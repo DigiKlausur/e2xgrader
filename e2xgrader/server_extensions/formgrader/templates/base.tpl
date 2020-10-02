@@ -76,9 +76,10 @@
         <ul class="nav nav-pills nav-stacked">
           {%- block sidebar -%}
           <li role="presentation" id="manage_assignments"><a href="{{ base_url }}/formgrader/manage_assignments">Manage Assignments</a></li>
-          <li role="presentation" id="gradebook"><a href="{{ base_url }}/formgrader/gradebook">Gradebook</a></li>
+          <li role="presentation" id="gradebook"><a href="{{ base_url }}/formgrader/gradebook">Manual Grading</a></li>
+          <li role="presentation" id="gradebook_questions"><a href="{{ base_url }}/formgrader/gradebook?view=task">Manual Grading (Task View)</a></li>
           <li role="presentation" id="manage_students"><a href="{{ base_url }}/formgrader/manage_students">Manage Students</a></li>
-          <li role="presentation" id="export_grades"><a href="{{ base_url }}/e2xgrader/export_grades">Export Grades</a></li>
+          <li role="presentation" id="export_grades"><a href="{{ base_url }}/formgrader/export_grades">Export Grades</a></li>
           {%- endblock -%}
         </ul>
       </div>
