@@ -73,16 +73,7 @@ class E2xAPI(NbGraderAPI):
                             
                 solution_cells.append(solution_cell)
             return solution_cells
-
-    def get_grade_cell(self, notebook_id, solution_cell_name):
-        with self.gradebook as gb:            
-            grade_cell = gb.db.query(GradeCell.id, GradeCell.name, GradeCell.max_score)\
-                .filter(GradeCell.notebook_id == notebook_id, GradeCell.name == solution_cell_name).first()
-            if grade_cell is None:
-                grade_cell = gb.db.query(GradeCell.id, GradeCell.name, GradeCell.max_score)\
-                .filter(GradeCell.notebook_id == notebook_id, GradeCell.name == 'test_{}'.format(solution_cell_name)).first()
-            return grade_cell
-
+            
 
     def get_task_submissions(self, assignment_id, notebook_id, task_id):
         """Get a list of submissions for a particular notebook in an assignment.
