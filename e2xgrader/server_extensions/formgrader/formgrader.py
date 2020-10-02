@@ -52,7 +52,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
         else:
             nbgrader_bad_setup = False
 
-        exporter = FormExporter(config=self.config)
+        exporter = FormExporter()
         exporter.register_preprocessor(FilterCellsById)
 
         # Configure the formgrader settings

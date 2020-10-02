@@ -20,8 +20,8 @@ class FormExporter(HTMLExporter):
         help='The name of the extra cell metadata field.'
     )
 
-    def __init__(self, config):
-        self.config = config
+    def __init__(self):
+        super().__init__()
         self.template_path.extend(
             [os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'server_extensions', 'formgrader', 'templates'))] + \
             [nbgrader_handlers.template_path]
@@ -74,3 +74,6 @@ class FormExporter(HTMLExporter):
         for pair in super(FormExporter, self).default_filters():
             yield pair
         yield ('to_choicecell', self.to_choicecell)
+
+    def _template_file_default(self):
+        return 'formgrade.tpl'
