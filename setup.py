@@ -47,7 +47,7 @@ setup_args = dict(
     install_requires=[
         "jupyter",
         "notebook>=4.2",
-        "nbconvert>=5.6",
+        "nbconvert==5.6.1",
         "nbformat",
         "traitlets",
         "jupyter_core",
