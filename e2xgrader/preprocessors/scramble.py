@@ -195,7 +195,6 @@ class Scramble(NbGraderPreprocessor):
         for cell in scrambled_nb.cells:
             for replacement_variable in replacement_variables:
                 cell.source = cell.source.replace('{{'+replacement_variable+'}}', replacement_variables[replacement_variable])
-        scrambled_nb.metadata['scramble_config'] = config['seed']
         scrambled_nb.metadata['scramble_config'] = {
                 'seed': config['seed'],
                 'config': self.obscure(replacement_variables)
