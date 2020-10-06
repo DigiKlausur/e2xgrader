@@ -30,7 +30,6 @@ class FormExporter(HTMLExporter):
     @contextfilter
     def to_choicecell(self, context, source):
         cell = context.get('cell', {})
-        metadata = context.get('cell', {}).metadata
         soup = BeautifulSoup(source, 'html.parser')
         my_type = None
         if not soup.ul or not utils.is_extra_cell(cell):
@@ -43,7 +42,6 @@ class FormExporter(HTMLExporter):
         form['class'] = 'hbrs_checkbox'
         
         list_elems = soup.ul.find_all('li')
-        inputs = []
         for i in range(len(list_elems)):
             div = soup.new_tag('div')
             box = soup.new_tag('input')
