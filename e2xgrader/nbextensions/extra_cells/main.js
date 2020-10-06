@@ -28,7 +28,7 @@ define([
             return cell.metadata.extended_cell.type;
         }
         return cell.cell_type;
-    };
+    }
 
     function patch_MarkdownCell_render () {
         MarkdownCell.prototype.render_force = old_render;
@@ -46,21 +46,17 @@ define([
                 old_render.apply(this, arguments);
             }
         }
-    };
+    }
 
     function patch_MarkdownCell_unrender () {
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
             let type = cell_type(this);
-            if (type == 'singlechoice') {
-                
-            } else if (type == 'multiplechoice') {
-
-            } else {
+            if (type != 'singlechoice' && type != 'multiplechoice') {
                 old_unrender.apply(this, arguments);
             }
         }
-    };
+    }
 
     function render_extended_cells () {
         let cells = Jupyter.notebook.get_cells();
@@ -71,7 +67,7 @@ define([
                 cell.render();
             }
         }
-    };
+    }
     
     function load_css () {
         let link = document.createElement('link');
@@ -79,7 +75,7 @@ define([
         link.rel = 'stylesheet';
         link.href = require.toUrl('./extra_cells.css');
         document.getElementsByTagName('head')[0].appendChild(link);
-    };
+    }
 
     function initialize () {
         load_css();
@@ -104,7 +100,7 @@ define([
             edit_mode = false;
             render_extended_cells();
         })
-    };
+    }
 
     let load_ipython_extension = function () {
         return Jupyter.notebook.config.loaded.then(initialize);
