@@ -17,7 +17,6 @@ class ExtraCellValidator:
                 raise ValidationError("single choice nbgrader cell {} does not have a solution".format(cell.metadata.nbgrader.grade_id))
 
     def validate_nb(self, nb):
-        ids = set([])
         for cell in nb.cells:
             self.validate_cell(cell)
 
