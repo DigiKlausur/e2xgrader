@@ -1,6 +1,6 @@
 from traitlets.config import LoggingConfigurable
 from traitlets import Unicode
-from nbgrader.api import *
+from nbgrader.api import MissingEntry
 import nbformat
 import os
 import pandas as pd
@@ -55,14 +55,6 @@ class GradeAssignmentExporter(LoggingConfigurable):
     
     def __init__(self, gradebook):
         self.gb = gradebook
-
-    def get_columns(self):
-        columns = []
-        assignments = sorted(self.gb.assignments, key=lambda x: x.name)
-        for assignment in assignments:
-            for notebook in assignment.notebooks:
-                    columns.append((assignment.name, notebook.name))            
-        return columns    
 
     def make_table(self):
         
