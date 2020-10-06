@@ -25,7 +25,8 @@ def _jupyter_nbextension_paths():
 
 def _jupyter_server_extension_paths():
     paths = [
-        dict(module="e2xgrader.server_extensions.formgrader")
+        dict(module="e2xgrader.server_extensions.formgrader"),
+        dict(module="e2xgrader.server_extensions.assignment_list")
     ]
 
     return paths
