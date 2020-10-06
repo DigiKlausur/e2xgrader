@@ -16,10 +16,9 @@ class Scramble(NbGraderPreprocessor):
         self.__p_random = re.compile(r'^#random +(?P<vars>.*) +in +(?P<sets>.*)')
         self.__p_replace = re.compile(r'#replace +(?P<name>\w+) +(?P<replace_with>.*)')
         self.__p_lambda = re.compile('^#lambda +(?P<name>[^ ]+) +(?P<lambda>.*)')
-        if kw is not None:
-            if 'seed' in kw:
-                self.__random = random.Random(kw['seed'])
-                self.__seed = kw['seed']
+        if kw and 'seed' in kw:
+            self.__random = random.Random(kw['seed'])
+            self.__seed = kw['seed']
 
     def parse_define(self, line):
         match = self.__p_define.search(line)

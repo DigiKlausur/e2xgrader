@@ -5,9 +5,8 @@ class PermuteTasks(NbGraderPreprocessor):
     
     def __init__(self, **kw):
         self.rand = random.Random()
-        if kw is not None:
-            if 'seed' in kw:
-                self.rand = random.Random(kw['seed'])
+        if kw and 'seed' in kw:
+            self.rand = random.Random(kw['seed'])
 
     
     def is_nbgrader_cell(self, cell):
