@@ -15,6 +15,16 @@ class ExportGradesHandler(BaseHandler):
         )
         self.write(html)
 
+class ExportGradesHandler(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        html = self.render(
+            'export_grades.tpl',
+            base_url = self.base_url
+        )
+        self.write(html)
+
 class ExportAssignmentGradesHandler(BaseHandler):
     def initialize(self):
         self.__exporter = GradeAssignmentExporter(self.gradebook)
@@ -198,7 +208,6 @@ class SubmissionHandler(BaseHandler):
         indices = self.api.get_notebook_submission_indices(assignment_id, notebook_id)
         ix = indices.get(submission.id, -2)
 
-        view = self.get_argument('view', 'notebook')
         task_id = self.get_argument('task', '')
 
         resources = {
