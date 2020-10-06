@@ -1,7 +1,7 @@
 import re
 import base64
 import pickle
-from . import NbGraderPreprocessor
+from nbgrader.preprocessors import NbGraderPreprocessor
 
 class Unscramble(NbGraderPreprocessor):
 
