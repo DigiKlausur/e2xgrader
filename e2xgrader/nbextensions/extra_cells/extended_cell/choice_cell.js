@@ -163,7 +163,6 @@ define([
             this.cell.render_force();
             let html = $(this.cell.element).find('.rendered_html');
             let lists = html.find('ul');
-            let that = this;
 
             if (lists.length > 0) {
                 let list = lists[0];
@@ -186,7 +185,7 @@ define([
                         .append(items[i].childNodes);
 
                     form.append(input_div);
-                };
+                }
                 $(list).replaceWith(form);
             }
             if (this.edit_mode) {
