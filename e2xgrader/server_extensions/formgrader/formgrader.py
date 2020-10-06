@@ -35,7 +35,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
         jinja_env = Environment(loader=FileSystemLoader([
             handlers.template_path,
             nbgrader_handlers.template_path
-        ]))
+        ]), autoescape=True)
 
         course_dir = self.coursedir.root
         notebook_dir = self.parent.notebook_dir
