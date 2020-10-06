@@ -26,9 +26,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
     def build_extra_config(self):
         extra_config = super(NbgraderFormgradeExtension, self).build_extra_config()
         extra_config.FormExporter.template_file = 'formgrade'
-        #extra_config.FormExporter.template_path = [handlers.template_path]
         extra_config.FormExporter.template_path = [handlers.template_path, nbgrader_handlers.template_path]
-        #extra_config.FormExporter.preprocessors = [FilterCellsById]
         return extra_config
             
 
