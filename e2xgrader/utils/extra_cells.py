@@ -30,9 +30,9 @@ def get_num_of_choices(cell):
 
 
 def get_instructor_choices(cell):
-    if (is_singlechoice(cell) or is_multiplechoice(cell)):
-        if ('source' in cell.metadata.extended_cell and \
-            'choice' in cell.metadata.extended_cell.source):
+    if (is_singlechoice(cell) or is_multiplechoice(cell)) and \
+       ('source' in cell.metadata.extended_cell) and \
+       ('choice' in cell.metadata.extended_cell.source):
             return [int(i) for i in cell.metadata.extended_cell.source.choice]
     return []
 
