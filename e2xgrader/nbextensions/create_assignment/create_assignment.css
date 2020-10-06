@@ -17,7 +17,7 @@ input.nbgrader-id-input {
 }
 
 #nbgrader-total-points {
-    width: 3em;
+    width: 5em;
     height: 24px;
     text-align: right;
     line-height: 10px;
@@ -63,8 +63,4 @@ div.nbgrader-highlight a.lock-button {
 
 a.lock-editable:hover {
     cursor: pointer;
-}
-
-#nbgrader-total-points {
-  width: 5em;
 }
