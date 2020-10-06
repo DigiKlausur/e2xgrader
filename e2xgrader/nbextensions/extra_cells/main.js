@@ -18,10 +18,10 @@ define([
 
     'use strict';
 
-    var MarkdownCell = textcell.MarkdownCell;
-    var old_render = MarkdownCell.prototype.render;
-    var old_unrender = MarkdownCell.prototype.unrender;
-    var edit_mode = false;
+    let MarkdownCell = textcell.MarkdownCell;
+    let old_render = MarkdownCell.prototype.render;
+    let old_unrender = MarkdownCell.prototype.unrender;
+    let edit_mode = false;
 
     function cell_type (cell) {
         if (cell.metadata.hasOwnProperty('extended_cell')) {
@@ -33,13 +33,13 @@ define([
     function patch_MarkdownCell_render () {
         MarkdownCell.prototype.render_force = old_render;
         MarkdownCell.prototype.render = function () {
-            var type = cell_type(this);
+            let type = cell_type(this);
             if (type == 'singlechoice') {
-                var sc = new choice_cell.SinglechoiceCell(this);
+                let sc = new choice_cell.SinglechoiceCell(this);
                 sc.edit_mode = edit_mode;
                 sc.render();
             } else if (type == 'multiplechoice') {
-                var mc = new choice_cell.MultiplechoiceCell(this);
+                let mc = new choice_cell.MultiplechoiceCell(this);
                 mc.edit_mode = edit_mode;
                 mc.render();
             } else {
@@ -51,7 +51,7 @@ define([
     function patch_MarkdownCell_unrender () {
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
-            var type = cell_type(this);
+            let type = cell_type(this);
             if (type == 'singlechoice') {
                 
             } else if (type == 'multiplechoice') {
@@ -63,9 +63,9 @@ define([
     };
 
     function render_extended_cells () {
-        var cells = Jupyter.notebook.get_cells();
-        for (var i in cells) {
-            var cell = cells[i];
+        let cells = Jupyter.notebook.get_cells();
+        for (let i in cells) {
+            let cell = cells[i];
             if (cell.metadata.hasOwnProperty('extended_cell') && cell.rendered) {
                 cell.unrender_force();
                 cell.render();
@@ -74,7 +74,7 @@ define([
     };
     
     function load_css () {
-        var link = document.createElement('link');
+        let link = document.createElement('link');
         link.type = 'text/css';
         link.rel = 'stylesheet';
         link.href = require.toUrl('./extra_cells.css');
@@ -106,7 +106,7 @@ define([
         })
     };
 
-    var load_ipython_extension = function () {
+    let load_ipython_extension = function () {
         return Jupyter.notebook.config.loaded.then(initialize);
     };
 

@@ -5,26 +5,30 @@ define([
 ) {
     'use strict';
 
-    var ExtendedCell = function (cell, type) {
-        this.field = 'extended_cell';
-        this.type = type;
-        this.cell = cell;
-        if (!this.cell.metadata.hasOwnProperty(this.field)) {
-            this.cell.metadata[this.field] = {};
-        }
-        this.cell.metadata[this.field]['type'] = type;
-    };
+    class ExtendedCell {
 
-    ExtendedCell.prototype.get_metadata = function () {
-        if (this.cell.metadata.hasOwnProperty(this.field)) {
-            return this.cell.metadata[this.field];
+        constructor(cell, type) {
+            this.field = 'extended_cell';
+            this.type = type;
+            this.cell = cell;
+            if (!this.cell.metadata.hasOwnProperty(this.field)) {
+                this.cell.metadata[this.field] = {};
+            }
+            this.cell.metadata[this.field]['type'] = type;
         }
-        return {};
-    };
 
-    ExtendedCell.prototype.render = function () {
-        this.cell.render();
-    };
+        get_metadata = function () {
+            if (this.cell.metadata.hasOwnProperty(this.field)) {
+                return this.cell.metadata[this.field];
+            }
+            return {};
+        };
+
+        render = function () {
+            this.cell.render();
+        };
+
+    }
 
     return {
         ExtendedCell: ExtendedCell

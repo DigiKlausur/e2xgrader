@@ -3,19 +3,19 @@ define([
 
     'use strict';
 
-    var nbgrader_schema_version = 3;
+    let nbgrader_schema_version = 3;
 
-    var to_float = function(val) {
+    let to_float = function(val) {
         if (val === undefined || val === "") {
             return 0;
         }
         return parseFloat(val);
     };
 
-    var randomString = function(length) {
-        var result = '';
-        var chars = 'abcdef0123456789';
-        var i;
+    let randomString = function(length) {
+        let result = '';
+        let chars = 'abcdef0123456789';
+        let i;
         for (i=0; i < length; i++) {
             result += chars[Math.floor(Math.random() * chars.length)];
         }
@@ -25,7 +25,7 @@ define([
     /**
      * Remove all nbgrader metadata
      */
-    var remove_metadata = function (cell) {
+    let remove_metadata = function (cell) {
         if (cell.metadata.hasOwnProperty("nbgrader")) {
             delete cell.metadata.nbgrader;
         }
@@ -34,7 +34,7 @@ define([
     /**
      * Set nbgrader schema version
      */
-    var set_schema_version = function (cell) {
+    let set_schema_version = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
@@ -44,7 +44,7 @@ define([
     /**
      * Get nbgrader schema version
      */
-    var get_schema_version = function (cell) {
+    let get_schema_version = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return undefined;
         }
@@ -57,7 +57,7 @@ define([
     /**
      * Is the cell a solution cell?
      */
-    var is_solution = function (cell) {
+    let is_solution = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return false;
         } else if (cell.metadata.nbgrader.solution === undefined) {
@@ -70,7 +70,7 @@ define([
     /**
      * Set whether this cell is or is not a solution cell.
      */
-    var set_solution = function (cell, val) {
+    let set_solution = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
@@ -80,7 +80,7 @@ define([
     /**
      * Is the cell a grade cell?
      */
-    var is_grade = function (cell) {
+    let is_grade = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return false;
         } else if (cell.metadata.nbgrader.grade === undefined) {
@@ -93,7 +93,7 @@ define([
     /**
      * Set whether this cell is or is not a grade cell.
      */
-    var set_grade = function (cell, val) {
+    let set_grade = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
@@ -106,7 +106,7 @@ define([
     /**
      * Is the cell a task cell?
      */
-    var is_task = function (cell) {
+    let is_task = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return false;
         } else if (cell.metadata.nbgrader.task === undefined) {
@@ -119,19 +119,19 @@ define([
     /**
      * Set whether this cell is or is not a grade cell.
      */
-    var set_task = function (cell, val) {
+    let set_task = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
         cell.metadata.nbgrader.task = val;
     };
 
-    var is_graded = function (cell) {
+    let is_graded = function (cell) {
         return ( is_grade(cell) || is_task(cell) );
     };
 
 
-    var get_points = function (cell) {
+    let get_points = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return 0;
         } else {
@@ -139,16 +139,16 @@ define([
         }
     };
 
-    var set_points = function (cell, val) {
+    let set_points = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
-        var points = to_float(val);
+        let points = to_float(val);
         if (points < 0) points = 0;
         cell.metadata.nbgrader.points = points;
     };
 
-    var get_grade_id = function (cell) {
+    let get_grade_id = function (cell) {
         if (cell.metadata.nbgrader === undefined) {
             return "cell-" + randomString(16);
         } else if (cell.metadata.nbgrader.grade_id === undefined) {
@@ -158,7 +158,7 @@ define([
         }
     };
 
-    var set_grade_id = function (cell, val) {
+    let set_grade_id = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
@@ -169,7 +169,7 @@ define([
         }
     };
 
-    var is_locked = function (cell) {
+    let is_locked = function (cell) {
         if (is_solution(cell)) {
             return false;
         } else if (is_graded(cell)) {
@@ -183,7 +183,7 @@ define([
         }
     };
 
-    var set_locked = function (cell, val) {
+    let set_locked = function (cell, val) {
         if (cell.metadata.nbgrader === undefined) {
             cell.metadata.nbgrader = {};
         }
@@ -196,7 +196,7 @@ define([
         }
     };
 
-    var is_invalid = function (cell) {
+    let is_invalid = function (cell) {
         if (is_task(cell)) {
             return false;
         } else if (is_solution(cell) && is_grade(cell)) {
