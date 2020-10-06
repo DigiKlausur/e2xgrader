@@ -1,15 +1,9 @@
 import os
-import sys
 import hashlib
 import nbformat
 
 from textwrap import dedent
 from e2xgrader.exporters import FormExporter
-
-if sys.platform != 'win32':
-    import pwd
-else:
-    pwd = None
 
 def has_name(cell, name):
     if cell.cell_type != 'markdown':
@@ -76,14 +70,6 @@ def generate_student_info(filename, username, hashcode, timestamp):
             Hashcode: {hashcode}
             Timestamp: {timestamp}
         """))
-
-def get_username():
-    if not pwd:
-        raise OSError('get_username can\'t be called on Windows')
-    osusername = pwd.getpwuid(os.getuid())[0]
-    if osusername == 'jovyan':
-        return os.environ.get('JUPYTERHUB_USER', 'jovyan')
-    return osusername
 
 def generate_html(nb, dest):
     exporter = FormExporter()
