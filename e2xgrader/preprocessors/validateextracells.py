@@ -10,12 +10,6 @@ class ExtraCellValidator:
         if 'nbgrader' not in cell.metadata:
             return
 
-        meta = cell.metadata['nbgrader']
-        grade = meta['grade']
-        solution = meta['solution']
-        locked = meta['locked']
-        task = meta.get('task', False)
-
         # check if there is a single choice cell without a solution
         if is_singlechoice(cell):
             extended_metadata = cell.metadata.extended_cell
