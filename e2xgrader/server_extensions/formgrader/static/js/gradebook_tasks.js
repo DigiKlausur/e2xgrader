@@ -104,6 +104,6 @@ var loadNotebooks = function () {
 
 var models = undefined;
 var views = [];
-$(window).load(function () {
+$(window).on('load', function () {
     loadNotebooks();
 });
