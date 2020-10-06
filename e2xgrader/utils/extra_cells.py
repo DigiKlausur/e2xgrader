@@ -82,4 +82,3 @@ def determine_grade(cell: NotebookNode, log: Logger = None) -> Tuple[Optional[fl
             else:
                 points -=option_points
         return max(0, points), max_points
-        
