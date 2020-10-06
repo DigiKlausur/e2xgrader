@@ -56,8 +56,6 @@ class E2xAPI(NbGraderAPI):
                     solution_cell['max_score'] += gb.db.query(GradeCell.max_score)\
                                                         .filter(GradeCell.id == grade_id[0])\
                                                         .first()[0]
-                    avg_score = 0
-                    submissions = 0
                     for manual_score, auto_score, needs_manual_grade in gb.db\
                             .query(Grade.manual_score, Grade.auto_score,\
                                    Grade.needs_manual_grade)\
