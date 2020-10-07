@@ -168,7 +168,7 @@ var loadSubmittedNotebooks = function () {
     var tbl = $("#main-table");
 
     models = new SubmittedNotebooks();
-    views = [];
+
     models.loaded = false;
     models.fetch({
         success: function () {
@@ -178,7 +178,6 @@ var loadSubmittedNotebooks = function () {
                     "model": model,
                     "el": insertRow(tbl)
                 });
-                views.push(view);
             });
             if (view === 'task') {
                 // Hide unused columns
@@ -198,7 +197,7 @@ var loadSubmittedNotebooks = function () {
 };
 
 var models = undefined;
-var views = [];
+
 $(window).on('load', function () {
     loadSubmittedNotebooks();
 });

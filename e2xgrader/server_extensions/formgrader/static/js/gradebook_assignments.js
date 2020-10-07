@@ -76,7 +76,6 @@ var loadAssignments = function () {
     var tbl = $("#main-table");
 
     models = new Assignments();
-    views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
@@ -86,7 +85,6 @@ var loadAssignments = function () {
                     "model": model,
                     "el": insertRow(tbl)
                 });
-                views.push(view);
             });
             insertDataTable(tbl.parent());
             models.loaded = true;
@@ -95,7 +93,7 @@ var loadAssignments = function () {
 };
 
 var models = undefined;
-var views = [];
+
 $(window).on('load', function () {
     loadAssignments();
 });

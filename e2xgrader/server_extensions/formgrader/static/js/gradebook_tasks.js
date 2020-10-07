@@ -84,7 +84,6 @@ var loadNotebooks = function () {
     var tbl = $("#main-table");
 
     models = new Notebooks();
-    views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
@@ -94,7 +93,6 @@ var loadNotebooks = function () {
                     "model": model,
                     "el": insertRow(tbl)
                 });
-                views.push(view);
             });
             insertDataTable(tbl.parent());
             models.loaded = true;
@@ -103,7 +101,7 @@ var loadNotebooks = function () {
 };
 
 var models = undefined;
-var views = [];
+
 $(window).on('load', function () {
     loadNotebooks();
 });
