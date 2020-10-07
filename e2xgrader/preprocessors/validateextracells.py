@@ -3,6 +3,9 @@ import traceback
 from nbgrader.nbgraderformat import ValidationError
 from nbgrader.preprocessors import NbGraderPreprocessor
 
+from ..utils.extra_cells import is_singlechoice
+
+
 class ExtraCellValidator:
 
     def validate_cell(self, cell):
