@@ -3,16 +3,6 @@ function FormGrader (base_url, submission_id) {
     this.base_url = base_url;
     this.submission_id = submission_id;
 
-    this.current_index;
-    this.last_selected;
-
-    this.grades;
-    this.grade_uis;
-    this.comments;
-    this.comment_uis;
-
-    this.keyboard_manager;
-
     this.loaded = false;
 }
 
