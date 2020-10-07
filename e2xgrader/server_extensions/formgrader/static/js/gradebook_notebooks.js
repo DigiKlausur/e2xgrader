@@ -118,7 +118,7 @@ var loadNotebooks = function () {
         success: function () {
             tbl.empty();
             models.each(function (model) {
-                var view = new NotebookUI({
+                new NotebookUI({
                     "model": model,
                     "el": insertRow(tbl)
                 });

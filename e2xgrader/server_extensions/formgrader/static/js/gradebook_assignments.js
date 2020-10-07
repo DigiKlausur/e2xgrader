@@ -81,7 +81,7 @@ var loadAssignments = function () {
         success: function () {
             tbl.empty();
             models.each(function (model) {
-                var view = new AssignmentUI({
+                new AssignmentUI({
                     "model": model,
                     "el": insertRow(tbl)
                 });
