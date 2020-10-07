@@ -18,6 +18,7 @@ c.Autograde.autograde_preprocessors = [
 ]
 
 c.GenerateAssignment.preprocessors = [
+    'e2xgrader.preprocessors.ValidateExtraCells',
     'nbgrader.preprocessors.IncludeHeaderFooter',
     'nbgrader.preprocessors.LockCells',
     'e2xgrader.preprocessors.ClearSolutions',
@@ -29,7 +30,6 @@ c.GenerateAssignment.preprocessors = [
     'nbgrader.preprocessors.ClearMarkScheme',
     'nbgrader.preprocessors.ComputeChecksums',
     'nbgrader.preprocessors.CheckCellMetadata',
-    'e2xgrader.preprocessors.ValidateExtraCells'
 ]
 
 c.ExchangeFactory.submit = 'e2xgrader.exchange.E2xExchangeSubmit'
