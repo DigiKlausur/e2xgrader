@@ -56,7 +56,8 @@ setup_args = dict(
         "requests",
         "beautifulsoup4",
         "pandas",
-        "nbgrader"
+        "nbgrader",
+        "e2xstudent",
     ]
 )
 
