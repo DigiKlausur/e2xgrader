@@ -42,7 +42,11 @@ class E2xAssignmentList(AssignmentList):
                     authenticator=authenticator,
                     config=config)
 
-                hashcode, timestamp = submit.start()
+                retval = submit.start()
+                hashcode = 'Exchange not set up for hashcode'
+                timestamp = 'Exchange not set up for timestamp'
+                if retval and len(retval) == 2:
+                    hashcode, timestamp = retval
 
             except:
                 self.log.error(traceback.format_exc())
