@@ -1,5 +1,6 @@
 import os
 import base64
+import sys
 import nbformat
 from stat import (
     S_IRUSR, S_IWUSR, S_IXUSR,
