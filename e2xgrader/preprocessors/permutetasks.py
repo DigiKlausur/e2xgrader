@@ -79,4 +79,5 @@ class PermuteTasks(NbGraderPreprocessor):
             
         cells = [nb.cells[i] for i in ids]
         nb.cells = cells
+        nb.metadata['permutation'] = ids
         return nb, resources
