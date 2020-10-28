@@ -37,8 +37,8 @@ class UnpermuteTasks(NbGraderPreprocessor):
         if 'original_order' not in nb.metadata:
             return nb, resources
 
-            perm = nb.metadata.permutation
-            keys = sorted(range(len(perm)), key=perm.__getitem__)
-            reorder_cells = [nb.cells[i] for i in keys]
-            nb.cells = reorder_cells
+        perm = nb.metadata.permutation
+        keys = sorted(range(len(perm)), key=perm.__getitem__)
+        reorder_cells = [nb.cells[i] for i in keys]
+        nb.cells = reorder_cells
         return nb, resources
