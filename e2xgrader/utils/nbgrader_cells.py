@@ -18,9 +18,8 @@ def get_tasks(nb):
         checked[task_id] = False
         associated[task_id] = []
         for cell in nb.cells:
-            if is_nbgrader_cell(cell):
-                if task_id in grade_id(cell):
-                    associated[task_id].append(grade_id(cell))
+            if is_nbgrader_cell(cell) and task_id in grade_id(cell):
+                associated[task_id].append(grade_id(cell))
 
     groups = []
     for i in range(len(task_ids)):
