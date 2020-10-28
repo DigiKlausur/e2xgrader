@@ -1,30 +1,12 @@
 import os
 import glob
-import shutil
-import sys
 from collections import defaultdict
-from textwrap import dedent
-import datetime
 
-from nbgrader.exchange.default import ExchangeCollect
+from nbgrader.exchange.default.collect import ExchangeCollect, groupby
 from .exchange import E2xExchange
 
 from nbgrader.utils import check_mode, parse_utc
 from nbgrader.api import Gradebook, MissingEntry
-
-# pwd is for matching unix names with student ide, so we shouldn't import it on
-# windows machines
-if sys.platform != 'win32':
-    import pwd
-else:
-    pwd = None
-
-
-def groupby(l, key=lambda x: x):
-    d = defaultdict(list)
-    for item in l:
-        d[key(item)].append(item)
-    return d
 
 
 class E2xExchangeCollect(E2xExchange, ExchangeCollect):
@@ -59,9 +41,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                     user_records[i]['filename'] = os.path.join(user, record['filename'])
 
                 usergroups.update(groupby(user_records, lambda item: item['username']))
-                records.append(user_records)
-                self.log.info(f'Usergroups: {usergroups}')
-            
+                records.append(user_records)           
 
         else:
             student_id = self.coursedir.student_id if self.coursedir.student_id else '*'
