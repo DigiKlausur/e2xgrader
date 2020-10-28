@@ -11,17 +11,7 @@ from nbgrader.api import Gradebook, MissingEntry
 
 class E2xExchangeCollect(E2xExchange, ExchangeCollect):
 
-    def init_src(self):
-        if self.coursedir.course_id == '':
-            self.fail("No course id specified. Re-run with --course flag.")
-
-        self.course_path = os.path.join(self.root, self.coursedir.course_id)
-        self.inbound_path = os.path.join(self.course_path, 'inbound')
-        if not os.path.isdir(self.inbound_path):
-            self.fail("Course not found: {}".format(self.inbound_path))
-        if not check_mode(self.inbound_path, read=True, execute=True):
-            self.fail("You don't have read permissions for the directory: {}".format(self.inbound_path))
-
+    def init_submissions(self):
         if self.personalized_inbound:
             self.log.info('Collecting from restricted submit dirs')
             submit_dirs = [username for username in os.listdir(self.inbound_path) if '+' not in username and 
@@ -48,6 +38,22 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             pattern = os.path.join(self.inbound_path, '{}+{}+*'.format(student_id, self.coursedir.assignment_id))
             records = [self._path_to_record(f) for f in glob.glob(pattern)]
             usergroups = groupby(records, lambda item: item['username'])
+
+        return records, usergroups
+
+
+    def init_src(self):
+        if self.coursedir.course_id == '':
+            self.fail("No course id specified. Re-run with --course flag.")
+
+        self.course_path = os.path.join(self.root, self.coursedir.course_id)
+        self.inbound_path = os.path.join(self.course_path, 'inbound')
+        if not os.path.isdir(self.inbound_path):
+            self.fail("Course not found: {}".format(self.inbound_path))
+        if not check_mode(self.inbound_path, read=True, execute=True):
+            self.fail("You don't have read permissions for the directory: {}".format(self.inbound_path))
+
+        records, usergroups = self.init_submissions()
 
         with Gradebook(self.coursedir.db_url, self.coursedir.course_id) as gb:
             try:
