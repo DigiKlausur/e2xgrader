@@ -1,6 +1,7 @@
 from textwrap import dedent
 
 from nbgrader.exchange.default import Exchange
+from nbgrader.utils import check_directory
 from traitlets import Bool
 
 
