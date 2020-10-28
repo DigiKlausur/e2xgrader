@@ -5,6 +5,7 @@ from .clearhiddentests import ClearHiddenTests
 from .overwritecells import OverwriteCells
 from .saveautogrades import SaveAutoGrades
 from .permutetasks import PermuteTasks
+from .unpermutetasks import UnpermuteTasks
 from .scramble import Scramble
 from .unscramble import Unscramble
 from .validateextracells import ValidateExtraCells
