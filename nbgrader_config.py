@@ -6,7 +6,7 @@ c.Autograde.sanitize_preprocessors = [
     'nbgrader.preprocessors.OverwriteKernelspec',
     'e2xgrader.preprocessors.OverwriteCells',
     'nbgrader.preprocessors.CheckCellMetadata',
-    'e2xgrader.preprocessors.UnpermuteTasks',
+    #'e2xgrader.preprocessors.UnpermuteTasks',
     'e2xgrader.preprocessors.Unscramble',
 ]
 
