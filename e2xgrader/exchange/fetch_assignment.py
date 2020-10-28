@@ -2,17 +2,20 @@ import os
 import glob
 import nbformat
 
+from textwrap import dedent
 from nbgrader.exchange.default import ExchangeFetchAssignment
 
 from ..preprocessors import Scramble, PermuteTasks
+from .exchange import E2xExchange
 
 
-class E2xExchangeFetchAssignment(ExchangeFetchAssignment):
+class E2xExchangeFetchAssignment(E2xExchange, ExchangeFetchAssignment):
+    
 
     def do_scrambling(self, dest, student_id):
         self.log.info(f'Scrambling for {student_id}')
         scrambler = Scramble(seed=hash(student_id))
-        permuter = Scramble(seed=hash(student_id))
+        permuter = PermuteTasks(seed=hash(student_id))
         for nb_path in glob.glob(os.path.join(dest, '*.ipynb')):
             nb = nbformat.read(nb_path, as_version=4)
             if len(nb.cells) > 0 and nb.cells[0].source.startswith('%% scramble'):
@@ -29,3 +32,16 @@ class E2xExchangeFetchAssignment(ExchangeFetchAssignment):
         self.do_copy(self.src_path, self.dest_path)
         self.do_scrambling(self.dest_path, os.getenv('JUPYTERHUB_USER'))
         self.log.info("Fetched as: {} {}".format(self.coursedir.course_id, self.coursedir.assignment_id))
+
+
+    def do_copy(self, src, dest):
+        if self.personalized_outbound:
+            personalized_src = os.path.join(src, os.getenv('JUPYTERHUB_USER'))
+            if os.path.exists(personalized_src):
+                src = personalized_src
+            else:
+                self.log.warning(dedent(f'''
+                    Using personalized outbound, but no directory for 
+                    user {os.getenv('JUPYTERHUB_USER')} exists.
+                    '''))
+        super().do_copy(src, dest)

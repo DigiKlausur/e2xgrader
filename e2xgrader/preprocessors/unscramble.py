@@ -22,5 +22,4 @@ class Unscramble(NbGraderPreprocessor):
                 if m.strip() in config:
                     cell.source = cell.source.replace('{{' + m + '}}', str(config[m.strip()]))
 
-        nb.cells = nb.cells[1:]
         return nb, resources
