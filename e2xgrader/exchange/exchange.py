@@ -1,7 +1,8 @@
-from traitlets import Bool
 from textwrap import dedent
 
 from nbgrader.exchange.default import Exchange
+from traitlets import Bool
+
 
 class E2xExchange(Exchange):
 
@@ -16,8 +17,9 @@ class E2xExchange(Exchange):
     ).tag(config=True)
 
     def ensure_root(self):
-         """See if the exchange directory exists and readable, fail if not.
-            We do not need to make the exchange root writable by default.
-         """
+        """
+        See if the exchange directory exists and readable, fail if not.
+        We do not need to make the exchange root writable by default.
+        """
         if not check_directory(self.root, read=True, execute=True):
             self.fail("Unreadable directory, please contact your instructor: {}".format(self.root))
