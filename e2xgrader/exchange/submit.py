@@ -23,7 +23,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         if not self.authenticator.has_access(self.coursedir.student_id, self.coursedir.course_id):
             self.fail("You do not have access to this course.")
 
-        self.inbound_path = os.path.join(self.root, self.coursedir.course_id, 'inbound')
+        self.inbound_path = os.path.join(self.root, self.coursedir.course_id, self.inbound_directory)
 
         if self.personalized_inbound:
             self.inbound_path = os.path.join(self.inbound_path, os.getenv('JUPYTERHUB_USER'))
@@ -109,6 +109,18 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         ))
 
         return hashcode, self.timestamp
+
+    def init_release(self):
+        if self.coursedir.course_id == '':
+            self.fail("No course id specified. Re-run with --course flag.")
+
+        course_path = os.path.join(self.root, self.coursedir.course_id)
+        outbound_path = os.path.join(course_path, self.outbound_directory)
+        self.release_path = os.path.join(outbound_path, self.coursedir.assignment_id)
+        if not os.path.isdir(self.release_path):
+            self.fail("Assignment not found: {}".format(self.release_path))
+        if not check_mode(self.release_path, read=True, execute=True):
+            self.fail("You don't have read permissions for the directory: {}".format(self.release_path))
 
     def start(self):
         if sys.platform == 'win32':

@@ -47,7 +47,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             self.fail("No course id specified. Re-run with --course flag.")
 
         self.course_path = os.path.join(self.root, self.coursedir.course_id)
-        self.inbound_path = os.path.join(self.course_path, 'inbound')
+        self.inbound_path = os.path.join(self.course_path, self.inbound_directory)
         if not os.path.isdir(self.inbound_path):
             self.fail("Course not found: {}".format(self.inbound_path))
         if not check_mode(self.inbound_path, read=True, execute=True):
