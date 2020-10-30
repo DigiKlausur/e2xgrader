@@ -1,3 +1,4 @@
+import os
 from nbgrader.exchange.default import ExchangeList
 from .exchange import E2xExchange
 
