@@ -1,5 +1,6 @@
 import os
 import glob
+import re
 from nbgrader.exchange.default import ExchangeList
 from .exchange import E2xExchange
 
