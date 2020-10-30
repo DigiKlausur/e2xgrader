@@ -4,6 +4,7 @@ import nbformat
 
 from textwrap import dedent
 from nbgrader.exchange.default import ExchangeFetchAssignment
+from nbgrader.utils import check_mode
 
 from ..preprocessors import Scramble, PermuteTasks
 from .exchange import E2xExchange
