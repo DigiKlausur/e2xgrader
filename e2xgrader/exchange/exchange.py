@@ -2,7 +2,7 @@ from textwrap import dedent
 
 from nbgrader.exchange.default import Exchange
 from nbgrader.utils import check_directory
-from traitlets import Bool
+from traitlets import Bool, Unicode
 
 
 class E2xExchange(Exchange):
@@ -16,6 +16,23 @@ class E2xExchange(Exchange):
         False,
         help='Whether to use a personalized inbound directory per student'
     ).tag(config=True)
+
+    outbound_directory = Unicode(
+        'outbound',
+        help='The name of the outbound directory'
+    )
+
+    inbound_directory = Unicode(
+        'inbound',
+        help='The name of the inbound directory'
+    )
+
+    def __init__(self, coursedir=None, authenticator=None, **kwargs):
+        super().__init__(coursedir=coursedir, authenticator=authenticator, **kwargs)
+        if self.personalized_outbound:
+            self.outbound_directory = 'personalized-outbound'
+        if self.personalized_inbound:
+            self.inbound_directory = 'personalized-inbound'
 
     def ensure_root(self):
         """
