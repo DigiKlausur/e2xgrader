@@ -17,6 +17,7 @@
 
   <script>
   var base_url = "{{ base_url }}";
+  var view = "notebook";
   </script>
 
   {%- block head -%}
