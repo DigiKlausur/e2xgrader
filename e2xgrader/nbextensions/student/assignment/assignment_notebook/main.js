@@ -7,7 +7,7 @@ define([
     'notebook/js/textcell',
     'base/js/events',
     './model/nbgrader_model'
-], function (require, $, Jupyter, notebook, cell, textcell, events, model) {
+], function (require, $, Jupyter, notebook, basecell, textcell, events, model) {
 
     let Notebook = notebook.Notebook;
     let MarkdownCell = textcell.MarkdownCell;
@@ -67,7 +67,7 @@ define([
 
     function init() {
         console.log('Assignment notebook initialized!');
-        cell.Cell.options_default.cm_config.lineNumbers = true;
+        basecell.Cell.options_default.cm_config.lineNumbers = true;
         patch_cell_type_select();
         patch_MarkdownCell_unrender();
         update_cells();
