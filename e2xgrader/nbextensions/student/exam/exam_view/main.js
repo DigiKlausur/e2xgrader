@@ -93,7 +93,6 @@ define([
         load_css('examview.css');
         remove_elements();
         add_toolbar();
-        console.log(run_control);
         remap_keys.remap();
     }
 
