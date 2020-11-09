@@ -71,7 +71,7 @@ define([
     let create_header = function(div, cell, celltoolbar) {
         if (cell.cell_type === null) {
             setTimeout(function () {
-                create_run_button(div, cell, celltoolbar);
+                create_header(div, cell, celltoolbar);
             }, 100);
         } else {
             if (!is_solution_cell(cell)) {

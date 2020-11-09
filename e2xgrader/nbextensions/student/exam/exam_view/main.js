@@ -4,9 +4,8 @@ define([
     'base/js/namespace',
     'base/js/utils',
     './submit/submit',
-    './run_control/run_control',
     './remap_keys/remap_keybindings',
-], function (require, $, Jupyter, utils, submit_tools, run_control, remap_keys) {
+], function (require, $, Jupyter, utils, submit_tools, remap_keys) {
 
     'use strict';
 
@@ -94,9 +93,7 @@ define([
         load_css('examview.css');
         remove_elements();
         add_toolbar();
-        console.log(run_control);
         remap_keys.remap();
-        run_control.initialize();
     }
 
     function load_extension() {
