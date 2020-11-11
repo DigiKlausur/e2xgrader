@@ -57,7 +57,7 @@ define([
 
     function update_cells() {
         Jupyter.notebook.get_cells().forEach(function (cell) {
-            if (model.is_test_cell(cell)) {
+            if (model.is_test_cell(cell) && model.is_empty_cell(cell)) {
                 cell.element.hide();
             } else if (cell.cell_type === 'code') {
                 cell.show_line_numbers(true);
