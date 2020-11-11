@@ -20,10 +20,15 @@ define([
         return cell.metadata.hasOwnProperty('nbgrader');
     }
 
+    function is_empty_cell(cell) {
+        return cell.code_mirror.getValue().length == 0
+    }
+
     return {
         is_test_cell: is_test_cell,
         is_nbgrader_cell: is_nbgrader_cell,
-        is_description_cell: is_description_cell
+        is_description_cell: is_description_cell,
+        is_empty_cell: is_empty_cell
     }
 
 });
