@@ -89,6 +89,8 @@ class ExtensionManager:
                             section='notebook', sys_prefix=sys_prefix, user=user)
         enable_nbextension(require='assignment_view/main', 
                             section='notebook', sys_prefix=sys_prefix, user=user)
+        enable_nbextension(require='assignment_notebook/main', 
+                            section='notebook', sys_prefix=sys_prefix, user=user)
         
     def activate_student_exam(self, sys_prefix=True, user=False):
         print(f'Activate student exam mode with sys_prefix = {sys_prefix} and user = {user}')
