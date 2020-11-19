@@ -14,6 +14,34 @@ define([
     let Notebook = notebook.Notebook;
     let MarkdownCell = textcell.MarkdownCell;
 
+    function alert_move_cell_disabled() {
+        let body = $('<div/>')
+            .append($('<span/>')
+                .text('At least one of the selected cells belongs to the assignment and can not be moved!'));
+        dialog.modal({
+            keyboard_manager: Jupyter.keyboard_manager,
+            title: 'Can not move cells',
+            body: body,
+            buttons: {
+                OK: {}
+            }
+        });
+    }
+
+    function alert_cell_type_select_blocked() {
+        let body = $('<div/>')
+            .append($('<span/>')
+                .text('You can not change the type of a cell that belongs to the assignment!'));
+        dialog.modal({
+            keyboard_manager: Jupyter.keyboard_manager,
+            title: 'Can not change cell type',
+            body: body,
+            buttons: {
+                OK: {}
+            }
+        });
+    }
+
     function patch_cell_type_select() {
         let old_to_code = Notebook.prototype.to_code;
         let old_to_markdown = Notebook.prototype.to_markdown;
@@ -22,7 +50,7 @@ define([
         Notebook.prototype.to_code = function () {
             let cell = Jupyter.notebook.get_cell(arguments[0]);
             if (model.is_nbgrader_cell(cell)) {
-                console.log('Can not change cell type of nbgrader cells');
+                alert_cell_type_select_blocked()
             } else {
                 old_to_code.apply(this, arguments);
             }
@@ -31,7 +59,7 @@ define([
         Notebook.prototype.to_markdown = function () {
             let cell = Jupyter.notebook.get_cell(arguments[0]);
             if (model.is_nbgrader_cell(cell)) {
-                console.log('Can not change cell type of nbgrader cells');
+                alert_cell_type_select_blocked()
             } else {
                 old_to_markdown.apply(this, arguments);
             }
@@ -40,7 +68,7 @@ define([
         Notebook.prototype.to_raw = function () {
             let cell = Jupyter.notebook.get_cell(arguments[0]);
             if (model.is_nbgrader_cell(cell)) {
-                console.log('Can not change cell type of nbgrader cells');
+                alert_cell_type_select_blocked()
             } else {
                 old_to_raw.apply(this, arguments);
             }
@@ -57,20 +85,7 @@ define([
         }
     }
 
-    function alert_move_cell_blocked() {
-        let body = $('<div/>')
-            .append($('<span/>')
-                .text('At least one of the selected cells belongs to the assignment and can not be moved!'));
-        dialog.modal({
-            keyboard_manager: Jupyter.keyboard_manager,
-            title: 'Can not move cells',
-            body: body,
-            buttons: {
-                OK: {}
-            }
-        });
-        //alert('At least one of the selected cells belongs to the assignment and can not be moved!');
-    }
+    
 
     function patch_move_cells() {
 
@@ -86,7 +101,7 @@ define([
             } else {
                 let cell = Jupyter.notebook.get_cell(index);
                 if (model.is_nbgrader_cell(cell)) {
-                    alert_move_cell_blocked();
+                    alert_move_cell_disabled();
                 } else {
                     old_move_cell_down.apply(this, arguments);
                 }
@@ -100,7 +115,7 @@ define([
             } else {
                 let cell = Jupyter.notebook.get_cell(index);
                 if (model.is_nbgrader_cell(cell)) {
-                    alert_move_cell_blocked();
+                    alert_move_cell_disabled();
                 } else {
                     old_move_cell_up.apply(this, arguments);
                 }
@@ -114,7 +129,7 @@ define([
                 let nbgrader_cell = model.is_nbgrader_cell(cell);
                 if (nbgrader_cell) {
                     nbgrader_cell_selected = true;
-                    alert_move_cell_blocked();
+                    alert_move_cell_disabled();
                 }
                 return nbgrader_cell;
             });
@@ -130,7 +145,7 @@ define([
                 let nbgrader_cell = model.is_nbgrader_cell(cell);
                 if (nbgrader_cell) {
                     nbgrader_cell_selected = true;
-                    alert_move_cell_blocked();
+                    alert_move_cell_disabled();
                 }
                 return nbgrader_cell;
             });
