@@ -87,9 +87,7 @@ class ExtensionManager:
         self.install_nbextensions('e2xgrader', sys_prefix=sys_prefix, user=user)
         enable_nbextension(require='extra_cells/main', 
                             section='notebook', sys_prefix=sys_prefix, user=user)
-        enable_nbextension(require='assignment_view/main', 
-                            section='notebook', sys_prefix=sys_prefix, user=user)
-        enable_nbextension(require='assignment_notebook/main', 
+        enable_nbextension(require='assignment_extension/main', 
                             section='notebook', sys_prefix=sys_prefix, user=user)
         
     def activate_student_exam(self, sys_prefix=True, user=False):
