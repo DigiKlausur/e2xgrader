@@ -26,11 +26,11 @@ define([
 
     function is_solution_cell(cell) {
         return is_nbgrader_cell(cell) && cell.metadata.nbgrader.solution;
-    };
+    }
 
     function is_extra_cell(cell){
         return is_solution_cell(cell) && cell.metadata.hasOwnProperty('extended_cell');
-    };
+    }
 
     function is_assignment_notebook() {
         let is_nbgrader = false;

@@ -31,7 +31,7 @@ define([
                 cell.celltoolbar.inner_element.addClass(highlight);
             }
         }
-    };
+    }
 
     function add_hidden(cell) {
         if (cell.celltoolbar !== undefined) {
@@ -39,7 +39,7 @@ define([
                 cell.celltoolbar.inner_element.addClass(minimized);
             }
         }
-    };
+    }
 
     function remove_classes(cell) {
         if (cell.celltoolbar !== null && cell.celltoolbar !== undefined) {
@@ -49,14 +49,14 @@ define([
                 cell.celltoolbar.inner_element.removeClass(minimized);
             }
         }
-    };
+    }
 
     function create_button(btn_text, btn_id, callback) {
         let btn = $('<button/>').attr('type', 'button').attr('id', btn_id)
                     .addClass('exam_btn').text(btn_text);
         btn.click(callback);
         return btn;
-    };
+    }
 
     function create_header(div, cell, celltoolbar) {
         if (cell.cell_type === null) {
@@ -91,7 +91,7 @@ define([
                 $(div).append($('<span/>').append(edit_btn).append(btn).addClass('cell_control'));
             }
         }
-    };
+    }
 
     /**
      * Load custom css for the nbgrader toolbar.
@@ -102,7 +102,7 @@ define([
         link.rel = 'stylesheet';
         link.href = require.toUrl('./assignment_view.css');
         document.getElementsByTagName('head')[0].appendChild(link);
-    };
+    }
 
     function initialize() {
         load_css();
