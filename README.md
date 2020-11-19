@@ -1,6 +1,6 @@
 # e2xgrader
 
-E2xgrader is an add on for nbgrader. All information can be found under https://digiklausur.github.io/e2xgrader/installation.html
+E2xgrader is an add on for nbgrader. All information can be found under https://digiklausur.github.io/e2xgrader/e2xgrader.html
 
 It comes with the following features:
 
