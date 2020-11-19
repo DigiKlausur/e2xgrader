@@ -1,5 +1,4 @@
 define([
-    'require',
     'jquery',
     'base/js/namespace',
     'base/js/dialog',
@@ -8,7 +7,9 @@ define([
     'notebook/js/textcell',
     'base/js/events',
     './model/nbgrader_model'
-], function (require, $, Jupyter, dialog, notebook, basecell, textcell, events, model) {
+], function ($, Jupyter, dialog, notebook, basecell, textcell, events, model) {
+
+    "use strict";
 
     let Notebook = notebook.Notebook;
     let MarkdownCell = textcell.MarkdownCell;
@@ -149,7 +150,7 @@ define([
         })
     }
 
-    function init() {
+    function initialize() {
         console.log('Assignment notebook initialized!');
         basecell.Cell.options_default.cm_config.lineNumbers = true;
         patch_cell_type_select();
@@ -158,17 +159,8 @@ define([
         update_cells();
     }
 
-
-    function load_extension() {
-        if (Jupyter.notebook) {
-            init();
-        } else {
-            events.on('notebook_loaded.notebook', () => init());
-        }
-    }
-
     return {
-        load_ipython_extension: load_extension
+        initialize: initialize
     }
 
 });
