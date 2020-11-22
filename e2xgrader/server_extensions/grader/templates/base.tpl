@@ -6,6 +6,8 @@
     {%- block head -%}
     <script src="{{ base_url }}/formgrader/static/components/jquery/jquery.min.js"></script>
     <script src="{{ base_url }}/grader/static/components/fontawesome/js/all.min.js"></script>
+    <script src="{{ base_url }}/grader/static/components/underscore/underscore.js"></script>
+    <script src="{{ base_url }}/grader/static/components/underscore/backbone.js"></script>
     <script src="{{ base_url }}/static/components/requirejs/require.js"></script>
     <script type="text/javascript">
         require.config({
