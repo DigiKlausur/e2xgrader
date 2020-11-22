@@ -17,6 +17,7 @@
             }
         })
     </script>
+    <script src="{{ base_url }}/grader/static/js/manage_assignments.js"></script>
     <link rel="stylesheet" href="{{ base_url }}/grader/static/css/grader.css" type="text/css">
     {%- endblock -%}
 </head>
