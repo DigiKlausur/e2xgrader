@@ -493,7 +493,7 @@ var createAssignmentModal = function () {
             "collection": models
         });
 
-        var tbl = $(".e2xtable");
+        var tbl = $("#main_table");
         var row = insertRow(tbl);
         var view = new AssignmentUI({
             "model": model,
