@@ -77,6 +77,7 @@ class ExtensionManager:
         self.disable_serverextension('nbgrader.server_extensions.assignment_list')
         self.enable_serverextension_py('e2xgrader', sys_prefix=sys_prefix, user=user)
         self.disable_serverextension('e2xgrader.server_extensions.formgrader')
+        self.disable_serverextension('e2xgrader.server_extensions.grader')
         
         # Install nbgrader nbextensions
         self.install_nbextensions('nbgrader', sys_prefix=sys_prefix, user=user)

@@ -1,0 +1,194 @@
+.e2xtable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1em;
+  border: 1px solid #ddd;
+  min-width: 100%;
+}
+ 
+.e2xtable td {
+  text-align: center;
+  padding: .5em;
+  border: 1px solid #ddd;  
+}
+
+.e2xtable > thead th {
+  background-color: #d2dbde;
+}
+
+.e2xtable tr:nth-child(even) {
+  background-color: white;
+}
+
+.e2xtable tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.e2xtable .column2 {
+  float: right;
+}
+
+.e2xtable select {
+  height: 2.5em;
+  width: 15em;
+  border: 1px solid #bbb;
+}
+
+.e2xtable input[type=text] {
+  height: 2.5em;
+  width: 15em;
+}
+
+.e2xtable thead th {
+  background-color: #2980b9;
+  color: white;
+}
+
+.e2xtable th:first-child {
+  text-align: left;
+  padding-left: .5em;
+}
+
+.e2xtable td:first-child {
+  text-align: left;
+  padding-left: .5em;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #000;
+  display: flex;
+  position: absolute;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#page {
+  margin: auto;
+  margin-top: 1em;
+  padding: 1em;
+  padding-bottom: 2em;
+  box-shadow: 3px 3px 10px #ddd;
+}
+
+#header {
+  margin-top: -2em;
+}
+
+#body {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+}
+
+.option {
+  border: 1px solid #ddd;
+  border-radius: .5em;
+  min-width: 10em;
+  width: 30em;
+  padding: 1em;
+  display: flex;
+}
+
+
+.icon {
+  display: inline;
+  margin-left: -1em;
+}
+.option h3 {
+  display:  inline;
+ 
+}
+
+.option svg {
+  min-width: 2em;
+  font-size: 3em;
+}
+
+svg {
+  color: #aaa;
+}
+
+.option:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+#options svg {
+  color: #008ffb;
+}
+
+#notebooks svg {
+  color: #ef474a;
+}
+
+#grading svg {
+  color: #fdc006; 
+}
+
+#exchange svg {
+  color: #995dea;
+}
+
+.label p {
+    margin: 0;
+}
+
+#breadcrumbs ul {
+  list-style: none;
+  padding: 0;
+}
+
+#breadcrumbs li {
+  display: inline;
+}
+
+#breadcrumbs {
+  background-color: #006fbf;
+  padding: 0 .5em 0 .5em;
+  line-height: 2em;
+  border-radius: .25em;
+  color: #fff;
+}
+
+#breadcrumbs svg {
+  color: #fff;
+}
+
+#breadcrumbs a {
+  text-decoration: none;
+  color: white;
+}
+
+#assignment_info {
+  grid-column: 1 / span 2;
+}
+
+.e2xtable td:nth-child(1) {
+  font-weight: bold;
+}
+
+.e2xtable thead th {
+  background-color: #008ffb;
+}
+
+#description {
+  grid-column: 1 / span 2;
+  max-width: 65em;
+}
+
+#table {
+  grid-column: 1 / span 2;
+}
+
+.option {
+  min-height: 4.5em;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
