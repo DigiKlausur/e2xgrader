@@ -7,7 +7,7 @@
     <script src="{{ base_url }}/formgrader/static/components/jquery/jquery.min.js"></script>
     <script src="{{ base_url }}/grader/static/components/fontawesome/js/all.min.js"></script>
     <script src="{{ base_url }}/grader/static/components/underscore/underscore.js"></script>
-    <script src="{{ base_url }}/grader/static/components/underscore/backbone.js"></script>
+    <script src="{{ base_url }}/grader/static/components/backbone/backbone.js"></script>
     <script src="{{ base_url }}/static/components/requirejs/require.js"></script>
     <script type="text/javascript">
         require.config({
@@ -16,6 +16,7 @@
                 jquery: 'components/jquery/jquery.min'
             }
         })
+        var base_url = "{{ base_url }}";
     </script>
     <script src="{{ base_url }}/grader/static/js/manage_assignments.js"></script>
     <link rel="stylesheet" href="{{ base_url }}/grader/static/css/grader.css" type="text/css">
