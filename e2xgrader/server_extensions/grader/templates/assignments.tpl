@@ -26,6 +26,7 @@
                 .append($('<th/>').text('# of Submissions'))
         ));
         let body = $('<tbody/>');
+        body.id = "main-table";
         assignments.forEach(function (assignment) {
           body.append(
             $('<tr/>')

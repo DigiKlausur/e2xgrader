@@ -22,14 +22,7 @@ var AssignmentUI = Backbone.View.extend({
         this.$name = this.$el.find(".name");
         this.$duedate = this.$el.find(".duedate");
         this.$status = this.$el.find(".status");
-        this.$edit = this.$el.find(".edit");
-        this.$assign = this.$el.find(".assign");
-        this.$preview = this.$el.find(".preview");
-        this.$release = this.$el.find(".release");
-        this.$collect = this.$el.find(".collect");
         this.$num_submissions = this.$el.find(".num-submissions");
-        this.$generate_feedback = this.$el.find(".generate-feedback");
-        this.$release_feedback = this.$el.find(".release-feedback");
 
         this.listenTo(this.model, "change", this.render);
         this.listenTo(this.model, "request", this.animateSaving);
@@ -85,14 +78,7 @@ var AssignmentUI = Backbone.View.extend({
         this.$name.empty();
         this.$duedate.empty();
         this.$status.empty();
-        this.$edit.empty();
-        this.$assign.empty();
-        this.$preview.empty();
-        this.$release.empty();
-        this.$collect.empty();
         this.$num_submissions.empty();
-        this.$generate_feedback.empty();
-        this.$release_feedback.empty();
     },
 
     render: function () {
@@ -126,7 +112,7 @@ var AssignmentUI = Backbone.View.extend({
             this.$status.append($("<span/>").addClass("label label-success").text("released"));
         }
 
-        // edit metadata
+        /* edit metadata
         this.$edit.append($("<a/>")
             .attr("href", "#")
             .click(_.bind(this.openModal, this))
@@ -140,7 +126,7 @@ var AssignmentUI = Backbone.View.extend({
             .click(_.bind(this.assign, this))
             .append($("<span/>")
                 .addClass("glyphicon glyphicon-education")
-                .attr("aria-hidden", "true")));
+                .attr("aria-hidden", "true")));*/
 
         // preview student version
         var release_path = this.model.get("release_path");
@@ -468,14 +454,7 @@ var insertRow = function (table) {
     row.append($("<td/>").addClass("name"));
     row.append($("<td/>").addClass("text-center duedate"));
     row.append($("<td/>").addClass("text-center status"));
-    row.append($("<td/>").addClass("text-center edit"));
-    row.append($("<td/>").addClass("text-center assign"));
-    row.append($("<td/>").addClass("text-center preview"));
-    row.append($("<td/>").addClass("text-center release"));
-    row.append($("<td/>").addClass("text-center collect"));
     row.append($("<td/>").addClass("text-center num-submissions"));
-    row.append($("<td/>").addClass("text-center generate-feedback"));
-    row.append($("<td/>").addClass("text-center release-feedback"));
     table.append(row)
     return row;
 };
@@ -490,14 +469,13 @@ var createAssignmentModal = function () {
             duedate = null;
             timezone = null;
         }
-        if (timezone == "") {
+        if (timezone === "") {
             timezone = null;
         }
         if (name === "") {
             modal.modal('hide');
             return;
-        }
-        if (name.indexOf("+") != -1) {
+        } else if (name.indexOf("+") != -1) {
             var err = $("#create-error");
             err.text("Assignment names may not include the '+' character.");
             err.show();
@@ -515,7 +493,7 @@ var createAssignmentModal = function () {
             "collection": models
         });
 
-        var tbl = $("#main-table");
+        var tbl = $(".e2xtable");
         var row = insertRow(tbl);
         var view = new AssignmentUI({
             "model": model,
@@ -524,7 +502,7 @@ var createAssignmentModal = function () {
         views.push(view);
         model.save();
         tbl.parent().DataTable().row.add(row).draw();
-
+        console.log("new row added")
         modal.modal('hide');
     };
 
