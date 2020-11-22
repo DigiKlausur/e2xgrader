@@ -3,6 +3,9 @@
 {%- block head -%}
   {{super()}}
 
+  <script>
+    var url_prefix = "{{ url_prefix }}";
+  </script>
   <script type="text/javascript">
     $.ajax({
       url: "{{ base_url }}/formgrader/api/assignments",
@@ -49,7 +52,7 @@
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <div class="option" id="options" onclik="createAssignmentModal();">
+  <div class="option" id="options" onclick="createAssignmentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>
       <h3>Add Assignment</h3>
