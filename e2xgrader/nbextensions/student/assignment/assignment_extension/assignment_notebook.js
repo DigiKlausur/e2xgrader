@@ -42,6 +42,20 @@ define([
         });
     }
 
+    function alert_copy_cell_disabled() {
+        let body = $('<div/>')
+            .append($('<span/>')
+                .text('You can not copy cells that belong to the assignment!'));
+        dialog.modal({
+            keyboard_manager: Jupyter.keyboard_manager,
+            title: 'Can not copy cell',
+            body: body,
+            buttons: {
+                OK: {}
+            }
+        });
+    }
+
     function patch_cell_type_select() {
         let old_to_code = Notebook.prototype.to_code;
         let old_to_markdown = Notebook.prototype.to_markdown;
@@ -75,6 +89,7 @@ define([
         }
     }
 
+
     function patch_MarkdownCell_unrender() {
         let old_unrender = MarkdownCell.prototype.unrender;
 
@@ -84,7 +99,6 @@ define([
             }
         }
     }
-
     
 
     function patch_move_cells() {
@@ -155,6 +169,54 @@ define([
         }
     }
 
+
+    function patch_paste_cell() {
+
+        let old_paste_cell_replace = Notebook.prototype.paste_cell_replace;
+        let old_paste_cell_above = Notebook.prototype.paste_cell_above;
+        let old_paste_cell_below = Notebook.prototype.paste_cell_below;
+
+        // Remove Ctrl-V command shortcut
+        Jupyter.keyboard_manager.command_shortcuts.remove_shortcut('Cmdtrl-V');
+
+        function sanitize_clipboard(clipboard) {
+            if (clipboard === null) {
+                return clipboard;
+            }
+            console.log('Clipboard:');
+            console.log(clipboard);
+            
+            let sanitized = [];
+            clipboard.forEach(function(cell) {
+                if (!model.is_nbgrader_cell(cell)) {
+                    sanitized.push(cell);
+                }
+            })
+            console.log('Sanitized clipboard:');
+            console.log(sanitized);
+            if (sanitized.length == 0) {
+                return null;
+            }
+            return sanitized;
+        }
+
+        Notebook.prototype.paste_cell_replace = function () {
+            this.clipboard = sanitize_clipboard(this.clipboard);
+            old_paste_cell_replace.apply(this, arguments);
+        }
+
+        Notebook.prototype.paste_cell_above = function () {
+            this.clipboard = sanitize_clipboard(this.clipboard);
+            old_paste_cell_above.apply(this, arguments);
+        }
+
+        Notebook.prototype.paste_cell_below = function () {
+            this.clipboard = sanitize_clipboard(this.clipboard);
+            old_paste_cell_below.apply(this, arguments);
+        }
+
+    }
+
     function update_cells() {
         Jupyter.notebook.get_cells().forEach(function (cell) {
             if (model.is_test_cell(cell) && model.is_empty_cell(cell)) {
@@ -165,13 +227,14 @@ define([
         })
     }
 
-    function initialize() {
-        console.log('Assignment notebook initialized!');
+    function initialize() {        
         basecell.Cell.options_default.cm_config.lineNumbers = true;
         patch_cell_type_select();
         patch_MarkdownCell_unrender();
         patch_move_cells();
+        patch_paste_cell();
         update_cells();
+        console.log('Assignment notebook initialized!');
     }
 
     return {
