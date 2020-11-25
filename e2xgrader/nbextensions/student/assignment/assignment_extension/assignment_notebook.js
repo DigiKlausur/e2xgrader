@@ -42,20 +42,6 @@ define([
         });
     }
 
-    function alert_copy_cell_disabled() {
-        let body = $('<div/>')
-            .append($('<span/>')
-                .text('You can not copy cells that belong to the assignment!'));
-        dialog.modal({
-            keyboard_manager: Jupyter.keyboard_manager,
-            title: 'Can not copy cell',
-            body: body,
-            buttons: {
-                OK: {}
-            }
-        });
-    }
-
     function patch_cell_type_select() {
         let old_to_code = Notebook.prototype.to_code;
         let old_to_markdown = Notebook.prototype.to_markdown;
