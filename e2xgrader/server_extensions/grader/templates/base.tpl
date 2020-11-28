@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
     {%- block title -%}
     {%- endblock -%}
     <title>e2xgrader</title>
     {%- block head -%}
-    <script src="{{ base_url }}/formgrader/static/components/jquery/jquery.min.js"></script>
+    <script src="{{ base_url }}/grader/static/components/jquery/jquery.min.js"></script>
+    <script src="{{ base_url }}/grader/static/components/jquery/jquery.js"></script>
     <script src="{{ base_url }}/grader/static/components/fontawesome/js/all.min.js"></script>
     <script src="{{ base_url }}/formgrader/static/components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="{{ base_url }}/formgrader/static/components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -51,3 +52,4 @@
         </div>
     </div>
 </body>
+</html>
