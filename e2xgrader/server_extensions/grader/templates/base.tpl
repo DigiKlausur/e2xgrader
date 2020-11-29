@@ -12,6 +12,7 @@
     <script src="{{ base_url }}/formgrader/static/components/bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ base_url }}/formgrader/static/components/underscore/underscore.js"></script>
     <script src="{{ base_url }}/formgrader/static/components/backbone/backbone.js"></script>
+    <script src="{{ base_url }}/formgrader/static/js/backbone_xsrf.js"></script>
     <script src="{{ base_url }}/static/components/requirejs/require.js"></script>
     <script type="text/javascript">
         require.config({
