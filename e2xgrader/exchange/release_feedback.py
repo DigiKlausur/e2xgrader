@@ -25,7 +25,6 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
         self.course_path = os.path.join(self.root, self.coursedir.course_id)
 
         self.dest_path = os.path.join(self.course_path, self.feedback_directory)
-        #self.dest_path = os.path.join(self.outbound_feedback_path)
 
         if self.personalized_feedback:
             # u+rwx, g+wx, o+wx
@@ -43,6 +42,9 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             )
 
     def copy_files(self):
+        """
+        Overried copy_files and add personalized-feedback generation
+        """
         if self.coursedir.student_id_exclude:
             exclude_students = set(self.coursedir.student_id_exclude.split(','))
         else:
