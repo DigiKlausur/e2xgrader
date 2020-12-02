@@ -3,6 +3,8 @@ import shutil
 import glob
 import re
 
+from stat import S_IRUSR, S_IWUSR, S_IXUSR, S_IRGRP, S_IWGRP, S_IXGRP, S_IXOTH, S_IWOTH, S_IROTH, S_ISGID
+
 from nbgrader.exchange.default import ExchangeReleaseFeedback
 
 from .exchange import E2xExchange
@@ -25,7 +27,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
         self.dest_path = os.path.join(self.course_path, self.feedback_directory)
         #self.dest_path = os.path.join(self.outbound_feedback_path)
 
-        if self.perosnalized_feedback:
+        if self.personalized_feedback:
             # u+rwx, g+wx, o+wx
             self.ensure_directory(
                 self.dest_path,
@@ -76,34 +78,38 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             submission_dir = self.coursedir.format_path(
                 self.coursedir.submitted_directory, student_id,
                 self.coursedir.assignment_id)
-
-            #timestamp = open(os.path.join(feedback_dir, 'timestamp.txt')).read()
-            #nbfile = os.path.join(submission_dir, "{}.ipynb".format(notebook_id))
-            #unique_key = make_unique_key(
-            #    self.coursedir.course_id,
-            #    self.coursedir.assignment_id,
-            #    notebook_id,
-            #    student_id,
-            #    timestamp)
-
-            #self.log.debug("Unique key is: {}".format(unique_key))
-            #checksum = notebook_hash(nbfile, unique_key)
-            #dest = os.path.join(self.dest_path, "{}.html".format(checksum))
-           
-            # dest= personalized-feedback/{student_id}/{assignment_id}/{notebook_id.html}
-            dest = os.path.join(self.dest_path, student_id, self.coursedir.assignment_id)
-
-            # u+rwx, g+wx, o+wx
-            self.ensure_directory(
-                dest,
-                (S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP| S_IWOTH | S_IROTH |
-                 ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
-            )
             
-            dest = os.path.join(dest, notebook_id+".html")
+            if self.personalized_feedback:
+                dest = os.path.join(self.dest_path, student_id, self.coursedir.assignment_id)
+                timestamp = open(os.path.join(feedback_dir, 'timestamp.txt')).read()
+                # u+rwx, g+wx, o+wx
+                self.ensure_directory(
+                    dest,
+                    (S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP| S_IXOTH | S_IROTH |
+                     ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
+                )
+                
+                dest = os.path.join(dest, notebook_id+"-{}.html".format(timestamp.replace(" ","-")))
 
-            self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ({})".format(
-                student_id, self.coursedir.course_id, self.coursedir.assignment_id, notebook_id, timestamp))
+                self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ".format(
+                    student_id, self.coursedir.course_id, self.coursedir.assignment_id, notebook_id))
+            else:
+                timestamp = open(os.path.join(feedback_dir, 'timestamp.txt')).read()
+                nbfile = os.path.join(submission_dir, "{}.ipynb".format(notebook_id))
+                unique_key = make_unique_key(
+                    self.coursedir.course_id,
+                    self.coursedir.assignment_id,
+                    notebook_id,
+                    student_id,
+                    timestamp)
+
+                self.log.debug("Unique key is: {}".format(unique_key))
+                checksum = notebook_hash(nbfile, unique_key)
+                dest = os.path.join(self.dest_path, "{}.html".format(checksum))
+
+                self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ({})".format(
+                              student_id, self.coursedir.course_id, self.coursedir.assignment_id, 
+                              notebook_id, timestamp))
 
             shutil.copy(html_file, dest)
             self.log.info("Feedback released to: {}".format(dest))
