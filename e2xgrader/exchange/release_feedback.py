@@ -23,7 +23,6 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             self.fail("No course id specified. Re-run with --course flag.")
 
         self.course_path = os.path.join(self.root, self.coursedir.course_id)
-
         self.dest_path = os.path.join(self.course_path, self.feedback_directory)
 
         if self.personalized_feedback:
