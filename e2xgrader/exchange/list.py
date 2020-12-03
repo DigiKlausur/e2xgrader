@@ -1,8 +1,18 @@
 import os
 import glob
 import re
+import hashlib
+
 from nbgrader.exchange.default import ExchangeList
+from nbgrader.utils import notebook_hash, make_unique_key
 from .exchange import E2xExchange
+
+
+def _checksum(path):
+    m = hashlib.md5()
+    m.update(open(path, 'rb').read())
+    return m.hexdigest()
+
 
 class E2xExchangeList(E2xExchange, ExchangeList):
 
@@ -100,7 +110,7 @@ class E2xExchangeList(E2xExchange, ExchangeList):
                 if self.personalized_feedback:
                     exchange_feedback_path = os.path.join(
                         self.root, info['course_id'], self.feedback_directory, info['student_id'], 
-                        '{0}.html'.format(nb_info['notebook_id']))
+                        info['assignment_id'], '{0}.html'.format(nb_info['notebook_id']))
                 else:
                     unique_key = make_unique_key(
                         info['course_id'],
