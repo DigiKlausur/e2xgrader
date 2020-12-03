@@ -51,7 +51,7 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
             notebooks = glob.glob(pattern)
             for notebook in notebooks:
                 notebook_id = os.path.splitext(os.path.split(notebook)[-1])[0]
-                feedbackpath = os.path.join(self.outbound_path, student_id, assignment_id, '{}-{}.html'.format(notebook_id, timestamp.replace(" ", "-")))
+                feedbackpath = os.path.join(self.outbound_path, student_id, assignment_id, '{}.html'.format(notebook_id))
                 self.log.debug("Feedback file: ",feedbackpath)
                 if os.path.exists(feedbackpath):
                     self.feedback_files.append((notebook_id, timestamp, feedbackpath))

@@ -82,7 +82,6 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             
             if self.personalized_feedback:
                 dest = os.path.join(self.dest_path, student_id, self.coursedir.assignment_id)
-                timestamp = open(os.path.join(feedback_dir, 'timestamp.txt')).read()
                 # u+rwx, g+wx, o+wx
                 self.ensure_directory(
                     dest,
@@ -90,7 +89,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
                      ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
                 )
                 
-                dest = os.path.join(dest, notebook_id+"-{}.html".format(timestamp.replace(" ","-")))
+                dest = os.path.join(dest, notebook_id+".html")
 
                 self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ".format(
                     student_id, self.coursedir.course_id, self.coursedir.assignment_id, notebook_id))
