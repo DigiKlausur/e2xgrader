@@ -17,6 +17,11 @@ class E2xExchange(Exchange):
         help='Whether to use a personalized inbound directory per student'
     ).tag(config=True)
 
+    personalized_feedback = Bool(
+        False,
+        help='Whether to use a personalized feedback directory per student'
+    ).tag(config=True)
+
     outbound_directory = Unicode(
         'outbound',
         help='The name of the outbound directory'
@@ -27,12 +32,22 @@ class E2xExchange(Exchange):
         help='The name of the inbound directory'
     )
 
+    feedback_directory = Unicode(
+        'feedback',
+        help='The name of the feedback directory'
+    )
+
     def __init__(self, coursedir=None, authenticator=None, **kwargs):
         super().__init__(coursedir=coursedir, authenticator=authenticator, **kwargs)
+        
         if self.personalized_outbound:
             self.outbound_directory = 'personalized-outbound'
+        
         if self.personalized_inbound:
             self.inbound_directory = 'personalized-inbound'
+        
+        if self.personalized_feedback:
+            self.feedback_directory = 'personalized-feedback'
 
     def ensure_root(self):
         """
