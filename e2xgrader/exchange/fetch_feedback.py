@@ -51,16 +51,52 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
             notebooks = glob.glob(pattern)
             for notebook in notebooks:
                 notebook_id = os.path.splitext(os.path.split(notebook)[-1])[0]
-                feedbackpath = os.path.join(self.outbound_path, student_id, assignment_id, '{}.html'.format(notebook_id))
-                self.log.debug("Feedback file: ",feedbackpath)
-                if os.path.exists(feedbackpath):
-                    self.feedback_files.append((notebook_id, timestamp, feedbackpath))
-                    self.log.info(
-                        "Found feedback for '{}/{}/{}' submitted at {}".format(
-                            self.coursedir.course_id, assignment_id, notebook_id, timestamp))
-                    continue
+                
+                # Check if personalized_inbound is used
+                if self.personalized_inbound:
+                    feedbackpath = os.path.join(self.outbound_path, student_id, assignment_id, '{}.html'.format(notebook_id))
+                    self.log.debug("Feedback file: ",feedbackpath)
+                    if os.path.exists(feedbackpath):
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
+                        self.log.info(
+                            "Found feedback for '{}/{}/{}' submitted at {}".format(
+                                self.coursedir.course_id, assignment_id, notebook_id, timestamp))
+                        continue
 
-                # If we reached here, then there's no feedback available
-                self.log.warning(
-                    "Could not find feedback for '{}/{}/{}' submitted at {}".format(
-                        self.coursedir.course_id, assignment_id, notebook_id, timestamp))
+                    # If we reached here, then there's no feedback available
+                    self.log.warning(
+                        "Could not find feedback for '{}/{}/{}' submitted at {}".format(
+                            self.coursedir.course_id, assignment_id, notebook_id, timestamp))
+                else:
+                    unique_key = make_unique_key(
+                        self.coursedir.course_id,
+                        assignment_id,
+                        notebook_id,
+                        student_id,
+                        timestamp)
+
+                    # Look for the feedback using new-style of feedback
+                    self.log.debug("Unique key is: {}".format(unique_key))
+                    nb_hash = notebook_hash(notebook, unique_key)
+                    feedbackpath = os.path.join(self.outbound_path, '{0}.html'.format(nb_hash))
+                    if os.path.exists(feedbackpath):
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
+                        self.log.info(
+                            "Found feedback for '{}/{}/{}' submitted at {}".format(
+                                self.coursedir.course_id, assignment_id, notebook_id, timestamp))
+                        continue
+
+                    # If it doesn't exist, try the legacy hashing
+                    nb_hash = notebook_hash(notebook)
+                    feedbackpath = os.path.join(self.outbound_path, '{0}.html'.format(nb_hash))
+                    if os.path.exists(feedbackpath):
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
+                        self.log.warning(
+                            "Found legacy feedback for '{}/{}/{}' submitted at {}".format(
+                                self.coursedir.course_id, assignment_id, notebook_id, timestamp))
+                        continue
+
+                    # If we reached here, then there's no feedback available
+                    self.log.warning(
+                        "Could not find feedback for '{}/{}/{}' submitted at {}".format(
+                            self.coursedir.course_id, assignment_id, notebook_id, timestamp))
