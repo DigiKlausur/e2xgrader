@@ -24,6 +24,7 @@
                 .append($('<th/>').text('Edit'))
         ));
         let body = $('<tbody/>');
+        body.attr('id' , 'main_table');
         students.forEach(function (student) {
           if (student['last_name'] == null) {
             student['last_name'] = 'None';
