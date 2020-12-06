@@ -25,8 +25,9 @@
     </script>
     <script src="{{ base_url }}/formgrader/static/js/utils.js"></script>
     <script src="{{ base_url }}/grader/static/js/manage_assignments.js"></script>
-    <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <script src="{{ base_url }}/formgrader/static/js/manage_students"></script>
+    <!--<link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/datatables.net-bs/css/dataTables.bootstrap.min.css">-->
     <link rel="stylesheet" href="{{ base_url }}/grader/static/css/grader.css" type="text/css">
     {%- endblock -%}
 </head>

@@ -503,13 +503,6 @@ var createAssignmentModal = function () {
         model.save();
         tbl.parent().DataTable().row.add(row).draw();
         console.log("new row added")
-        /*$.ajax({
-            url: "{{ base_url }}/formgrader/api/assignments",
-            type: 'put',
-            success: function (response) {
-                console.log(response);
-            }
-            } );*/
         modal.modal('hide');
     };
 

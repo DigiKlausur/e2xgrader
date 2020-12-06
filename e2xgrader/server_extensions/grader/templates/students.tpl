@@ -60,7 +60,7 @@
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <div class="option" id="options">
+  <div class="option" id="options" onclick="createStudentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>
       <h3>Add Student</h3>
