@@ -1,3 +1,12 @@
+
+let selection = [];
+let onSelect = function(id) {
+  // Get the checkbox
+  selection.push(id);
+  return;
+
+}
+
 $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
@@ -11,6 +20,7 @@ $.ajax({
           .append(
             $('<thead/>').append(
               $('<tr/>')
+                .append($('<th/>').text(' '))
                 .append($('<th/>').text('Name'))
                 .append($('<th/>').text('Due Date'))
                 .append($('<th/>').text('Status'))
@@ -19,9 +29,15 @@ $.ajax({
         let body = $('<tbody/>');
         body.attr('id' , 'main_table');
         assignments.forEach(function (assignment) {
+          console.log(assignment);
           body.append(
             $('<tr/>')
-              .append($('<td/>').append($('<a/>').attr('href', '{{ base_url }}/grader/assignment/' + assignment['name']).text(assignment['name'])))
+              .append($('<input />', {
+                type : 'checkbox',
+                id : assignment['id'],
+                value: 0
+                }))
+              .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
               .append($('<td/>').text(assignment['status']))
               .append($('<td/>').text(assignment['num_submissions']))

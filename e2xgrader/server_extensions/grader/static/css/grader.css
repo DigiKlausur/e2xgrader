@@ -136,6 +136,11 @@ svg {
 
 .label p {
     margin: 0;
+    color: black;
+}
+
+.label {
+    color: black;
 }
 
 #breadcrumbs ul {
