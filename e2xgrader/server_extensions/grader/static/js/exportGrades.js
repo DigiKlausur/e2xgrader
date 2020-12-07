@@ -1,5 +1,5 @@
 $.ajax({
-      url: "{{ base_url }}/formgrader/api/assignments",
+      url: base_url+"/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
         console.log(response);
