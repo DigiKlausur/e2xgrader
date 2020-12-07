@@ -7,7 +7,7 @@
     var url_prefix = "{{ url_prefix }}";
     var base_url ="{{ base_url }}";
   </script>
-  <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
+  <script type="text/javascript" src="{{ base_url }}/grader/static/js/manage_assignments.js></script>
 
 {%- endblock -%}
 
@@ -17,10 +17,10 @@
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <div class="option" id="options">
+  <div class="option" id="options" onclick="createAssignmentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>
-      <h3>Download</h3>
+      <h3>Add Assignment</h3>
     </div>
   </div>
 {%- endblock -%}
