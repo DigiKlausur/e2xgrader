@@ -28,7 +28,7 @@
 <p>You can either export the grades on an assignment level (total score per assignment per student) or on a notebook level (total score per notebook per student) or on a task level (total score per task per student).</p>
 </div>
 <!--<a target="_blank" href="{{ base_url }}/formgrader/export_grades/assignments" download="grades.csv">-->
-<div class="option" id="download_assignments" onclick="window.location='{{ base_url }}/grader/templates/export_common'">
+<div class="option" id="download_assignments" onclick="window.location='{{ base_url }}/grader/export_common'">
     
     <div class='icon'><i class='fa fa-file-download'></i></div>
     <div class='label'>

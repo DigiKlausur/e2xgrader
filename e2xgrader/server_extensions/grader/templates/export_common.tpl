@@ -3,21 +3,23 @@
 {%- block head -%}
   {{super()}}
 
+  <script>
+    var url_prefix = "{{ url_prefix }}";
+  </script>
   <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
-
 
 {%- endblock -%}
 
 {%- block breadcrumbs -%}
   {{ super() }}
-  <li>/ <a href="{{ base_url }}/grader/students">Students</a></li>
+  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a></li>
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <div class="option" id="options" onclick="createStudentModal();">
+  <div class="option" id="options" onclick="createAssignmentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>
-      <h3>Add Student</h3>
+      <h3>Add Assignment</h3>
     </div>
   </div>
 {%- endblock -%}
