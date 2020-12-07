@@ -5,9 +5,8 @@
 
   <script>
     var url_prefix = "{{ url_prefix }}";
-    var base_url ="{{ base_url }}";
   </script>
-  <script type="text/javascript" src="{{ base_url }}/grader/static/js/manage_assignments.js></script>
+  <script src="{{ base_url }}/grader/static/js/exportGrades.s"></script>
 
 {%- endblock -%}
 
