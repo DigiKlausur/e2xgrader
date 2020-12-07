@@ -50,6 +50,17 @@ class ExportGradesHandler(BaseHandler):
             windows=(sys.prefix == 'win32'))
         self.write(html)
 
+class ExportGeneralHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        html = self.render(
+            "export_common.tpl",
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
 
 class StudentsHandler(BaseHandler):
 
@@ -73,5 +84,6 @@ default_handlers = [
     (r"/grader/?", BaseGraderHandler),
     (r"/grader/assignments/?", AssignmentsHandler),
     (r"/grader/export_grades/?", ExportGradesHandler),
+    (r"/grader/export_common/?", ExportGeneralHandler),
     (r"/grader/students/?", StudentsHandler),
 ]

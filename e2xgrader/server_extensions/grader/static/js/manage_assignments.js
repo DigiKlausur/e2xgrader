@@ -356,6 +356,7 @@ var AssignmentUI = Backbone.View.extend({
             timezone = null;
         }
         this.model.save({"duedate_notimezone": duedate, "duedate_timezone": timezone});
+
     },
 
     animateSaving: function () {
@@ -502,7 +503,7 @@ var createAssignmentModal = function () {
         views.push(view);
         model.save();
         tbl.parent().DataTable().row.add(row).draw();
-        console.log("new row added")
+        console.log("new row added");
         modal.modal('hide');
     };
 
