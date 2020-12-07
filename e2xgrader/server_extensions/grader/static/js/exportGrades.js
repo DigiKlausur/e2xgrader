@@ -5,10 +5,9 @@ $.ajax({
         console.log(response);
         console.log($.parseJSON(response));
         let assignments = $.parseJSON(response);
-        let table = $('<table/>');
+        let table = $('#table');
         table
           .addClass('e2xtable')
-          .attr('id' , 'main_table')
           .append(
             $('<thead/>').append(
               $('<tr/>')
@@ -18,20 +17,21 @@ $.ajax({
                 .append($('<th/>').text('# of Submissions'))
         ));
         let body = $('<tbody/>');
-        /*body.attr('id' , 'main_table');
+        body.attr('id' , 'main_table');
         assignments.forEach(function (assignment) {
           body.append(
-            $('<tr/>')
+
+            $('<input type="radio" name="id" value="' + assignments + '">')
               .append($('<td/>').append($('<a/>').attr('href', '{{ base_url }}/grader/assignment/' + assignment['name']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
               .append($('<td/>').text(assignment['status']))
               .append($('<td/>').text(assignment['num_submissions']))
           );
-        });*/
+        });
 
         $('#table').append(table.append(body));
-        table.DataTable({
-        ajax: '{{base_url}}/formgrader/api/assignments',
+        /*table.DataTable({
+        ajax: base_url+'/formgrader/api/assignments',
         order: [[1, 'asc']],
         columnDefs:[
             {
@@ -39,11 +39,24 @@ $.ajax({
                 searchable: false,
                 orderable: true,
                 render: function(data){
-                   data = '<input type="radio" name="id" value="' + data + '">';
+                   data = '<input type="radio" name="id" value="' + assignments + '">';
                    return data;
                 }
             }
         ]
+        });
+        table.DataTable( {
+            columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+            select: {
+            style:    'os',
+            selector: 'td:first-child'
+        },
+            order: [[ 1, 'asc' ]]
+        });*/
       },
       error: function (xhr) {
         console.log('Something went wrong when fetching the assignment infos');
