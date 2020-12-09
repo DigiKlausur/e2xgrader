@@ -67,7 +67,7 @@ define([
 
         let help = $('<button/>')
             .attr('id', 'e2xhelp')
-            .click(() => window.open('/e2xhelp/base/html/en', '_blank'));
+            .click(() => window.open(Jupyter.notebook.base_url + 'e2xhelp/base/html/en', '_blank'));
         help.append($('<span/>').text('Help'));
         help.append($('<i/>').addClass('fa fa-question'));
         div.append(help);
