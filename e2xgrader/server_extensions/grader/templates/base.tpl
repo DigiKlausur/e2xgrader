@@ -36,7 +36,7 @@
 <body>
     <div id="page">
         <div id="header">
-            <div class="option" id="home" onclick="window.location='{{ base_url }}/grader'"><h1>e²xgrader</h1></div>
+            <div id="home" onclick="window.location='{{ base_url }}/grader'"><h1>e²xgrader</h1></div>
             {%- block pagetitle -%}
 
             {%- endblock -%}
