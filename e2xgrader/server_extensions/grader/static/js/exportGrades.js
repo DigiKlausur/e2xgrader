@@ -1,4 +1,3 @@
-
 let selection = [];
 function onSelect(obj) {
     //obj = Object type DOM element
@@ -9,9 +8,22 @@ function onSelect(obj) {
         selection = _.without(selection, obj.id);
     }
     return;
-
 }
 
+function onSelectall(obj) {
+    //obj = Object type DOM element
+    // Get the checkbox and see state, put value to array respective to state
+    if(obj.checked === true){
+       let checkboxes = document.getElementsByName("checkbox");
+       checkboxes.forEach(function (checkbox){
+            selection.push(checkbox.id);
+       });
+    } else {
+        selection = [];
+    }
+    console.log(selection);
+    return;
+}
 $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
@@ -25,7 +37,11 @@ $.ajax({
           .append(
             $('<thead/>').append(
               $('<tr/>')
-                .append($('<th/>').text(' '))
+                .append($('<th/>').append($('<input />', {
+                type : 'checkbox',
+                id : 'all',
+                value: 0,
+                }).attr('onclick','onSelectall(this)')))
                 .append($('<th/>').text('Name'))
                 .append($('<th/>').text('Due Date'))
                 .append($('<th/>').text('Status'))
@@ -40,7 +56,7 @@ $.ajax({
               .append($('<input />', {
                 type : 'checkbox',
                 id : assignment['id'],
-                value: 0,
+                name: "checkbox",
                 }).attr('onclick','onSelect(this)'))
               .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
