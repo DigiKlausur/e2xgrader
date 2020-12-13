@@ -1,10 +1,14 @@
 
 let selection = [];
-function onSelect(id) {
-  // Get the checkbox
-  selection.push(id);
-  console.log(selection);
-  return;
+function onSelect(obj) {
+    //obj = Object type DOM element
+    // Get the checkbox and see state, put value to array respective to state
+    if(obj.checked === true){
+        selection.push(obj.id);
+    } else {
+        selection = _.without(selection, obj.id);
+    }
+    return;
 
 }
 
@@ -37,7 +41,7 @@ $.ajax({
                 type : 'checkbox',
                 id : assignment['id'],
                 value: 0,
-                }).attr('onclick','onSelect(this.id)'))
+                }).attr('onclick','onSelect(this)'))
               .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
               .append($('<td/>').text(assignment['status']))
