@@ -1,6 +1,6 @@
 
 let selection = [];
-let onSelect = function(id) {
+function onSelect(id) {
   // Get the checkbox
   selection.push(id);
   console.log(selection);
@@ -35,8 +35,9 @@ $.ajax({
             $('<tr/>')
               .append($('<input />', {
                 type : 'checkbox',
+                id : assignment['id'],
                 value: 0,
-                }).attr( 'onclick', "onSelect("+assignment['id']+")"))
+                }).attr('onclick','onSelect(this.id)'))
               .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
               .append($('<td/>').text(assignment['status']))
