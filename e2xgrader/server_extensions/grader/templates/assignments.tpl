@@ -28,9 +28,10 @@
         let body = $('<tbody/>');
         body.attr('id' , 'main_table');
         assignments.forEach(function (assignment) {
+          console.log(assignment);
           body.append(
             $('<tr/>')
-              .append($('<td/>').append($('<a/>').attr('href', '{{ base_url }}/grader/assignment/' + assignment['name']).text(assignment['name'])))
+              .append($('<td/>').append($('<a/>').attr('href', "{{ base_url }}/tree/{{ url_prefix }}/" + assignment['source_path']).text(assignment['name'])))
               .append($('<td/>').text(assignment['duedate']))
               .append($('<td/>').text(assignment['status']))
               .append($('<td/>').text(assignment['num_submissions']))
@@ -44,7 +45,6 @@
       }
     });
   </script>
-  
 {%- endblock -%}
 
 {%- block breadcrumbs -%}

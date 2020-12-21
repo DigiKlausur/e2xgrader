@@ -1,6 +1,6 @@
 
 let selection = [];
-function onSelect(obj) {
+let onSelect = function (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
@@ -10,8 +10,7 @@ function onSelect(obj) {
     }
     return;
 }
-
-let onSelectall =function (obj) {
+let onSelectall = function (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
@@ -27,11 +26,9 @@ let onSelectall =function (obj) {
         });
         selection = [];
     }
-    console.log(selection);
     return;
 }
-
-function recieveData(){
+let recieveData =function (){
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'put',
@@ -71,7 +68,6 @@ $.ajax({
         let body = $('<tbody/>');
         body.attr('id' , 'main_table');
         assignments.forEach(function (assignment) {
-          console.log(assignment);
           body.append(
             $('<tr/>')
               .append($('<input />', {
