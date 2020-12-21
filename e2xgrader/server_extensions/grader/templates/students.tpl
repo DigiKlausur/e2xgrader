@@ -37,7 +37,7 @@
           }
           body.append(
             $('<tr/>')
-              .append($('<td/>').text(student['last_name'] + ', ' + student['first_name']))
+              .append($('<td/>').append($('<a/>').attr('href', "{{ base_url }}/formgrader/manage_students/" + student["id"]).text(student['last_name'] + ', ' + student['first_name'])))
               .append($('<td/>').text(student['id']))
               .append($('<td/>').text(student['email']))
               .append($('<td/>').text(student['score'] + ' / ' + student['max_score']))
