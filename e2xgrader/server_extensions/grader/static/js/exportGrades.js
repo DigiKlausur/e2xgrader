@@ -1,3 +1,4 @@
+
 let selection = [];
 function onSelect(obj) {
     //obj = Object type DOM element
@@ -10,18 +11,38 @@ function onSelect(obj) {
     return;
 }
 
-function onSelectall(obj) {
+let onSelectall =function (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
        let checkboxes = document.getElementsByName("checkbox");
        checkboxes.forEach(function (checkbox){
+            checkbox.checked = true;
             selection.push(checkbox.id);
        });
     } else {
+        document.getElementsByName("checkbox").forEach(function (checkbox){
+            checkbox.checked = false;
+            selection.push(checkbox.id);
+        });
         selection = [];
     }
     console.log(selection);
+    return;
+}
+
+function recieveData(){
+    $.ajax({
+      url: base_url+"/formgrader/api/assignments",
+      type: 'put',
+      data: selection,
+      success: function (response) {
+        console.log("suppossed to get selected data as csv");
+      },
+      error: function (xhr) {
+        console.log('Something went wrong when fetching the assignment infos');
+      }
+    });
     return;
 }
 $.ajax({
