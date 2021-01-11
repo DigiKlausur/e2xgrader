@@ -10,7 +10,7 @@ from ..utils import extra_cells as utils
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 
 
-class FormExporter(HTMLExporter):
+class E2xExporter(HTMLExporter):
     """
     My custom exporter
     """
@@ -20,8 +20,9 @@ class FormExporter(HTMLExporter):
         help='The name of the extra cell metadata field.'
     )
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
         self.template_path.extend(
             [os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'server_extensions', 'formgrader', 'templates'))] + \
             [nbgrader_handlers.template_path]
@@ -69,7 +70,7 @@ class FormExporter(HTMLExporter):
         return soup.prettify().replace('\n', '')
 
     def default_filters(self):
-        for pair in super(FormExporter, self).default_filters():
+        for pair in super(E2xExporter, self).default_filters():
             yield pair
         yield ('to_choicecell', self.to_choicecell)
 
