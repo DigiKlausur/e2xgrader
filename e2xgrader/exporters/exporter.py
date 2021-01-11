@@ -22,7 +22,9 @@ class E2xExporter(HTMLExporter):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
+        if kwargs:
+            if 'config' in kwargs:
+                self.template_file = kwargs['config'].HTMLExporter.template_file
         self.template_path.extend(
             [os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'server_extensions', 'formgrader', 'templates'))] + \
             [nbgrader_handlers.template_path]
