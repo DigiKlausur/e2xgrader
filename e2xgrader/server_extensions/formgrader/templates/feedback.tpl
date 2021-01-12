@@ -54,7 +54,13 @@ div#notebook-container {
 }
 
 div.prompt {
-  min-width: 21ex;
+  min-width: 5em;
+}
+
+div.panel.panel-primary.nbgrader_cell {
+  width: -webkit-calc(100% - 5.8em);
+  width:    -moz-calc(100% - 5.8em);
+  width:         calc(100% - 5.8em);
 }
 
 div.nbgrader_cell {
@@ -233,7 +239,7 @@ span.nbgrader-label {
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
       <div class="input_area">
-        {{ cell.source | highlight_code(metadata=cell.metadata) }}
+        {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
     </div>
     {{ nbgrader_footer(cell) }}
@@ -243,7 +249,7 @@ span.nbgrader-label {
 
   <div class="inner_cell">
     <div class="input_area">
-      {{ cell.source | highlight_code(metadata=cell.metadata) }}
+      {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
     </div>
   </div>
   {%- endif -%}
