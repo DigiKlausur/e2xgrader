@@ -6,8 +6,10 @@ from traitlets import Unicode
 from nbconvert.exporters.html import HTMLExporter
 from jinja2 import contextfilter
 from bs4 import BeautifulSoup
-from ..utils import extra_cells as utils
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
+
+from ..utils import extra_cells as utils
+from .filters import Highlight2HTMLwithLineNumbers
 
 
 class E2xExporter(HTMLExporter):
@@ -78,3 +80,12 @@ class E2xExporter(HTMLExporter):
 
     def _template_file_default(self):
         return 'formgrade.tpl'
+
+    def from_notebook_node(self, nb, resources=None, **kw):
+        langinfo = nb.metadata.get('language_info', {})
+        lexer = langinfo.get('pygments_lexer', langinfo.get('name', None))
+        highlight_code = self.filters.get(
+            'highlight_code_with_linenumbers', 
+            Highlight2HTMLwithLineNumbers(pygments_lexer=lexer, parent=self))
+        self.register_filter('highlight_code_with_linenumbers', highlight_code)
+        return super(E2xExporter, self).from_notebook_node(nb, resources, **kw)
