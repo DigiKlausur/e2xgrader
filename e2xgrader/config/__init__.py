@@ -1,3 +1,5 @@
+from ..exporters import E2xExporter
+
 def configure_base(config):
     config.Autograde.sanitize_preprocessors = [
         'nbgrader.preprocessors.ClearOutput',
@@ -29,6 +31,7 @@ def configure_base(config):
         'nbgrader.preprocessors.ComputeChecksums',
         'nbgrader.preprocessors.CheckCellMetadata',
     ]
+    config.GenerateFeedback.exporter_class = E2xExporter
     
 def configure_exchange(config):
     config.ExchangeFactory.exchange = 'e2xgrader.exchange.E2xExchange'

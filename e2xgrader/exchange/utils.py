@@ -3,7 +3,7 @@ import hashlib
 import nbformat
 
 from textwrap import dedent
-from e2xgrader.exporters import FormExporter
+from e2xgrader.exporters import E2xExporter
 
 def has_name(cell, name):
     if cell.cell_type != 'markdown':
@@ -72,7 +72,7 @@ def generate_student_info(filename, username, hashcode, timestamp):
         """))
 
 def generate_html(nb, dest):
-    exporter = FormExporter()
+    exporter = E2xExporter()
     exporter.template_file = 'form.tpl'
     html, _ = exporter.from_notebook_node(nb)
 
