@@ -1,15 +1,33 @@
 
 let selection = [];
+function format () {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>example</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+
 let onSelect = function (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
         selection.push(obj.id);
+        console.log(selection)
+        return format();
     } else {
         selection = _.without(selection, obj.id);
+        return;
     }
-    return;
+
 }
+
 let onSelectall = function (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
@@ -18,16 +36,19 @@ let onSelectall = function (obj) {
        checkboxes.forEach(function (checkbox){
             checkbox.checked = true;
             selection.push(checkbox.id);
+            console.log(selection);
        });
     } else {
         document.getElementsByName("checkbox").forEach(function (checkbox){
             checkbox.checked = false;
             selection.push(checkbox.id);
+            console.log(selection);
         });
         selection = [];
     }
     return;
 }
+
 let recieveData =function (){
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
@@ -42,8 +63,10 @@ let recieveData =function (){
     });
     return;
 }
+
+
 $.ajax({
-      url: base_url+"/formgrader/api/assignments",
+      url: base_url+"/formgrader/api/assignmentsh",
       type: 'get',
       success: function (response) {
         console.log(response);
@@ -83,8 +106,22 @@ $.ajax({
         });
 
         $('#table').append(table.append(body));
+        $('#options').click(window.location='{{ base_url }}/grader/export_common');
+        $('#options').attr("download", "grades.csv");
       },
       error: function (xhr) {
-        console.log('Something went wrong when fetching the assignment infos');
+        let table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead align="center"/>').append(
+              $('<tr/>')
+                .append($('<th/>').text('Error'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('align', 'center');
+        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
+        $('#table').append(table.append(body));
+        console.log('Something went wrong when fetching the information....contact administration');
       }
     });
