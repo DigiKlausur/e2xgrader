@@ -11,8 +11,6 @@
       url: "{{ base_url }}/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
-        console.log(response);
-        console.log($.parseJSON(response));
         let assignments = $.parseJSON(response);
         let table = $('<table/>');
         table
@@ -28,7 +26,6 @@
         let body = $('<tbody/>');
         body.attr('id' , 'main_table');
         assignments.forEach(function (assignment) {
-          console.log(assignment);
           body.append(
             $('<tr/>')
               .append($('<td/>').append($('<a/>').attr('href', "{{ base_url }}/tree/{{ url_prefix }}/" + assignment['source_path']).text(assignment['name'])))

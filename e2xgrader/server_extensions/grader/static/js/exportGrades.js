@@ -14,7 +14,7 @@ function format () {
     '</table>';
 }
 
-let onSelect = function (obj) {
+function onSelect (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
@@ -28,7 +28,7 @@ let onSelect = function (obj) {
 
 }
 
-let onSelectall = function (obj) {
+function onSelectall (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
@@ -49,7 +49,7 @@ let onSelectall = function (obj) {
     return;
 }
 
-let recieveData =function (){
+function recieveData (){
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'put',
@@ -66,7 +66,7 @@ let recieveData =function (){
 
 
 $.ajax({
-      url: base_url+"/formgrader/api/assignmentsh",
+      url: base_url+"/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
         console.log(response);
@@ -105,9 +105,9 @@ $.ajax({
           );
         });
 
-        $('#table').append(table.append(body));
         $('#options').click(window.location='{{ base_url }}/grader/export_common');
         $('#options').attr("download", "grades.csv");
+        $('#table').append(table.append(body));
       },
       error: function (xhr) {
         let table = $('<table/>');

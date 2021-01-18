@@ -54,7 +54,7 @@ class ExportGeneralHandler(BaseHandler):
 
     @web.authenticated
     @check_xsrf
-    def get(self,):
+    def get(self):
         html = self.render(
             "export_common.tpl",
             url_prefix=self.url_prefix,
