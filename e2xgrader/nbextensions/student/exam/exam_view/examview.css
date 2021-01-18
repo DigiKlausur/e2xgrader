@@ -1,10 +1,19 @@
+:root {
+  --blue: #eaf4f7;
+  --blue-border: #dae4e7;
+  --blue-hover: #c4dde6;
+  --light-blue: #f8fbfc;
+  --orange: #f37726;
+  --orange-border: #f3631d;
+}
+
 #e2xtoolbar {
   display: block;
   
-  background-color: #eaf4f7;
+  background-color: var(--blue);
   line-height: 3em;
   
-  border: 1px solid #dae4e7;
+  border: 1px solid var(--blue-border);
 }
 
 #e2xtoolbar a {
@@ -15,26 +24,26 @@
 .toolbarbutton {
     display: inline-block;
     padding: 0 1em 0 1em;
-    border-right: 1px solid #dae4e7;
+    border-right: 1px solid var(--blue-border);
 }
 
-#e2xtoolbar button {
+#e2xtoolbar button, .e2xbutton {
     display: inline-block;
     padding: 0 1em 0 1em;
     height: 3em;
     border: none;
-    background-color: #eaf4f7;
+    background-color: var(--blue);
     cursor: pointer;
 }
 
-#e2xtoolbar button:hover {
+#e2xtoolbar button:hover, .e2xbutton:hover {
     color: black;
-    background-color: #c4dde6;
+    background-color: var(--blue-hover);
 }
 
 #run_int {
-  border-left: 1px solid #dae4e7;
-  border-right: 1px solid #dae4e7;
+  border-left: 1px solid var(--blue-border);
+  border-right: 1px solid var(--blue-border);
 }
 
 #save-notbook i {
@@ -47,9 +56,8 @@
 
 #e2xtoolbar #submit {
   float: right;
-  background-color: #f37726;
-  border: 2px solid #f3631d;
-  /*box-shadow: inset 2px 2px 0px 0px #eee;*/
+  background-color: var(--orange);
+  border: 2px solid var(--orange-border);
 }
 
 #e2xtoolbar #submit i {
@@ -58,7 +66,7 @@
 
 #e2xtoolbar #e2xhelp {
   float: right;
-  border-left: 1px solid #dae4e7;
+  border-left: 1px solid var(--blue-border);
 }
 
 #e2xhelp i {
@@ -72,9 +80,41 @@
 
 #e2x_kernel_indicator {
   padding: 1em;
-  border-right: 1px solid #dae4e7;
+  border-right: 1px solid var(--blue-border);
 }
 
 #e2x_kernel_indicator #kernel_indicator_icon {
   padding-left: .5em;
 }
+
+.dropdown {
+  position: absolute;
+  display: none;
+  list-style-type: none;
+  background-color: var(--light-blue);
+  text-decoration: none;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  padding: .5em 0 .5em 0;
+  margin-left: -1em;
+  min-width: 9em;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.dropdown > li:hover {
+  background-color: var(--blue);
+}
+
+.dropdown_item {
+  line-height: 2em;
+  padding: 0 .5em 0 .5em;
+}
+
+#advanced {
+  float: right;
+  border-left: 1px solid var(--blue-border);
+}
+
+#advanced:hover .dropdown {
+  display: block;
+}
+
