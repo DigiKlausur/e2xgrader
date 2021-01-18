@@ -78,7 +78,27 @@ define([
 
         div.append(kernel_indicator);
 
+        div.append(advanced_options());
         div.insertAfter($('#maintoolbar-container'));
+    }
+
+    function advanced_options() {
+        let open_menu = $('<span/>').addClass('e2xbutton').attr('id', 'advanced').append($('<a/>').append('Advanced'));
+
+        let menu = $('<ul/>').addClass('dropdown');
+        let options = [
+            ['Clear All Outputs', () => Jupyter.notebook.clear_all_output()],
+        ];
+
+        options.forEach(function (option) {
+            let li = $('<li/>').addClass('dropdown_item');
+            li.append($('<a/>').append(option[0]));
+            li.click(option[1]);
+            menu.append(li);
+        })
+
+        open_menu.append(menu);
+        return open_menu;
     }
 
     function load_css(file) {
