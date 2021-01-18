@@ -86,6 +86,6 @@ default_handlers = [
     (r"/grader/?", BaseGraderHandler),
     (r"/grader/assignments/?", AssignmentsHandler),
     (r"/grader/export_grades/?", ExportGradesHandler),
-    (r"/grader/export_common/?", ExportGeneralHandler),
+    (r"/grader/export_grades/export_common/?", ExportGeneralHandler),
     (r"/grader/students/?", StudentsHandler),
 ]

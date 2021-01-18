@@ -8,6 +8,7 @@
     var base_url = "{{ base_url }}";
     var user_choice ="{{ user_choice }}";
     console.log("user_choice="+user_choice);
+    console.log("base url="+base_url);
   </script>
   <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
 
@@ -15,15 +16,13 @@
 
 {%- block breadcrumbs -%}
   {{ super() }}
-  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a></li>
+  <li>/ <a href="{{ base_url }}/grader/export_grades"></a>Export Grades/<a href="{{ base_url }}/grader/export_grades/export_common"></a>Export</li>
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <!--<a target="_blank" href="{{ base_url }}/formgrader/export_grades/assignments" download="grades.csv">-->
   <div class="option" id="options">
     <div class='icon'><i class="fa fa-download" aria-hidden="true"></i></div>
-    <div class='label'>
-      <h3>Download</h3>
+    <div class='label' id="download">
     </div>
   </div>
 {%- endblock -%}

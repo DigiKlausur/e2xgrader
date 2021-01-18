@@ -19,12 +19,11 @@ function onSelect (obj) {
     // Get the checkbox and see state, put value to array respective to state
     if(obj.checked === true){
         selection.push(obj.id);
-        console.log(selection)
-        return format();
     } else {
         selection = _.without(selection, obj.id);
-        return;
     }
+    console.log(selection);
+    return;
 
 }
 
@@ -36,36 +35,81 @@ function onSelectall (obj) {
        checkboxes.forEach(function (checkbox){
             checkbox.checked = true;
             selection.push(checkbox.id);
-            console.log(selection);
        });
     } else {
         document.getElementsByName("checkbox").forEach(function (checkbox){
             checkbox.checked = false;
-            selection.push(checkbox.id);
-            console.log(selection);
         });
         selection = [];
     }
+    console.log(selection);
     return;
 }
 
-function recieveData (){
+function assignmentView(){
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
-      type: 'put',
-      data: selection,
+      type: 'get',
       success: function (response) {
-        console.log("suppossed to get selected data as csv");
+        console.log(response);
+        console.log($.parseJSON(response));
+        var assignments = $.parseJSON(response);
+        var table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead/>').append(
+              $('<tr/>')
+                .append($('<th/>').append($('<input />', {
+                type : 'checkbox',
+                id : 'all',
+                value: 0,
+                }).attr('onclick','onSelectall(this)')))
+                .append($('<th/>').text('Name'))
+                .append($('<th/>').text('Due Date'))
+                .append($('<th/>').text('Status'))
+                .append($('<th/>').text('# of Submissions'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('id' , 'main_table');
+        assignments.forEach(function (assignment) {
+          body.append(
+            $('<tr/>')
+              .append($('<input />', {
+                type : 'checkbox',
+                id : assignment['id'],
+                name: "checkbox",
+                }).attr('onclick','onSelect(this)'))
+              .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
+              .append($('<td/>').text(assignment['duedate']))
+              .append($('<td/>').text(assignment['status']))
+              .append($('<td/>').text(assignment['num_submissions']))
+          );
+        });
+        $('#table').append(table.append(body));
+        $('#download').html('<a target="_blank" href="{{ base_url }}/formgrader/export_grades/assignments" download="grades.csv"><h3>Download Selected Assignments</h3></a>');
+
       },
       error: function (xhr) {
-        console.log('Something went wrong when fetching the assignment infos');
+        let table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead align="center"/>').append(
+              $('<tr/>')
+                .append($('<th/>').text('Error'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('align', 'center');
+        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
+        $('#table').append(table.append(body));
+        console.log('Something went wrong when fetching the information....contact administration');
       }
     });
-    return;
 }
 
-
-$.ajax({
+function taskView(){
+    $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
@@ -125,3 +169,81 @@ $.ajax({
         console.log('Something went wrong when fetching the information....contact administration');
       }
     });
+}
+
+function notebookView(){
+    $.ajax({
+      url: base_url + "/formgrader/api/assignments",
+      type: 'get',
+      success: function (response) {
+        console.log(response);
+        console.log($.parseJSON(response));
+        let assignments = $.parseJSON(response);
+        let table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead/>').append(
+              $('<tr/>')
+                .append($('<th/>').append($('<input />', {
+                type : 'checkbox',
+                id : 'all',
+                value: 0,
+                }).attr('onclick','onSelectall(this)')))
+                .append($('<th/>').text('Name'))
+                .append($('<th/>').text('Due Date'))
+                .append($('<th/>').text('Status'))
+                .append($('<th/>').text('# of Submissions'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('id' , 'main_table');
+        assignments.forEach(function (assignment) {
+          body.append(
+            $('<tr/>')
+              .append($('<input />', {
+                type : 'checkbox',
+                id : assignment['id'],
+                name: "checkbox",
+                }).attr('onclick','onSelect(this)'))
+              .append($('<td/>').append($('<a/>').attr('href', base_url+'/grader/assignment/' + assignment['name']).text(assignment['name'])))
+              .append($('<td/>').text(assignment['duedate']))
+              .append($('<td/>').text(assignment['status']))
+              .append($('<td/>').text(assignment['num_submissions']))
+          );
+        });
+
+        $('#options').click(window.location='{{ base_url }}/grader/export_common');
+        $('#options').attr("download", "grades.csv");
+        $('#table').append(table.append(body));
+      },
+      error: function (xhr) {
+        let table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead align="center"/>').append(
+              $('<tr/>')
+                .append($('<th/>').text('Error'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('align', 'center');
+        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
+        $('#table').append(table.append(body));
+        console.log('Something went wrong when fetching the information....contact administration');
+      }
+    });
+}
+
+function serveUserChoice (){
+    if ( user_choice === "assignment" ){
+        assignmentView();
+    }
+    else if ( user_choice === "notebook" ){
+        notebookView();
+    }
+    else {
+        taskView();
+    }
+}
+
+serveUserChoice();

@@ -5,6 +5,8 @@
 
   <script>
     var url_prefix = "{{ url_prefix }}";
+    var base_url = "{{ base_url }}";
+    console.log(base_url);
   </script>
   <script type="text/javascript">
     $.ajax({
