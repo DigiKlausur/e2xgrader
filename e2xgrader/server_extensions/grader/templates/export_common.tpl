@@ -7,6 +7,7 @@
     var url_prefix = "{{ url_prefix }}";
     var base_url = "{{ base_url }}";
     var user_choice ="{{ user_choice }}";
+    console.log("user_choice="+user_choice);
   </script>
   <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
 

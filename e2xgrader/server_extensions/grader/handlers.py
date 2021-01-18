@@ -55,10 +55,12 @@ class ExportGeneralHandler(BaseHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
+        user_choice = self.get_argument('user_choice', None)
         html = self.render(
             "export_common.tpl",
             url_prefix=self.url_prefix,
             base_url=self.base_url,
+            user_choice = user_choice,
             windows=(sys.prefix == 'win32'))
         self.write(html)
 
