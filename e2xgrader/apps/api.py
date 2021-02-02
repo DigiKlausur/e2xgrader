@@ -1,6 +1,10 @@
 
 from nbgrader.apps.api import NbGraderAPI
-from nbgrader.api import BaseCell, Grade, GradeCell
+from nbgrader.api import BaseCell, Grade, GradeCell, Gradebook
+from nbgrader import utils
+import nbformat
+import os
+import shutil
 
 class E2xAPI(NbGraderAPI):
 
@@ -141,3 +145,146 @@ class E2xAPI(NbGraderAPI):
             submission['index'] = idx
                 
         return submissions
+
+
+class E2X_Gradebook(Gradebook):
+
+    def update_grade(self, grade_cell: str, notebook: str, assignment: str, student: str, **kwargs: dict) -> None:
+        """Updates grade for a submissions for a particular cell in a particular notebook in an assignment.
+
+        Arguments
+        ---------
+        grade_cell: string
+            The name of the grade cell
+        notebook_id: string
+            The name of the notebook
+        assignment_id: string
+            The name of the assignment
+        student: string
+            The id of the student
+        Returns
+        -------
+        None
+        """
+        try:
+            grade = self.find_grade(grade_cell, notebook, assignment, student)
+        except MissingEntry:
+            self.logger.warning('No grade found!')
+        else:
+            for attr in kwargs:
+                setattr(grade, attr, kwargs[attr])
+            try:
+                self.db.commit()
+            except (IntegrityError, FlushError) as e:
+                self.logger.warning('Commit to database failed!')
+                self.db.rollback()
+                raise InvalidEntry(*e.args)
+
+        return None
+
+    def list_autograded_cell(self, notebook: str, assignment: str) -> dict:
+        """Lists the autograded cell name, id and content.
+
+        Arguments
+        ---------
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        Returns
+        -------
+        grade_id: list
+            Dictionary where the keys are the ids of the cell and the values are the content.
+        """
+        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
+        grade_id = {}
+        for idx, i in enumerate(nb.cells):
+            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True'\
+            and str(nb.cells[idx]['metadata']['nbgrader']['solution']) == 'False':
+                grade_id[str(nb.cells[idx]['metadata']['nbgrader']['grade_id'])] = nb.cells[idx]['source']
+        return grade_id
+
+    def update_cell_content(self, cell_id: str, notebook: str, assignment: str, cell_content: str) -> str:
+        """Updates cell content.
+
+        Arguments
+        ---------
+        cell_id: string
+            The name of the cell
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        cell_content: string
+            The updated content of the cell
+        Returns
+        -------
+        checksum_id: str
+            Generates new checksum id after changes.
+        """
+        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
+        for i in nb.cells:
+            if i['metadata']['nbgrader']['grade_id'] == cell_id:
+                i['source'] = cell_content
+                fname = "source/" + assignment + "/" + notebook + ".ipynb"
+                with open(fname, 'w') as f:
+                    nbformat.write(nb, f)
+                
+                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
+                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(i))
+
+                return utils.compute_checksum(i)
+
+        return None
+
+    def student_autograde(self, cell_id: str, notebook: str, assignment: str) -> str:
+        """Updates cell content.
+
+        Arguments
+        ---------
+        cell_id: string
+            The name of the cell
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        Returns
+        -------
+        None
+        """
+        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
+        grade_id = []
+        autograde_id = []
+        for idx, i in enumerate(nb.cells):
+            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True':
+                grade_id.append(str(nb.cells[idx]['metadata']['nbgrader']['grade_id']))
+            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True'\
+            and str(nb.cells[idx]['metadata']['nbgrader']['solution']) == 'False':
+                autograde_id.append(str(nb.cells[idx]['metadata']['nbgrader']['grade_id']))
+
+        src_dir = os.getcwd() + '/gradebook.db'
+        dst_dir = os.getcwd() + '/gradebook_temp.db'
+        shutil.copy(src_dir,dst_dir)
+
+        grading = {}
+        for i in self.students:
+            grading[i.id] = {}
+            for j in grade_id:
+                grade = self.find_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id)
+                grading[i.id][j] = grade.score
+                self.update_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id, manual_score = None)
+
+        nbg = NbGraderAPI()
+
+        for i in self.students:
+            nbg.autograde(assignment, i.id)
+
+        for i in grading:
+            grade = self.find_grade(grade_cell = cell_id, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i)
+            grading[i][cell_id] = grade.auto_score
+
+        for i in self.students:
+            for j in grade_id:
+                self.update_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id, manual_score = float(grading[i.id][j]))
+
+        return None
