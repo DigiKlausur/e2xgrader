@@ -1,17 +1,75 @@
 
 let selection = [];
-function format () {
-    // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+function getNotebooks (assignment_id) {
+    $.ajax({
+      url: base_url+"/formgrader/api/notebook/srhb",
+      type: 'get',
+      success: function (response) {
+        notebooks = $.parseJSON(response)
+        $(document).ready(function() {
+           table = table.DataTable({
+             "data": notebooks,
+             "columns": [
+                 {
+                     "className": 'details-control',
+                     "orderable": false,
+                     "data": null,
+                     "render": function () {
+                         return '<input type="checkbox" name="checkbox">';
+                     },
+                 },
+                 { "data": "name" },
+                 { "data": "average_score" },
+                 { "data": "num_submissions" }
+             ],
+             "order": [[1, 'asc']]
+           });
+
+           // Event listener for opening and closing details
+           table.on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var assignment_id = tr.find("td:eq(1)").text();
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child( format( assignment_id ) ).show();
+                    tr.addClass('shown');
+                }
+           });
+
+        });
+        return table;
+      },
+      error: function (error){
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>example</td>'+
+            '<td>Error:'+error+'</td>'+
+            '<td>Something went wrong while fetching notebooks..</td>'+
         '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
+        '</table>';
+      }
+    })
+}
+
+function format (assignment_id) {
+    // returns table for collapsible
+    return '<table id='+assignment_id+' cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width=100%">'+
+        '<thead>'+
+            '<tr>'+
+                '<th><input type="checkbox" onclick="onSelectall(this)"></th>'+
+                '<th>Name</th>'+
+                '<th>Due Date</th>'+
+                '<th>Status</th>'+
+                '<th>Number of Submissions</th>'+
+            '</tr>'+
+        '</thead>'+
+        '</table>';
 }
 
 function onSelect (obj) {
@@ -58,12 +116,11 @@ function onSelectall (obj) {
     return;
 }
 
-function assignmentView(){
+function assignmentView () {
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
-        console.log(typeof(response));
         var assignments = $.parseJSON(response);
         $(document).ready(function() {
            var table = $('#datatable').DataTable({
@@ -74,7 +131,7 @@ function assignmentView(){
                      "orderable": false,
                      "data": null,
                      "render": function () {
-                         return '<input type="checkbox">';
+                         return '<input type="checkbox" name="checkbox">';
                      },
                  },
                  { "data": "name" },
@@ -85,7 +142,7 @@ function assignmentView(){
              "order": [[1, 'asc']]
            });
 
-           // Add event listener for opening and closing details
+           // Event listener for opening and closing details
            $('#datatable tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var assignment_id = tr.find("td:eq(1)").text();
@@ -98,7 +155,7 @@ function assignmentView(){
                 }
                 else {
                     // Open this row
-                    row.child(format()).show();
+                    row.child( format( assignment_id ) ).show();
                     tr.addClass('shown');
                 }
            });
