@@ -65,6 +65,29 @@ function getNotebooks (assignment_id) {
     })
 }
 
+function getNotebooksTest(assignment_id){
+    $.ajax({
+      url: base_url+"/formgrader/api/notebooks/"+assignment_id,
+      type: 'get',
+      success: function (response) {
+        var notebooks = $.parseJSON(response);
+        let body = $('<tbody/>');
+        notebooks.forEach(function (notebook) {
+            body.append(
+            $('<tr/>')
+              .append($('<td/>').text(notebook['name']))
+              .append($('<td/>').text(notebook['average_score']))
+              .append($('<td/>').text(notebook['num_submissions']))
+          );
+        });
+        $("#"+assignment_id).append(body);
+      },
+      error: function (error){
+            return;
+      }
+    });
+}
+
 function getTasks (assignment_id , notebook_id) {
     $.ajax({
       url: base_url+"/formgrader/api/solution_cells/"+assignment_id+"/"+notebook_id,
@@ -214,7 +237,7 @@ function assignmentView () {
                     // Open this row
                     row.child( '<table id='+assignment_id+' cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width=100%"><thead style="display:none;"></thead></table>' ).show();
                     tr.addClass('shown');
-                    getNotebooks(assignment_id);
+                    getNotebooksTest(assignment_id);
                 }
            });
         });
