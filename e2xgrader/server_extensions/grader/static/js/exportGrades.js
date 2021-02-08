@@ -65,15 +65,6 @@ function assignmentView(){
       success: function (response) {
         console.log(typeof(response));
         var assignments = $.parseJSON(response);
-        /*assignments.forEach(function (assignment) {
-          var row = [];
-          row.push(" ");
-          row.push(assignment['name']);
-          row.push(assignment['duedate']);
-          row.push(assignment['status']);
-          row.push(assignment['num_submissions']);
-          data.push(row);
-        });*/
         $(document).ready(function() {
            var table = $('#datatable').DataTable({
              "data": assignments,
@@ -82,7 +73,6 @@ function assignmentView(){
                      "className": 'details-control',
                      "orderable": false,
                      "data": null,
-                     "defaultContent": '',
                      "render": function () {
                          return '<input type="checkbox">';
                      },
@@ -98,6 +88,7 @@ function assignmentView(){
            // Add event listener for opening and closing details
            $('#datatable tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
+                var assignment_id = tr.find("td:eq(1)").text();
                 var row = table.row(tr);
 
                 if (row.child.isShown()) {
@@ -111,16 +102,6 @@ function assignmentView(){
                     tr.addClass('shown');
                 }
            });
-           /* $('#datatable').DataTable( {
-                data: data,
-                columns: [
-                    { title: "<input type=\"checkbox\">" },
-                    { title: "Name" },
-                    { title: "Due Date" },
-                    { title: "Status" },
-                    { title: "Number of submissions" }
-                ]
-            });*/
         });
         $('#download').html('<a target="_blank" href="{{ base_url }}/formgrader/export_grades/assignments" download="grades.csv"><h3>Download Selected Assignments</h3></a>');
 
