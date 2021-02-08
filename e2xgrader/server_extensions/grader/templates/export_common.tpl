@@ -19,7 +19,19 @@
   <li>/ <a href="{{ base_url }}/grader/export_grades"></a>Export Grades/<a href="{{ base_url }}/grader/export_grades/export_common"></a>Export</li>
 {%- endblock -%}
 {%- block body -%}
-  <div id="table"></div>
+  <div id="table">
+  <table id="datatable" class="display e2xtable" style="width:100%">
+        <thead>
+            <tr>
+                <th><input type="checkbox" onclick="onSelectall(this)"></th>
+                <th>Name</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Number of Submissions</th>
+            </tr>
+        </thead>
+  </table>
+  </div>
   <div class="option" id="options">
     <div class='icon'><i class="fa fa-download" aria-hidden="true"></i></div>
     <div class='label' id="download">

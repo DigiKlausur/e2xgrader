@@ -502,8 +502,9 @@ var createAssignmentModal = function () {
         });
         views.push(view);
         model.save();
+        console.log(tbl.parent().Datatable());
         tbl.parent().DataTable().row.add(row).draw();
-        console.log("new row added");
+        console.log(tbl.parent().DataTable());
         modal.modal('hide');
     };
 
