@@ -11,6 +11,7 @@ def configure_base(config):
         'e2xgrader.preprocessors.Unscramble',
     ]
     config.Autograde.autograde_preprocessors = [
+        'e2xgrader.preprocessors.ExtractAttachments',
         'nbgrader.preprocessors.Execute',
         'nbgrader.preprocessors.LimitOutput',
         'e2xgrader.preprocessors.SaveAutoGrades',
