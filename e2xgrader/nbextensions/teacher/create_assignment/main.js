@@ -338,6 +338,8 @@ define([
                     return "multiplechoice";
                 } else if (extramodel.is_singlechoice(cell)) {
                     return "singlechoice";
+                } else if (extramodel.is_attachment(cell)) {
+                    return "attachments";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
                     return "manual";
                 } else if (model.is_solution(cell) && cell.cell_type === "code") {
