@@ -36,6 +36,18 @@ define([
         };
     };
 
+    let is_attachment = function (cell) {
+        return cell_type(cell) === 'attachments';
+    };
+
+    let to_attachment = function (cell) {
+        cell.metadata[field] = {
+            'type': 'attachments'
+        };
+    };
+
+
+
     let remove_metadata = function (cell) {
         if (cell.metadata.hasOwnProperty(field)) {
             delete cell.metadata.extended_cell;
@@ -51,6 +63,8 @@ define([
         is_singlechoice: is_singlechoice,
         to_singlechoice: to_singlechoice,
         is_multiplechoice: is_multiplechoice,
-        to_multiplechoice: to_multiplechoice
+        to_multiplechoice: to_multiplechoice,
+        is_attachment: is_attachment,
+        to_attachment: to_attachment,
     };
 })
