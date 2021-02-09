@@ -5,7 +5,8 @@ define([
     'base/js/events',
     'notebook/js/textcell',
     './extended_cell/extended_cell',
-    './extended_cell/choice_cell'
+    './extended_cell/choice_cell',
+    './extended_cell/attachment_cell'
 ], function (
     $,
     require,
@@ -14,13 +15,16 @@ define([
     textcell,
     extended_cell,
     choice_cell,
+    attachment_cell,
 ) {
 
     'use strict';
 
     let MarkdownCell = textcell.MarkdownCell;
+    let TextCell = textcell.TextCell;
     let old_render = MarkdownCell.prototype.render;
     let old_unrender = MarkdownCell.prototype.unrender;
+    let old_toJSON = TextCell.prototype.toJSON;
     let edit_mode = false;
 
     function cell_type (cell) {
@@ -28,6 +32,19 @@ define([
             return cell.metadata.extended_cell.type;
         }
         return cell.cell_type;
+    }
+
+    function patch_TextCell_toJSON() {
+        TextCell.prototype.toJSON = function () {
+            let type = cell_type(this);
+            if (type == 'attachments') {
+                // Do not remove ununsed attachments
+                arguments[0] = false;
+                return old_toJSON.apply(this, arguments);
+            } else {                
+                return old_toJSON.apply(this, arguments);
+            }
+        }
     }
 
     function patch_MarkdownCell_render () {
@@ -42,6 +59,12 @@ define([
                 let mc = new choice_cell.MultiplechoiceCell(this);
                 mc.edit_mode = edit_mode;
                 mc.render();
+            } else if (type == 'attachments') {
+                //console.log('AttachmentCell found!');
+                let mycell = new attachment_cell.AttachmentCell(this);
+                mycell.render();
+                //let ac = new attachment_cell.AttachmentCell(this);
+                //ac.render();
             } else {
                 old_render.apply(this, arguments);
             }
@@ -52,7 +75,7 @@ define([
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
             let type = cell_type(this);
-            if (type != 'singlechoice' && type != 'multiplechoice') {
+            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments') {
                 old_unrender.apply(this, arguments);
             }
         }
@@ -84,6 +107,7 @@ define([
                 edit_mode = true;
             }
         }
+        patch_TextCell_toJSON();
         patch_MarkdownCell_render();
         patch_MarkdownCell_unrender();
         render_extended_cells();
