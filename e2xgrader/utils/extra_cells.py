@@ -10,6 +10,10 @@ def is_extra_cell(cell):
     return 'extended_cell' in cell.metadata
 
 
+def is_attachment_cell(cell):
+    return is_extra_cell(cell) and cell.metadata.extended_cell.type == 'attachments'
+
+
 def is_singlechoice(cell):
     return is_extra_cell(cell) and cell.metadata.extended_cell.type == 'singlechoice'
 
@@ -51,7 +55,7 @@ def determine_grade(cell: NotebookNode, log: Logger = None) -> Tuple[Optional[fl
     if not nbutils.is_grade(cell):
         raise ValueError('cell is not a grade cell')
 
-    if not is_extra_cell(cell):
+    if (not is_multiplechoice(cell)) or (not is_singlechoice(cell)):
         return nbutils.determine_grade(cell, log)
 
     max_points = float(cell.metadata['nbgrader']['points'])
