@@ -7,13 +7,9 @@ define([
 ) {
 
     class Observer {
-
-        constructor() {
-
-        }  
     
         notify(observable) {
-            alert('Notified!');
+            
         }
     }
 
@@ -27,11 +23,103 @@ define([
             this.observers.push(observer);
         }
         
-        notifyAll() {
+        notifyAll(event) {
             let that = this;
-            this.observers.forEach(observer => observer.notify(that));
+            this.observers.forEach(observer => observer.notify(event));
         }
         
+    }
+
+    class Webcam {
+
+        constructor(model) {
+            this.stream = undefined;
+            this.model = model;
+        }
+
+        open() {
+        	let that = this;
+        	let cell = Jupyter.notebook.get_cell(0);
+	        let videoObj = { "video": true };
+	        navigator.mediaDevices.getUserMedia(videoObj).then(
+                function sucess(stream) {
+    	        	that.stream = stream;
+    	        	that.openDialog();
+    	        }).catch(function(err) {
+                    alert('Could not access webcam!\n' + err);
+                }
+            );
+        }
+
+        openDialog() {
+        	let that = this;
+        	let body = $('<div/>').attr('id', 'webcamDiv');
+	        let video = $('<video/>');
+	        body.append(video);
+
+	        let controls = $('<div/>').attr('id', 'videoControls');
+	        controls.append($('<button/>')
+	                        .attr('id', 'takePhoto')
+	                        .click(() => {
+	                            if (video[0].paused) {
+	                                video[0].play();
+	                                $('#saveImage').attr('disabled', true);
+	                                $('#takePhoto span').text('Take Photo');
+	                            } else {
+	                                video[0].pause();
+	                                $('#saveImage').removeAttr('disabled');
+	                                $('#takePhoto span').text('Retry');
+	                            }
+	                        })
+	                        .append($('<span/>').text('Take Photo')));
+	        body.append(controls);  
+
+	        dialog.modal({
+	            keyboard_manager: Jupyter.keyboard_manager,
+	            title: 'Take Photo',
+	            open: () => {
+	                
+	                $('#webcamDiv').bind('destroyed', function() {
+	                    that.close();
+	                });
+	            },
+	            body: body,
+	            buttons: {
+	                'Save Image': {
+	                    id: 'saveImage',
+	                    click: () => {
+	                        let tmpCanvas = $('<canvas/>').attr('width', video[0].videoWidth).attr('height', video[0].videoHeight);
+	                        tmpCanvas[0].getContext('2d').drawImage(video[0], 0, 0, video[0].videoWidth, video[0].videoHeight);
+	                        let dataUrl = tmpCanvas[0].toDataURL('image/png');
+	                        let key = that.model.getName('webcam', 'png');
+	                        that.model.addAttachment(key, dataUrl);
+	                    }
+	                },
+	                Cancel: {}
+	            }
+	        });
+
+	        if(navigator.getUserMedia) {
+	            video[0].src = that.stream;
+	            video[0].play();
+	        } else if(navigator.webkitGetUserMedia) {        // WebKit
+	            video[0].src = window.webkitURL.createObjectURL(stream);
+	            video[0].play();
+	        } else if(navigator.mozGetUserMedia) {        // Firefox
+	            video[0].srcObject = that.stream;
+	            video[0].play();
+	        };
+
+        }
+
+        close() {
+        	if (this.stream !== undefined) {
+        		this.stream.getTracks().forEach(track => track.stop());
+        	}
+
+        }
+
+
     }
 
     class AttachmentGallery extends Observer {
@@ -40,11 +128,16 @@ define([
             super();         
             this.cell = cell;
             this.model = model;
+            this.element = $('<div/>').addClass('gallery-view');
             model.registerObserver(this);
         }
 
-        notify(model) {
-            //alert('Notified the gallery!');
+        notify(event) {
+            if (event.type == 'delete') {
+                this.element.find($('#' + event.id)).remove();
+            } else if (event.type == 'add') {
+                this.addThumbnail(this.model.getAttachment(event.key));
+            }
         }
 
         addThumbnail(attachment) {
@@ -61,11 +154,7 @@ define([
                     body: removeItemBody,
                     buttons: {
                         'Delete': {class: 'button-delete',
-                                   click: function() {
-                                        that.model.removeAttachment(attachment.name);
-                                        that.model.save();
-                                        $('#' + attachment.id + '.gallery-item')[0].remove();
-                                   }},
+                                   click: () => that.model.removeAttachment(attachment.name)},
                         'Cancel': {}
                     }
                 })
@@ -94,19 +183,30 @@ define([
                 thumbnail.append(img);
             }
             item.append(thumbnail).append(caption);
-            return item;
+            this.element.append(item);
         }
 
         getControls() {
             let controls = $('<div/>').addClass('attachment-controls');
-            controls.append($('<button/>').append('Gallery'));
-            controls.append($('<button/>').append('Webcam'));
-            controls.append($('<input/>')
+            
+            controls.append($('<button/>')
+                .append($('<i/>').addClass('fa fa-camera'))
+                .append('Webcam')
+                .click(() => new Webcam(this.model).open()));
+            let input_button = $('<button/>')
+                .addClass('upload-btn')
+                .append($('<i/>').addClass('fa fa-upload'))
+                .append('Upload')
+                .click(() => $('#upload-attachments')[0].click());
+            
+            input_button.append($('<input/>')
                                 .attr('id', 'upload-attachments')
                                 .attr('type', 'file')
                                 .attr('accept', 'application/pdf,image/*')
                                 .attr('multiple', 'multiple')
                                 .change(() => this.uploadFiles()));
+
+            controls.append(input_button);
             return controls;
         }
 
@@ -116,16 +216,25 @@ define([
 
             
             Array.prototype.forEach.call(input.files, function(file) {
-                //console.log(file.name);
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
 
                 reader.onload = function() {
                     let data = reader.result;
-                    let name = file.name;
-                    that.model.addAttachment(name, data);
-                    $('.gallery-view').append(that.addThumbnail(that.model.getAttachment(name)));
-                    that.model.save();
+                    let key = file.name;
+                    if (!that.model.addAttachment(key, data)) {
+                        let name = key.split('.')[0];
+                        let type = key.replace(name + '.', '');
+                        let newName = that.model.getName(name, type);
+
+                        let msg = 'A file with the name ' + key + ' already exists!\nDo you want to rename it to ' + newName + '?'
+
+                        if (confirm(msg)) {
+                            that.model.addAttachment(newName, data);
+                        }
+
+                        
+                    }                    
                 }
 
                 reader.onerror = function() {
@@ -138,11 +247,11 @@ define([
 
         open() {
             let body = $('<div/>').addClass('attachment-editor');
-            let gallery = $('<div/>').addClass('gallery-view');
-            body.append(gallery);
+            this.element = $('<div/>').addClass('gallery-view');
+            body.append(this.element);
             body.append(this.getControls());
             let that = this;
-            this.model.getAttachments().forEach(attachment => gallery.append(that.addThumbnail(attachment)));
+            this.model.getAttachments().forEach(attachment => that.addThumbnail(attachment));
             dialog.modal({
                 keyboard_manager: Jupyter.keyboard_manager,
                 title: 'Attachment Editor',
@@ -156,16 +265,23 @@ define([
 
         constructor(cell) {
             super();
+            this.ids = {};
             this.cell = cell;
             this.typePattern = new RegExp("data:([^;]*)");
             this.imagePattern = new RegExp("!\\[[^\(]+\\]\\(attachment:[^)]+\\)", "g");
             this.infoPattern = new RegExp("\n### You uploaded \\d+ attachments.\n\n", "g");
-            this.attachments = {};
+            this.attachments = {};            
             this.load();
         }
 
         load() {
+            let that = this;
+            this.id = 0;
             Object.assign(this.attachments, this.cell.attachments);
+            Object.keys(this.attachments).forEach(function(key) {
+                that.id += 1;
+                that.ids[key] = that.id;                
+            });
         }
 
         save() {
@@ -190,25 +306,39 @@ define([
         }
 
         addAttachment(key, dataUrl) {
+            if (key in this.attachments) {
+                return false;
+            }
             let type = this.typePattern.exec(dataUrl)[1];
             let data = dataUrl.replace('data:' + type + ';base64,', '');
-            let present = false;
-            this.getAttachments().forEach(attachment => present = present | data == attachment.data);
-            console.log('PRESENT: ' + present);
-            if (present == 0) {
-                this.attachments[key] = {};
-                this.attachments[key][type] = data;
-                this.notifyAll();
-            }
+            this.id += 1;
+            this.attachments[key] = {};
+            this.attachments[key][type] = data;
+            this.ids[key] = this.id;
+            this.notifyAll({
+                type: 'add',
+                key: key,
+                id: this.ids[key]
+            });
+            this.save();
+            return true;
         }
         
         removeAttachment(key) {
+            let id = this.ids[key];
             delete this.attachments[key];
-            this.notifyAll();
+            delete this.ids[key];
+            this.notifyAll({
+                type: 'delete',
+                key: key,
+                id: id
+            });
+            this.save();
         }
 
         getAttachment(key) {
             return {
+                id: this.ids[key],
                 name: key,
                 type: Object.keys(this.attachments[key])[0],
                 data: Object.values(this.attachments[key])[0] 
@@ -218,28 +348,20 @@ define([
         getAttachments() {
             let that = this;
             let attachments = [];
-            let id = 0;
             Object.keys(this.attachments).forEach(function(key) {
-                id += 1;
-                attachments.push({
-                    id: id,
-                    name: key,
-                    type: Object.keys(that.attachments[key])[0],
-                    data: Object.values(that.attachments[key])[0]
-                });
+                attachments.push(that.getAttachment(key));
             });
             return attachments;
         }
 
-        getImageNames() {
-            let images = [];
-            for (let key in this.cell.attachments) {
-                let type = Object.keys(this.attachments[key])[0];
-                if (type.startsWith('image/')) {
-                    images.push(key);
-                }            
+        getName(name, type) {
+            let current_name = name + '.' + type;
+            let counter = 0;
+            while (current_name in this.attachments) {
+                counter += 1;
+                current_name = name + '_' + counter + '.' + type;
             }
-            return images;
+            return current_name;
         }
 
     }

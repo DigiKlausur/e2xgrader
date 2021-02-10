@@ -1,11 +1,11 @@
 .hbrs_radio {
-    padding-top: 2em;
-    padding-left: 0.5em;
+  padding-top: 2em;
+  padding-left: 0.5em;
 }
 
 .hbrs_checkbox {
-    padding-top: 2em;
-    padding-left: 0.5em;
+  padding-top: 2em;
+  padding-left: 0.5em;
 }
 
 .hbrs_points {
@@ -21,13 +21,17 @@
 
 
 .gallery-view {
-    min-width: 100%;
-    overflow-y: scroll;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
-    grid-gap: 1em;
-    padding-right: .5em;
+  min-height: 15em;
+  min-width: 100%;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+  grid-gap: 1em;
+  padding-right: .5em;
+}
 
+#upload-attachments {
+  display: none;
 }
 
 .gallery-item {
@@ -81,6 +85,10 @@
 }
 
 .button-delete {
-    background: #a00;
-    color: #ddd;
+  background: #a00;
+  color: #ddd;
+}
+
+.attachment-controls > button > i {
+  padding-right: 1em;
 }
