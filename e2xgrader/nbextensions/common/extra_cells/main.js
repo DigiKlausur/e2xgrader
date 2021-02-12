@@ -102,6 +102,15 @@ define([
     }
 
     function initialize () {
+        // Add special event handler when items are removed
+        $.event.special.destroyed = {
+            remove: function(o) {
+                if (o.handler) {
+                    o.handler()
+                }
+            }
+        };
+        
         load_css();
         if (Jupyter.notebook.metadata.hasOwnProperty('celltoolbar')) {
             if (Jupyter.notebook.metadata.celltoolbar == 'Create Assignment') {
