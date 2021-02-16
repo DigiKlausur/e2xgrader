@@ -24,7 +24,6 @@ define([
         }
         
         notifyAll(event) {
-            let that = this;
             this.observers.forEach(observer => observer.notify(event));
         }
         
@@ -39,7 +38,6 @@ define([
 
         open() {
         	let that = this;
-        	let cell = Jupyter.notebook.get_cell(0);
 	        let videoObj = { "video": true };
 	        navigator.mediaDevices.getUserMedia(videoObj).then(
                 function sucess(stream) {
@@ -99,17 +97,13 @@ define([
 	            }
 	        });
 
-	        if(navigator.getUserMedia) {
+	        if (navigator.getUserMedia || navigator.mozGetUserMedia) {
 	            video[0].srcObject = that.stream;
 	            video[0].play();
-	        } else if(navigator.webkitGetUserMedia) {        // WebKit
+	        } else if (navigator.webkitGetUserMedia) {        // WebKit
 	            video[0].src = window.webkitURL.createObjectURL(stream);
 	            video[0].play();
-	        } else if(navigator.mozGetUserMedia) {        // Firefox
-	            video[0].srcObject = that.stream;
-	            video[0].play();
-	        };
-
+	        } 
         }
 
         close() {
