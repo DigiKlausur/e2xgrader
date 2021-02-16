@@ -83,12 +83,8 @@ class ExtractAttachments(NbGraderPreprocessor):
 
                 if name.endswith(".gif") and mime == "image/png":
                     filename = filename.replace(".gif", ".png")
-
-                # In the resources, make the figure available via
-                #   resources['outputs']['filename'] = data
-                
-                
-                #resources['outputs'][filename] = data
+                    
+                # Write the attachments to a file and add a link
                 
                 with open(filename, 'wb') as f:
                     f.write(data)
@@ -105,7 +101,5 @@ class ExtractAttachments(NbGraderPreprocessor):
                     
         for name in to_delete:
             del cell.attachments[name]
-
-        #del cell.metadata['extended_cell']
 
         return cell, resources

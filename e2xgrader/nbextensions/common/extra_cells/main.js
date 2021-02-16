@@ -60,12 +60,9 @@ define([
                 mc.edit_mode = edit_mode;
                 mc.render();
             } else if (type == 'attachments') {
-                //console.log('AttachmentCell found!');
                 let mycell = new attachment_cell.AttachmentCell(this);
                 mycell.edit_mode = edit_mode;
                 mycell.render();
-                //let ac = new attachment_cell.AttachmentCell(this);
-                //ac.render();
             } else {
                 old_render.apply(this, arguments);
             }
