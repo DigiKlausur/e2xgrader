@@ -19,8 +19,6 @@ define([
             this.model = new attachment_view.AttachmentModel(cell);
             this.view = new attachment_view.AttachmentGallery(cell, this.model);
             this.edit_mode = false;
-            //console.log(this.view);
-            //console.log(new attachment_view.AttachmentGallery(cell));
         }
 
         get_attachment_button() {
