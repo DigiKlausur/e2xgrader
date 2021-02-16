@@ -100,7 +100,7 @@ define([
 	        });
 
 	        if(navigator.getUserMedia) {
-	            video[0].src = that.stream;
+	            video[0].srcObject = that.stream;
 	            video[0].play();
 	        } else if(navigator.webkitGetUserMedia) {        // WebKit
 	            video[0].src = window.webkitURL.createObjectURL(stream);
