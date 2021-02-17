@@ -55,7 +55,7 @@ def determine_grade(cell: NotebookNode, log: Logger = None) -> Tuple[Optional[fl
     if not nbutils.is_grade(cell):
         raise ValueError('cell is not a grade cell')
 
-    if (not is_multiplechoice(cell)) or (not is_singlechoice(cell)):
+    if not (is_multiplechoice(cell) or is_singlechoice(cell)):
         return nbutils.determine_grade(cell, log)
 
     max_points = float(cell.metadata['nbgrader']['points'])

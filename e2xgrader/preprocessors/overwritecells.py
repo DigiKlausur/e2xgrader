@@ -15,7 +15,7 @@ class OverwriteCells(NbgraderOverwriteCells):
                         resources: ResourcesDict,
                         cell_index: int
                         ) -> Tuple[NotebookNode, ResourcesDict]:
-        if (not is_singlechoice(cell)) or (not is_multiplechoice(cell)):
+        if not (is_singlechoice(cell) or is_multiplechoice(cell)):
             return super().preprocess_cell(cell, resources, cell_index)
 
         grade_id = cell.metadata.get('nbgrader', {}).get('grade_id', None)
