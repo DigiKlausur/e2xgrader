@@ -19,6 +19,10 @@
   <li>/ <a href="{{ base_url }}/grader/export_grades"></a>Export Grades/<a href="{{ base_url }}/grader/export_grades/export_common"></a>Export</li>
 {%- endblock -%}
 {%- block body -%}
+  <div id="description">
+        <h4>Here you can export grades</h4>
+        <p>You can either export the grades on an assignment level (total score per assignment per student) or on a notebook level (total score per notebook per student) or on a task level (total score per task per student).</p>
+  </div>
   <div id="table">
   <table id="datatable" class="display e2xtable" style="width:100%">
         <thead>
