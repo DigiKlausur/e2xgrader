@@ -88,70 +88,6 @@ function getNotebooksTest(assignment_id){
     });
 }
 
-function getTasks (assignment_id , notebook_id) {
-    $.ajax({
-      url: base_url+"/formgrader/api/solution_cells/"+assignment_id+"/"+notebook_id,
-      type: 'get',
-      success: function (response) {
-        var tasks = $.parseJSON(response)
-        $(document).ready(function() {
-           table = $("#"+assignment_id).DataTable({
-             "data": notebooks,
-             "columns": [
-                 {
-                     "className": 'details-control',
-                     "orderable": false,
-                     "data": null,
-                     "render": function () {
-                         return '<input type="checkbox" name="checkbox">';
-                     },
-                 },
-                 { "data": "name" },
-                 { "data": "average_score" },
-                 { "data": "num_submissions" }
-             ],
-             "order": [[1, 'asc']]
-           });
-
-           // Event listener for opening and closing details
-           $("#"+assignment_id).on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var notebook_id = tr.find("td:eq(1)").text();
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( '<table id='+notebook_id+' cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width=100%"><thead style="display:none;"></thead></table>' ).show();
-                    tr.addClass('shown');
-                }
-           });
-
-        });
-        return table;
-      },
-      error: function (error){
-        let table = $('<table/>');
-        table
-          .addClass('e2xtable')
-          .append(
-            $('<thead align="center"/>').append(
-              $('<tr/>')
-                .append($('<th/>').text('Error'))
-        ));
-        let body = $('<tbody/>');
-        body.attr('align', 'center');
-        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
-        $('#'+assignment_id).append(table.append(body));
-        console.log('Something went wrong when fetching the information....contact administrator');
-      }
-    })
-}
-
 function onSelect (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
@@ -235,7 +171,7 @@ function assignmentView () {
                 }
                 else {
                     // Open this row
-                    row.child( '<table id='+assignment_id+' cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width=100%"><thead style="display:none;"></thead></table>' ).show();
+                    row.child( '<table id='+assignment_id+' cellpadding="5" cellspacing="0" class="display" style="padding-left:50px;"><thead style="display:none;"></thead></table>' ).show();
                     tr.addClass('shown');
                     getNotebooksTest(assignment_id);
                 }
@@ -263,11 +199,4 @@ function assignmentView () {
     });
 }
 
-function serveUserChoice (){
-    if ( user_choice === "assignment" ){
-        assignmentView();
-    }
-
-}
-
-serveUserChoice();
+assignmentView();
