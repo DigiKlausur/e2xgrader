@@ -9,3 +9,4 @@ from .unpermutetasks import UnpermuteTasks
 from .scramble import Scramble
 from .unscramble import Unscramble
 from .validateextracells import ValidateExtraCells
+from .extractattachments import ExtractAttachments

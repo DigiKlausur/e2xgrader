@@ -244,6 +244,7 @@ define([
             if (cell.cell_type == "markdown") {
                 options_list.push(["Multiple Choice", "multiplechoice"]);
                 options_list.push(["Single Choice", "singlechoice"]);
+                options_list.push(["Upload answer", "attachments"]);
             }
             if (cell.cell_type == "code") {
                 options_list.push(["Autograded answer", "solution"]);
@@ -272,6 +273,17 @@ define([
                     model.set_locked(cell, false);
                     model.set_task(cell, false);
                     extramodel.to_singlechoice(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
+                } else if (val === "attachments") {
+                    model.set_schema_version(cell);
+                    model.set_solution(cell, true);
+                    model.set_grade(cell, true);
+                    model.set_locked(cell, false);
+                    model.set_task(cell, false);
+                    extramodel.to_attachment(cell);
                     if (cell.rendered) {
                         cell.unrender_force();
                         cell.render();
@@ -326,6 +338,8 @@ define([
                     return "multiplechoice";
                 } else if (extramodel.is_singlechoice(cell)) {
                     return "singlechoice";
+                } else if (extramodel.is_attachment(cell)) {
+                    return "attachments";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
                     return "manual";
                 } else if (model.is_solution(cell) && cell.cell_type === "code") {
