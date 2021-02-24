@@ -81,7 +81,7 @@ define([
         let old_unrender = MarkdownCell.prototype.unrender;
 
         MarkdownCell.prototype.unrender = function () {
-            if (!model.is_description_cell(this) && !extramodel.is_pdf(cell)) {
+            if (!model.is_description_cell(this) || extramodel.is_pdf(cell)) {
                 old_unrender.apply(this, arguments);
             }
         }
