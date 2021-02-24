@@ -6,8 +6,9 @@ define([
     'notebook/js/cell',
     'notebook/js/textcell',
     'base/js/events',
-    './model/nbgrader_model'
-], function ($, Jupyter, dialog, notebook, basecell, textcell, events, model) {
+    './model/nbgrader_model',
+    './model/extracell'
+], function ($, Jupyter, dialog, notebook, basecell, textcell, events, model, extramodel) {
 
     "use strict";
 
@@ -80,7 +81,7 @@ define([
         let old_unrender = MarkdownCell.prototype.unrender;
 
         MarkdownCell.prototype.unrender = function () {
-            if (!model.is_description_cell(this)) {
+            if (!model.is_description_cell(this) && !extramodel.is_pdf(cell)) {
                 old_unrender.apply(this, arguments);
             }
         }
