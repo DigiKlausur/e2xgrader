@@ -142,7 +142,7 @@ define([
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
             let type = cell_type(this);
-            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments') {
+            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments' && type != 'pdf') {
                 old_unrender.apply(this, arguments);
             }
         }
