@@ -46,6 +46,16 @@ define([
         };
     };
 
+    let is_pdf = function (cell) {
+        return cell_type(cell) === 'pdf';
+    };
+
+    let to_pdf = function (cell) {
+        cell.metadata[field] = {
+            'type': 'pdf'
+        };
+    };
+
 
 
     let remove_metadata = function (cell) {
@@ -66,5 +76,7 @@ define([
         to_multiplechoice: to_multiplechoice,
         is_attachment: is_attachment,
         to_attachment: to_attachment,
+        is_pdf: is_pdf,
+        to_pdf: to_pdf,
     };
 })

@@ -245,6 +245,7 @@ define([
                 options_list.push(["Multiple Choice", "multiplechoice"]);
                 options_list.push(["Single Choice", "singlechoice"]);
                 options_list.push(["Upload answer", "attachments"]);
+                options_list.push(["Embedded PDF Question", "pdf"]);
             }
             if (cell.cell_type == "code") {
                 options_list.push(["Autograded answer", "solution"]);
@@ -288,6 +289,13 @@ define([
                         cell.unrender_force();
                         cell.render();
                     }
+                } else if (val === "pdf") {
+                    model.set_schema_version(cell);
+                    model.set_solution(cell, false);
+                    model.set_grade(cell, false);
+                    model.set_locked(cell, true);
+                    model.set_task(cell, false);
+                    extramodel.to_pdf(cell);
                 } else if (val === "manual") {
                     extramodel.remove_metadata(cell);
                     model.set_schema_version(cell);
@@ -340,6 +348,8 @@ define([
                     return "singlechoice";
                 } else if (extramodel.is_attachment(cell)) {
                     return "attachments";
+                } else if (extramodel.is_pdf(cell)) {
+                    return "pdf";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
                     return "manual";
                 } else if (model.is_solution(cell) && cell.cell_type === "code") {
