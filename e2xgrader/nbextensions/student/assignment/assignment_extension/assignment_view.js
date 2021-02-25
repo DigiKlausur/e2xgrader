@@ -4,11 +4,11 @@ define([
     'base/js/namespace',
     'notebook/js/celltoolbar',
     'base/js/events',
-    './model/nbgrader_model'
-], function (require, $, Jupyter, nbcelltoolbar, events, model) {
+], function (require, $, Jupyter, nbcelltoolbar, events) {
 
     "use strict";
 
+    let model = undefined;
     let preset_name = "Assignment View";
     let CellToolbar = nbcelltoolbar.CellToolbar;
     let highlight = 'highlight';
@@ -106,16 +106,21 @@ define([
 
     function initialize() {
         load_css();
+        let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
+        require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
+            
+            model = nbgrader;
 
-        CellToolbar.register_callback('assignment_view.create_header', create_header);
-        let preset = [
-            'assignment_view.create_header',
-        ];
-        CellToolbar.register_preset(preset_name, preset, Jupyter.notebook);
+            CellToolbar.register_callback('assignment_view.create_header', create_header);
+            let preset = [
+                'assignment_view.create_header',
+            ];
+            CellToolbar.register_preset(preset_name, preset, Jupyter.notebook);
 
-        // Activate the toolbar
-        CellToolbar.activate_preset(preset_name);
-        Jupyter.CellToolbar.global_show();
+            // Activate the toolbar
+            CellToolbar.activate_preset(preset_name);
+            Jupyter.CellToolbar.global_show();
+        });
     }
 
     return {

@@ -6,12 +6,12 @@ define([
     'notebook/js/cell',
     'notebook/js/textcell',
     'base/js/events',
-    './model/nbgrader_model',
-    './model/extracell'
-], function ($, Jupyter, dialog, notebook, basecell, textcell, events, model, extramodel) {
+], function ($, Jupyter, dialog, notebook, basecell, textcell, events) {
 
     "use strict";
 
+    let model = undefined;
+    let extramodel = undefined;
     let Notebook = notebook.Notebook;
     let MarkdownCell = textcell.MarkdownCell;
 
@@ -214,14 +214,19 @@ define([
         })
     }
 
-    function initialize() {        
+    function initialize() {   
         basecell.Cell.options_default.cm_config.lineNumbers = true;
-        patch_cell_type_select();
-        patch_MarkdownCell_unrender();
-        patch_move_cells();
-        patch_paste_cell();
-        update_cells();
-        console.log('Assignment notebook initialized!');
+        let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
+        require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
+            model = nbgrader;
+            extramodel = extracell;
+            patch_cell_type_select();
+            patch_MarkdownCell_unrender();
+            patch_move_cells();
+            patch_paste_cell();
+            update_cells();
+            console.log('Assignment notebook initialized!');
+        });
     }
 
     return {
