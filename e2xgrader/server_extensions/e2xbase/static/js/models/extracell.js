@@ -12,10 +12,6 @@ define([
         return cell.cell_type;
     };
 
-    let is_extracell = function (cell) {
-        return cell.metadata.hasOwnProperty(field);
-    };
-
     let is_multiplechoice = function (cell) {
         return cell_type(cell) === 'multiplechoice';
     };
