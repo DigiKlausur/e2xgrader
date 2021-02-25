@@ -245,7 +245,7 @@ define([
                 options_list.push(["Multiple Choice", "multiplechoice"]);
                 options_list.push(["Single Choice", "singlechoice"]);
                 options_list.push(["Upload answer", "attachments"]);
-                options_list.push(["Embedded PDF Question", "pdf"]);
+                options_list.push(["Read-only HTML", "pdf"]);
             }
             if (cell.cell_type == "code") {
                 options_list.push(["Autograded answer", "solution"]);
