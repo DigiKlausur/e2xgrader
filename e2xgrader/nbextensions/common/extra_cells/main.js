@@ -39,7 +39,6 @@ define([
         if (cont) {
             var that = this;
             var text = this.get_text();
-            var math = null;
             if (text === "") { text = this.placeholder; }
 
             markdown.render(text, {
@@ -47,7 +46,7 @@ define([
                 clean_tables: true,
                 sanitize: false,
             }, function (err, html) {
-                //console.log(err, html, );
+                console.log(err, html, );
                 html = $(html);
                 // add anchors to headings
                 html.find(":header").addBack(":header").each(function (i, h) {
