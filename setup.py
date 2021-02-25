@@ -22,6 +22,12 @@ for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formg
     for filename in filenames:
         static_files.append(os.path.join(root, filename))
 
+base_static_files = []
+for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/e2xbase/static"):
+    root = os.path.relpath(dirname, "e2xgrader/server_extensions/e2xbase")
+    for filename in filenames:
+        base_static_files.append(os.path.join(root, filename))
+
 name = u'e2xgrader'
 
 setup_args = dict(
@@ -43,6 +49,7 @@ setup_args = dict(
     package_data={
         'e2xgrader': extension_files,
         'e2xgrader.server_extensions.formgrader': static_files,
+        'e2xgrader.server_extensions.e2xbase': base_static_files,
     },
     install_requires=[
         "jupyter",
