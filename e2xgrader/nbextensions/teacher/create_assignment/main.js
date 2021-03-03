@@ -5,12 +5,12 @@ define([
     'base/js/dialog',
     'notebook/js/celltoolbar',
     'base/js/events',
-    './models/nbgrader',
-    './models/extracell'
+], function (require, $, Jupyter, dialog, celltoolbar, events) {
 
-], function (require, $, Jupyter, dialog, celltoolbar, events, model, extramodel) {
     "use strict";
 
+    let model = undefined;
+    let extramodel = undefined;
     var nbgrader_preset_name = "Create Assignment";
     var nbgrader_highlight_cls = "nbgrader-highlight";
     var nbgrader_cls = "nbgrader-cell";
@@ -471,19 +471,26 @@ define([
      */
     var load_extension = function () {
         load_css();
-        CellToolbar.register_callback('create_assignment.grading_options', create_celltype_select);
-        CellToolbar.register_callback('create_assignment.id_input', create_id_input);
-        CellToolbar.register_callback('create_assignment.points_input', create_points_input);
-        CellToolbar.register_callback('create_assignment.lock_cell', create_lock_cell_button);
+        let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
+        require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
+            extramodel = extracell;
+            model = nbgrader;
+            
+            CellToolbar.register_callback('create_assignment.grading_options', create_celltype_select);
+            CellToolbar.register_callback('create_assignment.id_input', create_id_input);
+            CellToolbar.register_callback('create_assignment.points_input', create_points_input);
+            CellToolbar.register_callback('create_assignment.lock_cell', create_lock_cell_button);
 
-        var preset = [
-            'create_assignment.lock_cell',
-            'create_assignment.points_input',
-            'create_assignment.id_input',
-            'create_assignment.grading_options',
-        ];
-        CellToolbar.register_preset(nbgrader_preset_name, preset, Jupyter.notebook);
-        console.log('nbgrader extension for metadata editing loaded.');
+            var preset = [
+                'create_assignment.lock_cell',
+                'create_assignment.points_input',
+                'create_assignment.id_input',
+                'create_assignment.grading_options',
+            ];
+            CellToolbar.register_preset(nbgrader_preset_name, preset, Jupyter.notebook);
+            console.log('nbgrader extension for metadata editing loaded.');
+        });
+        
     };
 
     return {

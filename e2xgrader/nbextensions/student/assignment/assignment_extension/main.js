@@ -1,19 +1,21 @@
 define([
     'base/js/namespace',
     'base/js/events',
-    './model/nbgrader_model',
     './assignment_notebook',
     './assignment_view'
-], function (Jupyter, events, model, assignment_notebook, assignment_view) {
+], function (Jupyter, events, assignment_notebook, assignment_view) {
 
     "use strict";
 
     function initialize() {
-        if (!model.is_assignment_notebook()) {
-            return;
-        }
-        assignment_view.initialize();
-        assignment_notebook.initialize();
+        let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
+        require([static_path + 'nbgrader.js'], function(nbgrader) {
+            if (!nbgrader.is_assignment_notebook()) {
+                return;
+            }
+            assignment_view.initialize();
+            assignment_notebook.initialize();
+        });
     }
 
     function load_ipython_extension() {
