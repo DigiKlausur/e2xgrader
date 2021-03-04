@@ -1,0 +1,33 @@
+{
+  "name": "e2xgrader",
+  "version": "0.0.1",
+  "description": "An addon for nbgrader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel e2xgrader/nbextensions/src -d e2xgrader/nbextensions/lib --copy-files"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DigiKlausur/e2xgrader.git"
+  },
+  "keywords": [
+    "nbgrader",
+    "e2xgrader",
+    "teaching",
+    "jupyter",
+    "notebook"
+  ],
+  "author": "Tim Metzler",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0"
+  },
+  "bugs": {
+    "url": "https://github.com/DigiKlausur/e2xgrader/issues"
+  },
+  "homepage": "https://github.com/DigiKlausur/e2xgrader#readme"
+}
