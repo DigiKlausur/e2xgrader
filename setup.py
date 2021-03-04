@@ -2,15 +2,9 @@
 
 import os
 from setuptools import setup, find_packages
+from setuptools.command.build_py import build_py
+from setupbase import js_prerelease, discover_nbextensions
 
-# get paths to all the extension files
-extension_files = []
-for (dirname, dirnames, filenames) in os.walk("e2xgrader/nbextensions"):
-    root = os.path.relpath(dirname, "e2xgrader")
-    for filename in filenames:
-        if filename.endswith(".pyc"):
-            continue
-        extension_files.append(os.path.join(root, filename))
 
 static_files = []
 for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formgrader/static"):
@@ -47,7 +41,7 @@ setup_args = dict(
     ],
     packages=find_packages(),
     package_data={
-        'e2xgrader': extension_files,
+        'e2xgrader': discover_nbextensions(name),
         'e2xgrader.server_extensions.formgrader': static_files,
         'e2xgrader.server_extensions.e2xbase': base_static_files,
     },
@@ -64,7 +58,10 @@ setup_args = dict(
         "beautifulsoup4",
         "pandas",
         "nbgrader",
-    ]
+    ],
+    cmdclass={
+        'build_py': js_prerelease(build_py),
+    },
 )
 
 if __name__ == "__main__":
