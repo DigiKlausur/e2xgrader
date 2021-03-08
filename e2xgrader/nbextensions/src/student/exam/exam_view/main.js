@@ -62,7 +62,6 @@ define([
             $('<i/>').addClass('fa fa-paper-plane')
         );
 
-        //submit_btn.hide();
         div.append(submit_btn);
 
         let help = $('<button/>')
