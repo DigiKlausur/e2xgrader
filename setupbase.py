@@ -71,9 +71,6 @@ def discover_nbextensions(name):
     src_path = pjoin('nbextensions', 'src')
     lib_path = pjoin('nbextensions', 'lib')
     extension_path = pjoin(name, src_path)
-    extensions = [
-        pjoin(name)
-    ]
     extension_files = []
     for (dirname, dirnames, filenames) in os.walk(extension_path):
         root = os.path.relpath(dirname, extension_path)
