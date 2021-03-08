@@ -45,6 +45,9 @@ setup_args = dict(
         'e2xgrader.server_extensions.formgrader': static_files,
         'e2xgrader.server_extensions.e2xbase': base_static_files,
     },
+    entry_points={
+        'console_scripts': ['e2xgrader=e2xgrader.apps.e2xgraderapp:main']
+    },
     install_requires=[
         "jupyter",
         "notebook>=6.1.6",
