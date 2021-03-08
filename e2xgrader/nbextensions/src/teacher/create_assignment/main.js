@@ -5,7 +5,7 @@ define([
     'base/js/dialog',
     'notebook/js/celltoolbar',
     'base/js/events',
-], function (require, $, Jupyter, dialog, celltoolbar, events) {
+], function (require, $, Jupyter, dialog, toolbar, events) {
 
     "use strict";
 
@@ -17,7 +17,7 @@ define([
     var nbgrader_schema_version = 3;
     var warning;
 
-    var CellToolbar = celltoolbar.CellToolbar;
+    var CellToolbar = toolbar.CellToolbar;
 
     // trigger an event when the toolbar is being rebuilt
     CellToolbar.prototype._rebuild = CellToolbar.prototype.rebuild;
@@ -32,8 +32,8 @@ define([
         $("#nbgrader-total-points-group").hide();
 
         CellToolbar._global_hide();
-        for (var i=0; i < CellToolbar._instances.length; i++) {
-            events.trigger('global_hide.CellToolbar', CellToolbar._instances[i].cell);
+        for (let instance of CellToolbar._instances) {
+            events.trigger('global_hide.CellToolbar', instance.cell);
         }
     };
 
@@ -91,9 +91,9 @@ define([
     var update_total = function() {
         var total_points = 0;
         var cells = Jupyter.notebook.get_cells();
-        for (var i=0; i < cells.length; i++) {
-            if (model.is_graded(cells[i])) {
-                total_points += to_float(cells[i].metadata.nbgrader.points);
+        for (let cell of cells) {
+            if (model.is_graded(cell)) {
+                total_points += to_float(cell.metadata.nbgrader.points);
             }
         }
         $("#nbgrader-total-points").attr("value", total_points);
@@ -364,10 +364,10 @@ define([
             };
 
             var select = $('<select/>');
-            for(var i=0; i < options_list.length; i++){
-                var opt = $('<option/>')
-                    .attr('value', options_list[i][1])
-                    .text(options_list[i][0]);
+            for (let option of options_list) {
+                let opt = $('<option/>')
+                    .attr('value', option[1])
+                    .text(option[0]);
                 select.append(opt);
             }
             select.val(getter(cell));
