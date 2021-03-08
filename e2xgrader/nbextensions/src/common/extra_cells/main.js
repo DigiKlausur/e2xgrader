@@ -46,7 +46,6 @@ define([
                 clean_tables: true,
                 sanitize: false,
             }, function (err, html) {
-                console.log(err, html, );
                 html = $(html);
                 // add anchors to headings
                 html.find(":header").addBack(":header").each(function (i, h) {
