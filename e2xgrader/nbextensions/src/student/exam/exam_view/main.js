@@ -9,6 +9,26 @@ define([
 
     'use strict';
 
+    let Notebook = Jupyter.Notebook;
+
+    Notebook.prototype.execute_cell_and_select_below = function () {
+        var indices = this.get_selected_cells_indices();
+        var cell_index;
+        if (indices.length > 1) {
+            this.execute_cells(indices);
+            cell_index = Math.max.apply(Math, indices);
+        } else {
+            var cell = this.get_selected_cell();
+            cell_index = this.find_cell_index(cell);
+            cell.execute();
+        }
+
+        this.command_mode();
+        this.select(cell_index+1);
+        this.focus_cell();
+        this.set_dirty(true);
+    };
+
     function remove_elements() {
         let elements = [
             '#insert_above_below',
