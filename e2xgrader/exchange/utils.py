@@ -27,9 +27,8 @@ def append_alert_cell(nb, text, msg, cell_id):
 
     # When using notebooks with version <= 4.4 and nbformat v4.5
     # delete the new id attribute to prevent validation errors
-    if (nb.nbformat == 4 and nb.nbformat_minor <= 4):
-        if 'id' in alert_cell:
-            del alert_cell['id']
+    if nb.nbformat == 4 and nb.nbformat_minor <= 4 and 'id' in alert_cell:
+        del alert_cell['id']
 
     target_idx = -1
     for idx, cell in enumerate(nb.cells):
