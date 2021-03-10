@@ -52,6 +52,16 @@ define([
         };
     };
 
+    let is_form = function (cell) {
+        return cell_type(cell) === 'form';
+    };
+
+    let to_form = function (cell) {
+        cell.metadata[field] = {
+            'type': 'form'
+        };
+    };
+
 
 
     let remove_metadata = function (cell) {
@@ -74,5 +84,7 @@ define([
         to_attachment: to_attachment,
         is_pdf: is_pdf,
         to_pdf: to_pdf,
+        is_form: is_form,
+        to_form: to_form,
     };
 })
