@@ -14,7 +14,11 @@ define([
 
         constructor(cell) {            
             super(cell, 'pdf');
-            this.edit_mode = false;
+        }
+
+        render = function() {
+            this.cell.unsafe_render();
+            this.add_edit_button();
         }
 
     }

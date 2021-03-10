@@ -17,7 +17,6 @@ define([
         constructor(cell, type) {
             super(cell, type);
             this.choice_field = 'choice';
-            this.edit_mode = false;
         }
 
         get_choices = function () {
@@ -81,9 +80,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }
@@ -178,9 +175,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }

@@ -18,7 +18,6 @@ define([
             super(cell, 'attachments');
             this.model = new attachment_view.AttachmentModel(cell);
             this.view = new attachment_view.AttachmentGallery(cell, this.model);
-            this.edit_mode = false;
         }
 
         get_attachment_button() {
@@ -37,9 +36,7 @@ define([
             if (html.find('.edit_attachments').length < 1) {
                 html.append(this.get_attachment_button());
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());
-            }
+            this.add_edit_button();
         }
 
     }

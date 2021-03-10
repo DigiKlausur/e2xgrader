@@ -15,6 +15,7 @@ define([
                 this.cell.metadata[this.field] = {};
             }
             this.cell.metadata[this.field]['type'] = type;
+            this.edit_mode = false;
         }
 
         get_metadata = function () {
@@ -28,10 +29,20 @@ define([
             let that = this;
             return $('<button>')
                 .attr('type', 'button')
-                .addClass('hbrs_unrender')
+                .addClass('e2x_unrender')
                 .click(function () {
                     that.cell.unrender_force();
                 }).append('Edit cell');
+        }
+
+        add_edit_button = function () {
+            if (!this.edit_mode) {
+                return;
+            }
+            let html = $(this.cell.element).find('.rendered_html');
+            if (html.find('.e2x_unrender').length < 1) {
+                html.append(this.get_edit_button());
+            }
         }
 
         render = function () {
