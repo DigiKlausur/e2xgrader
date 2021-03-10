@@ -31,16 +31,6 @@ define([
                 }).append('Add Files / Images');
         }
 
-        get_edit_button = function () {
-            let that = this;
-            return $('<button>')
-                .attr('type', 'button')
-                .addClass('hbrs_unrender')
-                .click(function () {
-                    that.cell.unrender_force();
-                }).append('Edit cell');
-        }
-
         render = function() {
             this.cell.render_force();
             let html = $(this.cell.element).find('.rendered_html');

@@ -24,6 +24,16 @@ define([
             return {};
         };
 
+        get_edit_button = function () {
+            let that = this;
+            return $('<button>')
+                .attr('type', 'button')
+                .addClass('hbrs_unrender')
+                .click(function () {
+                    that.cell.unrender_force();
+                }).append('Edit cell');
+        }
+
         render = function () {
             this.cell.render();
         };
