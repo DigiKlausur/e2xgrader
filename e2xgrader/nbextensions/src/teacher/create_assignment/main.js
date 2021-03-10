@@ -246,6 +246,7 @@ define([
                 options_list.push(["Single Choice", "singlechoice"]);
                 options_list.push(["Upload answer", "attachments"]);
                 options_list.push(["Read-only HTML", "pdf"]);
+                options_list.push(["HTML Form answer", "form"]);
             }
             if (cell.cell_type == "code") {
                 options_list.push(["Autograded answer", "solution"]);
@@ -296,6 +297,21 @@ define([
                     model.set_locked(cell, true);
                     model.set_task(cell, false);
                     extramodel.to_pdf(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
+                } else if (val === "form") {
+                    model.set_schema_version(cell);
+                    model.set_solution(cell, false);
+                    model.set_grade(cell, false);
+                    model.set_locked(cell, true);
+                    model.set_task(cell, false);
+                    extramodel.to_form(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
                 } else if (val === "manual") {
                     extramodel.remove_metadata(cell);
                     model.set_schema_version(cell);
@@ -350,6 +366,8 @@ define([
                     return "attachments";
                 } else if (extramodel.is_pdf(cell)) {
                     return "pdf";
+                } else if (extramodel.is_form(cell)) {
+                    return "form";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
                     return "manual";
                 } else if (model.is_solution(cell) && cell.cell_type === "code") {
