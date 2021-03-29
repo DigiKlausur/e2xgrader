@@ -1,6 +1,7 @@
 import os
 
 from tornado import web
+from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
