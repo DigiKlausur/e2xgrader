@@ -4,6 +4,7 @@ from nbformat.notebooknode import NotebookNode
 from nbconvert.exporters.exporter import ResourcesDict
 from typing import Tuple
 
+from nbgrader.api import MissingEntry
 from nbgrader.preprocessors import OverwriteCells as NbgraderOverwriteCells
 
 from ..utils.extra_cells import is_singlechoice, is_multiplechoice
