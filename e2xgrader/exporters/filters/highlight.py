@@ -1,5 +1,6 @@
 from nbconvert.filters.highlight import _pygments_highlight, Highlight2HTML
 
+
 class Highlight2HTMLwithLineNumbers(Highlight2HTML):
 
     def __call__(self, source, language=None, metadata=None):
@@ -19,7 +20,7 @@ class Highlight2HTMLwithLineNumbers(Highlight2HTML):
         from pygments.formatters import HtmlFormatter
 
         if not language:
-            language=self.pygments_lexer
+            language = self.pygments_lexer
 
         return _pygments_highlight(source if len(source) > 0 else ' ',
                                    # needed to help post processors:

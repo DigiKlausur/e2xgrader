@@ -1,17 +1,17 @@
-import os
 import hashlib
 import nbformat
 
 from textwrap import dedent
 from e2xgrader.exporters import E2xExporter
 
+
 def has_name(cell, name):
     if cell.cell_type != 'markdown':
         return False
     return 'name' in cell.metadata and cell.metadata.name == name
 
-def append_alert_cell(nb, text, msg, cell_id):
 
+def append_alert_cell(nb, text, msg, cell_id):
     alert_cell = nbformat.v4.new_markdown_cell()
     alert_cell.source = dedent(f'''
         <div class="alert alert-block alert-danger">
@@ -43,12 +43,15 @@ def append_alert_cell(nb, text, msg, cell_id):
 
     return nb
 
+
 def append_hashcode(nb, hashcode, msg='Ihr Hashcode'):
     return append_alert_cell(nb, hashcode, msg, 'hashcode_cell')
 
+
 def append_timestamp(nb, timestamp, msg='Timestamp'):
     return append_alert_cell(nb, timestamp, msg, 'timestamp_cell')
-    
+
+
 def compute_hashcode(filename, method='md5'):
     if method == 'md5':
         hashcode = hashlib.md5()
@@ -63,11 +66,13 @@ def compute_hashcode(filename, method='md5'):
 
     return hashcode.hexdigest()
 
+
 def truncate_hashcode(hashcode, size=20, chunk_size=5):
     hash_string = ''
     for i in range(0, size, chunk_size):
         hash_string += f'-{hashcode[i:i+chunk_size+1]}'
     return hash_string[1:]
+
 
 def generate_student_info(filename, username, hashcode, timestamp):
     with open(filename, 'w') as f:
@@ -76,6 +81,7 @@ def generate_student_info(filename, username, hashcode, timestamp):
             Hashcode: {hashcode}
             Timestamp: {timestamp}
         """))
+
 
 def generate_html(nb, dest):
     exporter = E2xExporter()

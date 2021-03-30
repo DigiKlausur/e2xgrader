@@ -6,10 +6,11 @@ from nbgrader.preprocessors import ClearHiddenTests as NbgraderClearHiddenTests
 
 from ..utils.extra_cells import is_singlechoice, is_multiplechoice, clear_choices
 
+
 class ClearHiddenTests(NbgraderClearHiddenTests):
 
-    def preprocess_cell(self, 
-                        cell: NotebookNode, 
+    def preprocess_cell(self,
+                        cell: NotebookNode,
                         resources: ResourcesDict,
                         cell_index: int
                         ) -> Tuple[NotebookNode, ResourcesDict]:

@@ -9,10 +9,11 @@ from nbgrader.preprocessors import OverwriteCells as NbgraderOverwriteCells
 
 from ..utils.extra_cells import is_singlechoice, is_multiplechoice
 
+
 class OverwriteCells(NbgraderOverwriteCells):
 
-    def preprocess_cell(self, 
-                        cell: NotebookNode, 
+    def preprocess_cell(self,
+                        cell: NotebookNode,
                         resources: ResourcesDict,
                         cell_index: int
                         ) -> Tuple[NotebookNode, ResourcesDict]:
@@ -35,4 +36,4 @@ class OverwriteCells(NbgraderOverwriteCells):
 
         cell.metadata.extended_cell.source = json.loads(source_cell.source)
 
-        return cell, resources            
+        return cell, resources

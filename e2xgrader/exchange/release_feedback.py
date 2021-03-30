@@ -29,15 +29,15 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             # u+rwx, g+wx, o+wx
             self.ensure_directory(
                 self.dest_path,
-                (S_IRUSR | S_IWUSR | S_IXUSR | S_IWGRP | S_IXGRP| S_IWOTH | S_IXOTH |
-                 ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
+                (S_IRUSR | S_IWUSR | S_IXUSR | S_IWGRP | S_IXGRP | S_IWOTH | S_IXOTH |
+                 ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0))
             )
         else:
             # 0755
             self.ensure_directory(
                 self.dest_path,
                 (S_IRUSR | S_IWUSR | S_IXUSR | S_IXGRP | S_IXOTH |
-                 ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
+                 ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0))
             )
 
     def copy_files(self):
@@ -48,7 +48,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             exclude_students = set(self.coursedir.student_id_exclude.split(','))
         else:
             exclude_students = set()
-        
+
         html_files = glob.glob(os.path.join(self.src_path, "*.html"))
         for html_file in html_files:
             if 'hashcode' in html_file:
@@ -79,16 +79,16 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             submission_dir = self.coursedir.format_path(
                 self.coursedir.submitted_directory, student_id,
                 self.coursedir.assignment_id)
-            
+
             if self.personalized_feedback:
                 dest = os.path.join(self.dest_path, student_id, self.coursedir.assignment_id)
                 # u+rwx, g+wx, o+wx
                 self.ensure_directory(
                     dest,
-                    (S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP| S_IXOTH | S_IROTH |
-                     ((S_IRGRP|S_IWGRP|S_ISGID) if self.coursedir.groupshared else 0))
+                    (S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IXOTH | S_IROTH |
+                     ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0))
                 )
-                
+
                 dest = os.path.join(dest, notebook_id+".html")
 
                 self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ".format(
@@ -108,7 +108,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
                 dest = os.path.join(self.dest_path, "{}.html".format(checksum))
 
                 self.log.info("Releasing feedback for student '{}' on assignment '{}/{}/{}' ({})".format(
-                              student_id, self.coursedir.course_id, self.coursedir.assignment_id, 
+                              student_id, self.coursedir.course_id, self.coursedir.assignment_id,
                               notebook_id, timestamp))
 
             shutil.copy(html_file, dest)

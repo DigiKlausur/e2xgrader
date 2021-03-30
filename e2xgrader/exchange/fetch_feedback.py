@@ -1,11 +1,10 @@
 import os
-import shutil
 import glob
-import re
 
 from nbgrader.exchange.default import ExchangeFetchFeedback
 from .exchange import E2xExchange
 from nbgrader.utils import check_mode, notebook_hash, make_unique_key, get_username
+
 
 class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
 
@@ -51,11 +50,11 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
             notebooks = glob.glob(pattern)
             for notebook in notebooks:
                 notebook_id = os.path.splitext(os.path.split(notebook)[-1])[0]
-                
+
                 # Check if personalized_feedback is used
                 if self.personalized_feedback:
                     feedbackpath = os.path.join(self.outbound_path, student_id, assignment_id, '{}.html'.format(notebook_id))
-                    self.log.debug("Feedback file: ",feedbackpath)
+                    self.log.debug("Feedback file: ", feedbackpath)
                     if os.path.exists(feedbackpath):
                         self.feedback_files.append((notebook_id, timestamp, feedbackpath))
                         self.log.info(

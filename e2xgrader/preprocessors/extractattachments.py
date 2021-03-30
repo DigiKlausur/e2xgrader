@@ -20,14 +20,14 @@ class ExtractAttachments(NbGraderPreprocessor):
         {'image/png', 'image/jpeg', 'image/svg+xml', 'application/pdf'}
     ).tag(config=True)
 
-    def preprocess(self, nb, resources):       
+    def preprocess(self, nb, resources):
         # Get files directory if it has been specified
         self.path = os.path.join(resources['metadata']['path'], self.subdirectory)
         os.makedirs(self.path, exist_ok=True)
 
         for cell_index, cell in enumerate(nb.cells):
             cell, resources = self.preprocess_cell(cell, resources, cell_index)
-        
+
         return nb, resources
 
     def preprocess_cell(self, cell, resources, cell_index):
@@ -44,7 +44,7 @@ class ExtractAttachments(NbGraderPreprocessor):
         cell_index : int
             Index of the cell being processed (see base.py)
         """
-        
+
         if not is_attachment_cell(cell):
             return cell, resources
 
@@ -54,7 +54,7 @@ class ExtractAttachments(NbGraderPreprocessor):
         # Make sure outputs key exists
         if not isinstance(resources['outputs'], dict):
             resources['outputs'] = {}
-            
+
         to_delete = []
 
         # Loop through all of the attachments in the cell
@@ -83,12 +83,11 @@ class ExtractAttachments(NbGraderPreprocessor):
 
                 if name.endswith(".gif") and mime == "image/png":
                     filename = filename.replace(".gif", ".png")
-                    
+
                 # Write the attachments to a file and add a link
-                
+
                 with open(filename, 'wb') as f:
                     f.write(data)
-
 
                 cell.source += f'\n<a href="{link}">{name}</a>\n'
                 to_delete.append(name)
@@ -98,7 +97,7 @@ class ExtractAttachments(NbGraderPreprocessor):
                 attach_str = "attachment:"+name
                 if attach_str in cell.source:
                     cell.source = cell.source.replace(attach_str, filename)
-                    
+
         for name in to_delete:
             del cell.attachments[name]
 

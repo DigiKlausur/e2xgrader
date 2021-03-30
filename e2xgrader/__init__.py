@@ -3,8 +3,8 @@ A system for creating assignments.
 """
 
 import os
-import sys
 from os.path import join as pjoin
+
 
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
@@ -12,7 +12,7 @@ def _jupyter_nbextension_paths():
         base_path = pjoin(root, 'nbextensions', 'lib')
     else:
         base_path = pjoin(root, 'nbextensions', 'src')
-    
+
     paths = [
         dict(
             section='notebook',
@@ -45,8 +45,9 @@ def _jupyter_nbextension_paths():
             require='restricted_tree/main'
         ),
     ]
-    
+
     return paths
+
 
 def _jupyter_server_extension_paths():
     paths = [

@@ -1,5 +1,3 @@
-from textwrap import dedent
-
 from nbgrader.exchange.default import Exchange
 from nbgrader.utils import check_directory
 from traitlets import Bool, Unicode
@@ -39,13 +37,13 @@ class E2xExchange(Exchange):
 
     def __init__(self, coursedir=None, authenticator=None, **kwargs):
         super().__init__(coursedir=coursedir, authenticator=authenticator, **kwargs)
-        
+
         if self.personalized_outbound:
             self.outbound_directory = 'personalized-outbound'
-        
+
         if self.personalized_inbound:
             self.inbound_directory = 'personalized-inbound'
-        
+
         if self.personalized_feedback:
             self.feedback_directory = 'personalized-feedback'
 
