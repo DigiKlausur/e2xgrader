@@ -1,7 +1,6 @@
 import os
 import os.path
 
-from traitlets.config import Config
 from traitlets import Unicode
 from nbconvert.exporters.html import HTMLExporter
 from jinja2 import contextfilter
@@ -18,17 +17,18 @@ class E2xExporter(HTMLExporter):
     """
 
     extra_cell_field = Unicode(
-        'extended_cell', 
+        'extended_cell',
         help='The name of the extra cell metadata field.'
     )
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if kwargs and 'config' in kwargs and 'HTMLExporter' in kwargs['config']:
-                self.template_file = kwargs['config'].HTMLExporter.template_file
+            self.template_file = kwargs['config'].HTMLExporter.template_file
         self.template_path.extend(
-            [os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'server_extensions', 'formgrader', 'templates'))] + \
-            [nbgrader_handlers.template_path]
+            [os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                             'server_extensions', 'formgrader', 'templates'))]
+            + [nbgrader_handlers.template_path]
         )
 
     @contextfilter
@@ -44,7 +44,7 @@ class E2xExporter(HTMLExporter):
             my_type = 'checkbox'
         form = soup.new_tag('form')
         form['class'] = 'hbrs_checkbox'
-        
+
         list_elems = soup.ul.find_all('li')
         for i in range(len(list_elems)):
             div = soup.new_tag('div')
@@ -53,7 +53,7 @@ class E2xExporter(HTMLExporter):
             box['value'] = i
             box['disabled'] = 'disabled'
             if i in utils.get_choices(cell):
-                box['checked'] = 'checked'                
+                box['checked'] = 'checked'
             div.append(box)
             children = [c for c in list_elems[i].children]
             for child in children:
@@ -84,7 +84,7 @@ class E2xExporter(HTMLExporter):
         langinfo = nb.metadata.get('language_info', {})
         lexer = langinfo.get('pygments_lexer', langinfo.get('name', None))
         highlight_code = self.filters.get(
-            'highlight_code_with_linenumbers', 
+            'highlight_code_with_linenumbers',
             Highlight2HTMLwithLineNumbers(pygments_lexer=lexer, parent=self))
         self.register_filter('highlight_code_with_linenumbers', highlight_code)
         return super(E2xExporter, self).from_notebook_node(nb, resources, **kw)

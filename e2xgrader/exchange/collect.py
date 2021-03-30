@@ -5,7 +5,7 @@ from collections import defaultdict
 from nbgrader.exchange.default.collect import ExchangeCollect, groupby
 from .exchange import E2xExchange
 
-from nbgrader.utils import check_mode, parse_utc
+from nbgrader.utils import check_mode
 from nbgrader.api import Gradebook, MissingEntry
 
 
@@ -14,7 +14,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
     def init_submissions(self):
         if self.personalized_inbound:
             self.log.info('Collecting from restricted submit dirs')
-            submit_dirs = [username for username in os.listdir(self.inbound_path) if '+' not in username and 
+            submit_dirs = [username for username in os.listdir(self.inbound_path) if '+' not in username and
                            os.path.isdir(os.path.join(self.inbound_path, username))]
             self.log.info(f'Submission dirs: {submit_dirs}')
 
@@ -31,7 +31,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                     user_records[i]['filename'] = os.path.join(user, record['filename'])
 
                 usergroups.update(groupby(user_records, lambda item: item['username']))
-                records.append(user_records)           
+                records.append(user_records)
 
         else:
             student_id = self.coursedir.student_id if self.coursedir.student_id else '*'
@@ -40,7 +40,6 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             usergroups = groupby(records, lambda item: item['username'])
 
         return records, usergroups
-
 
     def init_src(self):
         if self.coursedir.course_id == '':

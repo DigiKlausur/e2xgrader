@@ -14,6 +14,16 @@ def _checksum(path):
     return m.hexdigest()
 
 
+def _get_key(info):
+    return info['course_id'], info['student_id'], info['assignment_id']
+
+
+def _match_key(info, key):
+    return (info['course_id'] == key[0] and
+            info['student_id'] == key[1] and
+            info['assignment_id'] == key[2])
+
+
 class E2xExchangeList(E2xExchange, ExchangeList):
 
     def init_dest(self):
@@ -109,7 +119,7 @@ class E2xExchangeList(E2xExchange, ExchangeList):
                 # and check whether personalized-feedback is enabled
                 if self.personalized_feedback:
                     exchange_feedback_path = os.path.join(
-                        self.root, info['course_id'], self.feedback_directory, info['student_id'], 
+                        self.root, info['course_id'], self.feedback_directory, info['student_id'],
                         info['assignment_id'], '{0}.html'.format(nb_info['notebook_id']))
                 else:
                     unique_key = make_unique_key(
@@ -166,11 +176,6 @@ class E2xExchangeList(E2xExchange, ExchangeList):
 
         # partition the assignments into groups for course/student/assignment
         if self.inbound or self.cached:
-            _get_key = lambda info: (info['course_id'], info['student_id'], info['assignment_id'])
-            _match_key = lambda info, key: (
-                info['course_id'] == key[0] and
-                info['student_id'] == key[1] and
-                info['assignment_id'] == key[2])
             assignment_keys = sorted(list(set([_get_key(info) for info in assignments])))
             assignment_submissions = []
             for key in assignment_keys:
@@ -187,4 +192,3 @@ class E2xExchangeList(E2xExchange, ExchangeList):
             assignments = assignment_submissions
 
         return assignments
-

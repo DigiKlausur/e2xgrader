@@ -13,7 +13,6 @@ from ...exporters import E2xExporter
 from ...preprocessors import FilterCellsById
 
 
-
 class FormgradeExtension(NbgraderFormgradeExtension):
 
     @default("classes")
@@ -22,13 +21,11 @@ class FormgradeExtension(NbgraderFormgradeExtension):
         classes.append(E2xExporter)
         return classes
 
-    
     def build_extra_config(self):
         extra_config = super(NbgraderFormgradeExtension, self).build_extra_config()
         extra_config.E2xExporter.template_file = 'formgrade'
         extra_config.E2xExporter.template_path = [handlers.template_path, nbgrader_handlers.template_path]
         return extra_config
-            
 
     def init_tornado_settings(self, webapp):
         # Init jinja environment
@@ -73,7 +70,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
         h.extend(apihandlers.default_handlers)
         h.extend(nbgrader_handlers.default_handlers)
         h.extend(nbgrader_apihandlers.default_handlers)
-        h.extend([                        
+        h.extend([
             (r"/formgrader/static/(.*)", web.StaticFileHandler, {'path': nbgrader_handlers.static_path}),
             (r"/e2xgrader/static/(.*)", web.StaticFileHandler, {'path': handlers.static_path}),
 
@@ -85,7 +82,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
             return (pat,) + x[1:]
 
         webapp.add_handlers(".*$", [rewrite(x) for x in h])
-        
+
 
 def load_jupyter_server_extension(nbapp):
     """Load the formgrader extension"""

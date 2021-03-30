@@ -2,7 +2,7 @@ import os
 from tornado import web
 from notebook.utils import url_path_join as ujoin
 from traitlets.config import LoggingConfigurable
-from textwrap import dedent
+
 
 class E2xBaseExtension(LoggingConfigurable):
 
@@ -11,10 +11,11 @@ class E2xBaseExtension(LoggingConfigurable):
         static_path = os.path.join(root_path, 'static')
         handlers = [
             (r"/e2xbase/static/(.*)", web.StaticFileHandler, {
-                'path': static_path, 
+                'path': static_path,
             }),
         ]
         return handlers
+
 
 def init_handlers(webapp):
     h = E2xBaseExtension().get_handlers()
@@ -24,6 +25,7 @@ def init_handlers(webapp):
         return (pat, ) + x[1:]
 
     webapp.add_handlers('.*$', [rewrite(x) for x in h])
+
 
 def load_jupyter_server_extension(nbapp):
     nbapp.log.info('Loading the e2xgrader base serverextension')

@@ -9,7 +9,7 @@ from tornado import web
 
 from notebook.utils import url_path_join as ujoin
 
-from nbgrader.exchange import ExchangeFactory, ExchangeError
+from nbgrader.exchange import ExchangeFactory
 from nbgrader.coursedir import CourseDirectory
 from nbgrader.auth import Authenticator
 
@@ -48,7 +48,7 @@ class E2xAssignmentList(AssignmentList):
                 if retval and len(retval) == 2:
                     hashcode, timestamp = retval
 
-            except:
+            except Exception:
                 self.log.error(traceback.format_exc())
                 retvalue = {
                     "success": False,
@@ -94,9 +94,9 @@ class AssignmentActionHandler(BaseAssignmentHandler):
             self.finish(json.dumps(self.manager.list_assignments(course_id=course_id)))
 
 
-#-----------------------------------------------------------------------------
-# URL to handler mappings
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+#  URL to handler mappings
+# -----------------------------------------------------------------------------
 
 
 _assignment_action_regex = r"(?P<action>fetch|submit|fetch_feedback)"

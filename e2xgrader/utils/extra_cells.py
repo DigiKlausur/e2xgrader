@@ -3,6 +3,7 @@ from typing import Tuple, Optional
 from logging import Logger
 from nbformat.notebooknode import NotebookNode
 
+
 def is_extra_cell(cell):
     """Returns True if the cell is a form cell."""
     if 'nbgrader' not in cell.metadata:
@@ -37,7 +38,7 @@ def get_instructor_choices(cell):
     if (is_singlechoice(cell) or is_multiplechoice(cell)) and \
        ('source' in cell.metadata.extended_cell) and \
        ('choice' in cell.metadata.extended_cell.source):
-            return [int(i) for i in cell.metadata.extended_cell.source.choice]
+        return [int(i) for i in cell.metadata.extended_cell.source.choice]
     return []
 
 
@@ -50,6 +51,7 @@ def has_solution(cell):
     if (is_singlechoice(cell) or is_multiplechoice(cell)):
         return 'source' in cell.metadata.extended_cell
     return False
+
 
 def determine_grade(cell: NotebookNode, log: Logger = None) -> Tuple[Optional[float], float]:
     if not nbutils.is_grade(cell):
@@ -84,5 +86,5 @@ def determine_grade(cell: NotebookNode, log: Logger = None) -> Tuple[Optional[fl
                ((i not in student_choices) and (i not in instructor_choices)):
                 points += option_points
             else:
-                points -=option_points
+                points -= option_points
         return max(0, points), max_points

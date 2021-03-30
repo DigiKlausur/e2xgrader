@@ -26,7 +26,7 @@ class E2xExchangeFetchAssignment(E2xExchange, ExchangeFetchAssignment):
                 self.src_path,
                 os.path.join(self.outbound_path, "*"))
         if not check_mode(self.src_path, read=True, execute=True):
-            self.fail("You don't have read permissions for the directory: {}".format(self.src_path))    
+            self.fail("You don't have read permissions for the directory: {}".format(self.src_path))
 
     def do_scrambling(self, dest, student_id):
         self.log.info(f'Scrambling for {student_id}')
@@ -55,7 +55,7 @@ class E2xExchangeFetchAssignment(E2xExchange, ExchangeFetchAssignment):
                 src = personalized_src
             else:
                 self.log.warning(dedent(f'''
-                    Using personalized outbound, but no directory for 
+                    Using personalized outbound, but no directory for
                     user {os.getenv('JUPYTERHUB_USER')} exists.
                     '''))
         super().do_copy(src, dest)
