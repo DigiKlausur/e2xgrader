@@ -8,7 +8,8 @@ define([
     './extended_cell/extended_cell',
     './extended_cell/choice_cell',
     './extended_cell/attachment_cell',
-    './extended_cell/pdf_cell'
+    './extended_cell/pdf_cell',
+    './extended_cell/form_cell',
 ], function (
     $,
     require,
@@ -20,6 +21,7 @@ define([
     choice_cell,
     attachment_cell,
     pdf_cell,
+    form_cell,
 ) {
 
     'use strict';
@@ -129,7 +131,12 @@ define([
             } else if (type == 'pdf') {
                 let mycell = new pdf_cell.PDFCell(this);
                 mycell.edit_mode = edit_mode;
-                render_pdf.apply(this, arguments);
+                mycell.render();
+                //render_pdf.apply(this, arguments);
+            } else if (type == 'form') {
+                let mycell = new form_cell.FormCell(this);
+                mycell.edit_mode = edit_mode;
+                mycell.render();
             } else {
                 old_render.apply(this, arguments);
             }
@@ -140,7 +147,7 @@ define([
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
             let type = cell_type(this);
-            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments' && type != 'pdf') {
+            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments' && type != 'pdf' && type != 'form') {
                 old_unrender.apply(this, arguments);
             }
         }

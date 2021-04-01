@@ -17,7 +17,6 @@ define([
         constructor(cell, type) {
             super(cell, type);
             this.choice_field = 'choice';
-            this.edit_mode = false;
         }
 
         get_choices = function () {
@@ -26,16 +25,6 @@ define([
                 return metadata[this.choice_field];
             }
             return [];
-        }
-
-        get_edit_button = function () {
-            let that = this;
-            return $('<button>')
-                .attr('type', 'button')
-                .addClass('hbrs_unrender')
-                .click(function () {
-                    that.cell.unrender_force();
-                }).append('Edit cell');
         }
 
     }
@@ -91,9 +80,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }
@@ -188,9 +175,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }
