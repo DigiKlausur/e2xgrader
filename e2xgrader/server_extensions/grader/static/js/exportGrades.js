@@ -16,12 +16,13 @@ function getNotebooks(assignment_id){
             } else
             {
                 notebooks.forEach(function (notebook) {
-                    notebook_list += '<tr><td><input type="checkbox" id="'+assignment_id+'/'+notebook['name']+'" name="'+assignment_id+'checkbox" onclick="onSelect(this)"></td>'+
+                    notebook_list += '<tr><td><input type="checkbox" id="'+assignment_id+'/'+notebook['name']+'" name="'+assignment_id+'notebook" onclick="onSelect(this)" checked></td>'+
                             '<td>Notebook:</td>'+
                             '<td>'+notebook['name']+'</td>'+
                             '<td>Submissions:</td>'+
                             '<td>'+notebook['num_submissions']+'</td>'+
                     '</tr>';
+                    selection.push(assignment_id+'/'+notebook['name']);
                 });
             }
       },
@@ -85,20 +86,15 @@ function assignmentView ()  {
            var table = $('#datatable_export').DataTable({
              "data": assignments,
              "columns": [
-                 /*{
+                 {
                      "className": 'details-control',
                      "orderable": false,
                      "data": "name",
                      "render": function (name) {
                          return '<input type="checkbox" id="'+name+'" name="checkbox" >';
-                     },*/
-                    {
-                        'targets': 0,
-                        'checkboxes': {
-                            'selectRow': true
-                        }
-                    }
+                     },
                  },
+
                  { "data": "name" },
                  { "data": "duedate" },
                  { "data": "status" },
@@ -130,28 +126,7 @@ function assignmentView ()  {
                     row.child(notebook_list).show();
                     tr.addClass('shown');
                     console.log("selection:"+selection);
-                    if($(this).children("input").checked === true)
-                    {
-                        console.log("checked true");
-                        if(_.contains(selection, $(this).children("input").id) === false)
-                        {
-                            selection.push(obj.id);
-                            console.log(selection);
-                            console.log("obj id:"+obj.id+" pushed getting child")
-                            let checkboxes = document.getElementsByName($(this).children("input").id+"checkbox");
-                            console.log("children:"+checkboxes);
-                            checkboxes.forEach(function (checkbox)
-                            {
-                                checkbox.checked = true;
-                                onSelect(checkbox);
-                                console.log("checkbox click performed");
-                            });
 
-                        }
-                    } else
-                    {
-                        selection = _.without(selection, $(this).children("input").id);
-                    }
                 }
            });
         });
