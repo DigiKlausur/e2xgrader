@@ -23,7 +23,7 @@ function getNotebooks(assignment_id){
                             '<td>'+notebook['num_submissions']+'</td>'+
                     '</tr>';
                     selection.push(assignment_id+'/'+notebook['name']);
-                    selection = _.without(selection, assignment_id);
+
                 });
 
             }
@@ -44,10 +44,13 @@ function onSelect (obj) {
         if(_.contains(selection, obj.id) === false){
             selection.push(obj.id);
             console.log("obj id:"+obj.id+" pushed getting child")
-
         }
     } else {
         selection = _.without(selection, obj.id);
+        selection.forEach(function (element){
+            if(element.startsWith(obj.id))
+                selection = _.without(selection, element);
+        });
     }
     console.log(selection);
     return;
@@ -121,6 +124,7 @@ function assignmentView ()  {
                     row.child.hide();
                     tr.removeClass('shown');
                     onSelect(this.firstChild);
+
                 }
                 else
                 {
