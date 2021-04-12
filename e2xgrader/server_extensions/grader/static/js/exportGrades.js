@@ -23,7 +23,9 @@ function getNotebooks(assignment_id){
                             '<td>'+notebook['num_submissions']+'</td>'+
                     '</tr>';
                     selection.push(assignment_id+'/'+notebook['name']);
+                    selection = _.without(selection, assignment_id);
                 });
+
             }
       },
       error: function (error){
@@ -110,7 +112,6 @@ function assignmentView ()  {
            $('#datatable_export tbody').on('click', 'td.details-control', function ()
            {
                 var tr = $(this).closest('tr');
-                console.log(this.firstChild.id);
                 var assignment_id = tr.find("td:eq(1)").text();
                 var row = table.row(tr);
                 var notebook_list = getNotebooks(assignment_id);
@@ -119,13 +120,14 @@ function assignmentView ()  {
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
+                    onSelect(this.firstChild);
                 }
                 else
                 {
                     // Open this row
                     row.child(notebook_list).show();
                     tr.addClass('shown');
-                    console.log("selection:"+selection);
+                    onSelect(this.firstChild);
 
                 }
            });
