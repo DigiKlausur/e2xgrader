@@ -1,6 +1,6 @@
-
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell
+
 
 class E2xAPI(NbGraderAPI):
 
@@ -25,11 +25,11 @@ class E2xAPI(NbGraderAPI):
         with self.gradebook as gb:
             num_submissions = len(gb.notebook_submissions(notebook_id, assignment_id))
             notebook_id = gb.find_notebook(notebook_id, assignment_id).id
-            
+
             for cell_name in gb.db.query(BaseCell.name)\
                                   .filter(BaseCell.type == 'SolutionCell')\
                                   .filter(BaseCell.notebook_id == notebook_id):
-                
+
                 solution_cell = {
                     'name': cell_name[0],
                     'avg_score': 0,
@@ -51,16 +51,16 @@ class E2xAPI(NbGraderAPI):
                          .filter(BaseCell.name == cell_name[0])\
                          .first():
                     solution_cell['autograded'] = 1
-                    
+
                 for grade_id in grade_ids:
                     solution_cell['max_score'] += gb.db.query(GradeCell.max_score)\
                                                         .filter(GradeCell.id == grade_id[0])\
                                                         .first()[0]
                     for manual_score, auto_score, needs_manual_grade in gb.db\
-                            .query(Grade.manual_score, Grade.auto_score,\
+                            .query(Grade.manual_score, Grade.auto_score,
                                    Grade.needs_manual_grade)\
                             .filter(Grade.cell_id == grade_id[0]):
-                        solution_cell['needs_manual_grade'] = max(solution_cell['needs_manual_grade'], \
+                        solution_cell['needs_manual_grade'] = max(solution_cell['needs_manual_grade'],
                                                                   needs_manual_grade)
                         if manual_score:
                             solution_cell['avg_score'] += manual_score
@@ -68,10 +68,9 @@ class E2xAPI(NbGraderAPI):
                             solution_cell['avg_score'] += auto_score
                 if num_submissions > 0:
                     solution_cell['avg_score'] /= num_submissions
-                            
+
                 solution_cells.append(solution_cell)
             return solution_cells
-            
 
     def get_task_submissions(self, assignment_id, notebook_id, task_id):
         """Get a list of submissions for a particular notebook in an assignment.
@@ -94,16 +93,16 @@ class E2xAPI(NbGraderAPI):
         with self.gradebook as gb:
             notebook_uid = gb.find_notebook(notebook_id, assignment_id).id
             manual = gb.db.query(BaseCell.id)\
-                    .filter(BaseCell.notebook_id == notebook_uid)\
-                    .filter(BaseCell.type == 'GradeCell')\
-                    .filter(BaseCell.name == task_id)\
-                    .first()
+                          .filter(BaseCell.notebook_id == notebook_uid)\
+                          .filter(BaseCell.type == 'GradeCell')\
+                          .filter(BaseCell.name == task_id)\
+                          .first()
             grade_ids = gb.db.query(BaseCell.id)\
-                      .filter(BaseCell.notebook_id == notebook_uid)\
-                      .filter(BaseCell.type == 'GradeCell')\
-                      .filter(BaseCell.name.contains(task_id))\
-                      .all()
-        
+                             .filter(BaseCell.notebook_id == notebook_uid)\
+                             .filter(BaseCell.type == 'GradeCell')\
+                             .filter(BaseCell.name.contains(task_id))\
+                             .all()
+
             submissions = []
 
             for idx, submitted_notebook in enumerate(gb.notebook_submissions(notebook_id, assignment_id)):
@@ -120,10 +119,10 @@ class E2xAPI(NbGraderAPI):
                 }
                 for grade_id in grade_ids:
                     grade, max_score = gb.db.query(Grade, GradeCell.max_score)\
-                        .filter(Grade.notebook_id == submitted_notebook.id)\
-                        .filter(Grade.cell_id == grade_id[0])\
-                        .filter(GradeCell.id == grade_id[0])\
-                        .first()
+                                            .filter(Grade.notebook_id == submitted_notebook.id)\
+                                            .filter(Grade.cell_id == grade_id[0])\
+                                            .filter(GradeCell.id == grade_id[0])\
+                                            .first()
                     submission['max_score'] += max_score
                     if grade.manual_score is not None:
                         submission['score'] += grade.manual_score
@@ -131,13 +130,13 @@ class E2xAPI(NbGraderAPI):
                         submission['score'] += grade.auto_score
                         if grade.auto_score < max_score and not manual:
                             submission['failed_tests'] = 1
-                    submission['needs_manual_grade'] = max(submission['needs_manual_grade'], \
+                    submission['needs_manual_grade'] = max(submission['needs_manual_grade'],
                                                            grade.needs_manual_grade)
-                    
+
                 submissions.append(submission)
 
         submissions.sort(key=lambda x: x['id'])
         for idx, submission in enumerate(submissions):
             submission['index'] = idx
-                
+
         return submissions

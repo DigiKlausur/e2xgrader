@@ -5,6 +5,7 @@ from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
 
 from ..utils.extra_cells import determine_grade
 
+
 class SaveAutoGrades(NbgraderSaveAutoGrades):
 
     def _add_score(self, cell: NotebookNode, resources: ResourcesDict) -> None:

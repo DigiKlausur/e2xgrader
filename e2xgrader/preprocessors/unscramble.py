@@ -3,6 +3,7 @@ import base64
 import pickle
 from nbgrader.preprocessors import NbGraderPreprocessor
 
+
 class Unscramble(NbGraderPreprocessor):
 
     def __init__(self, **kw):
