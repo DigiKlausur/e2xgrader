@@ -1,112 +1,50 @@
 
 let selection = [];
-function getNotebooks (assignment_id) {
+
+function getNotebooks(assignment_id){
+
+    var notebook_list = "";
     $.ajax({
       url: base_url+"/formgrader/api/notebooks/"+assignment_id,
       type: 'get',
+      async: false,
       success: function (response) {
-        var notebooks = $.parseJSON(response)
-        $(document).ready(function() {
-           table = $("#"+assignment_id).DataTable({
-             "data": notebooks,
-             "columns": [
-                 {
-                     "className": 'details-control',
-                     "orderable": false,
-                     "data": null,
-                     "render": function () {
-                         return '<input type="checkbox" name="checkbox">';
-                     },
-                 },
-                 { "data": "name" },
-                 { "data": "average_score" },
-                 { "data": "num_submissions" }
-             ],
-             "order": [[1, 'asc']]
-           });
-
-           // Event listener for opening and closing details
-           $("#"+assignment_id).on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var notebook_id = tr.find("td:eq(1)").text();
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    // Open this row
-                    row.child( '<table id='+notebook_id+' cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; width=100%"><thead style="display:none;"></thead></table>' ).show();
-                    tr.addClass('shown');
-                }
-           });
-
-        });
-        $("#"+assignment_id +"thead").remove();
-        return table;
+            var notebooks = $.parseJSON(response);
+            if (notebooks.length === 0)
+            {
+                notebook_list  = "<tr><td> No notebook to show</td></tr>";
+            } else
+            {
+                notebooks.forEach(function (notebook) {
+                    notebook_list += '<tr><td><input type="checkbox" id="'+assignment_id+'/'+notebook['name']+'" name="'+assignment_id+'checkbox" onclick="onSelect(this)"></td>'+
+                            '<td>Notebook:</td>'+
+                            '<td>'+notebook['name']+'</td>'+
+                            '<td>Submissions:</td>'+
+                            '<td>'+notebook['num_submissions']+'</td>'+
+                    '</tr>';
+                });
+            }
       },
       error: function (error){
-        let table = $('<table/>');
-        table
-          .addClass('e2xtable')
-          .append(
-            $('<thead align="center"/>').append(
-              $('<tr/>')
-                .append($('<th/>').text('Error'))
-        ));
-        let body = $('<tbody/>');
-        body.attr('align', 'center');
-        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
-        $('#'+assignment_id).append(table.append(body));
-        console.log('Something went wrong when fetching the information....contact administrator');
-      }
-    })
-}
-
-function getNotebooksTest(assignment_id){
-    $.ajax({
-      url: base_url+"/formgrader/api/notebooks/"+assignment_id,
-      type: 'get',
-      success: function (response) {
-        var notebooks = $.parseJSON(response);
-        let body = $('<tbody/>');
-        notebooks.forEach(function (notebook) {
-            body.append(
-            $('<tr/>')
-              .append($('<td/>').text(notebook['name']))
-              .append($('<td/>').text(notebook['average_score']))
-              .append($('<td/>').text(notebook['num_submissions']))
-          );
-        });
-        $("#"+assignment_id).append(body);
-      },
-      error: function (error){
-            return;
+            notebook_list += '<tr><td>Error : '+error+'</td></tr>';
       }
     });
+    return notebook_list;
 }
 
 function onSelect (obj) {
     //obj = Object type DOM element
     // Get the checkbox and see state, put value to array respective to state
-    var tr = obj.closest('tr');
-    console.log(tr);
-    /*
-    var table = $('#datatable').DataTable();
-    console.log(table);
-    */
-    var row = $('#datatable').row( tr );
+    console.log("entered onSelect obj id="+obj.id);
     if(obj.checked === true){
-        selection.push(obj.id);
-        row.child( format() ).show();
-        tr.addClass('shown');
+        console.log("checked true");
+        if(_.contains(selection, obj.id) === false){
+            selection.push(obj.id);
+            console.log("obj id:"+obj.id+" pushed getting child")
 
+        }
     } else {
         selection = _.without(selection, obj.id);
-        row.child.hide();
-        tr.removeClass('shown');
     }
     console.log(selection);
     return;
@@ -120,8 +58,12 @@ function onSelectall (obj) {
        let checkboxes = document.getElementsByName("checkbox");
        checkboxes.forEach(function (checkbox){
             checkbox.checked = true;
-            selection.push(checkbox.id);
+            if(_.contains(selection, checkbox.id) === false)
+                selection.push(checkbox.id);
+                /*console.log(selection);
+                checkbox.click();*/
        });
+       console.log(selection);
     } else {
         document.getElementsByName("checkbox").forEach(function (checkbox){
             checkbox.checked = false;
@@ -132,48 +74,84 @@ function onSelectall (obj) {
     return;
 }
 
-function assignmentView () {
+function assignmentView ()  {
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
       success: function (response) {
         var assignments = $.parseJSON(response);
-        $(document).ready(function() {
-           var table = $('#datatable').DataTable({
+        $(document).ready(function()
+        {
+           var table = $('#datatable_export').DataTable({
              "data": assignments,
              "columns": [
-                 {
+                 /*{
                      "className": 'details-control',
                      "orderable": false,
-                     "data": null,
-                     "render": function () {
-                         return '<input type="checkbox" name="checkbox">';
-                     },
+                     "data": "name",
+                     "render": function (name) {
+                         return '<input type="checkbox" id="'+name+'" name="checkbox" >';
+                     },*/
+                    {
+                        'targets': 0,
+                        'checkboxes': {
+                            'selectRow': true
+                        }
+                    }
                  },
                  { "data": "name" },
                  { "data": "duedate" },
                  { "data": "status" },
                  { "data": "num_submissions" }
              ],
+             'select': {
+                'style': 'multi'
+             },
              "order": [[1, 'asc']]
            });
 
            // Event listener for opening and closing details
-           $('#datatable tbody').on('click', 'td.details-control', function () {
+           $('#datatable_export tbody').on('click', 'td.details-control', function ()
+           {
                 var tr = $(this).closest('tr');
+                console.log(this.firstChild.id);
                 var assignment_id = tr.find("td:eq(1)").text();
                 var row = table.row(tr);
-
-                if (row.child.isShown()) {
+                var notebook_list = getNotebooks(assignment_id);
+                if (row.child.isShown())
+                {
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
                 }
-                else {
+                else
+                {
                     // Open this row
-                    row.child( '<table id='+assignment_id+' cellpadding="5" cellspacing="0" class="display" style="padding-left:50px;"><thead style="display:none;"></thead></table>' ).show();
+                    row.child(notebook_list).show();
                     tr.addClass('shown');
-                    getNotebooksTest(assignment_id);
+                    console.log("selection:"+selection);
+                    if($(this).children("input").checked === true)
+                    {
+                        console.log("checked true");
+                        if(_.contains(selection, $(this).children("input").id) === false)
+                        {
+                            selection.push(obj.id);
+                            console.log(selection);
+                            console.log("obj id:"+obj.id+" pushed getting child")
+                            let checkboxes = document.getElementsByName($(this).children("input").id+"checkbox");
+                            console.log("children:"+checkboxes);
+                            checkboxes.forEach(function (checkbox)
+                            {
+                                checkbox.checked = true;
+                                onSelect(checkbox);
+                                console.log("checkbox click performed");
+                            });
+
+                        }
+                    } else
+                    {
+                        selection = _.without(selection, $(this).children("input").id);
+                    }
                 }
            });
         });
@@ -199,4 +177,8 @@ function assignmentView () {
     });
 }
 
+function downloadSelection(){
+    // ajaX call to handler
+    return;
+}
 assignmentView();

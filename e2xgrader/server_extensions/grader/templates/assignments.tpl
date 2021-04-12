@@ -8,42 +8,6 @@
     var base_url = "{{ base_url }}";
     console.log(base_url);
   </script>
-  <script type="text/javascript">
-    $.ajax({
-      url: "{{ base_url }}/formgrader/api/assignments",
-      type: 'get',
-      success: function (response) {
-        let assignments = $.parseJSON(response);
-        let table = $('<table/>');
-        table
-          .addClass('e2xtable')
-          .append(
-            $('<thead/>').append(
-              $('<tr/>')
-                .append($('<th/>').text('Name'))
-                .append($('<th/>').text('Due Date'))
-                .append($('<th/>').text('Status'))
-                .append($('<th/>').text('# of Submissions'))
-        ));
-        let body = $('<tbody/>');
-        body.attr('id' , 'main_table');
-        assignments.forEach(function (assignment) {
-          body.append(
-            $('<tr/>')
-              .append($('<td/>').append($('<a/>').attr('href', "{{ base_url }}/tree/{{ url_prefix }}/" + assignment['source_path']).text(assignment['name'])))
-              .append($('<td/>').text(assignment['duedate']))
-              .append($('<td/>').text(assignment['status']))
-              .append($('<td/>').text(assignment['num_submissions']))
-          );
-        });
-
-        $('#table').append(table.append(body));
-      },
-      error: function (xhr) {
-        console.log('Something went wrong when fetching the assignment infos');
-      }
-    });
-  </script>
 {%- endblock -%}
 
 {%- block breadcrumbs -%}
@@ -51,7 +15,18 @@
   <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a></li>
 {%- endblock -%}
 {%- block body -%}
-  <div id="table"></div>
+  <div id="table">
+  <table id="datatable" class="display " style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Number of Submissions</th>
+            </tr>
+        </thead>
+  </table>
+  </div>
   <div class="option" id="options" onclick="createAssignmentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>

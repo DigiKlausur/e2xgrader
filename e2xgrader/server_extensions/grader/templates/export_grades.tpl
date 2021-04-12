@@ -10,6 +10,7 @@
     console.log("user_choice="+user_choice);
     console.log("base url="+base_url);
   </script>
+  <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.10/js/dataTables.checkboxes.min.js"></script>
   <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
 
 {%- endblock -%}
@@ -24,10 +25,10 @@
         <p>You can either export the grades on an assignment level (total score per assignment per student) or on a notebook level (total score per notebook per student) or on a task level (total score per task per student).</p>
   </div>
   <div id="table">
-  <table id="datatable" class="display e2xtable" style="width:100%">
+  <table id="datatable_export" class="display " style="width:100%">
         <thead>
             <tr>
-                <th><input type="checkbox" onclick="onSelectall(this)"></th>
+                <th><!--<input type="checkbox" onclick="onSelectall(this)">--></th>
                 <th>Name</th>
                 <th>Due Date</th>
                 <th>Status</th>

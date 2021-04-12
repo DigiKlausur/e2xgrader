@@ -460,7 +460,7 @@ var insertRow = function (table) {
     return row;
 };
 
-var createAssignmentModal = function () {
+function createAssignmentModal () {
     var modal;
     var createAssignment = function () {
         var name = modal.find(".name").val();
@@ -502,10 +502,11 @@ var createAssignmentModal = function () {
         });
         views.push(view);
         model.save();
-        console.log(tbl.parent().Datatable());
         tbl.parent().DataTable().row.add(row).draw();
-        console.log(tbl.parent().DataTable());
         modal.modal('hide');
+        console.log('modal hide done');
+        location.reload();
+        //loadAssignments();
     };
 
     var body = $("<p/>")
@@ -543,7 +544,7 @@ var createAssignmentModal = function () {
     modal = createModal("add-assignment-modal", "Add New Assignment", body, footer);
 };
 
-var loadAssignments = function () {
+function loadAssignments () {
     var tbl = $("#main-table");
 
     models = new Assignments();
@@ -565,8 +566,47 @@ var loadAssignments = function () {
     });
 };
 
+function fetchAssignment () {
+    $.ajax({
+      url: base_url+"/formgrader/api/assignments",
+      type: 'get',
+      success: function (response) {
+        var assignments = $.parseJSON(response);
+        $(document).ready(function() {
+           var table = $('#datatable').DataTable({
+             "data": assignments,
+             "columns": [
+                 { "data": "name" },
+                 { "data": "duedate" },
+                 { "data": "status" },
+                 { "data": "num_submissions" }
+             ],
+             "order": [[1, 'asc']]
+           });
+        });
+        loadAssignments();
+      },
+      error: function (xhr) {
+        let table = $('<table/>');
+        table
+          .addClass('e2xtable')
+          .append(
+            $('<thead align="center"/>').append(
+              $('<tr/>')
+                .append($('<th/>').text('Error'))
+        ));
+        let body = $('<tbody/>');
+        body.attr('align', 'center');
+        body.append($('<td/>').text("Something went wrong when fetching the information....contact administration"));
+        $('#table').empty();
+        $('#table').append(table.append(body));
+        console.log('Something went wrong when fetching the information....contact administration');
+      }
+    });
+}
+
 var models = undefined;
 var views = [];
 $(window).on('load', function () {
-    loadAssignments();
+    fetchAssignment();
 });
