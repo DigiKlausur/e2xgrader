@@ -9,3 +9,19 @@ from .unpermutetasks import UnpermuteTasks
 from .scramble import Scramble
 from .unscramble import Unscramble
 from .validateextracells import ValidateExtraCells
+from .extractattachments import ExtractAttachments
+
+__all__ = [
+    'FilterCellsById',
+    'SaveCells',
+    'ClearSolutions',
+    'ClearHiddenTests',
+    'OverwriteCells',
+    'SaveAutoGrades',
+    'PermuteTasks',
+    'UnpermuteTasks',
+    'Scramble',
+    'Unscramble',
+    'ValidateExtraCells',
+    'ExtractAttachments',
+]

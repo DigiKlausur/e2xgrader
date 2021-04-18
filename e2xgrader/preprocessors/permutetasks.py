@@ -4,8 +4,9 @@ from copy import deepcopy
 from nbgrader.preprocessors import NbGraderPreprocessor
 from ..utils.nbgrader_cells import grade_id, get_tasks
 
+
 class PermuteTasks(NbGraderPreprocessor):
-    
+
     def __init__(self, **kw):
         self.rand = random.Random()
         if kw and 'seed' in kw:
@@ -41,6 +42,6 @@ class PermuteTasks(NbGraderPreprocessor):
         permuted_nb.metadata['original_order'] = original_order
 
         return permuted_nb
-    
+
     def preprocess(self, nb, resources):
         return self.permute(nb), resources

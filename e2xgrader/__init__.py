@@ -3,55 +3,58 @@ A system for creating assignments.
 """
 
 import os
-import sys
+from os.path import join as pjoin
+
 
 def _jupyter_nbextension_paths():
+    root = os.path.dirname(__file__)
+    if os.path.exists(pjoin(root, 'nbextensions', 'lib')):
+        base_path = pjoin(root, 'nbextensions', 'lib')
+    else:
+        base_path = pjoin(root, 'nbextensions', 'src')
+
     paths = [
         dict(
             section='notebook',
-            src=os.path.join('nbextensions', 'common', 'extra_cells'),
+            src=pjoin(base_path, 'common', 'extra_cells'),
             dest='extra_cells',
             require='extra_cells/main'
         ),
         dict(
             section='notebook',
-            src=os.path.join('nbextensions', 'teacher', 'create_assignment'),
+            src=pjoin(base_path, 'teacher', 'create_assignment'),
             dest='create_assignment',
             require='create_assignment/main'
         ),
         dict(
             section='notebook',
-            src=os.path.join('nbextensions', 'student', 'assignment', 'assignment_view'),
-            dest='assignment_view',
-            require='assignment_view/main'
+            src=pjoin(base_path, 'student', 'assignment', 'assignment_extension'),
+            dest='assignment_extension',
+            require='assignment_extension/main'
         ),
         dict(
             section='notebook',
-            src=os.path.join('nbextensions', 'student', 'assignment', 'assignment_notebook'),
-            dest='assignment_notebook',
-            require='assignment_notebook/main'
-        ),
-        dict(
-            section='notebook',
-            src=os.path.join('nbextensions', 'student', 'exam', 'exam_view'),
+            src=pjoin(base_path, 'student', 'exam', 'exam_view'),
             dest='exam_view',
             require='exam_view/main'
         ),
         dict(
             section='tree',
-            src=os.path.join('nbextensions', 'student', 'exam', 'restricted_tree'),
+            src=pjoin(base_path, 'student', 'exam', 'restricted_tree'),
             dest='restricted_tree',
             require='restricted_tree/main'
         ),
     ]
-    
+
     return paths
+
 
 def _jupyter_server_extension_paths():
     paths = [
         dict(module="e2xgrader.server_extensions.formgrader"),
         dict(module="e2xgrader.server_extensions.assignment_list"),
-        dict(module="e2xgrader.server_extensions.grader")
+        dict(module="e2xgrader.server_extensions.grader"),
+        dict(module="e2xgrader.server_extensions.e2xbase"),
     ]
 
     return paths

@@ -4,18 +4,20 @@ from nbformat.notebooknode import NotebookNode
 from nbconvert.exporters.exporter import ResourcesDict
 from typing import Tuple
 
+from nbgrader.api import MissingEntry
 from nbgrader.preprocessors import OverwriteCells as NbgraderOverwriteCells
 
-from ..utils.extra_cells import is_extra_cell
+from ..utils.extra_cells import is_singlechoice, is_multiplechoice
+
 
 class OverwriteCells(NbgraderOverwriteCells):
 
-    def preprocess_cell(self, 
-                        cell: NotebookNode, 
+    def preprocess_cell(self,
+                        cell: NotebookNode,
                         resources: ResourcesDict,
                         cell_index: int
                         ) -> Tuple[NotebookNode, ResourcesDict]:
-        if not is_extra_cell(cell):
+        if not (is_singlechoice(cell) or is_multiplechoice(cell)):
             return super().preprocess_cell(cell, resources, cell_index)
 
         grade_id = cell.metadata.get('nbgrader', {}).get('grade_id', None)
@@ -34,4 +36,4 @@ class OverwriteCells(NbgraderOverwriteCells):
 
         cell.metadata.extended_cell.source = json.loads(source_cell.source)
 
-        return cell, resources            
+        return cell, resources
