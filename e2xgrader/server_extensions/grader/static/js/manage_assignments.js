@@ -506,7 +506,6 @@ function createAssignmentModal () {
         modal.modal('hide');
         console.log('modal hide done');
         location.reload();
-        //loadAssignments();
     };
 
     var body = $("<p/>")
@@ -576,7 +575,12 @@ function fetchAssignment () {
            var table = $('#datatable').DataTable({
              "data": assignments,
              "columns": [
-                 { "data": "name" },
+                 { "data": "name",
+                   "render": function (name) {
+                        var data = base_url+"/grader/assignments/assignment_common";
+                        return '<a href='+data+'>'+name+'</a>';
+                     },
+                 },
                  { "data": "duedate" },
                  { "data": "status" },
                  { "data": "num_submissions" }
