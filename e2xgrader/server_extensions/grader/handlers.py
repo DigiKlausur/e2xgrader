@@ -51,12 +51,12 @@ class AssignmentsCommonHandler(BaseHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
-        user_choice = self.get_argument('user_choice', None)
+        assignment_id = self.get_argument('assignment_id', None)
         html = self.render(
             "assignment_details.tpl",
             url_prefix=self.url_prefix,
             base_url=self.base_url,
-            user_choice = user_choice,
+            assignment_id = assignment_id,
             windows=(sys.prefix == 'win32'))
         self.write(html)
 

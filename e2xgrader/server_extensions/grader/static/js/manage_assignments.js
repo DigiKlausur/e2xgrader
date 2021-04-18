@@ -577,7 +577,7 @@ function fetchAssignment () {
              "columns": [
                  { "data": "name",
                    "render": function (name) {
-                        var data = base_url+"/grader/assignments/assignment_common";
+                        var data = base_url+"/grader/assignments/assignment_common/?assignment_id="+name;
                         return '<a href='+data+'>'+name+'</a>';
                      },
                  },
