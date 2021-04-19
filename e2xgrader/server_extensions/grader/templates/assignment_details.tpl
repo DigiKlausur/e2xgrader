@@ -28,17 +28,47 @@
         </thead>
   </table>
   </div>
-  <div class="option" id="grading" >
+  <div class="option" id="grading" onclick="toggleView('grading_buttons')">
     <div class='icon'><i class='fa fa-address-card'></i></div>
     <div class='label'>
       <h3>Grading</h3>
     </div>
   </div>
-  <div class="option" id="exchange" >
+  <div class="option" id="exchange" onclick="toggleView('exchange_buttons')">
     <div class='icon'><i class='fa fa-exchange-alt'></i></div>
     <div class='label'>
       <h3>Exchange</h3>
     </div>
+  </div>
+
+  <div id="grading_buttons" style="display:none;">
+  <div class="option" id="grading1" >
+    <div class='icon'><i class='fa fa-address-card'></i></div>
+    <div class='label'>
+      <h3>Grading 1</h3>
+    </div>
+  </div>
+  <div class="option" id="grading2" >
+    <div class='icon'><i class='fa fa-address-card'></i></div>
+    <div class='label'>
+      <h3>Grading 2</h3>
+    </div>
+  </div>
+  </div>
+
+  <div id="exchange_buttons" style="display:none;">
+  <div class="option" id="exchange1" >
+    <div class='icon'><i class='fa fa-exchange-alt'></i></div>
+    <div class='label'>
+      <h3>Exchange 1</h3>
+    </div>
+  </div>
+  <div class="option" id="exchange2" >
+    <div class='icon'><i class='fa fa-exchange-alt'></i></div>
+    <div class='label'>
+      <h3>Exchange 2</h3>
+    </div>
+  </div>
   </div>
 
 {%- endblock -%}
