@@ -5,7 +5,19 @@ from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
 
 from ..utils.extra_cells import determine_grade
 
+from traitlets import Unicode, List
+from textwrap import dedent
+
 class SaveAutoGrades(NbgraderSaveAutoGrades):
+
+    cell_id = Unicode(
+        "*",
+        help=dedent(
+            """
+            Cell_ID.
+            """
+        )
+    ).tag(config=True)
 
     def _add_score(self, cell: NotebookNode, resources: ResourcesDict) -> None:
         """Graders can override the autograder grades, and may need to
@@ -34,4 +46,9 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         else:
             grade.needs_manual_grade = False
 
+        if cell.metadata['nbgrader']['grade_id'] in self.cell_id.split(" "):
+            grade.manual_score = None
+            grade.needs_manual_grade = True
+            grade.manual_score = auto_score
+        
         self.gradebook.db.commit()

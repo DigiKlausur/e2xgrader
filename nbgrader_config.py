@@ -35,12 +35,12 @@ c.GenerateAssignment.preprocessors = [
 
 # Set up the exchange
 
-#c.ExchangeFactory.exchange = 'e2xgrader.exchange.E2xExchange'
-#c.ExchangeFactory.submit = 'e2xgrader.exchange.E2xExchangeSubmit'
-#c.ExchangeFactory.collect = 'e2xgrader.exchange.E2xExchangeCollect'
-#c.ExchangeFactory.fetch_assignment = 'e2xgrader.exchange.E2xExchangeFetchAssignment'
-#c.ExchangeFactory.release_assignment = 'e2xgrader.exchange.E2xExchangeReleaseAssignment'
-#c.ExchangeFactory.list = 'e2xgrader.exchange.E2xExchangeList'
+# c.ExchangeFactory.exchange = 'e2xgrader.exchange.E2xExchange'
+# c.ExchangeFactory.submit = 'e2xgrader.exchange.E2xExchangeSubmit'
+# c.ExchangeFactory.collect = 'e2xgrader.exchange.E2xExchangeCollect'
+# c.ExchangeFactory.fetch_assignment = 'e2xgrader.exchange.E2xExchangeFetchAssignment'
+# c.ExchangeFactory.release_assignment = 'e2xgrader.exchange.E2xExchangeReleaseAssignment'
+# c.ExchangeFactory.list = 'e2xgrader.exchange.E2xExchangeList'
 
-#c.Exchange.personalized_inbound = True
-#c.Exchange.personalized_outbound = True
+# c.Exchange.personalized_inbound = True
+# c.Exchange.personalized_outbound = True

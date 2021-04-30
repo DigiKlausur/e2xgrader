@@ -8,7 +8,7 @@ from notebook.nbextensions import (
     uninstall_nbextension_python,
     install_nbextension_python, enable_nbextension_python,
     disable_nbextension, enable_nbextension, disable_nbextension_python)
-
+from .apps.nbgraderapp import main
 
 class ExtensionManager:
 
@@ -99,7 +99,6 @@ class ExtensionManager:
         enable_nbextension(require='restricted_tree/main', 
                             section='tree', sys_prefix=sys_prefix, user=user)
 
-
 class Manager:
 
     def __init__(self):
@@ -173,6 +172,7 @@ class Manager:
             user = True
         self.extension_manager.deactivate(sys_prefix=sys_prefix, user=user)
 
-        
+
 if __name__ == '__main__':
-    Manager()
+    main()
+    # Manager()

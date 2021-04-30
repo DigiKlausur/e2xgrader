@@ -1,2 +1,2 @@
-from .gradeexporter import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
+from .gradeexporter import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter, GradeSelectedAssignmentExporter
 from .exporter import E2xExporter
