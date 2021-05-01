@@ -1,11 +1,56 @@
 import os
-
 from tornado import web
 from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter, GradeSelectedAssignmentExporter
+from e2xgrader.apps.api import E2X_Gradebook
 import json
+
+
+class UpdateNotebook(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        notebook_id = self.get_argument('notebook_id')
+        cells = self.get_argument('cells')
+        cells = eval(cells.split()[0])
+        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
+        gb = E2X_Gradebook(db_url)
+        checksum_id = []
+        for cell in cells:
+            checksum_single = gb.update_cell_content(cell, notebook_id, assignment_id)
+            checksum_id.append(checksum_single)
+            gb.update_or_create_source_cell(name = cell, notebook = notebook_id, assignment = assignment_id, checksum = checksum_single)
+        self.write(json.dumps(checksum_id))
+
+
+class FindUpdatedCells(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        notebook_id = self.get_argument('notebook_id')
+        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
+        gb = E2X_Gradebook(db_url)
+        updated_cells = gb.list_updated_cells(notebook_id, assignment_id)
+        self.write(json.dumps(updated_cells))
+
+
+class GetNotebook(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
+        gb = E2X_Gradebook(db_url)
+        assignment_object = gb.find_assignment(assignment_id)
+        notebooks = []
+        for assignment in assignment_object.notebooks:
+            notebooks.append(assignment.name)
+        self.write(json.dumps(notebooks))
+
 
 class ExportSelectedAssignmentGradesHandler(BaseHandler):
     @web.authenticated
@@ -13,7 +58,6 @@ class ExportSelectedAssignmentGradesHandler(BaseHandler):
     def get(self):
         assignment_ids = self.get_argument('assignment_id')
         assignment_ids = json.loads(assignment_ids)
-        self.log.info(assignment_ids)
         self.__exporter = GradeSelectedAssignmentExporter(self.gradebook, assignment_ids)
         self.set_header('Content-Type', 'text/csv; charset="utf-8"')
         self.set_header('Content-Disposition', 'attachment; filename=grades.csv')
@@ -269,4 +313,9 @@ default_handlers = [
     (r'/formgrader/gradebook/([^/]+)/([^/]+)/?', GradebookNotebookSubmissionsHandler),
     (r'/formgrader/submissions/(?P<submission_id>[^/]+)/%s/?' % _navigation_regex, SubmissionNavigationHandler),
     (r'/formgrader/submissions/([^/]+)/?', SubmissionHandler),
+    (r'/formgrader/export_grades/selected_assignments/?', ExportSelectedAssignmentGradesHandler),
+    (r'/formgrader/find_updated_cell/?', FindUpdatedCells),
+    (r'/formgrader/get_notebook/?', GetNotebook),
+    (r'/formgrader/update_notebook/?', UpdateNotebook),
 ]
+
