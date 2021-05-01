@@ -1,11 +1,49 @@
 import os
 from tornado import web
 from nbgrader.api import MissingEntry
+from nbgrader.apps.api import NbGraderAPI
 from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter, GradeSelectedAssignmentExporter
 from e2xgrader.apps.api import E2X_Gradebook
 import json
+from multiprocessing import Process, Value
+
+
+autograde_flag = Value('b', False)
+autograde_progress = Value('d', 0.0)
+
+
+def autograder(assignment_id):
+    autograde_flag.value = True
+    db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
+    gb = NbGraderAPI()
+    students = list(gb.get_submitted_students(assignment_id))
+    total_students = len(students)
+    for idx, student in enumerate(students):
+        autograde_command = "nbgrader autograde " + assignment_id + " --student " + student + " --force"
+        # autograde_command = "nbgrader autograde " + assignment_id + " --student " + student + " --cell-id \"test_sum test_diff\" --force"
+        os.system(autograde_command)
+        autograde_progress.value = (idx + 1) * 100 / total_students
+    autograde_progress.value = 0.0
+    autograde_flag.value = False
+
+
+class AutogradeAll(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        p = Process(target = autograder, args = (assignment_id,))
+        p.start()
+
+
+class AutogradingProgess(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        result = {'autograde_progress' : autograde_progress.value, 'autograde_flag' : autograde_flag.value}
+        self.write(json.dumps(result))
 
 
 class UpdateNotebook(BaseHandler):
@@ -317,5 +355,7 @@ default_handlers = [
     (r'/formgrader/find_updated_cell/?', FindUpdatedCells),
     (r'/formgrader/get_notebook/?', GetNotebook),
     (r'/formgrader/update_notebook/?', UpdateNotebook),
+    (r'/formgrader/autograde_all/?', AutogradeAll),
+    (r'/formgrader/autograding_progress/?', AutogradingProgess),
 ]
 

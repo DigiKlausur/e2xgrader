@@ -5,7 +5,7 @@
 var assignment_id = "{{ assignment_id }}";
 </script>
 
-<script src="{{ base_url }}/formgrader/static/js/manage_submissions.js"></script>
+<script src="{{ base_url }}/e2xgrader/static/js/e2x_manage_submissions.js"></script>
 {%- endblock head -%}
 
 {%- block title -%}
@@ -52,6 +52,12 @@ nbgrader autograde "{{ assignment_id }}"</pre>
       </div>
     </div>
   </div>
+</div>
+<div id = 'autograde_all'>
+</div>
+<div hidden id = 'progress_bar'>
+  <label>Autograding progress: </label>
+  <progress id = "progress" value="0" max="100"> 0% </progress>
 </div>
 {%- endblock -%}
 
