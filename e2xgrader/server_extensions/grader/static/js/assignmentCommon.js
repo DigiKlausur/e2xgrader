@@ -2,20 +2,42 @@ $.ajax({
       url: base_url+"/formgrader/api/assignment/"+assignment_id,
       type: 'get',
       success: function (response) {
-       var assignment = $.parseJSON(response);
-       console.log(assignment);
-        $(document).ready(function() {
-           var table = $('#datatableAssignment').DataTable({
-             "data": assignment,
-             "columns": [
-                 { "data": "name"},
-                 { "data": "duedate" },
-                 { "data": "status" },
-                 { "data": "num_submissions" }
-             ],
-             "order": [[1, 'asc']]
-           });
+        var result = $.parseJSON(response);
+        console.log(typeof(result));
+        console.log(result['name']);
+        document.getElementById('name').innerHTML = result['name'];
+        document.getElementById('duedate').innerHTML = result['duedate'];
+        document.getElementById('status').innerHTML = result['status'];
+        document.getElementById('num_submissions').innerHTML = result['num_submissions'];
+        $.ajax({
+            url: base_url+"/formgrader/api/notebooks/"+assignment_id,
+            type: 'get',
+            success: function (response) {
+                var result = $.parseJSON(response);
+
+                $(document).ready(function() {
+                    var table = $('#notebookList').DataTable({
+                        "data": result,
+                        "columns": [
+                            { "data": "name",},
+                            { "data": "needs_manual_grade" },
+                            { "data": "num_submissions" }
+                        ],
+                        "order": [[1, 'asc']],
+                        "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": true,
+                        "bInfo": false,
+                        "bAutoWidth": false
+                    });
+                });
+            },
+            error: function (xhr) {
+                console.log('Something went wrong when fetching the information....contact administration');
+            }
         });
+
+
       },
       error: function (xhr) {
         console.log('Something went wrong when fetching the information....contact administration');
