@@ -94,6 +94,26 @@ body {
   color: black;
 }
 
+.optionButton {
+  border: 1px solid #ddd;
+  border-radius: .5em;
+  min-width: 8em;
+  width: 20em;
+  padding: 1em;
+  display: flex;
+  color: black;
+}
+
+.optionButton h3 {
+  display:  inline;
+  font-size: 2em;
+
+}
+
+.optionButton svg {
+  min-width: 1em;
+  font-size: 2em;
+}
 
 .icon {
   display: inline;

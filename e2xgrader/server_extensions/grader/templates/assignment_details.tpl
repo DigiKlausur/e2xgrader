@@ -65,13 +65,13 @@
   </div>
 
   <div id="grading_buttons" style="display:none;">
-  <div class="option" id="grading1" >
+  <div class="optionButton" id="grading1" >
     <div class='icon'><i class='fa fa-address-card'></i></div>
     <div class='label'>
       <h3>Grading 1</h3>
     </div>
   </div>
-  <div class="option" id="grading2" >
+  <div class="optionButton" id="grading2" >
     <div class='icon'><i class='fa fa-address-card'></i></div>
     <div class='label'>
       <h3>Grading 2</h3>
