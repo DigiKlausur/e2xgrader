@@ -19,7 +19,7 @@
   <script src="{{ base_url }}/grader/static/js/assignmentCommon.js"></script>
   <div id="description">
         <h4>Here you can find the assignment details.</h4>
-        <p>Details of usage to be specified.</p>
+        <p id='message'>Details of usage to be specified.</p>
   </div>
   <div id="table">
   <table style='border-collapse: collapse;width: 100%;'>
@@ -40,16 +40,18 @@
         <h4>Here you can find the notebook list linked to the mentioned assignment.</h4>
         <p>Details of usage to be specified.</p>
   </div>
-  <table id="notebookList" class="display " style="width:90%">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Notebook</th>
-                <th>Needs Manual Grading</th>
-                <th>Number of Submissions</th>
-            </tr>
-        </thead>
-  </table>
+  <div id='notebookTable'>
+        <table id="notebookList" class="display " style="width:90%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Notebook</th>
+                        <th>Needs Manual Grading</th>
+                        <th>Number of Submissions</th>
+                    </tr>
+                </thead>
+        </table>
+  </div>
   </div>
   <div class="option" id="grading" onclick="toggleView('grading_buttons','exchange_buttons')">
     <div class='icon'><i class='fa fa-address-card'></i></div>
@@ -80,13 +82,13 @@
   </div>
 
   <div id="exchange_buttons" style="display:none;">
-  <div class="option" id="exchange1" >
+  <div class="optionButton" id="downloadSelction" onclick='downloadSelection()'>
     <div class='icon'><i class='fa fa-exchange-alt'></i></div>
     <div class='label'>
-      <h3>Exchange 1</h3>
+      <h3>Download Selection</h3>
     </div>
   </div>
-  <div class="option" id="exchange2" >
+  <div class="optionButton" id="exchange2" >
     <div class='icon'><i class='fa fa-exchange-alt'></i></div>
     <div class='label'>
       <h3>Exchange 2</h3>
