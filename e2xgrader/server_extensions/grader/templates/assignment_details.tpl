@@ -43,6 +43,7 @@
   <table id="notebookList" class="display " style="width:90%">
         <thead>
             <tr>
+                <th></th>
                 <th>Notebook</th>
                 <th>Needs Manual Grading</th>
                 <th>Number of Submissions</th>

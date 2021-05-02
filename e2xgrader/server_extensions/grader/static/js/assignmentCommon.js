@@ -1,3 +1,5 @@
+var notebookList = [];
+
 $.ajax({
       url: base_url+"/formgrader/api/assignment/"+assignment_id,
       type: 'get',
@@ -19,7 +21,14 @@ $.ajax({
                     var table = $('#notebookList').DataTable({
                         "data": result,
                         "columns": [
-                            { "data": "name",},
+                            {
+                              "orderable": false,
+                              "data": "name",
+                              "render": function (name) {
+                                    return '<input type="checkbox" id="'+assignment_id+'/'+name+'" name="checkbox" onclick="submitNotebook(this)">';
+                              }
+                            },
+                            { "data": "name"},
                             { "data": "needs_manual_grade" },
                             { "data": "num_submissions" }
                         ],
@@ -51,4 +60,16 @@ function toggleView(id) {
   } else {
     x.style.display = "none";
   }
+}
+
+function submitNotebook(obj) {
+
+    if(obj.checked === true){
+        if(_.contains(notebookList, obj.id) === false){
+            notebookList.push(obj.id);
+        }
+    } else {
+        notebookList = _.without(notebookList, obj.id);
+    }
+    console.log(notebookList);
 }
