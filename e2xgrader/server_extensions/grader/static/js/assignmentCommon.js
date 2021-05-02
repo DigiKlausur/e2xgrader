@@ -53,12 +53,16 @@ $.ajax({
       }
     });
 
-function toggleView(id) {
-  var x = document.getElementById(id);
-  if (x.style.display === "none") {
-    x.style.display = "block";
+function toggleView(id1,id2) {
+  var element1 = document.getElementById(id1);
+  var element2 = document.getElementById(id2);
+  if (element1.style.display === "none") {
+    element1.style.display = "block";
+    if(element2.style.display === "block"){
+       element2.style.display = "none";
+    }
   } else {
-    x.style.display = "none";
+    element1.style.display = "none";
   }
 }
 

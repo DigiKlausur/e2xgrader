@@ -51,13 +51,13 @@
         </thead>
   </table>
   </div>
-  <div class="option" id="grading" onclick="toggleView('grading_buttons')">
+  <div class="option" id="grading" onclick="toggleView('grading_buttons','exchange_buttons')">
     <div class='icon'><i class='fa fa-address-card'></i></div>
     <div class='label'>
       <h3>Grading</h3>
     </div>
   </div>
-  <div class="option" id="exchange" onclick="toggleView('exchange_buttons')">
+  <div class="option" id="exchange" onclick="toggleView('exchange_buttons','grading_buttons')">
     <div class='icon'><i class='fa fa-exchange-alt'></i></div>
     <div class='label'>
       <h3>Exchange</h3>
