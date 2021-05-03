@@ -67,31 +67,61 @@
   </div>
 
   <div id="grading_buttons" style="display:none;">
-  <div class="optionButton" id="grading1" >
-    <div class='icon'><i class='fa fa-address-card'></i></div>
+  <div class="optionButton" id="autograde" >
+    <div class='icon'><i class='fas fa-cogs'></i></div>
     <div class='label'>
-      <h3>Grading 1</h3>
+      <h3>Autograde</h3>
     </div>
   </div>
-  <div class="optionButton" id="grading2" >
-    <div class='icon'><i class='fa fa-address-card'></i></div>
+  <div class="optionButton" id="manualGrading" >
+    <div class='icon'><i class='fas fa-cog'></i></div>
     <div class='label'>
-      <h3>Grading 2</h3>
+      <h3>Manual Grading</h3>
+    </div>
+  </div>
+  <div class="optionButton" id="activeGrading" >
+    <div class='icon'><i class='fas fa-chalkboard-teacher'></i></div>
+    <div class='label'>
+      <h3>Active Grading</h3>
     </div>
   </div>
   </div>
 
   <div id="exchange_buttons" style="display:none;">
   <div class="optionButton" id="downloadSelction" onclick='downloadSelection()'>
-    <div class='icon'><i class='fa fa-exchange-alt'></i></div>
+    <div class='icon'><i class='fa fa-download'></i></div>
     <div class='label'>
       <h3>Download Selection</h3>
     </div>
   </div>
-  <div class="optionButton" id="exchange2" >
-    <div class='icon'><i class='fa fa-exchange-alt'></i></div>
+  <div class="optionButton" id="generateAssignment" >
+    <div class='icon'><i class='fas fa-plus'></i></div>
     <div class='label'>
-      <h3>Exchange 2</h3>
+      <h3>Generate Assignment</h3>
+    </div>
+  </div>
+  <div class="optionButton" id="releaseAssignment" >
+    <div class='icon'><i class='fas fa-file-export'></i></div>
+    <div class='label'>
+      <h3>Release Assignment</h3>
+    </div>
+  </div>
+  <div class="optionButton" id="collectAssignment" >
+    <div class='icon'><i class='fas fa-file-import'></i></div>
+    <div class='label'>
+      <h3>Collect Assignment</h3>
+    </div>
+  </div>
+  <div class="optionButton" id="generateFeedback" >
+    <div class='icon'><i class='fas fa-head-side-virus'></i></div>
+    <div class='label'>
+      <h3>Generate Feedback</h3>
+    </div>
+  </div>
+  <div class="optionButton" id="releaseFeedback" >
+    <div class='icon'><i class='fas fa-head-side-cough'></i></div>
+    <div class='label'>
+      <h3>Release Feedback</h3>
     </div>
   </div>
   </div>

@@ -456,7 +456,7 @@ var insertRow = function (table) {
     row.append($("<td/>").addClass("text-center duedate"));
     row.append($("<td/>").addClass("text-center status"));
     row.append($("<td/>").addClass("text-center num-submissions"));
-    table.append(row)
+    table.append(row);
     return row;
 };
 
@@ -545,7 +545,6 @@ function createAssignmentModal () {
 
 function loadAssignments () {
     var tbl = $("#main-table");
-
     models = new Assignments();
     views = [];
     models.loaded = false;
