@@ -46,8 +46,8 @@ Manage Submissions
         </p>
         <p>
         <pre>
-cd "{{ course_dir }}"
-nbgrader autograde "{{ assignment_id }}"</pre>
+          cd "{{ course_dir }}"
+          nbgrader autograde "{{ assignment_id }}"</pre>
         </p>
       </div>
     </div>
@@ -56,8 +56,8 @@ nbgrader autograde "{{ assignment_id }}"</pre>
 <div id = 'autograde_all'>
 </div>
 <div hidden id = 'progress_bar'>
-  <label>Autograding progress: </label>
-  <progress id = "progress" value="0" max="100"> 0% </progress>
+  <label id = 'autograde_percentage'>Autograding progress: 0% </label>
+  <progress id="progress" style="width: 100%; height: 35px;" value="0" max="100"> 0% </progress>
 </div>
 {%- endblock -%}
 

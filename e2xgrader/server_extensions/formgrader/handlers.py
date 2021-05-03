@@ -24,7 +24,7 @@ def autograder(assignment_id):
         autograde_command = "nbgrader autograde " + assignment_id + " --student " + student + " --force"
         # autograde_command = "nbgrader autograde " + assignment_id + " --student " + student + " --cell-id \"test_sum test_diff\" --force"
         os.system(autograde_command)
-        autograde_progress.value = (idx + 1) * 100 / total_students
+        autograde_progress.value = round((idx + 1) * 100 / total_students)
     autograde_progress.value = 0.0
     autograde_flag.value = False
 

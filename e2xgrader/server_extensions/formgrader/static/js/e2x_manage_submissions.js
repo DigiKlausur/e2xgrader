@@ -341,6 +341,7 @@ async function doAjax() {
     var progress_bar = $('#progress_bar');
     var progress_value = $('#progress');
     var autograde_icon = $('#autograde_all');
+    var autograde_percentage = $('#autograde_percentage');
     var tbl = $("#main-table");
     while(true){
         try {
@@ -361,6 +362,7 @@ async function doAjax() {
                 tbl.hide();
                 autograde_icon.hide();
                 progress_bar.show();
+                autograde_percentage.html('Autograding progress: ' + progress['autograde_progress'] + '%')
                 progress_value.val(progress['autograde_progress'])
             }
         } catch (error) {
