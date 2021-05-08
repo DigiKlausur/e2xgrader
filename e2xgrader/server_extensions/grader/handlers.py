@@ -60,6 +60,34 @@ class AssignmentsCommonHandler(BaseHandler):
             windows=(sys.prefix == 'win32'))
         self.write(html)
 
+class GraderCommonHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id', None)
+        html = self.render(
+            "grading_common.tpl",
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            assignment_id = assignment_id,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+class ExchangeCommonHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id', None)
+        html = self.render(
+            "exchange_common.tpl",
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            assignment_id = assignment_id,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
 class StudentsHandler(BaseHandler):
 
     @web.authenticated
@@ -83,5 +111,7 @@ default_handlers = [
     (r"/grader/assignments/?", AssignmentsHandler),
     (r"/grader/export_grades/?", ExportGradesHandler),
     (r"/grader/assignments/assignment_common/?", AssignmentsCommonHandler),
+    (r"/grader/assignments/assignment_common/grading_common/?", GraderCommonHandler),
+    (r"/grader/assignments/assignment_common/exchange_common/?", ExchangeCommonHandler),
     (r"/grader/students/?", StudentsHandler),
 ]

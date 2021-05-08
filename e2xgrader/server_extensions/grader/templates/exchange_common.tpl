@@ -53,13 +53,13 @@
         </table>
   </div>
   </div>
-  <div class="option" id="grading" onclick="window.location='{{ base_url }}/grader/assignments/assignment_common/grading_common/?{{ assignment_id }}'">
+  <div class="option" id="grading" onclick="toggleView('grading_buttons','exchange_buttons')">
     <div class='icon'><i class='fa fa-address-card'></i></div>
     <div class='label'>
       <h3>Grading</h3>
     </div>
   </div>
-  <div class="option" id="exchange" onclick="window.location='{{ base_url }}/grader/assignments/assignment_common/exchange_common/?{{ assignment_id }}'">
+  <div class="option" id="exchange" onclick="window.location='{{ base_url }}/grader/assignments'">
     <div class='icon'><i class='fa fa-exchange-alt'></i></div>
     <div class='label'>
       <h3>Exchange</h3>

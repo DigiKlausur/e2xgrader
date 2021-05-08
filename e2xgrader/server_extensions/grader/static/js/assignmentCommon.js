@@ -6,8 +6,6 @@ function loadNotebooks(){
       type: 'get',
       success: function (response) {
         var result = $.parseJSON(response);
-        console.log(typeof(result));
-        console.log(result['name']);
         document.getElementById('name').innerHTML = result['name'];
         document.getElementById('duedate').innerHTML = result['duedate'];
         document.getElementById('status').innerHTML = result['status'];
@@ -21,13 +19,6 @@ function loadNotebooks(){
                     var table = $('#notebookList').DataTable({
                         "data": result,
                         "columns": [
-                            {
-                              "orderable": false,
-                              "data": "name",
-                              "render": function (name) {
-                                    return '<input type="checkbox" id="'+assignment_id+'/'+name+'" name="checkbox" onclick="submitNotebook(this)">';
-                              }
-                            },
                             { "data": "name"},
                             { "data": "needs_manual_grade" },
                             { "data": "num_submissions" }
@@ -85,22 +76,7 @@ function toggleView(id1,id2) {
   }
 }
 
-function submitNotebook(obj) {
 
-    if(obj.checked === true){
-        if(_.contains(notebookList, obj.id) === false){
-            notebookList.push(obj.id);
-        }
-    } else {
-        notebookList = _.without(notebookList, obj.id);
-    }
-    console.log(notebookList);
-}
-
-function downloadSelection(){
-    // download handler call
-    return
-}
 
 $(window).on('load', function () {
     loadNotebooks();
