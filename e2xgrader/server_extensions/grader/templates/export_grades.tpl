@@ -1,63 +1,45 @@
 {%- extends 'base.tpl' -%}
 
 {%- block head -%}
-{{ super() }}
-<style type="text/css">
-    #download_assignments svg {
-  color: #008ffb;
-}
+  {{super()}}
 
-#download_notebooks svg {
-  color: #ef474a;
-}
+  <script>
+    var url_prefix = "{{ url_prefix }}";
+    var base_url = "{{ base_url }}";
+    var user_choice ="{{ user_choice }}";
+    console.log("user_choice="+user_choice);
+    console.log("base url="+base_url);
+  </script>
+  <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.10/js/dataTables.checkboxes.min.js"></script>
+  <script src="{{ base_url }}/grader/static/js/exportGrades.js"></script>
 
-#download_tasks svg {
-  color: #fdc006;
-}
-</style>
 {%- endblock -%}
 
 {%- block breadcrumbs -%}
   {{ super() }}
-  <li>/ <a href="{{ base_url }}/grader/export_grades/">Export Grades</a></li>
+  <li>/ <a href="{{ base_url }}/grader/export_grades"></a>Export Grades/<a href="{{ base_url }}/grader/export_grades/export_common"></a>Export</li>
 {%- endblock -%}
-
 {%- block body -%}
-<div id="description">
-<h4>Here you can export grades</h4>
-<p>You can either export the grades on an assignment level (total score per assignment per student) or on a notebook level (total score per notebook per student) or on a task level (total score per task per student).</p>
-</div>
-
-<a target="_blank" href="{{ base_url }}/formgrader/export_grades/assignments" download="grades.csv">
-<div class="option" id="download_assignments">
-    
-    <div class='icon'><i class='fa fa-file-download'></i></div>
-    <div class='label'>
-      <h3>Assignments</h3>
-      <p>Creates a table with one column per assignment</p>
+  <div id="description">
+        <h4>Here you can export grades</h4>
+        <p>You can either export the grades on an assignment level (total score per assignment per student) or on a notebook level (total score per notebook per student) or on a task level (total score per task per student).</p>
+  </div>
+  <div id="table">
+  <table id="datatable_export" class="display " style="width:100%">
+        <thead>
+            <tr>
+                <th><!--<input type="checkbox" onclick="onSelectall(this)">--></th>
+                <th>Name</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Number of Submissions</th>
+            </tr>
+        </thead>
+  </table>
+  </div>
+  <div class="option" id="options">
+    <div class='icon'><i class="fa fa-download" aria-hidden="true"></i></div>
+    <div class='label' id="download">
     </div>
   </div>
-</a>
-
-<a target="_blank" href="{{ base_url }}/formgrader/export_grades/notebooks" download="grades.csv">
-<div class="option" id="download_notebooks">
-    
-    <div class='icon'><i class='fa fa-file-download'></i></div>
-    <div class='label'>
-      <h3>Notebooks</h3>
-      <p>Creates a table with one column per notebook per assignment</p>
-    </div>
-  </div>
-</a>
-<a target="_blank" href="{{ base_url }}/formgrader/export_grades/tasks" download="grades.csv">
-<div class="option" id="download_tasks">
-    
-    <div class='icon'><i class='fa fa-file-download'></i></div>
-    <div class='label'>
-      <h3>Tasks</h3>
-      <p>Creates a table with one column per task per notebook per assignment</p>
-    </div>
-  </div>
-</a>
-
 {%- endblock -%}

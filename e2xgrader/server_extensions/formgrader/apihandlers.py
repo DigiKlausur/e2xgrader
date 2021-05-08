@@ -5,6 +5,7 @@ from nbgrader.server_extensions.formgrader.base import check_xsrf
 
 from .base import E2xBaseApiHandler as BaseApiHandler
 
+
 class SolutionCellCollectionHandler(BaseApiHandler):
     @web.authenticated
     @check_xsrf

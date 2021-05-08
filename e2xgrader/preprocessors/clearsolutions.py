@@ -6,10 +6,11 @@ from nbgrader.preprocessors import ClearSolutions as NbgraderClearSolutions
 
 from ..utils.extra_cells import is_extra_cell
 
+
 class ClearSolutions(NbgraderClearSolutions):
 
-    def preprocess_cell(self, 
-                        cell: NotebookNode, 
+    def preprocess_cell(self,
+                        cell: NotebookNode,
                         resources: ResourcesDict,
                         cell_index: int
                         ) -> Tuple[NotebookNode, ResourcesDict]:

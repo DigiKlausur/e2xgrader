@@ -1,15 +1,18 @@
 def is_nbgrader_cell(cell):
     return 'nbgrader' in cell.metadata
 
+
 def is_solution_cell(cell):
     return is_nbgrader_cell(cell) and cell.metadata.nbgrader.solution
+
 
 def grade_id(cell):
     if is_nbgrader_cell(cell):
         return cell.metadata.nbgrader.grade_id
 
+
 def get_tasks(nb):
-    task_ids = [grade_id(cell) for cell in nb.cells 
+    task_ids = [grade_id(cell) for cell in nb.cells
                 if is_solution_cell(cell)]
     associated = dict()
     checked = dict()

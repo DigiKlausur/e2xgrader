@@ -24,6 +24,7 @@
                 .append($('<th/>').text('Edit'))
         ));
         let body = $('<tbody/>');
+        body.attr('id' , 'main_table');
         students.forEach(function (student) {
           if (student['last_name'] == null) {
             student['last_name'] = 'None';
@@ -36,7 +37,7 @@
           }
           body.append(
             $('<tr/>')
-              .append($('<td/>').text(student['last_name'] + ', ' + student['first_name']))
+              .append($('<td/>').append($('<a/>').attr('href', "{{ base_url }}/formgrader/manage_students/" + student["id"]).text(student['last_name'] + ', ' + student['first_name'])))
               .append($('<td/>').text(student['id']))
               .append($('<td/>').text(student['email']))
               .append($('<td/>').text(student['score'] + ' / ' + student['max_score']))
@@ -60,7 +61,7 @@
 {%- endblock -%}
 {%- block body -%}
   <div id="table"></div>
-  <div class="option" id="options">
+  <div class="option" id="options" onclick="createStudentModal();">
     <div class='icon'><i class='fa fa-plus'></i></div>
     <div class='label'>
       <h3>Add Student</h3>

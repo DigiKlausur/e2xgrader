@@ -18,6 +18,17 @@
 {{ mathjax( resources.base_url + '/' + resources.mathjax_url + '?config=TeX-AMS-MML_HTMLorMML-full') }}
 
 <link rel="stylesheet" href="{{ resources.base_url }}/formgrader/static/css/formgrade.css" />
+<style type="text/css">
+  div.prompt {
+    min-width: 5em;
+  }
+
+  div.panel.panel-primary.nbgrader_cell {
+    width: -webkit-calc(100% - 5.8em);
+    width:    -moz-calc(100% - 5.8em);
+    width:         calc(100% - 5.8em);
+  }
+</style>
 
 </head>
 {%- endblock header -%}
@@ -130,7 +141,7 @@
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
       <div class="input_area">
-        {{ cell.source | highlight_code(metadata=cell.metadata) }}
+        {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
     </div>
     {{ nbgrader_footer(cell) }}
@@ -140,7 +151,7 @@
   
   <div class="inner_cell">
     <div class="input_area">
-      {{ cell.source | highlight_code(metadata=cell.metadata) }}
+      {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
     </div>
   </div>
   {%- endif -%}

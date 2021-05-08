@@ -12,8 +12,9 @@ from nbgrader.utils import check_mode, get_username
 
 from .exchange import E2xExchange
 from .utils import (
-    compute_hashcode, truncate_hashcode, append_hashcode, 
+    compute_hashcode, truncate_hashcode, append_hashcode,
     append_timestamp, generate_html, generate_student_info)
+
 
 class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
 
@@ -28,7 +29,6 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         if self.personalized_inbound:
             self.inbound_path = os.path.join(self.inbound_path, os.getenv('JUPYTERHUB_USER'))
 
-        
         if not os.path.isdir(self.inbound_path):
             self.fail("Inbound directory doesn't exist: {}".format(self.inbound_path))
         if not check_mode(self.inbound_path, write=True, execute=True):
@@ -49,7 +49,6 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         else:
             self.assignment_filename = '{}+{}+{}'.format(
                 student_id, self.coursedir.assignment_id, self.timestamp)
-
 
     def copy_files(self):
         self.init_release()
@@ -94,7 +93,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         # Make this 0777=ugo=rwx so the instructor can delete later. Hidden from other users by the timestamp.
         os.chmod(
             dest_path,
-            S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH
+            S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH
         )
 
         # also copy to the cache

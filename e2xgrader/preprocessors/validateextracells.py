@@ -16,12 +16,14 @@ class ExtraCellValidator:
         # check if there is a single choice cell without a solution
         if is_singlechoice(cell):
             extended_metadata = cell.metadata.extended_cell
-            if (not 'choice' in extended_metadata) or (len(extended_metadata.choice) < 1):
-                raise ValidationError("single choice nbgrader cell {} does not have a solution".format(cell.metadata.nbgrader.grade_id))
+            if ('choice' not in extended_metadata) or (len(extended_metadata.choice) < 1):
+                raise ValidationError(
+                    "single choice nbgrader cell {} does not have a solution".format(cell.metadata.nbgrader.grade_id))
 
     def validate_nb(self, nb):
         for cell in nb.cells:
             self.validate_cell(cell)
+
 
 class ValidateExtraCells(NbGraderPreprocessor):
     """A preprocessor for checking that choice cells have valid solutions."""

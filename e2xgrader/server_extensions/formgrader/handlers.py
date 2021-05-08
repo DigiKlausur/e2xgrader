@@ -1,19 +1,11 @@
 import os
 
 from tornado import web
+from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
 
-class ExportGradesHandler(BaseHandler):
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        html = self.render(
-            'export_grades.tpl',
-            base_url = self.base_url
-        )
-        self.write(html)
 
 class ExportGradesHandler(BaseHandler):
     @web.authenticated
@@ -21,9 +13,10 @@ class ExportGradesHandler(BaseHandler):
     def get(self):
         html = self.render(
             'export_grades.tpl',
-            base_url = self.base_url
+            base_url=self.base_url
         )
         self.write(html)
+
 
 class ExportAssignmentGradesHandler(BaseHandler):
     def initialize(self):
@@ -37,6 +30,7 @@ class ExportAssignmentGradesHandler(BaseHandler):
         self.write(self.__exporter.make_table().to_csv(index=False))
         self.finish()
 
+
 class ExportNotebookGradesHandler(BaseHandler):
     def initialize(self):
         self.__exporter = GradeNotebookExporter(self.gradebook)
@@ -49,6 +43,7 @@ class ExportNotebookGradesHandler(BaseHandler):
         self.write(self.__exporter.make_table().to_csv(index=False))
         self.finish()
 
+
 class ExportTaskGradesHandler(BaseHandler):
     def initialize(self):
         self.__exporter = GradeTaskExporter(self.gradebook)
@@ -60,6 +55,7 @@ class ExportTaskGradesHandler(BaseHandler):
         self.set_header('Content-Disposition', 'attachment; filename=grades.csv')
         self.write(self.__exporter.make_table().to_csv(index=False))
         self.finish()
+
 
 class GradebookAssignmentsHandler(BaseHandler):
     @web.authenticated
@@ -75,6 +71,7 @@ class GradebookAssignmentsHandler(BaseHandler):
             template,
             base_url=self.base_url)
         self.write(html)
+
 
 class GradebookNotebooksHandler(BaseHandler):
     @web.authenticated
@@ -92,6 +89,7 @@ class GradebookNotebooksHandler(BaseHandler):
             base_url=self.base_url)
         self.write(html)
 
+
 class GradebookTasksHandler(BaseHandler):
     @web.authenticated
     @check_xsrf
@@ -102,6 +100,7 @@ class GradebookTasksHandler(BaseHandler):
             notebook_id=notebook_id,
             base_url=self.base_url)
         self.write(html)
+
 
 class GradebookNotebookSubmissionsHandler(BaseHandler):
     @web.authenticated
@@ -120,9 +119,10 @@ class GradebookNotebookSubmissionsHandler(BaseHandler):
             assignment_id=assignment_id,
             notebook_id=notebook_id,
             base_url=self.base_url,
-            task_id = task_id
+            task_id=task_id
         )
         self.write(html)
+
 
 class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
 
@@ -181,6 +181,7 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
 
         handler = getattr(self, '_{}'.format(action))
         self.redirect(handler(assignment_id, notebook_id, submission, task_id), permanent=False)
+
 
 class SubmissionHandler(BaseHandler):
     @web.authenticated
