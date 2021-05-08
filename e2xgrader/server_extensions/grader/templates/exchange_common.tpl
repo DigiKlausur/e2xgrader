@@ -17,6 +17,7 @@
 
 {%- block body -%}
   <script src="{{ base_url }}/grader/static/js/assignmentCommon.js"></script>
+  <script src="{{ base_url }}/grader/static/js/exchangeCommon.js"></script>
   <div id="description">
         <h4>Here you can find the assignment details.</h4>
         <p id='message'>Details of usage to be specified.</p>
@@ -52,77 +53,36 @@
         </table>
   </div>
   </div>
-  <div class="option" id="grading" onclick="toggleView('grading_buttons','exchange_buttons')">
-    <div class='icon'><i class='fa fa-address-card'></i></div>
-    <div class='label'>
-      <h3>Grading</h3>
-    </div>
-  </div>
-  <div class="option" id="exchange" onclick="window.location='{{ base_url }}/grader/assignments'">
-    <div class='icon'><i class='fa fa-exchange-alt'></i></div>
-    <div class='label'>
-      <h3>Exchange</h3>
-    </div>
-  </div>
 
-  <div id="grading_buttons" style="display:none;">
-  <div class="optionButton" id="autograde" onclick='autoGrader()'>
-    <div class='icon'><i class='fas fa-cogs'></i></div>
-    <div class='label'>
-      <h3>Autograde</h3>
-    </div>
-  </div>
-  <div class="optionButton" id="manualGrading" onclick='manualGrader()'>
-    <div class='icon'><i class='fas fa-cog'></i></div>
-    <div class='label'>
-      <h3>Manual Grading</h3>
-    </div>
-  </div>
-  <div class="optionButton" id="activeGrading" >
-    <div class='icon'><i class='fas fa-chalkboard-teacher'></i></div>
-    <div class='label'>
-      <h3>Active Grading</h3>
-    </div>
-  </div>
-  </div>
-
-  <div id="exchange_buttons" style="display:none;">
-  <div class="optionButton" id="downloadSelction" onclick='downloadSelection()'>
-    <div class='icon'><i class='fa fa-download'></i></div>
-    <div class='label'>
-      <h3>Download Selection</h3>
-    </div>
-  </div>
-  <div class="optionButton" id="generateAssignment" >
+  <div class="option" id="generateAssignment" onclick='generateAssignment()'>
     <div class='icon'><i class='fas fa-plus'></i></div>
     <div class='label'>
       <h3>Generate Assignment</h3>
     </div>
   </div>
-  <div class="optionButton" id="releaseAssignment" >
+  <div class="option" id="releaseAssignment" onclick='releaseAssignment()'>
     <div class='icon'><i class='fas fa-file-export'></i></div>
     <div class='label'>
       <h3>Release Assignment</h3>
     </div>
   </div>
-  <div class="optionButton" id="collectAssignment" >
+  <div class="option" id="collectAssignment" onclick='collectAssignment()'>
     <div class='icon'><i class='fas fa-file-import'></i></div>
     <div class='label'>
       <h3>Collect Assignment</h3>
     </div>
   </div>
-  <div class="optionButton" id="generateFeedback" >
+  <div class="option" id="generateFeedback" onclick='generateFeedbackAll()'>
     <div class='icon'><i class='fas fa-head-side-virus'></i></div>
     <div class='label'>
       <h3>Generate Feedback</h3>
     </div>
   </div>
-  <div class="optionButton" id="releaseFeedback" >
+  <div class="option" id="releaseFeedback" onclick='releaseFeedbackAll()'>
     <div class='icon'><i class='fas fa-head-side-cough'></i></div>
     <div class='label'>
       <h3>Release Feedback</h3>
     </div>
-  </div>
   </div>
 
 {%- endblock -%}
