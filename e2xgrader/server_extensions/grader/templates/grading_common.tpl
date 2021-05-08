@@ -6,17 +6,19 @@
     var url_prefix = "{{ url_prefix }}";
     var base_url = "{{ base_url }}";
     var assignment_id = "{{ assignment_id }}";
+    console.log("assignment_id = "+assignment_id);
   </script>
 
 {%- endblock -%}
 
 {%- block breadcrumbs -%}
   {{super()}}
-  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a></li>
+  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a>/<a href="{{ base_url }}/grader/assignments/assignment_common/?assignment_id={{ assignment_id }}">Assignment details</a></li>
 {%- endblock -%}
 
 {%- block body -%}
   <script src="{{ base_url }}/grader/static/js/gradingCommon.js"></script>
+  <script src="{{ base_url }}/grader/static/js/assignmentCommon.js"></script>
   <div id="description">
         <h4>Here you can find the assignment details.</h4>
         <p id='message'>Details of usage to be specified.</p>
@@ -44,7 +46,6 @@
         <table id="notebookList" class="display " style="width:90%">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Notebook</th>
                         <th>Needs Manual Grading</th>
                         <th>Number of Submissions</th>

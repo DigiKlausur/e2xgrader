@@ -52,6 +52,7 @@ class AssignmentsCommonHandler(BaseHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id', None)
+        print("assignment id received:"+assignment_id)
         html = self.render(
             "assignment_details.tpl",
             url_prefix=self.url_prefix,
@@ -66,6 +67,7 @@ class GraderCommonHandler(BaseHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id', None)
+        print("assignment id received:"+assignment_id)
         html = self.render(
             "grading_common.tpl",
             url_prefix=self.url_prefix,

@@ -12,7 +12,7 @@
 
 {%- block breadcrumbs -%}
   {{super()}}
-  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a></li>
+  <li>/ <a href="{{ base_url }}/grader/assignments">Assignments</a>/<a href="{{ base_url }}/grader/assignments/assignment_common/?assignment_id={{ assignment_id }}">Assignment details</a></li>
 {%- endblock -%}
 
 {%- block body -%}
@@ -44,7 +44,6 @@
         <table id="notebookList" class="display " style="width:90%">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Notebook</th>
                         <th>Needs Manual Grading</th>
                         <th>Number of Submissions</th>

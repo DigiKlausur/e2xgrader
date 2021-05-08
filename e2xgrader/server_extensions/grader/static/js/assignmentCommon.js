@@ -20,10 +20,11 @@ function loadNotebooks(){
                         "data": result,
                         "columns": [
                             { "data": "name"},
-                            { "data": "needs_manual_grade" },
-                            { "data": "num_submissions" }
+                            { "data": "needs_manual_grade",
+                               "orderable": false },
+                            { "data": "num_submissions",
+                              "orderable": false}
                         ],
-                        "order": [[1, 'asc']],
                         "bPaginate": false,
                         "bLengthChange": false,
                         "bFilter": true,
@@ -55,8 +56,14 @@ function loadNotebooks(){
       error: function (xhr) {
         console.log('Something went wrong when fetching the information....contact administration');
         $('#table').empty();
-        document.getElementById('exchange').style.display = 'none';
-        document.getElementById('grading').style.display = 'none';
+
+        var exchange = document.getElementById('exchange');
+        var grading = document.getElementById('grading');
+        if (exchange !== null && grading !== null){
+            exchange.style.display = 'none';
+            grading.style.display = 'none';
+        }
+
         document.getElementById('message').innerHTML = 'Something went wrong when fetching the information....contact administration';
         return false;
       }
@@ -75,8 +82,6 @@ function toggleView(id1,id2) {
     element1.style.display = "none";
   }
 }
-
-
 
 $(window).on('load', function () {
     loadNotebooks();
