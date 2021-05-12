@@ -268,7 +268,5 @@ default_handlers = [
     (r'/formgrader/submissions/(?P<submission_id>[^/]+)/%s/?' % _navigation_regex, SubmissionNavigationHandler),
     (r'/formgrader/submissions/([^/]+)/?', SubmissionHandler),
     (r'/formgrader/export_grades/selected_assignments/?', ExportSelectedAssignmentGradesHandler),
-    # (r'/formgrader/autograde_all/?', AutogradeAll),
-    # (r'/formgrader/autograding_progress/?', AutogradingProgess),
 ]
 

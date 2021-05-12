@@ -5,7 +5,7 @@ import nbformat
 import os
 import shutil
 from multiprocessing import Process, Value
-
+from nbgrader.utils import is_grade, is_solution
 
 class E2xAPI(NbGraderAPI):
 
@@ -174,40 +174,7 @@ class E2xAPI(NbGraderAPI):
         return submissions
 
 
-class E2X_Gradebook(Gradebook):
-
-    def update_grade(self, grade_cell: str, notebook: str, assignment: str, student: str, **kwargs: dict) -> None:
-        """Updates grade for a submissions for a particular cell in a particular notebook in an assignment.
-
-        Arguments
-        ---------
-        grade_cell: string
-            The name of the grade cell
-        notebook_id: string
-            The name of the notebook
-        assignment_id: string
-            The name of the assignment
-        student: string
-            The id of the student
-        Returns
-        -------
-        None
-        """
-        try:
-            grade = self.find_grade(grade_cell, notebook, assignment, student)
-        except MissingEntry:
-            self.logger.warning('No grade found!')
-        else:
-            for attr in kwargs:
-                setattr(grade, attr, kwargs[attr])
-            try:
-                self.db.commit()
-            except (IntegrityError, FlushError) as e:
-                self.logger.warning('Commit to database failed!')
-                self.db.rollback()
-                raise InvalidEntry(*e.args)
-
-        return None
+class E2xGradebook(Gradebook):
 
     def list_updated_cells(self, notebook: str, assignment: str) -> dict:
         """Lists the updated autograde cell id and content from the source directory.
@@ -225,10 +192,9 @@ class E2X_Gradebook(Gradebook):
         """
         nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
         source_directory = {}
-        for idx, i in enumerate(nb.cells):
-            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True'\
-            and str(nb.cells[idx]['metadata']['nbgrader']['solution']) == 'False':
-                source_directory[str(nb.cells[idx]['metadata']['nbgrader']['grade_id'])] = nb.cells[idx]['source']
+        for cell in nb.cells:
+            if is_grade(cell) and not is_solution(cell):
+                source_directory[cell.metadata.nbgrader.grade_id] = cell.source
         
         updated_notebook = self.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
@@ -263,45 +229,12 @@ class E2X_Gradebook(Gradebook):
             Generates new checksum id after changes.
         """
         nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
-        for i in nb.cells:
-            if i['metadata']['nbgrader']['grade_id'] == cell_id:
-                cell_content = i['source']
+        for cell in nb.cells:
+            if cell.metadata.nbgrader.grade_id == cell_id:
+                cell_content = cell.source
                 self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(i))
+                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(cell))
 
-                return utils.compute_checksum(i)
-
-        return None
-
-    def update_cell(self, cell_id: str, notebook: str, assignment: str) -> str:
-        """Updates cell content.
-
-        Arguments
-        ---------
-        cell_id: string
-            The name of the cell
-        notebook: string
-            The name of the notebook
-        assignment: string
-            The name of the assignment
-        cell_content: string
-            The updated content of the cell
-        Returns
-        -------
-        checksum_id: str
-            Generates new checksum id after changes.
-        """
-        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
-        for i in nb.cells:
-            if i['metadata']['nbgrader']['grade_id'] == cell_id:
-                i['source'] = cell_content
-                fname = "source/" + assignment + "/" + notebook + ".ipynb"
-                with open(fname, 'w') as f:
-                    nbformat.write(nb, f)
-                
-                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(i))
-
-                return utils.compute_checksum(i)
+                return utils.compute_checksum(cell)
 
         return
