@@ -55,6 +55,7 @@ Manage Submissions
 </div>
 <div>
   <div id = 'autograde_all' style = 'display : inline-block; width : 200px'></div>
+  <div id = 'autograde_log' style = 'display : inline-block'>Last autograded: <a id = 'log_time' href = '#top'></a></div>
 </div>
 <div hidden id = 'progress_bar'>
   <label id = 'autograde_percentage'>Autograding progress: 0% </label>

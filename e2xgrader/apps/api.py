@@ -47,24 +47,36 @@ class E2xAPI(NbGraderAPI):
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)
 
-    # def autograde_cell(self, assignment_id, selected_cells):
-    #     """Autogrades notebooks all the students for the given assignment id and selected cell ids.
+    def autograde_cells(self, assignment_id, selected_cells):
+        """Autogrades notebooks all the students for the given assignment id and selected cell ids.
 
-    #     Arguments
-    #     ---------
-    #     assignment_id: string
-    #         The name of the assignment
-    #     selected_cells: list
-    #         The cell ids for overriding grade
-    #     Returns
-    #     -------
+        Arguments
+        ---------
+        assignment_id: string
+            The name of the assignment
+        selected_cells: list
+            The cell ids for overriding grade
+        Returns
+        -------
 
-    #     """
-    #     self.autograde_flag.value = True
-    #     students = list(self.get_submitted_students(assignment_id))
-    #     total_students = len(students)
-
-
+        """
+        self.autograde_flag.value = True
+        students = list(self.get_submitted_students(assignment_id))
+        self.autograde_total.value = len(students)
+        result_log = {}
+        selected_cells = '\\"' + '\\",\\"'.join(selected_cells) + '\\"'
+        for idx, student in enumerate(students):
+            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
+            result_log[student] = subprocess.getoutput(autograde_command)
+            self.autograde_idx.value = idx + 1
+        self.autograde_idx.value = 0
+        self.autograde_total.value = 0
+        self.autograde_flag.value = False
+        result_log['time'] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(os.getcwd(), 'log/')
+        os.makedirs(path, exist_ok=True)
+        with open(path + assignment_id + '.txt', 'w') as outfile:
+            json.dump(result_log, outfile)
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook

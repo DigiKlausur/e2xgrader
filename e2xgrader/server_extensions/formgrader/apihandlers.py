@@ -9,7 +9,23 @@ from e2xgrader.apps.api import E2xGradebook
 from multiprocessing import Process, Value
 from ctypes import c_wchar_p
 
+
 autograde_assignment = Value(c_wchar_p, '')
+
+
+class AutogradeLog(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        try:
+            with open(os.path.join(os.getcwd(), 'log/') + assignment_id + '.txt') as json_file:
+                autograde_log = json_file.read()
+        except:
+            autograde_log = 'Autograding required.'
+        result = {'autograde_log' : autograde_log}
+        self.write(json.dumps(result))
+
 
 class AutogradeAll(BaseApiHandler):
     @web.authenticated
@@ -18,6 +34,18 @@ class AutogradeAll(BaseApiHandler):
         assignment_id = self.get_argument('assignment_id')
         autograde_assignment.value = str(assignment_id)
         p = Process(target = self.api.autograde_all, args = (assignment_id,))
+        p.start()
+
+
+class AutogradeCells(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        selected_cells = self.get_argument('cell_ids')
+        selected_cells = str(selected_cells).split(",")
+        autograde_assignment.value = str(assignment_id)
+        p = Process(target = self.api.autograde_cells, args = (assignment_id, selected_cells,))
         p.start()
 
 
@@ -107,5 +135,7 @@ default_handlers = [
     (r'/formgrader/api/find_updated_cell/?', FindUpdatedCells),
     (r'/formgrader/api/update_notebook/?', UpdateNotebook),
     (r'/formgrader/api/autograde_all/?', AutogradeAll),
+    (r'/formgrader/api/autograde_cells/?', AutogradeCells),
+    (r'/formgrader/api/autograding_log/?', AutogradeLog),
     (r'/formgrader/api/autograding_progress/?', AutogradingProgess),
 ]

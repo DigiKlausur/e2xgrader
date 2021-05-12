@@ -348,6 +348,39 @@ async function async_progress() {
     var log_time = $('#log_time');
     var tbl = $("#main-table");
     var flag = 0;
+    log_time.click(function(e){
+        $.ajax({
+          url: base_url + '/formgrader/api/autograding_log',
+          type: 'get',
+          data: {
+            'assignment_id' : assignment_id
+          },
+          success: function(response) {
+              try{
+                var log_report = JSON.parse(JSON.parse(response)['autograde_log']);
+                var student = Object.keys(log_report);
+                report = '';
+                for (var i = 0; i < student.length; i++){
+                    if (student[i] != 'time') {
+                        report += '\n' + student[i] + ': \n';  
+                        report += log_report[student[i]];
+                    }
+                }
+                createLogModal(
+                "log-modal",
+                "Autograde Log",
+                "Autograded notebooks for \'" + assignment_id + "\'.",
+                report);
+              }catch{
+                console.log(response);
+              }
+          },
+          error: function(e) {
+              console.log(e);
+          },
+          async: false
+        });
+    });
     while(true){
         try {
             result = await $.ajax({
