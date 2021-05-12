@@ -2,15 +2,9 @@
 
 import os
 from setuptools import setup, find_packages
+from setuptools.command.build_py import build_py
+from setupbase import js_prerelease, discover_nbextensions
 
-# get paths to all the extension files
-extension_files = []
-for (dirname, dirnames, filenames) in os.walk("e2xgrader/nbextensions"):
-    root = os.path.relpath(dirname, "e2xgrader")
-    for filename in filenames:
-        if filename.endswith(".pyc"):
-            continue
-        extension_files.append(os.path.join(root, filename))
 
 static_files = []
 for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formgrader/static"):
@@ -21,6 +15,12 @@ for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formg
     root = os.path.relpath(dirname, "e2xgrader/server_extensions/formgrader")
     for filename in filenames:
         static_files.append(os.path.join(root, filename))
+
+base_static_files = []
+for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/e2xbase/static"):
+    root = os.path.relpath(dirname, "e2xgrader/server_extensions/e2xbase")
+    for filename in filenames:
+        base_static_files.append(os.path.join(root, filename))
 
 name = u'e2xgrader'
 
@@ -36,17 +36,23 @@ setup_args = dict(
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     packages=find_packages(),
     package_data={
-        'e2xgrader': extension_files,
+        'e2xgrader': discover_nbextensions(name),
         'e2xgrader.server_extensions.formgrader': static_files,
+        'e2xgrader.server_extensions.e2xbase': base_static_files,
+    },
+    entry_points={
+        'console_scripts': ['e2xgrader=e2xgrader.apps.e2xgraderapp:main']
     },
     install_requires=[
         "jupyter",
-        "notebook>=4.2",
+        "notebook>=6.1.6",
         "nbconvert==5.6.1",
         "nbformat",
         "traitlets",
@@ -57,7 +63,10 @@ setup_args = dict(
         "beautifulsoup4",
         "pandas",
         "nbgrader",
-    ]
+    ],
+    cmdclass={
+        'build_py': js_prerelease(build_py),
+    },
 )
 
 if __name__ == "__main__":

@@ -6,8 +6,9 @@ import base64
 import pickle
 from nbgrader.preprocessors import NbGraderPreprocessor
 
+
 class Scramble(NbGraderPreprocessor):
-    
+
     def __init__(self, **kw):
         self.__seed = random.randint(0, 10000000)
         self.__random = random.Random(self.__seed)
@@ -47,19 +48,19 @@ class Scramble(NbGraderPreprocessor):
             rand_vars = [s.strip() for s in var_str.split('==')]
             var_groups = [[v.strip() for v in s.split(',')] for s in rand_vars]
             return var_groups, '==', opts
-        
+
     def parse_replace(self, line):
         match = self.__p_replace.search(line)
         if not match:
             return None
         return match.group('name'), match.group('replace_with')
-    
+
     def parse_lambda(self, line):
         match = self.__p_lambda.search(line)
         if not match:
             return None
         return match.group('name'), 'lambda ' + match.group('lambda')
-    
+
     def replace(self, text, macro):
         p_macro = re.compile(r'(?P<fun>{}\((?P<args>[^)]*)\))'.format(macro[0]))
         processed = text
@@ -71,13 +72,13 @@ class Scramble(NbGraderPreprocessor):
                 replacement = replacement.replace(macro[1][i], args[i])
             processed = processed.replace(match.group('fun'), replacement)
         return processed
-    
+
     def replace_lambdas(self, text, name, expr):
         p_macro = re.compile(r'(?P<fun>{}\((?P<args>[^)]*)\))'.format(name))
         processed = text
         for match in p_macro.finditer(text):
             args = [arg.strip() for arg in match.group('args').split(',')]
-    
+
             replacement = expr(*args)
             processed = processed.replace(match.group('fun'), str(replacement))
         return processed
@@ -92,7 +93,7 @@ class Scramble(NbGraderPreprocessor):
                 group = groups[g_idx]
                 for set_idx in range(len(group)):
                     rand_dict[group[set_idx]] = sets[set_idx][sampled_idx[0]]
-            return rand_dict        
+            return rand_dict
 
         if constraint == '!=':
             k = len(groups)
@@ -103,7 +104,7 @@ class Scramble(NbGraderPreprocessor):
                     rand_dict[group[set_idx]] = sets[set_idx][sampled_idx[g_idx]]
             return rand_dict
 
-    def sample_config(self, config):      
+    def sample_config(self, config):
         lines = config.split('\n')
         new_lines = []
         i = 0
@@ -140,9 +141,8 @@ class Scramble(NbGraderPreprocessor):
                 name, lambda_expr = self.parse_lambda(line)
                 lambdas[name] = eval(lambda_expr)
 
-
         for i in range(len(macros)):
-            for j in range(i+1,len(macros)):
+            for j in range(i+1, len(macros)):
                 macros[j][2] = self.replace(macros[j][2], macros[i])
             for set_name in sets:
                 sets[set_name] = [self.replace(s, macros[i]) for s in sets[set_name]]
@@ -152,7 +152,6 @@ class Scramble(NbGraderPreprocessor):
         for rand in rands:
             rand_vars.update(self.sample(rand[0], rand[1], rand[2], sets))
 
-
         for rand in rand_vars:
             for r_name in replaces:
                 replaces[r_name] = replaces[r_name].replace(rand, rand_vars[rand])
@@ -160,30 +159,28 @@ class Scramble(NbGraderPreprocessor):
         for rand in rand_vars:
             for r_name in replaces:
                 replaces[r_name] = replaces[r_name].replace(rand, rand_vars[rand])
-                
+
         for rand in rand_vars:
             for r_name in replaces:
                 replaces[r_name] = replaces[r_name].replace(rand, rand_vars[rand])
-                
+
         for lambda_expr in lambdas:
             for r_name in replaces:
                 replaces[r_name] = self.replace_lambdas(replaces[r_name], lambda_expr, lambdas[lambda_expr])
-
-
 
         return {
             'seed': self.__seed,
             'macros': macros,
             'sets': sets,
             'rands': rand_vars,
-            'replace': replaces   
+            'replace': replaces
         }
 
     def obscure(self, my_dict):
         byte_str = pickle.dumps(my_dict)
         obscured = base64.b85encode(byte_str)
         return obscured
-    
+
     def preprocess(self, nb, resources):
         if len(nb.cells) < 1 or not nb.cells[0].source.startswith('%% scramble'):
             return nb, resources
