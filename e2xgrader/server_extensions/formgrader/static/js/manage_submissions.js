@@ -316,19 +316,20 @@ function autograde_all() {
     .append("Autograde All: ").append($("<a/>")
         .click(function(e){
               $.ajax({
-                url: base_url + '/formgrader/autograde_all',
+                url: base_url + '/formgrader/api/autograde_all',
                 type: 'get',
                 data: {
                   'assignment_id' : assignment_id
                 },
                 success: function(response) {
-                    console.log("Server handled request successfully.");
+                    console.log(response);
                 },
                 error: function(e) {
                     console.log(e);
                 },
                 async: false
-              });
+              }); 
+              async_progress();
         })
         .attr("href", "#")
         .append($("<span/>")
@@ -336,7 +337,7 @@ function autograde_all() {
         .attr("aria-hidden", "true")));
 }
 
-async function doAjax() {
+async function async_progress() {
     var result;
     var progress_bar = $('#progress_bar');
     var progress_value = $('#progress');
@@ -346,7 +347,7 @@ async function doAjax() {
     while(true){
         try {
             result = await $.ajax({
-                url: base_url + '/formgrader/autograding_progress',
+                url: base_url + '/formgrader/api/autograding_progress',
                 type: 'get',
                 data: {
                     'assignment_id' : assignment_id
@@ -357,6 +358,7 @@ async function doAjax() {
                 progress_bar.hide();
                 autograde_icon.show();
                 tbl.show();
+                break;
             }
             else{
                 tbl.hide();
@@ -369,7 +371,7 @@ async function doAjax() {
             console.error(error);
             break;
         }
-        await sleep(10);
+        await sleep(1000);
     }
 }
 
@@ -378,5 +380,5 @@ var views = [];
 $(window).on('load', function () {
     autograde_all();
     loadSubmissions();
-    doAjax();
+    async_progress();
 });

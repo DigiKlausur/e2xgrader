@@ -93,7 +93,7 @@ var AssignmentUI = Backbone.View.extend({
         var notebook = [];
         var assignment_name = this.model.get("name");
         $.ajax({
-            url: base_url + '/formgrader/get_notebook',
+            url: base_url + '/formgrader/api/get_notebook',
             type: 'get',
             data: {
               'assignment_id' : assignment_name
@@ -151,7 +151,7 @@ var AssignmentUI = Backbone.View.extend({
         }
         if (cells_for_updating.length !=0){
             $.ajax({
-                url: base_url + '/formgrader/update_notebook',
+                url: base_url + '/formgrader/api/update_notebook',
                 type: 'get',
                 data: {
                     'assignment_id' : assignment,
@@ -188,7 +188,7 @@ var AssignmentUI = Backbone.View.extend({
         var notebook = document.getElementById("notebook_list").value;
         cells = {}
         $.ajax({
-            url: base_url + '/formgrader/find_updated_cell',
+            url: base_url + '/formgrader/api/find_updated_cell',
             type: 'get',
             data: {
               'assignment_id' : assignment,

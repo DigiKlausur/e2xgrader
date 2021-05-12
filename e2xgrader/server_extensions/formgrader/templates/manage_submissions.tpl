@@ -5,8 +5,8 @@
 var assignment_id = "{{ assignment_id }}";
 </script>
 
-<script src="{{ base_url }}/e2xgrader/static/js/e2x_manage_submissions.js"></script>
-{%- endblock head -%}
+<script src="{{ base_url }}/e2xgrader/static/js/manage_submissions.js"></script>
+{%- endblock head -%} 
 
 {%- block title -%}
 Manage Submissions

@@ -4,17 +4,17 @@ from nbconvert.exporters.exporter import ResourcesDict
 from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
 
 from ..utils.extra_cells import determine_grade
+from ..utils.nbgrader_cells import grade_id
 
 from traitlets import Unicode, List
 from textwrap import dedent
 
 class SaveAutoGrades(NbgraderSaveAutoGrades):
  
-    cell_id = Unicode(
-        "*",
+    cell_ids = List([],
         help=dedent(
             """
-            Cell_ID.
+            List of cell ids of autograde test cells for forced grading.
             """
         )
     ).tag(config=True)
@@ -46,7 +46,7 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         else:
             grade.needs_manual_grade = False
 
-        if cell.metadata['nbgrader']['grade_id'] in self.cell_id.split(" "):
+        if len(self.cell_ids) < 1 or grade_id(cell) in self.cell_ids:
             grade.manual_score = None
             grade.needs_manual_grade = True
             grade.manual_score = auto_score

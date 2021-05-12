@@ -4,9 +4,37 @@ from nbgrader import utils
 import nbformat
 import os
 import shutil
+from multiprocessing import Process, Value
 
 
 class E2xAPI(NbGraderAPI):
+
+    autograde_flag = Value('b', False)
+    autograde_progress = Value('d', 0.0)
+
+    def autograde_all(self, assignment_id):
+        """Autogrades notebooks all the students for the given assignment_id.
+
+        Arguments
+        ---------
+        assignment_id: string
+            The name of the assignment
+
+        Returns
+        -------
+
+        """
+        E2xAPI.autograde_flag.value = True
+        students = list(self.get_submitted_students(assignment_id))
+        total_students = len(students)
+
+        for idx, student in enumerate(students):
+            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
+            os.system(autograde_command)
+            E2xAPI.autograde_progress.value = round((idx + 1) * 100 / total_students)
+
+        E2xAPI.autograde_progress.value = 0.0
+        E2xAPI.autograde_flag.value = False
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook
@@ -145,6 +173,7 @@ class E2xAPI(NbGraderAPI):
 
         return submissions
 
+
 class E2X_Gradebook(Gradebook):
 
     def update_grade(self, grade_cell: str, notebook: str, assignment: str, student: str, **kwargs: dict) -> None:
@@ -275,56 +304,4 @@ class E2X_Gradebook(Gradebook):
 
                 return utils.compute_checksum(i)
 
-        return None
-
-    def student_autograde(self, cell_id: str, notebook: str, assignment: str) -> str:
-        """Updates cell content.
-
-        Arguments
-        ---------
-        cell_id: string
-            The name of the cell
-        notebook: string
-            The name of the notebook
-        assignment: string
-            The name of the assignment
-        Returns
-        -------
-        None
-        """
-        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
-        grade_id = []
-        autograde_id = []
-        for idx, i in enumerate(nb.cells):
-            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True':
-                grade_id.append(str(nb.cells[idx]['metadata']['nbgrader']['grade_id']))
-            if str(nb.cells[idx]['metadata']['nbgrader']['grade']) == 'True'\
-            and str(nb.cells[idx]['metadata']['nbgrader']['solution']) == 'False':
-                autograde_id.append(str(nb.cells[idx]['metadata']['nbgrader']['grade_id']))
-
-        src_dir = os.getcwd() + '/gradebook.db'
-        dst_dir = os.getcwd() + '/gradebook_temp.db'
-        shutil.copy(src_dir,dst_dir)
-
-        grading = {}
-        for i in self.students:
-            grading[i.id] = {}
-            for j in grade_id:
-                grade = self.find_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id)
-                grading[i.id][j] = grade.score
-                self.update_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id, manual_score = None)
-
-        nbg = NbGraderAPI()
-
-        for i in self.students:
-            nbg.autograde(assignment, i.id)
-
-        for i in grading:
-            grade = self.find_grade(grade_cell = cell_id, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i)
-            grading[i][cell_id] = grade.auto_score
-
-        for i in self.students:
-            for j in grade_id:
-                self.update_grade(grade_cell = j, notebook = 'Assignment_1', assignment = 'Assignment_1', student = i.id, manual_score = float(grading[i.id][j]))
-
-        return None
+        return
