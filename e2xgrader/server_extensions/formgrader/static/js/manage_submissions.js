@@ -343,7 +343,11 @@ async function async_progress() {
     var progress_value = $('#progress');
     var autograde_icon = $('#autograde_all');
     var autograde_percentage = $('#autograde_percentage');
+    var autograde_cell_div = $('#autograde_cell');
+    var autograde_log = $('#autograde_log');
+    var log_time = $('#log_time');
     var tbl = $("#main-table");
+    var flag = 0;
     while(true){
         try {
             result = await $.ajax({
@@ -354,18 +358,42 @@ async function async_progress() {
                   },
             });
             var progress = JSON.parse(result);
+            var autograde_progress = parseInt(progress['autograde_idx']) * 100 / parseInt(progress['autograde_total']);
             if (progress['autograde_flag'] == 0){
+                if (flag == 1){
+                    flag = 0;
+                    console.log('Restart!');
+                    location.reload()
+                }
+                if (progress['autograde_log'] == 'Autograding required.'){
+                    autograde_cell_div.hide();
+                }else{
+                    autograde_cell_div.show();
+                }
+                autograde_log.show();
+                log_time.html(progress['autograde_log']);
                 progress_bar.hide();
                 autograde_icon.show();
+                progress_value.hide();
                 tbl.show();
                 break;
             }
             else{
+                flag = 1;
+                autograde_log.hide();
                 tbl.hide();
                 autograde_icon.hide();
-                progress_bar.show();
-                autograde_percentage.html('Autograding progress: ' + progress['autograde_progress'] + '%')
-                progress_value.val(progress['autograde_progress'])
+                autograde_cell_div.hide();
+                if (progress['autograde_assignment'] == assignment_id){
+                    progress_bar.show();
+                    progress_value.show();
+                    autograde_percentage.html('Autograding progress: ' + autograde_progress.toFixed(0).toString() + '%');
+                    progress_value.val(autograde_progress);
+                }else{
+                    progress_bar.show();
+                    progress_value.hide();
+                    autograde_percentage.html('\'' + progress['autograde_assignment'] + '\' autograding in progress. Please wait...');
+                }
             }
         } catch (error) {
             console.error(error);

@@ -5,16 +5,21 @@ from nbgrader.coursedir import CourseDirectory
 from nbgrader.utils import is_grade, is_solution
 import nbformat
 import os
+import json
+import time
+import subprocess
 import shutil
+from ctypes import c_wchar_p
 from multiprocessing import Process, Value
 
 class E2xAPI(NbGraderAPI):
 
     autograde_flag = Value('b', False)
-    autograde_progress = Value('d', 0.0)
+    autograde_idx = Value('i', 0)
+    autograde_total = Value('i', 0)
 
     def autograde_all(self, assignment_id):
-        """Autogrades notebooks all the students for the given assignment_id.
+        """Autogrades notebooks all the students for the given assignment id.
 
         Arguments
         ---------
@@ -25,17 +30,41 @@ class E2xAPI(NbGraderAPI):
         -------
 
         """
-        E2xAPI.autograde_flag.value = True
+        self.autograde_flag.value = True
         students = list(self.get_submitted_students(assignment_id))
-        total_students = len(students)
-
+        self.autograde_total.value = len(students)
+        result_log = {}
         for idx, student in enumerate(students):
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
-            os.system(autograde_command)
-            E2xAPI.autograde_progress.value = round((idx + 1) * 100 / total_students)
+            result_log[student] = subprocess.getoutput(autograde_command)
+            self.autograde_idx.value = idx + 1
+        self.autograde_idx.value = 0
+        self.autograde_total.value = 0
+        self.autograde_flag.value = False
+        result_log['time'] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(os.getcwd(), 'log/')
+        os.makedirs(path, exist_ok=True)
+        with open(path + assignment_id + '.txt', 'w') as outfile:
+            json.dump(result_log, outfile)
 
-        E2xAPI.autograde_progress.value = 0.0
-        E2xAPI.autograde_flag.value = False
+    # def autograde_cell(self, assignment_id, selected_cells):
+    #     """Autogrades notebooks all the students for the given assignment id and selected cell ids.
+
+    #     Arguments
+    #     ---------
+    #     assignment_id: string
+    #         The name of the assignment
+    #     selected_cells: list
+    #         The cell ids for overriding grade
+    #     Returns
+    #     -------
+
+    #     """
+    #     self.autograde_flag.value = True
+    #     students = list(self.get_submitted_students(assignment_id))
+    #     total_students = len(students)
+
+
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook

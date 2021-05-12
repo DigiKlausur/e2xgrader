@@ -7,13 +7,16 @@ from nbgrader.server_extensions.formgrader.base import check_xsrf
 from .base import E2xBaseApiHandler as BaseApiHandler
 from e2xgrader.apps.api import E2xGradebook
 from multiprocessing import Process, Value
+from ctypes import c_wchar_p
 
+autograde_assignment = Value(c_wchar_p, '')
 
 class AutogradeAll(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id')
+        autograde_assignment.value = str(assignment_id)
         p = Process(target = self.api.autograde_all, args = (assignment_id,))
         p.start()
 
@@ -22,7 +25,18 @@ class AutogradingProgess(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
-        result = {'autograde_progress' : self.api.autograde_progress.value, 'autograde_flag' : self.api.autograde_flag.value}
+        assignment_id = self.get_argument('assignment_id')
+        try:
+            with open(os.path.join(os.getcwd(), 'log/') + assignment_id + '.txt') as json_file:
+                data = json.load(json_file)
+                autograde_log = data['time']
+        except:
+            autograde_log = 'Autograding required.'
+        result = {'autograde_idx' : self.api.autograde_idx.value,
+                  'autograde_total' : self.api.autograde_total.value,
+                  'autograde_flag' : self.api.autograde_flag.value,
+                  'autograde_log' : autograde_log,
+                  'autograde_assignment' : autograde_assignment.value}
         self.write(json.dumps(result))
 
 

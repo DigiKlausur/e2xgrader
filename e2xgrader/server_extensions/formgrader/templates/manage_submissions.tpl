@@ -53,7 +53,8 @@ Manage Submissions
     </div>
   </div>
 </div>
-<div id = 'autograde_all'>
+<div>
+  <div id = 'autograde_all' style = 'display : inline-block; width : 200px'></div>
 </div>
 <div hidden id = 'progress_bar'>
   <label id = 'autograde_percentage'>Autograding progress: 0% </label>
