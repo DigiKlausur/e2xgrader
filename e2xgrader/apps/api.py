@@ -1,11 +1,12 @@
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell, Gradebook
 from nbgrader import utils
+from nbgrader.coursedir import CourseDirectory
+from nbgrader.utils import is_grade, is_solution
 import nbformat
 import os
 import shutil
 from multiprocessing import Process, Value
-from nbgrader.utils import is_grade, is_solution
 
 class E2xAPI(NbGraderAPI):
 
@@ -190,7 +191,7 @@ class E2xGradebook(Gradebook):
         updated_cells: list
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
-        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
+        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
         source_directory = {}
         for cell in nb.cells:
             if is_grade(cell) and not is_solution(cell):
@@ -228,7 +229,7 @@ class E2xGradebook(Gradebook):
         checksum_id: str
             Generates new checksum id after changes.
         """
-        nb = nbformat.read("source/" + assignment + "/" + notebook + ".ipynb", as_version = 4)
+        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
         for cell in nb.cells:
             if cell.metadata.nbgrader.grade_id == cell_id:
                 cell_content = cell.source
