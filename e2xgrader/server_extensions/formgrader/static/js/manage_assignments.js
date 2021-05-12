@@ -328,7 +328,7 @@ var AssignmentUI = Backbone.View.extend({
 
         // update
         if (release_path && releaseable) {
-            if (status === "released") {
+            if (status === "draft") {
                 this.$update.append($("<a/>")
                 .attr("href", "#")
                 .click(_.bind(this.updateModal, this))
