@@ -2,14 +2,14 @@
 # coding: utf-8
 
 from nbgrader.apps.nbgraderapp import NbGraderApp
-from .autogradeapp import E2XAutogradeApp
+from .autogradeapp import E2xAutogradeApp
 from textwrap import dedent
 
-class E2XNbGraderApp(NbGraderApp):
+class E2xNbGraderApp(NbGraderApp):
 
     subcommands = NbGraderApp.subcommands.copy()
     subcommands['autograde'] = (
-            E2XAutogradeApp,
+            E2xAutogradeApp,
             dedent(
                 """
                 Autograde submitted assignments. Intended for use by instructors
@@ -18,4 +18,4 @@ class E2XNbGraderApp(NbGraderApp):
             ).strip())
 
 def main():
-    E2XNbGraderApp.launch_instance()
+    E2xNbGraderApp.launch_instance()
