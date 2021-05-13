@@ -9,8 +9,22 @@ from e2xgrader.apps.api import E2xGradebook
 from multiprocessing import Process, Value
 from ctypes import c_wchar_p
 
-
 autograde_assignment = Value(c_wchar_p, '')
+
+
+class ListCells(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
+        gb = E2xGradebook(db_url)
+        assignment_object = gb.find_assignment(assignment_id)
+        notebooks = []
+        for notebook in assignment_object.notebooks:
+            notebooks.append(notebook.name)
+        cells = gb.list_autograde_testcells(notebooks[0], assignment_id)
+        self.write(json.dumps(cells))
 
 
 class AutogradeLog(BaseApiHandler):
@@ -44,6 +58,7 @@ class AutogradeCells(BaseApiHandler):
         assignment_id = self.get_argument('assignment_id')
         selected_cells = self.get_argument('cell_ids')
         selected_cells = str(selected_cells).split(",")
+        print(selected_cells)
         autograde_assignment.value = str(assignment_id)
         p = Process(target = self.api.autograde_cells, args = (assignment_id, selected_cells,))
         p.start()
@@ -137,5 +152,6 @@ default_handlers = [
     (r'/formgrader/api/autograde_all/?', AutogradeAll),
     (r'/formgrader/api/autograde_cells/?', AutogradeCells),
     (r'/formgrader/api/autograding_log/?', AutogradeLog),
+    (r'/formgrader/api/list_cells/?', ListCells),
     (r'/formgrader/api/autograding_progress/?', AutogradingProgess),
 ]

@@ -55,6 +55,7 @@ Manage Submissions
 </div>
 <div>
   <div id = 'autograde_all' style = 'display : inline-block; width : 200px'></div>
+  <div id = 'autograde_cell' style = 'display : inline-block; width : 200px'>Select cells: <a id = 'select_cells' style="font-size:15px" href = '#top'><strong>[≡]</strong></a></div>
   <div id = 'autograde_log' style = 'display : inline-block'>Last autograded: <a id = 'log_time' href = '#top'></a></div>
 </div>
 <div hidden id = 'progress_bar'>

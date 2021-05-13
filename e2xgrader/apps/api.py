@@ -64,7 +64,8 @@ class E2xAPI(NbGraderAPI):
         students = list(self.get_submitted_students(assignment_id))
         self.autograde_total.value = len(students)
         result_log = {}
-        selected_cells = '\\"' + '\\",\\"'.join(selected_cells) + '\\"'
+        selected_cells = '\\"' + '\\",\\"'.join(selected_cells) + '\\",'
+        print(selected_cells)
         for idx, student in enumerate(students):
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
             result_log[student] = subprocess.getoutput(autograde_command)
@@ -280,3 +281,27 @@ class E2xGradebook(Gradebook):
                 return utils.compute_checksum(cell)
 
         return
+
+    def list_autograde_testcells(self, notebook: str, assignment: str) -> dict:
+        """Lists the autograde test cell ids from the given assignment and notebook.
+
+        Arguments
+        ---------
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        Returns
+        -------
+        updated_cells: list
+            Dictionary where the keys are the ids of the cell and the values are the content.
+        """
+        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
+        updated_notebook = self.find_notebook(notebook, assignment)
+        source_cells = updated_notebook.source_cells
+        grade_cells = updated_notebook.grade_cells
+
+        cells = [cell.name for cell in grade_cells if cell.cell_type == "code"]
+        autograde_cells = [cell.name for cell in source_cells if cell.name in cells and cell.locked == True]
+
+        return autograde_cells

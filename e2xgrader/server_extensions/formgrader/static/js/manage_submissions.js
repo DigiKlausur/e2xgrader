@@ -337,6 +337,78 @@ function autograde_all() {
         .attr("aria-hidden", "true")));
 }
 
+function select_cell(){
+    var select_cells = $('#select_cells');
+    select_cells.click(function(e){autograde_cell()});
+}
+
+function autograde_cell() {
+    var instructions = "<div id = 'notebook_cells'><p>Below are the autograding test cells of the selected assignment to force autograde.</p><p></p>";
+    var cells = [];
+    $.ajax({
+        url: base_url + '/formgrader/api/list_cells',
+        type: 'get',
+        data: {
+          'assignment_id' : assignment_id
+        },
+        success: function(response) {
+            cells = JSON.parse(response);
+        },
+        error: function(e) {
+            console.log(e);
+        },
+        async: false
+      });
+    var cells_checkbox = "";
+    for (var i = 0; i < cells.length; i++){
+        cells_checkbox += "<input type = 'checkbox' id = '" + cells[i] + "'><label for = '" + cells[i] + "'>&nbsp;" + cells[i] + "</label><br/>";
+    }
+    var container_start = "<div id = 'cell_id'>";
+    var container_end = "</div></div>";
+    var container = container_start + cells_checkbox + container_end;
+    var body = $(instructions + container);
+    var footer = $("<div/>");
+    footer.append($("<button/>")
+        .addClass("btn btn-primary autograde")
+        .attr("type", "button")
+        .text("Autograde"));
+    footer.append($("<button/>")
+        .addClass("btn btn-danger")
+        .attr("type", "button")
+        .attr("data-dismiss", "modal")
+        .text("Cancel"));
+    $modal = createModal("autograde-cells-modal", "Autograde cells " + assignment_id, body, footer);
+    $autograde_button = $modal.find("button.autograde")
+    $autograde_button.click(function() {
+        var selected = [];
+        $('#cell_id input:checked').each(function() {
+            selected.push($(this).attr('id'));
+        });
+        if (selected.length == 0){
+            alert('Select a cell to be graded.')
+        }else{
+            $modal.modal('hide')
+            $.ajax({
+                url: base_url + '/formgrader/api/autograde_cells',
+                type: 'get',
+                data: {
+                  'assignment_id' : assignment_id,
+                  'cell_ids' : selected.toString()
+                },
+                success: function(response) {
+                    console.log("Server handled request successfully." + response);
+                },
+                error: function(e) {
+                    console.log(e);
+                },
+                async: false
+              });
+              async_progress();
+        }
+
+    });
+}
+
 async function async_progress() {
     var result;
     var progress_bar = $('#progress_bar');
@@ -439,6 +511,7 @@ async function async_progress() {
 var models = undefined;
 var views = [];
 $(window).on('load', function () {
+    select_cell();
     autograde_all();
     loadSubmissions();
     async_progress();
