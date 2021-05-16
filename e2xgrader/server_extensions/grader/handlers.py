@@ -76,6 +76,21 @@ class GraderCommonHandler(BaseHandler):
             windows=(sys.prefix == 'win32'))
         self.write(html)
 
+class GraderManualGrading(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id', None)
+        print("assignment id received:"+assignment_id)
+        html = self.render(
+            "grading_common.tpl",
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            assignment_id = assignment_id,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
 class ExchangeCommonHandler(BaseHandler):
 
     @web.authenticated
