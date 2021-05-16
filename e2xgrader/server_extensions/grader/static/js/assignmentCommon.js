@@ -1,4 +1,4 @@
-var notebookList = [];
+var totalNotebook = 0;
 
 function loadNotebooks(){
     $.ajax({
@@ -15,6 +15,7 @@ function loadNotebooks(){
             type: 'get',
             success: function (response) {
                 var result = $.parseJSON(response);
+                console.log(result);
                 $(document).ready(function() {
                     var table = $('#notebookList').DataTable({
                         "data": result,
@@ -32,6 +33,13 @@ function loadNotebooks(){
                         "bAutoWidth": false
                     });
                 });
+
+                if( response === '[]'){
+                    var grading = document.getElementById("grading");
+                    var exchange = document.getElementById("exchange");
+                    grading.style.display = "none";
+                    exchange.style.display = "none";
+                }
             },
             error: function (xhr) {
                 let table = $('<table/>');

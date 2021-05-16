@@ -1,7 +1,7 @@
 function generateAssignment(){
     // download handler call
     $.ajax({
-            url: base_url+"/formgrader/api/assignment/"+assignment_id,
+            url: base_url+"/formgrader/api/assignment/"+assignment_id+"/assign",
             type: 'post',
             success: function (response) {
                 var result = $.parseJSON(response);

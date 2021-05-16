@@ -577,9 +577,9 @@ function fetchAssignment () {
              "data": assignments,
              "columns": [
                  { "data": "name",
-                   "render": function (name) {
-                        var data = base_url+"/grader/assignments/assignment_common/?assignment_id="+name;
-                        return '<a href='+data+'>'+name+'</a>';
+                   "render": function (id) {
+                        var data = base_url+"/grader/assignments/assignment_common/?assignment_id="+id;
+                        return '<a href='+data+'>'+id+'</a>';
                      },
                  },
                  { "data": "duedate" },
@@ -615,3 +615,4 @@ var views = [];
 $(window).on('load', function () {
     fetchAssignment();
 });
+
