@@ -3,10 +3,8 @@
 {%- block head -%}
   {{super()}}
   <script>
-    var url_prefix = "{{ url_prefix }}";
     var base_url = "{{ base_url }}";
     var assignment_id = "{{ assignment_id }}";
-    console.log("assignment_id = "+assignment_id);
   </script>
 
 {%- endblock -%}
@@ -18,8 +16,7 @@
 {%- endblock -%}
 
 {%- block body -%}
-  <script src="{{ base_url }}/grader/static/js/gradingCommon.js"></script>
-  <script src="{{ base_url }}/grader/static/js/assignmentCommon.js"></script>
+  <script src="{{ base_url }}/grader/static/js/gradingManualGrading.js"></script>
   <div id="description">
         <h4 id='message_header'>Here you can find the assignment details.</h4>
         <p id='message'>Details of usage to be specified.</p>
@@ -47,7 +44,11 @@
         <table id="notebookList" class="display " style="width:90%">
                 <thead>
                     <tr>
-                        <th>Notebook</th>
+                        <th>Notebook ID</th>
+                        <th>Avg Score</th>
+                        <th>Avg Code Score</th>
+                        <th>Avg Written Score</th>
+                        <th>Avg Task Score</th>
                         <th>Needs Manual Grading</th>
                         <th>Number of Submissions</th>
                     </tr>

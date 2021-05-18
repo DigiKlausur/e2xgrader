@@ -1,5 +1,3 @@
-var totalNotebook = 0;
-
 function loadNotebooks(){
     $.ajax({
       url: base_url+"/formgrader/api/assignment/"+assignment_id,
@@ -20,7 +18,16 @@ function loadNotebooks(){
                     var table = $('#notebookList').DataTable({
                         "data": result,
                         "columns": [
-                            { "data": "name"},
+                            { "data": "name",
+                              "render": function (id) {
+                                    var data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/"+assignment_id+"/"+id;
+                                    return '<a href='+data+'>'+id+'</a>';
+                                },
+                            },
+                            { "data": "average_score"},
+                            { "data": "average_code_score"},
+                            { "data": "average_written_score"},
+                            { "data": "average_task_score"},
                             { "data": "needs_manual_grade"},
                             { "data": "num_submissions"}
                         ],
@@ -74,19 +81,6 @@ function loadNotebooks(){
         return false;
       }
     });
-}
-
-function toggleView(id1,id2) {
-  var element1 = document.getElementById(id1);
-  var element2 = document.getElementById(id2);
-  if (element1.style.display === "none") {
-    element1.style.display = "block";
-    if(element2.style.display === "block"){
-       element2.style.display = "none";
-    }
-  } else {
-    element1.style.display = "none";
-  }
 }
 
 $(window).on('load', function () {

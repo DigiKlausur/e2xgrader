@@ -3,7 +3,7 @@ import sys
 
 from tornado import web
 
-from .base import BaseHandler, check_xsrf
+from .base import BaseHandler, check_xsrf, check_notebook_dir
 
 class Template404(BaseHandler):
     """Render our 404 template"""
@@ -80,15 +80,30 @@ class GraderManualGrading(BaseHandler):
 
     @web.authenticated
     @check_xsrf
+    @check_notebook_dir
     def get(self):
         assignment_id = self.get_argument('assignment_id', None)
-        print("assignment id received:"+assignment_id)
         html = self.render(
-            "grading_common.tpl",
-            url_prefix=self.url_prefix,
-            base_url=self.base_url,
-            assignment_id = assignment_id,
-            windows=(sys.prefix == 'win32'))
+            "grading_manual_grading.tpl",
+            assignment_id=assignment_id,
+            base_url=self.base_url)
+        self.write(html)
+
+class GraderManualGradingNotebook(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self,assignment_id,notebook_id):
+        #assignment_id = self.get_argument('assignment_id', None)
+        #notebook_id = self.get_argument('notebook_id', None)
+        print(assignment_id)
+        print(notebook_id)
+        html = self.render(
+            "grading_manual_grading_notebook.tpl",
+            assignment_id=assignment_id,
+            notebook_id=notebook_id,
+            base_url=self.base_url)
         self.write(html)
 
 class ExchangeCommonHandler(BaseHandler):
@@ -129,6 +144,8 @@ default_handlers = [
     (r"/grader/export_grades/?", ExportGradesHandler),
     (r"/grader/assignments/assignment_common/?", AssignmentsCommonHandler),
     (r"/grader/assignments/assignment_common/grading_common/?", GraderCommonHandler),
+    (r"/grader/assignments/assignment_common/grading_common/manual_grading/?", GraderManualGrading),
+    (r"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/([^/]+)/([^/]+)/?", GraderManualGradingNotebook),
     (r"/grader/assignments/assignment_common/exchange_common/?", ExchangeCommonHandler),
     (r"/grader/students/?", StudentsHandler),
 ]
