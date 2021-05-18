@@ -4,18 +4,19 @@ function loadNotebooks(){
       type: 'get',
       success: function (response) {
         var result = $.parseJSON(response);
-        document.getElementById('name').innerHTML = result['name'];
+        document.getElementById('assignmentName').innerHTML = result['name'];
+        document.getElementById('notebookName').innerHTML = notebook_id;
         document.getElementById('duedate').innerHTML = result['duedate'];
         document.getElementById('status').innerHTML = result['status'];
         document.getElementById('num_submissions').innerHTML = result['num_submissions'];
         $.ajax({
-            url: base_url+"/formgrader/api/notebooks/"+assignment_id,
+            url: base_url+"/formgrader/api/submitted_notebooks/" + assignment_id + "/" + notebook_id,
             type: 'get',
             success: function (response) {
                 var result = $.parseJSON(response);
                 console.log(result);
                 $(document).ready(function() {
-                    var table = $('#notebookList').DataTable({
+                    var table = $('#notebookSubmission').DataTable({
                         "data": result,
                         "columns": [
                             { "data": "name",
@@ -29,6 +30,7 @@ function loadNotebooks(){
                             { "data": "average_written_score"},
                             { "data": "average_task_score"},
                             { "data": "needs_manual_grade"},
+                            { "data": "num_submissions"},
                             { "data": "num_submissions"}
                         ],
                         "bPaginate": false,
@@ -38,13 +40,6 @@ function loadNotebooks(){
                         "bAutoWidth": false
                     });
                 });
-
-                if( response === '[]'){
-                    var grading = document.getElementById("grading");
-                    var exchange = document.getElementById("exchange");
-                    grading.style.display = "none";
-                    exchange.style.display = "none";
-                }
             },
             error: function (xhr) {
                 let table = $('<table/>');

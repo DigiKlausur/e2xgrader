@@ -38,13 +38,6 @@ function loadNotebooks(){
                         "bAutoWidth": false
                     });
                 });
-
-                if( response === '[]'){
-                    var grading = document.getElementById("grading");
-                    var exchange = document.getElementById("exchange");
-                    grading.style.display = "none";
-                    exchange.style.display = "none";
-                }
             },
             error: function (xhr) {
                 let table = $('<table/>');

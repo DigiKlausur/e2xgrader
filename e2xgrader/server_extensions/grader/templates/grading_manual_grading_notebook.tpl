@@ -20,7 +20,7 @@
 {%- endblock -%}
 
 {%- block body -%}
-  <script src="{{ base_url }}/grader/static/js/gradingManualGrading.js"></script>
+  <script src="{{ base_url }}/grader/static/js/gradingManualGradingNotebook.js"></script>
   <div id="description">
         <h4 id='message_header'>Here you can find the assignment details.</h4>
         <p id='message'>Details of usage to be specified.</p>
@@ -35,7 +35,8 @@
       <th style='padding: 8px;'>Number of Submissions</th>
     </tr>
     <tr>
-      <td id='name' style='padding: 8px;'></td>
+      <td id='assignmentName' style='padding: 8px;'></td>
+      <td id='notebookName' style='padding: 8px;'></td>
       <td id='duedate' style='padding: 8px;'></td>
       <td id='status' style='padding: 8px;'></td>
       <td id='num_submissions' style='padding: 8px;'></td>
@@ -46,16 +47,17 @@
         <p>Details of usage to be specified.</p>
   </div>
   <div id='notebookTable'>
-        <table id="notebookList" class="display " style="width:90%">
+        <table id="notebookSubmission" class="display " style="width:90%">
                 <thead>
                     <tr>
-                        <th>Notebook ID</th>
-                        <th>Avg Score</th>
-                        <th>Avg Code Score</th>
-                        <th>Avg Written Score</th>
-                        <th>Avg Task Score</th>
+                        <th>Submission ID</th>
+                        <th>Overall Score</th>
+                        <th>Code Score</th>
+                        <th>Written Score</th>
+                        <th>Task Score</th>
                         <th>Needs Manual Grading</th>
-                        <th>Number of Submissions</th>
+                        <th>Test Failed</th>
+                        <th>Flagged</th>
                     </tr>
                 </thead>
         </table>
