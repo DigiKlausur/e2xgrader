@@ -105,8 +105,7 @@ class FindUpdatedCells(BaseApiHandler):
     def get(self):
         assignment_id = self.get_argument('assignment_id')
         notebook_id = self.get_argument('notebook_id')
-        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
-        gb = E2xGradebook(db_url)
+        gb = E2xGradebook(self.api.coursedir.db_url)
         updated_cells = gb.list_updated_cells(notebook_id, assignment_id)
         self.write(json.dumps(updated_cells))
 
