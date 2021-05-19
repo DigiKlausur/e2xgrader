@@ -90,8 +90,7 @@ class UpdateNotebook(BaseApiHandler):
         notebook_id = self.get_argument('notebook_id')
         cells = self.get_argument('cells')
         cells = eval(cells.split()[0])
-        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
-        gb = E2xGradebook(db_url)
+        gb = E2xGradebook(self.api.coursedir.db_url)
         checksum_id = []
         for cell in cells:
             checksum_single = gb.update_cell_content(cell, notebook_id, assignment_id)
