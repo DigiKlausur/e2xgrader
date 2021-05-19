@@ -33,8 +33,6 @@ class AutogradeLog(BaseApiHandler):
                 autograde_log = json_file.read()
         except FileNotFoundError:
             autograde_log = 'Autograding required.'
-        else:
-            raise Exception("Error while accessing log file.")
         result = {'autograde_log' : autograde_log}
         self.write(json.dumps(result))
 
@@ -72,8 +70,6 @@ class AutogradingProgess(BaseApiHandler):
                 autograde_log = data['time']
         except FileNotFoundError:
             autograde_log = 'Autograding required.'
-        else:
-            raise Exception("Error while accessing log file.")
         result = {'autograde_idx' : self.api.autograde_idx.value,
                   'autograde_total' : self.api.autograde_total.value,
                   'autograde_flag' : self.api.autograde_flag.value,
