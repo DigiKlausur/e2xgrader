@@ -29,10 +29,12 @@ class AutogradeLog(BaseApiHandler):
     def get(self):
         assignment_id = self.get_argument('assignment_id')
         try:
-            with open(os.path.join(os.getcwd(), 'log/') + assignment_id + '.txt') as json_file:
+            with open(os.path.join(os.getcwd(), 'log', assignment_id + '.txt')) as json_file:
                 autograde_log = json_file.read()
-        except:
+        except FileNotFoundError:
             autograde_log = 'Autograding required.'
+        else:
+            raise Exception("Error while accessing log file.")
         result = {'autograde_log' : autograde_log}
         self.write(json.dumps(result))
 
