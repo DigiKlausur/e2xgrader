@@ -56,7 +56,6 @@ class AutogradeCells(BaseApiHandler):
         assignment_id = self.get_argument('assignment_id')
         selected_cells = self.get_argument('cell_ids')
         selected_cells = str(selected_cells).split(",")
-        print(selected_cells)
         autograde_assignment.value = str(assignment_id)
         p = Process(target = self.api.autograde_cells, args = (assignment_id, selected_cells,))
         p.start()
