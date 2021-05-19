@@ -17,13 +17,9 @@ class ListCells(BaseApiHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id')
-        db_url = 'sqlite:///' + os.path.join(os.getcwd(), 'gradebook.db')
-        gb = E2xGradebook(db_url)
-        assignment_object = gb.find_assignment(assignment_id)
-        notebooks = []
-        for notebook in assignment_object.notebooks:
-            notebooks.append(notebook.name)
-        cells = gb.list_autograde_testcells(notebooks[0], assignment_id)
+        gb = E2xGradebook(self.api.coursedir.db_url)
+        notebook = self.api.gradebook.find_assignment(assignment_id).notebooks[0].name
+        cells = gb.list_autograde_testcells(notebook, assignment_id)
         self.write(json.dumps(cells))
 
 
