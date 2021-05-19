@@ -65,7 +65,6 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = len(students)
         result_log = {}
         selected_cells = '\\"' + '\\",\\"'.join(selected_cells) + '\\",'
-        print(selected_cells)
         for idx, student in enumerate(students):
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
             result_log[student] = subprocess.getoutput(autograde_command)
