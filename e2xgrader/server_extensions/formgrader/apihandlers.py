@@ -5,7 +5,6 @@ from tornado import web
 from nbgrader.server_extensions.formgrader.base import check_xsrf
 
 from .base import E2xBaseApiHandler as BaseApiHandler
-from e2xgrader.apps.api import E2xGradebook
 from multiprocessing import Process, Value
 from ctypes import c_wchar_p
 
@@ -17,9 +16,8 @@ class ListCells(BaseApiHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id')
-        gb = E2xGradebook(self.api.coursedir.db_url)
         notebook = self.api.gradebook.find_assignment(assignment_id).notebooks[0].name
-        cells = gb.list_autograde_testcells(notebook, assignment_id)
+        cells = self.api.list_autograde_testcells(notebook, assignment_id)
         self.write(json.dumps(cells))
 
 
@@ -86,12 +84,12 @@ class UpdateNotebook(BaseApiHandler):
         notebook_id = self.get_argument('notebook_id')
         cells = self.get_argument('cells')
         cells = eval(cells.split()[0])
-        gb = E2xGradebook(self.api.coursedir.db_url)
         checksum_id = []
         for cell in cells:
-            checksum_single = gb.update_cell_content(cell, notebook_id, assignment_id)
+            checksum_single = self.api.update_cell_content(cell, notebook_id, assignment_id)
             checksum_id.append(checksum_single)
-            gb.update_or_create_source_cell(name = cell, notebook = notebook_id, assignment = assignment_id, checksum = checksum_single)
+            self.api.gradebook.update_or_create_source_cell(name = cell, notebook = notebook_id, 
+                                                            assignment = assignment_id, checksum = checksum_single)
         self.write(json.dumps(checksum_id))
 
 
@@ -101,8 +99,7 @@ class FindUpdatedCells(BaseApiHandler):
     def get(self):
         assignment_id = self.get_argument('assignment_id')
         notebook_id = self.get_argument('notebook_id')
-        gb = E2xGradebook(self.api.coursedir.db_url)
-        updated_cells = gb.list_updated_cells(notebook_id, assignment_id)
+        updated_cells = self.api.list_updated_cells(notebook_id, assignment_id)
         self.write(json.dumps(updated_cells))
 
 
@@ -111,8 +108,7 @@ class GetNotebook(BaseApiHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id')
-        gb = E2xGradebook(self.api.coursedir.db_url)
-        assignment_object = gb.find_assignment(assignment_id)
+        assignment_object = self.api.gradebook.find_assignment(assignment_id)
         notebooks = []
         for assignment in assignment_object.notebooks:
             notebooks.append(assignment.name)

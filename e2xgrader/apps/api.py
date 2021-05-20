@@ -215,9 +215,6 @@ class E2xAPI(NbGraderAPI):
 
         return submissions
 
-
-class E2xGradebook(Gradebook):
-
     def list_updated_cells(self, notebook: str, assignment: str) -> dict:
         """Lists the updated autograde cell id and content from the source directory.
 
@@ -232,13 +229,14 @@ class E2xGradebook(Gradebook):
         updated_cells: list
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
-        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
+        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
+                           as_version = nbformat.NO_CONVERT)
         source_directory = {}
         for cell in nb.cells:
             if is_grade(cell) and not is_solution(cell):
                 source_directory[cell.metadata.nbgrader.grade_id] = cell.source
         
-        updated_notebook = self.find_notebook(notebook, assignment)
+        updated_notebook = self.gradebook.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
         grade_cells = updated_notebook.grade_cells
 
@@ -270,12 +268,13 @@ class E2xGradebook(Gradebook):
         checksum_id: str
             Generates new checksum id after changes.
         """
-        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
+        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
+                           as_version = nbformat.NO_CONVERT)
         for cell in nb.cells:
             if cell.metadata.nbgrader.grade_id == cell_id:
                 cell_content = cell.source
-                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(cell))
+                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
+                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(cell))
 
                 return utils.compute_checksum(cell)
 
@@ -293,8 +292,9 @@ class E2xGradebook(Gradebook):
         updated_cells: list
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
-        nb = nbformat.read(os.path.join(CourseDirectory().source_directory, assignment, notebook + '.ipynb'), as_version = 4)
-        updated_notebook = self.find_notebook(notebook, assignment)
+        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
+                           as_version = nbformat.NO_CONVERT)
+        updated_notebook = self.gradebook.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
         grade_cells = updated_notebook.grade_cells
 
