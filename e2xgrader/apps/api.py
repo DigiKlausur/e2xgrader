@@ -279,8 +279,6 @@ class E2xGradebook(Gradebook):
 
                 return utils.compute_checksum(cell)
 
-        return
-
     def list_autograde_testcells(self, notebook: str, assignment: str) -> dict:
         """Lists the autograde test cell ids from the given assignment and notebook.
 
