@@ -1,9 +1,3 @@
-
-var base_url = "";
-function set_url(val){
-    base_url = val;
-}
-
 var Assignment = Backbone.Model.extend({
     idAttribute: 'name',
     urlRoot: base_url + "/formgrader/api/assignment"
