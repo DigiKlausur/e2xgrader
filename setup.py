@@ -48,7 +48,7 @@ setup_args = dict(
         'e2xgrader.server_extensions.e2xbase': base_static_files,
     },
     entry_points={
-        'console_scripts': ['e2xgrader=e2xgrader:main']
+        'console_scripts': ['e2xgrader=e2xgrader.__main__:main']
     },
     install_requires=[
         "jupyter",
