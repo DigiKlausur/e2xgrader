@@ -95,14 +95,24 @@ class GraderManualGradingNotebook(BaseHandler):
     @check_xsrf
     @check_notebook_dir
     def get(self,assignment_id,notebook_id):
-        #assignment_id = self.get_argument('assignment_id', None)
-        #notebook_id = self.get_argument('notebook_id', None)
-        print(assignment_id)
-        print(notebook_id)
         html = self.render(
             "grading_manual_grading_notebook.tpl",
             assignment_id=assignment_id,
             notebook_id=notebook_id,
+            base_url=self.base_url)
+        self.write(html)
+
+class GraderManageSubmissionsHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        assignment_id = self.get_argument('assignment_id', None)
+        html = self.render(
+            "grading_auto_singular_grading.tpl",
+            course_dir=self.coursedir.root,
+            assignment_id=assignment_id,
             base_url=self.base_url)
         self.write(html)
 
@@ -144,6 +154,7 @@ default_handlers = [
     (r"/grader/export_grades/?", ExportGradesHandler),
     (r"/grader/assignments/assignment_common/?", AssignmentsCommonHandler),
     (r"/grader/assignments/assignment_common/grading_common/?", GraderCommonHandler),
+    (r"/grader/assignments/assignment_common/grading_common/manage_submission/?", GraderManageSubmissionsHandler),
     (r"/grader/assignments/assignment_common/grading_common/manual_grading/?", GraderManualGrading),
     (r"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/([^/]+)/([^/]+)/?", GraderManualGradingNotebook),
     (r"/grader/assignments/assignment_common/exchange_common/?", ExchangeCommonHandler),

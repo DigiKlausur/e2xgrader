@@ -39,6 +39,7 @@ function loadNotebooks(){
                         "bInfo": false,
                         "bAutoWidth": false
                     });
+
                 });
             },
             error: function (xhr) {

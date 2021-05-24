@@ -9,27 +9,60 @@ function loadNotebooks(){
         document.getElementById('status').innerHTML = result['status'];
         document.getElementById('num_submissions').innerHTML = result['num_submissions'];
         $.ajax({
-            url: base_url+"/formgrader/api/notebooks/"+assignment_id,
+            url: base_url+"/formgrader/api/submissions/"+assignment_id,
             type: 'get',
             success: function (response) {
                 var result = $.parseJSON(response);
                 console.log(result);
                 $(document).ready(function() {
-                    var table = $('#notebookList').DataTable({
+
+                    var table = $('#submissionList').DataTable({
                         "data": result,
                         "columns": [
-                            { "data": "name",
-                              "render": function (id) {
-                                    var data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/"+assignment_id+"/"+id;
-                                    return '<a href='+data+'>'+id+'</a>';
-                                },
+                            { "data": "student"},
+                            { "data": "last_name",
+                              "defaultContent": "<i>NA</i>",
+                              "render":function(data,type,row,meta){
+                                    var name = '';
+                                    if(row['first_name'] === null && row['last_name'] === null)
+                                        name = "NA,NA";
+                                    else
+                                        name = row['first_name']+','+row['last_name'];
+
+                                    return name;
+
+                              }
                             },
-                            { "data": "average_score"},
-                            { "data": "average_code_score"},
-                            { "data": "average_written_score"},
-                            { "data": "average_task_score"},
-                            { "data": "needs_manual_grade"},
-                            { "data": "num_submissions"}
+                            { "data": "timestamp",
+                              "className": "dt-center",
+                              "defaultContent": "<i>NA</i>"},
+                            { "data": "needs_manual_grade",
+                              "render": function(data,type,row,meta)
+                              {
+                                   if( row['needs_manual_grade'] ){
+                                        return '<div class="label label-info">needs manual grading</div>'
+                                    }
+                                    else if( !row['autograded'] ){
+                                        return '<div class="label label-warning">needs autograding</div>'
+                                    }
+                                    else
+                                    {
+                                        return '<div class="label label-success">graded</div>'
+                                    }
+                              }
+                            },
+                            { "data": "score",
+                              "className": "dt-center"},
+                            { "data": "autograded",
+                              "className": "dt-center",
+                              "render": function(status){
+                                    if( !status ){
+                                        return '<i class="fa fa-bolt"></i>'
+                                    }
+                                    return ''
+                              }
+                            },
+
                         ],
                         "bPaginate": false,
                         "bLengthChange": false,

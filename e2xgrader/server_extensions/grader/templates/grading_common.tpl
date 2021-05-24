@@ -17,7 +17,6 @@
 {%- endblock -%}
 
 {%- block body -%}
-  <script src="{{ base_url }}/grader/static/js/gradingCommon.js"></script>
   <script src="{{ base_url }}/grader/static/js/assignmentCommon.js"></script>
   <div id="description">
         <h4 id='message_header'>Here you can find the assignment details.</h4>
@@ -56,7 +55,7 @@
   </div>
 
 
-  <div class="option" id="autograde" onclick='autoGrader()'>
+  <div class="option" id="autograde" onclick="window.location='{{ base_url }}/grader/assignments/assignment_common/grading_common/manage_submission/?assignment_id={{ assignment_id }}'">
     <div class='icon'><i class='fas fa-cogs'></i></div>
     <div class='label'>
       <h3>Autograde</h3>
