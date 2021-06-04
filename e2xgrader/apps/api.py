@@ -1,16 +1,14 @@
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell, Gradebook
-from nbgrader import utils
 from nbgrader.coursedir import CourseDirectory
-from nbgrader.utils import is_grade, is_solution
+from e2xgrader.utils.nbgrader_cells import grade_id
+from nbgrader.utils import is_grade, is_solution, compute_checksum
 import nbformat
 import os
 import json
 import time
 import subprocess
-import shutil
-from ctypes import c_wchar_p
-from multiprocessing import Process, Value
+from multiprocessing import Value
 
 class E2xAPI(NbGraderAPI):
 
@@ -42,7 +40,7 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = 0
         self.autograde_flag.value = False
         result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(os.getcwd(), 'log/')
+        path = os.path.join(self.coursedir.root, 'log')
         os.makedirs(path, exist_ok=True)
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)
@@ -73,7 +71,7 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = 0
         self.autograde_flag.value = False
         result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(os.getcwd(), 'log/')
+        path = os.path.join(self.coursedir.root, 'log')
         os.makedirs(path, exist_ok=True)
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)
@@ -212,7 +210,6 @@ class E2xAPI(NbGraderAPI):
         submissions.sort(key=lambda x: x['id'])
         for idx, submission in enumerate(submissions):
             submission['index'] = idx
-
         return submissions
 
     def list_updated_cells(self, notebook: str, assignment: str) -> dict:
@@ -229,25 +226,27 @@ class E2xAPI(NbGraderAPI):
         updated_cells: list
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
-        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
-                           as_version = nbformat.NO_CONVERT)
-        source_directory = {}
-        for cell in nb.cells:
-            if is_grade(cell) and not is_solution(cell):
-                source_directory[cell.metadata.nbgrader.grade_id] = cell.source
-        
+        assignment_path = self.coursedir.format_path(
+            nbgrader_step = self.coursedir.source_directory, 
+            student_id = '.', 
+            assignment_id = assignment
+        )
+        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
+        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+
+        nb_test_cells = {grade_id(cell): cell for cell in nb.cells 
+                 if is_grade(cell) and not is_solution(cell)}
+
         updated_notebook = self.gradebook.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
-        grade_cells = updated_notebook.grade_cells
 
-        cells = [cell.name for cell in grade_cells if cell.cell_type == "code"]
-        autograde_cells = [cell for cell in source_cells if cell.name in cells and cell.locked == True]
+        test_cell_names = self.list_autograde_testcells(notebook, assignment)
+        gb_test_cells = [cell for cell in source_cells if cell.name in test_cell_names]
 
         updated_cells = []
-        for cell in autograde_cells:
-            if cell.name in source_directory.keys() and cell.source != source_directory[cell.name]:
+        for cell in gb_test_cells:                
+            if cell.name in test_cell_names and compute_checksum(nb_test_cells[cell.name]) != cell.checksum:
                 updated_cells.append(cell.name)
-
         return updated_cells
 
     def update_cell_content(self, cell_id: str, notebook: str, assignment: str) -> str:
@@ -268,15 +267,20 @@ class E2xAPI(NbGraderAPI):
         checksum_id: str
             Generates new checksum id after changes.
         """
-        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
-                           as_version = nbformat.NO_CONVERT)
+        assignment_path = self.coursedir.format_path(
+            nbgrader_step = self.coursedir.source_directory, 
+            student_id = '.', 
+            assignment_id = assignment
+        )
+        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
+        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+
         for cell in nb.cells:
             if cell.metadata.nbgrader.grade_id == cell_id:
                 cell_content = cell.source
                 self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = utils.compute_checksum(cell))
-
-                return utils.compute_checksum(cell)
+                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = compute_checksum(cell))
+                return compute_checksum(cell)
 
     def list_autograde_testcells(self, notebook: str, assignment: str) -> dict:
         """Lists the autograde test cell ids from the given assignment and notebook.
@@ -289,16 +293,11 @@ class E2xAPI(NbGraderAPI):
             The name of the assignment
         Returns
         -------
-        updated_cells: list
-            Dictionary where the keys are the ids of the cell and the values are the content.
+        autograde_cells: list
+            List of autograde test cells in the notebook.
         """
-        nb = nbformat.read(os.path.join(self.coursedir.source_directory, assignment, notebook + '.ipynb'),
-                           as_version = nbformat.NO_CONVERT)
         updated_notebook = self.gradebook.find_notebook(notebook, assignment)
-        source_cells = updated_notebook.source_cells
-        grade_cells = updated_notebook.grade_cells
-
-        cells = [cell.name for cell in grade_cells if cell.cell_type == "code"]
-        autograde_cells = [cell.name for cell in source_cells if cell.name in cells and cell.locked == True]
-
-        return autograde_cells
+        grade_cell_names = [cell.name for cell in updated_notebook.grade_cells]
+        solution_cell_names = [cell.name for cell in updated_notebook.solution_cells]
+        autograde_cells = set(grade_cell_names).difference(set(solution_cell_names))
+        return list(autograde_cells)
