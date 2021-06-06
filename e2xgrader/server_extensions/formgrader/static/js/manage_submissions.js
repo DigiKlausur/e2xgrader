@@ -286,7 +286,6 @@ var insertRow = function (table) {
 
 var loadSubmissions = function () {
     var tbl = $("#main-table");
-
     models = new Submissions();
     views = [];
     models.loaded = false;
@@ -308,11 +307,56 @@ var loadSubmissions = function () {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }  
+}  
 
-function autograde_all() {
-    var auto = $('#autograde_all');
-    auto.addClass("autograde_all")
+function startup(){
+    var select_cells = $('#select_cells');
+    var log_time = $('#log_time');
+    var autograde_all = $('#autograde_all');
+    var autograde_cell_div = $('#autograde_cell');
+    var log_report = null;
+    select_cells.click(function(e){autograde_cell()});
+    $.ajax({
+        url: base_url + '/formgrader/api/autograding_log',
+        type: 'get',
+        data: {
+          'assignment_id' : assignment_id
+        },
+        success: function(response) {
+            try{
+              log_report = JSON.parse(response)['autograde_log'];
+              log_time.html(JSON.parse(log_report)['time']);
+            }catch{
+              log_time.html(log_report);
+              autograde_cell_div.hide();
+            }
+        },
+        error: function(e) {
+            console.log(e);
+        },
+        async: false
+    });
+    log_time.click(function(e){
+        if (log_report == 'Autograding required.'){
+            null;
+        }else{
+            var log =  JSON.parse(log_report);
+            var student = Object.keys(log);
+            report = '';
+            for (var i = 0; i < student.length; i++){
+                if (student[i] != 'time') {
+                    report += '\n' + student[i] + ': \n';  
+                    report += log[student[i]];
+                }
+            }
+            createLogModal(
+            "log-modal",
+            "Autograde Log",
+            "Autograded notebooks for \'" + assignment_id + "\'.",
+            report);
+        }
+    });
+    autograde_all.addClass("autograde_all")
     .append("Autograde All: ").append($("<a/>")
         .click(function(e){
               $.ajax({
@@ -335,11 +379,6 @@ function autograde_all() {
         .append($("<span/>")
         .addClass("glyphicon glyphicon-flash")
         .attr("aria-hidden", "true")));
-}
-
-function select_cell(){
-    var select_cells = $('#select_cells');
-    select_cells.click(function(e){autograde_cell()});
 }
 
 function autograde_cell() {
@@ -385,7 +424,7 @@ function autograde_cell() {
             selected.push($(this).attr('id'));
         });
         if (selected.length == 0){
-            alert('Select a cell to be graded.')
+            alert('Select the cells to be graded.')
         }else{
             $modal.modal('hide')
             $.ajax({
@@ -396,16 +435,15 @@ function autograde_cell() {
                   'cell_ids' : selected.toString()
                 },
                 success: function(response) {
-                    console.log("Server handled request successfully." + response);
+                    console.log(response);
                 },
                 error: function(e) {
                     console.log(e);
                 },
                 async: false
-              });
-              async_progress();
+            });
+            async_progress();
         }
-
     });
 }
 
@@ -417,40 +455,23 @@ async function async_progress() {
     var autograde_percentage = $('#autograde_percentage');
     var autograde_cell_div = $('#autograde_cell');
     var autograde_log = $('#autograde_log');
-    var log_time = $('#log_time');
     var tbl = $("#main-table");
+    var autograde_stop = $('#autograde_stop');
+    var autograde_stop_text = $('#autograde_stop_text');
     var flag = 0;
-    log_time.click(function(e){
+    autograde_stop.click(function(e){
+        autograde_stop.hide();
+        autograde_stop_text.html('Please wait...');
         $.ajax({
-          url: base_url + '/formgrader/api/autograding_log',
-          type: 'get',
-          data: {
-            'assignment_id' : assignment_id
-          },
-          success: function(response) {
-              try{
-                var log_report = JSON.parse(JSON.parse(response)['autograde_log']);
-                var student = Object.keys(log_report);
-                report = '';
-                for (var i = 0; i < student.length; i++){
-                    if (student[i] != 'time') {
-                        report += '\n' + student[i] + ': \n';  
-                        report += log_report[student[i]];
-                    }
-                }
-                createLogModal(
-                "log-modal",
-                "Autograde Log",
-                "Autograded notebooks for \'" + assignment_id + "\'.",
-                report);
-              }catch{
+            url: base_url + '/formgrader/api/autograding_stop',
+            type: 'get',
+            success: function(response) {
                 console.log(response);
-              }
-          },
-          error: function(e) {
-              console.log(e);
-          },
-          async: false
+            },
+            error: function(e) {
+                console.log(e);
+            },
+            async: false
         });
     });
     while(true){
@@ -467,16 +488,9 @@ async function async_progress() {
             if (progress['autograde_flag'] == 0){
                 if (flag == 1){
                     flag = 0;
-                    console.log('Restart!');
                     location.reload()
                 }
-                if (progress['autograde_log'] == 'Autograding required.'){
-                    autograde_cell_div.hide();
-                }else{
-                    autograde_cell_div.show();
-                }
                 autograde_log.show();
-                log_time.html(progress['autograde_log']);
                 progress_bar.hide();
                 autograde_icon.show();
                 progress_value.hide();
@@ -485,17 +499,16 @@ async function async_progress() {
             }
             else{
                 flag = 1;
-                autograde_log.hide();
                 tbl.hide();
+                progress_bar.show();
+                autograde_log.hide();
                 autograde_icon.hide();
                 autograde_cell_div.hide();
                 if (progress['autograde_assignment'] == assignment_id){
-                    progress_bar.show();
                     progress_value.show();
                     autograde_percentage.html('Autograding progress: ' + autograde_progress.toFixed(0).toString() + '%');
                     progress_value.val(autograde_progress);
                 }else{
-                    progress_bar.show();
                     progress_value.hide();
                     autograde_percentage.html('\'' + progress['autograde_assignment'] + '\' autograding in progress. Please wait...');
                 }
@@ -511,8 +524,6 @@ async function async_progress() {
 var models = undefined;
 var views = [];
 $(window).on('load', function () {
-    select_cell();
-    autograde_all();
+    startup();
     loadSubmissions();
-    async_progress();
 });

@@ -15,6 +15,7 @@ class E2xAPI(NbGraderAPI):
     autograde_flag = Value('b', False)
     autograde_idx = Value('i', 0)
     autograde_total = Value('i', 0)
+    autograde_stop = Value('b', False)
 
     def autograde_all(self, assignment_id):
         """Autogrades notebooks all the students for the given assignment id.
@@ -33,6 +34,9 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = len(students)
         result_log = {}
         for idx, student in enumerate(students):
+            if self.autograde_stop.value == True:
+                self.autograde_stop.value = False
+                break
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
@@ -40,7 +44,7 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = 0
         self.autograde_flag.value = False
         result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log')
+        path = os.path.join(self.coursedir.root, 'log/')
         os.makedirs(path, exist_ok=True)
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)
@@ -64,6 +68,9 @@ class E2xAPI(NbGraderAPI):
         result_log = {}
         selected_cells = '\\"' + '\\",\\"'.join(selected_cells) + '\\",'
         for idx, student in enumerate(students):
+            if self.autograde_stop.value == True:
+                self.autograde_stop.value = False
+                break
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
@@ -71,7 +78,7 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = 0
         self.autograde_flag.value = False
         result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log')
+        path = os.path.join(self.coursedir.root, 'log/')
         os.makedirs(path, exist_ok=True)
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)

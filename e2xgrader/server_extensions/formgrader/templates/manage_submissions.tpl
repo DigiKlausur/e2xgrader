@@ -59,7 +59,8 @@ Manage Submissions
   <div id = 'autograde_log' style = 'display : inline-block'>Last autograded: <a id = 'log_time' href = '#top'></a></div>
 </div>
 <div hidden id = 'progress_bar'>
-  <label id = 'autograde_percentage'>Autograding progress: 0% </label>
+  <label id = 'autograde_percentage' style = 'display : inline-block; width : 300px'>Autograding progress: 0% </label> 
+  <div id = 'autograde_stop_text' style = 'display : inline-block; width : 300px'>Stop Autograding: <a id = 'autograde_stop' style="font-size:15px" href = '#top'><strong>⦿</strong></a></div>
   <progress id="progress" style="width: 100%; height: 35px;" value="0" max="100"> 0% </progress>
 </div>
 {%- endblock -%}

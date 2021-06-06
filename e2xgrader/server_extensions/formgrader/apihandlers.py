@@ -57,6 +57,13 @@ class AutogradeCells(BaseApiHandler):
         p.start()
 
 
+class AutogradingStop(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        self.api.autograde_stop.value = True
+
+
 class AutogradingProgess(BaseApiHandler):
     @web.authenticated
     @check_xsrf
@@ -142,4 +149,5 @@ default_handlers = [
     (r'/formgrader/api/autograding_log/?', AutogradeLog),
     (r'/formgrader/api/list_cells/?', ListCells),
     (r'/formgrader/api/autograding_progress/?', AutogradingProgess),
+    (r'/formgrader/api/autograding_stop/?', AutogradingStop),
 ]
