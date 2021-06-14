@@ -200,4 +200,5 @@ var models = undefined;
 
 $(window).on('load', function () {
     loadSubmittedNotebooks();
+    console.log("IN HERE")
 });

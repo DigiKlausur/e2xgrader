@@ -55,9 +55,10 @@ function loadNotebooks(){
                               "className": "dt-center"},
                             { "data": "autograded",
                               "className": "dt-center",
-                              "render": function(status){
+                              "render": function(status,type,row,meta){
+                                    console.log(row['student']);
                                     if( !status ){
-                                        return '<i class="fa fa-bolt"></i>'
+                                        return '<div onclick="autogradeNotebook(\''+row["student"]+'\')"><i class="fa fa-bolt"></i></div>'
                                     }
                                     return ''
                               }
@@ -106,6 +107,36 @@ function loadNotebooks(){
 
         document.getElementById('message').innerHTML = 'Something went wrong when fetching the information....contact administration';
         return false;
+      }
+    });
+}
+
+function autogradeNotebook(student_id){
+   $.ajax({
+      url: base_url+"/formgrader/api/submission/"+assignment_id+"/"+student_id+"/autograde",
+      type: 'get',
+      success: function (response) {
+        response = $.parseJSON(response);
+        console.log(response)
+        if (response["success"]) {
+            createLogModal(
+                "success-modal",
+                "Success",
+                "Successfully completed autograding:",
+                response["log"]);
+
+        } else {
+            createLogModal(
+                "error-modal",
+                "Error",
+                "There was an error while autograding:",
+                response["log"],
+                response["error"]);
+        }
+
+      },
+      error: function (xhr) {
+       console.log(xhr);
       }
     });
 }

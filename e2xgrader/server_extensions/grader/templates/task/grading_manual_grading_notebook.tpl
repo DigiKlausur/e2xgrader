@@ -7,6 +7,7 @@
     var assignment_id = "{{ assignment_id }}";
     var notebook_id = "{{ notebook_id }}";
     var task_id = "{{ task_id }}";
+    var view = 'task';
   </script>
 {%- endblock -%}
 

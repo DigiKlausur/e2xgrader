@@ -570,8 +570,6 @@ function fetchAssignment () {
       type: 'get',
       success: function (response) {
         var assignments = $.parseJSON(response);
-        console.log(typeof(assignments));
-        console.log(assignments);
         $(document).ready(function() {
            var table = $('#datatable').DataTable({
              "data": assignments,

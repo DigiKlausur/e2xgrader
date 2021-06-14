@@ -67,7 +67,6 @@ class GraderCommonHandler(BaseHandler):
     @check_xsrf
     def get(self):
         assignment_id = self.get_argument('assignment_id', None)
-        print("assignment id received:"+assignment_id)
         html = self.render(
             "grading_common.tpl",
             url_prefix=self.url_prefix,
@@ -82,9 +81,15 @@ class GraderManualGrading(BaseHandler):
     @check_xsrf
     @check_notebook_dir
     def get(self):
+        view = self.get_argument('view', 'notebook')
         assignment_id = self.get_argument('assignment_id', None)
+        if view == 'task':
+            template = os.path.join('task', 'grading_manual_grading.tpl')
+        else:
+            template = 'grading_manual_grading.tpl'
+
         html = self.render(
-            "grading_manual_grading.tpl",
+            template,
             assignment_id=assignment_id,
             base_url=self.base_url)
         self.write(html)
@@ -95,10 +100,14 @@ class GraderManualGradingNotebook(BaseHandler):
     @check_xsrf
     @check_notebook_dir
     def get(self,assignment_id,notebook_id):
+        view = self.get_argument('view', 'notebook')
+        task_id = self.get_argument('filter', '')
+
         html = self.render(
-            "grading_manual_grading_notebook.tpl",
+            'grading_manual_grading_notebook.tpl',
             assignment_id=assignment_id,
             notebook_id=notebook_id,
+            task_id =task_id,
             base_url=self.base_url)
         self.write(html)
 
@@ -113,6 +122,19 @@ class GraderManageSubmissionsHandler(BaseHandler):
             "grading_auto_singular_grading.tpl",
             course_dir=self.coursedir.root,
             assignment_id=assignment_id,
+            base_url=self.base_url)
+        self.write(html)
+
+class GraderTasksHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    def get(self, assignment_id, notebook_id):
+        print(assignment_id+" assignment id")
+        html = self.render(
+            "task/grading_manual_grading_task.tpl",
+            assignment_id=assignment_id,
+            notebook_id=notebook_id,
             base_url=self.base_url)
         self.write(html)
 
@@ -156,6 +178,7 @@ default_handlers = [
     (r"/grader/assignments/assignment_common/grading_common/?", GraderCommonHandler),
     (r"/grader/assignments/assignment_common/grading_common/manage_submission/?", GraderManageSubmissionsHandler),
     (r"/grader/assignments/assignment_common/grading_common/manual_grading/?", GraderManualGrading),
+    (r'/grader/assignments/assignment_common/grading_common/manual_grading/tasks/([^/]+)/([^/]+)/?', GraderTasksHandler),
     (r"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/([^/]+)/([^/]+)/?", GraderManualGradingNotebook),
     (r"/grader/assignments/assignment_common/exchange_common/?", ExchangeCommonHandler),
     (r"/grader/students/?", StudentsHandler),

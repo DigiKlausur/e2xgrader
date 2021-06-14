@@ -19,19 +19,64 @@ function loadNotebooks(){
                     var table = $('#notebookSubmission').DataTable({
                         "data": result,
                         "columns": [
-                            { "data": "name",
-                              "render": function (id) {
-                                    var data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/"+assignment_id+"/"+id;
-                                    return '<a href='+data+'>'+id+'</a>';
+                            { "data": "id",
+                              "render": function (name,type,row,meta) {
+                                    var data = null;
+                                    try {
+                                        if (view === "task"){
+                                            data = base_url+"/formgrader/submissions/" + name + "/?task=" + task_id;
+                                        }
+                                    }catch(err) {
+                                        data = base_url+"/formgrader/submissions/" + name + "/?task=" + task_id;
+                                    }
+                                    //var data = base_url+"/formgrader/submissions/" + name;
+                                    return '<a href='+data+'>Submission #'+row['index']+'</a>';
                                 },
                             },
-                            { "data": "average_score"},
-                            { "data": "average_code_score"},
-                            { "data": "average_written_score"},
-                            { "data": "average_task_score"},
-                            { "data": "needs_manual_grade"},
-                            { "data": "num_submissions"},
-                            { "data": "num_submissions"}
+                            { "data": "score",
+                              "render": function (name,type,row,meta) {
+                                    return name+'/'+row['max_score'];
+                                },
+                            },
+                            { "data": "score",
+                              "render": function (name,type,row,meta) {
+                                    return name+'/'+row['max_code_score'];
+                                },
+                            },
+                            { "data": "written_score",
+                              "render": function (name,type,row,meta) {
+                                    return name+'/'+row['max_written_score'];
+                                },
+                            },
+                            { "data": "task_score",
+                              "render": function (name,type,row,meta) {
+                                    return name+'/'+row['max_task_score'];
+                                },
+                            },
+                            { "data": "needs_manual_grade",
+                              "render": function (name,type,row,meta) {
+                                    if(name)
+                                        return '<i class="fas fa-check"></i>';
+                                    else
+                                        return '<i class="fas fa-check"></i>';
+                                },
+                            },
+                            { "data": "failed_tests",
+                              "render": function (name,type,row,meta) {
+                                    if(name)
+                                        return '<i class="fas fa-check"></i>';
+                                    else
+                                        return '<i class="fas fa-check"></i>';
+                                },
+                            },
+                            { "data": "flagged",
+                              "render": function (name,type,row,meta) {
+                                    if(name)
+                                        return '<i class="fas fa-check"></i>';
+                                    else
+                                        return '<i class="fas fa-check"></i>';
+                                },
+                            },
                         ],
                         "bPaginate": false,
                         "bLengthChange": false,

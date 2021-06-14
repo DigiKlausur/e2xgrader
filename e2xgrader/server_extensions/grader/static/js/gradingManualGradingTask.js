@@ -1,43 +1,39 @@
-
+//console.log(view+" VIEW");
 function loadNotebooks(){
     $.ajax({
       url: base_url+"/formgrader/api/assignment/"+assignment_id,
       type: 'get',
       success: function (response) {
         var result = $.parseJSON(response);
-        document.getElementById('name').innerHTML = result['name'];
+        document.getElementById('assignment_name').innerHTML = result['name'];
+        document.getElementById('notebook_name').innerHTML = notebook_id;
         document.getElementById('duedate').innerHTML = result['duedate'];
         document.getElementById('status').innerHTML = result['status'];
         document.getElementById('num_submissions').innerHTML = result['num_submissions'];
         $.ajax({
-            url: base_url+"/formgrader/api/notebooks/"+assignment_id,
+            url: base_url+"/formgrader/api/solution_cells/" + assignment_id + "/" + notebook_id,
             type: 'get',
             success: function (response) {
                 var result = $.parseJSON(response);
                 console.log(result);
                 $(document).ready(function() {
-                    var table = $('#notebookList').DataTable({
+                    var table = $('#taskList').DataTable({
                         "data": result,
                         "columns": [
                             { "data": "name",
-                              "render": function (id) {
-                                    var data = null;
-                                    try {
-                                        if (view === "task"){
-                                            data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/tasks/"+assignment_id+"/"+id;
-                                        }
-                                    }catch(err) {
-                                        data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/"+assignment_id+"/"+id;
-                                    }
-                                    return '<a href='+data+'>'+id+'</a>';
+                              "render": function (name) {
+                                    var data = base_url+"/grader/assignments/assignment_common/grading_common/manual_grading/notebook/" + assignment_id + "/" + notebook_id + "/?view=task&filter=" + name;
+                                    return '<a href='+data+'>'+name+'</a>';
                                 },
                             },
-                            { "data": "average_score"},
-                            { "data": "average_code_score"},
-                            { "data": "average_written_score"},
-                            { "data": "average_task_score"},
+                            { "data": "avg_score",
+                              "render": function (score,type,row,meta) {
+                                     return score +'/'+row['max_score'];
+                                }
+                            },
+                            { "data": "autograded"},
                             { "data": "needs_manual_grade"},
-                            { "data": "num_submissions"}
+
                         ],
                         "bPaginate": false,
                         "bLengthChange": false,

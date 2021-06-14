@@ -67,6 +67,12 @@
       <h3>Manual Grading</h3>
     </div>
   </div>
+  <div class="option" id="manualGradingTaskView" onclick="window.location='{{ base_url }}/grader/assignments/assignment_common/grading_common/manual_grading/?assignment_id={{ assignment_id }}&view=task'">
+    <div class='icon'><i class='fas fa-cog'></i></div>
+    <div class='label'>
+      <h3>Manual Grading(TaskView)</h3>
+    </div>
+  </div>
   <div class="option" id="activeGrading" >
     <div class='icon'><i class='fas fa-chalkboard-teacher'></i></div>
     <div class='label'>
