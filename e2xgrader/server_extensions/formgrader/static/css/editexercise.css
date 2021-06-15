@@ -1,0 +1,38 @@
+#tasks td {
+  text-align: center;
+}
+
+.mid-col {
+  width: 20%;
+}
+
+.mid-col button {
+  display: block;
+  width: 6em;
+  margin: auto;
+  margin-top: .5em;  
+}
+
+.side-col {
+  width: 40%;
+}
+
+#selected-tasks {
+  width: 100%;
+}
+
+#pool-tasks {
+  width: 100%;
+}
+
+#template-options {
+    margin-top: 1em;
+}
+
+select[name=pool] {
+  margin-left: 1em;
+}
+
+.e2xtable {
+  min-width: 40%;
+}
