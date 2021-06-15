@@ -21,10 +21,28 @@ def _jupyter_nbextension_paths():
             require='extra_cells/main'
         ),
         dict(
+            section='tree',
+            src=pjoin(base_path, 'teacher', 'taskcreator'),
+            dest='taskcreator',
+            require='taskcreator/main'
+        ),
+        dict(
             section='notebook',
             src=pjoin(base_path, 'teacher', 'create_assignment'),
             dest='create_assignment',
             require='create_assignment/main'
+        ),
+        dict(
+            section='notebook',
+            src=pjoin(base_path, 'teacher', 'taskeditor'),
+            dest='taskeditor',
+            require='taskeditor/main'
+        ),
+        dict(
+            section='notebook',
+            src=pjoin(base_path, 'teacher', 'templatebar'),
+            dest='templatebar',
+            require='templatebar/main'
         ),
         dict(
             section='notebook',
