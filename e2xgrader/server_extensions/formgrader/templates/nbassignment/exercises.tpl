@@ -4,6 +4,7 @@
 <script type="text/javascript">
     let assignment = '{{ assignment }}';
 </script>
+{{ super() }}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/exercises.js'></script>
 {% endblock head %}
 

@@ -1,10 +1,11 @@
-{%- extends 'base.tpl' -%}
+{%- extends 'nbassignment/base.tpl' -%}
 
 {% block head %}
-<link rel="stylesheet" href="{{ base_url }}/taskcreator/static/css/editexercise.css" type="text/css">
+<link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/editexercise.css" type="text/css">
 <script type="module">    
-    import {addTaskSelector, generateExercise, templateOptions, exerciseOptions} from "{{ base_url }}/taskcreator/static/js/editexercise.js";
-    addTaskSelector({{ pools }}, "{{ base_url }}");
+    import {addTaskSelector, generateExercise, templateOptions, exerciseOptions} from "{{ base_url }}/e2xgrader/static/js/nbassignment/editexercise.js";
+    console.log("{{ pools }}");
+    addTaskSelector("{{ base_url }}");
     templateOptions("{{ base_url }}");
     exerciseOptions("{{ base_url }}");
     generateExercise("{{ exercise }}", "{{ assignment }}", "{{ url_prefix }}", "{{ base_url }}");

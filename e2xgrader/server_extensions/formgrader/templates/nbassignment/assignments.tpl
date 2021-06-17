@@ -1,6 +1,7 @@
 {%- extends 'nbassignment/tablebase.tpl' -%}
 
 {% block head %}
+{{ super() }}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/assignments.js'></script>
 {% endblock head %}
 

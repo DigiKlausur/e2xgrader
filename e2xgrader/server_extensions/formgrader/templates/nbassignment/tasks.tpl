@@ -4,8 +4,8 @@
 <script type="text/javascript">
     let pool = '{{ pool }}';
 </script>
+{{ super() }}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/tasks.js'></script>
-
 {% endblock head %}
 
 {% block sidebar %}
