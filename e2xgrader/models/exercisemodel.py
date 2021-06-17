@@ -12,7 +12,9 @@ class ExerciseModel(BaseModel):
         help='The directory where assignments go.'
     )
 
-    def remove(self, assignment, name):
+    def remove(self, **kwargs):
+        assignment = kwargs['assignment']
+        name = kwargs['name']
         base_path = os.path.join(self.base_path(), assignment)
         exercise_files = os.path.join(base_path, '{}_files'.format(name))
         if os.path.exists(exercise_files):
@@ -21,7 +23,8 @@ class ExerciseModel(BaseModel):
         if os.path.exists(exercise):
             os.remove(exercise)
 
-    def list(self, assignment):
+    def list(self, **kwargs):
+        assignment = kwargs['assignment']
         base_path = os.path.join(self.base_path(), assignment)
         exercisenbs = glob.glob(os.path.join(base_path, '*.ipynb'))
         exercises = []

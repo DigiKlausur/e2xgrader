@@ -44,21 +44,42 @@ class TaskModel(BaseModel):
         
         return nb
 
-    def new(self, name, pool):
-        base_path = os.path.join(self.base_path(), pool)
-        os.makedirs(os.path.join(base_path, name, 'img'), exist_ok=True)
-        os.makedirs(os.path.join(base_path, name, 'data'), exist_ok=True)
-        filename = '{}.ipynb'.format(name)
-        nb = self.new_taskbook(name)
-        path = os.path.join(base_path, name, filename)
-        nbformat.write(nb, path)
-        return path
+    def new(self, **kwargs):
+        name = kwargs['name']
+        pool = kwargs['pool']
+        if (self.is_valid_name(name)):            
+            path = os.path.join(self.base_path(), pool, name)
+            if (os.path.exists(path)):
+                return {
+                    'success': False,
+                    'error': f'A task with the name {name} already exists!'
+                }
+            else:
+                base_path = os.path.join(self.base_path(), pool)
+                os.makedirs(os.path.join(base_path, name, 'img'), exist_ok=True)
+                os.makedirs(os.path.join(base_path, name, 'data'), exist_ok=True)
+                filename = '{}.ipynb'.format(name)
+                nb = self.new_taskbook(name)
+                path = os.path.join(base_path, name, filename)
+                nbformat.write(nb, path)
+                return {
+                    'success': True,
+                    'path': os.path.join('notebooks', path)
+                }
+        else:
+            return {
+                'success': False,
+                'error': 'Invalid name'
+            }
 
-    def remove(self, name, pool):
+    def remove(self, **kwargs):
+        name = kwargs['name']
+        pool = kwargs['pool']
         base_path = os.path.join(self.base_path(), pool)
         shutil.rmtree(os.path.join(base_path, name))
     
-    def list(self, pool):
+    def list(self, **kwargs):
+        pool = kwargs['pool']
         base_path = os.path.join(self.base_path(), pool)
         taskfolders = os.listdir(base_path)
         tasks = []
