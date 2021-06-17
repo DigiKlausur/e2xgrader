@@ -1,13 +1,3 @@
-let Task = Backbone.Model.extend({
-    idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/task/' + pool
-});
-
-let Tasks = Backbone.Collection.extend({
-    model: Task,
-    url: base_url + '/taskcreator/api/pools/' + pool
-});
-
 let TaskUI = BaseUI.extend({
 
     events: {},
@@ -78,7 +68,7 @@ function addView(model, table) {
 
 function loadTasks() {
     let tbl = $('#main_table');
-    models = new Tasks();
+    models = new Tasks({pool: pool});
     views = [];
     models.loaded = false;
     models.fetch({
@@ -127,7 +117,7 @@ function newTask() {
     $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
         $modal_name = $modal.find('input.modal-name').val();
-        let task = new Task();
+        let task = new Task({pool: pool});
         task.save({
             'name': $modal_name,
             'tasks': 0

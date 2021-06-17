@@ -1,13 +1,3 @@
-let Pool = Backbone.Model.extend({
-    idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/pool'
-});
-
-let Pools = Backbone.Collection.extend({
-    model: Pool,
-    url: base_url + '/taskcreator/api/pools/'
-});
-
 let PoolUI = BaseUI.extend({
 
     events: {},

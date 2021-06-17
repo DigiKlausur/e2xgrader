@@ -172,7 +172,29 @@ export function generateExercise(exercise, assignment, url_prefix, base_url) {
     $('#generate').append(generate_button);
 }
 
-export function addTaskSelector(pools, base_url) {
+export function addTaskSelector(base_url) {
+    let Pool = Backbone.Model.extend({
+        idAttribute: 'name',
+        urlRoot: base_url + '/taskcreator/api/pool'
+    });
+
+    let Pools = Backbone.Collection.extend({
+        model: Pool,
+        url: base_url + '/taskcreator/api/pools/'
+    });
+    let models = new Pools();
+    models.fetch({
+        success: function () {
+            addTaskSelector2(models, base_url);
+
+        }
+    });
+
+}
+
+export function addTaskSelector2(pools, base_url) {
+    
+
     let table = $('<table/>')
         .attr('id', 'tasks');
 
@@ -186,33 +208,33 @@ export function addTaskSelector(pools, base_url) {
     let pool_select = $('<select/>').attr('name', 'pool');
     pool_select.append($('<option/>').attr('value', '').text('Choose a pool'));
     pools.forEach(function(pool) {
-        let option = $('<option/>').attr('value', pool.name).text(pool.name);
+        let option = $('<option/>').attr('value', pool.get('name')).text(pool.get('name'));
         pool_select.append(option);
     });
     pool_select.change(function () {
         let pool = pool_select.val();
         $('#pool-tasks').empty();
         if (pool != '') {
-            $.ajax({
-                url: base_url + "/taskcreator/api/tasks",
-                type: "get",
-                data: {
-                    'pool': pool
-                },
-                success: function(response) {
-                    let tasks = $.parseJSON(response);
-                    tasks.forEach(function(task) {
+            let Task = Backbone.Model.extend({
+                idAttribute: 'name',
+                urlRoot: base_url + '/taskcreator/api/task/' + pool
+            });
+
+            let Tasks = Backbone.Collection.extend({
+                model: Task,
+                url: base_url + '/taskcreator/api/pools/' + pool
+            });
+            let models = new Tasks();
+            models.fetch({
+                success: function () {
+                    models.forEach(function(task) {
                         let opt = $('<option/>')
-                            .attr('value', pool + '/' + task.name)
-                            .text(task.name);
+                            .attr('value', pool + '/' + task.get('name'))
+                            .text(task.get('name'));
                         $('#pool-tasks').append(opt);
                     });
-                },
-                error: function(xhr) {
-                    console.log('Oh no!')
-                    console.log(xhr)
                 }
-            });
+            })
         }
     });
 

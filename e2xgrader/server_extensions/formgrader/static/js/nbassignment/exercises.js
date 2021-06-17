@@ -1,13 +1,3 @@
-let Exercise = Backbone.Model.extend({
-    idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/exercise'
-});
-
-let Exercises = Backbone.Collection.extend({
-    model: Exercise,
-    url: base_url + '/taskcreator/api/assignments/' + assignment
-});
-
 let ExerciseUI = Backbone.View.extend({
 
     events: {},
@@ -44,7 +34,7 @@ function insertRow(table) {
 function loadExercises() {
     console.log('Loading the exercises');
     let tbl = $('#main_table');
-    models = new Exercises();
+    models = new Exercises({assignment: assignment});
     views = [];
     models.loaded = false;
     models.fetch({

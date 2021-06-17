@@ -1,13 +1,3 @@
-let Assignment = Backbone.Model.extend({
-    idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/assignment'
-});
-
-let Assignments = Backbone.Collection.extend({
-    model: Assignment,
-    url: base_url + '/taskcreator/api/assignments'
-});
-
 let AssignmentUI = Backbone.View.extend({
 
     events: {},

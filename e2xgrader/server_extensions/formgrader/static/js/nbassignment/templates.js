@@ -1,13 +1,3 @@
-let Template = Backbone.Model.extend({
-    idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/template'
-});
-
-let Templates = Backbone.Collection.extend({
-    model: Template,
-    url: base_url + '/taskcreator/api/templates/'
-});
-
 let TemplateUI = BaseUI.extend({
 
     events: {},
