@@ -41,7 +41,7 @@ function insertRow(table) {
 
 function loadAssignments() {
     console.log('Loading the assignments');
-    let tbl = $('#assignment_table');
+    let tbl = $('#main_table');
     models = new Assignments();
     views = [];
     models.loaded = false;

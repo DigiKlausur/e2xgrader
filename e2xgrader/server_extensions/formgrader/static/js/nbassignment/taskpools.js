@@ -8,34 +8,44 @@ let Pools = Backbone.Collection.extend({
     url: base_url + '/taskcreator/api/pools/'
 });
 
-let PoolUI = Backbone.View.extend({
+let PoolUI = BaseUI.extend({
 
     events: {},
 
     initialize: function () {
         this.$pool_name = this.$el.find('.pool-name');
         this.$number_of_tasks = this.$el.find('.number-of-tasks');
-        this.$edit_pool = this.$el.find('.edit-pool');
         this.$remove_pool = this.$el.find('.remove-pool');
+
+        this.fields = [this.$pool_name, this.$number_of_tasks, this.$remove_pool];
 
         this.listenTo(this.model, 'sync', this.render);
         this.render();
     },
 
     render: function () {
+        this.clear();
         let name = this.model.get('name');
-        //this.$pool_name.text(name);
+        
         this.$pool_name.append($('<a/>')
             .attr('href', base_url + '/taskcreator/pools/' + name)
             .text(name));
         this.$number_of_tasks.text(this.model.get('tasks'));
-        this.$edit_pool.append($('<a/>')
-            .attr('href', base_url + '/taskcreator/api/pool/' + name)
-            .text('Edit'));
         this.$remove_pool.append($('<a/>')
-            .attr('href', base_url + '/taskcreator/api/pool/' + name)
-            .text('Remove'));
-    }
+            .attr('href', '#')
+            .click(_.bind(this.removePoolModal, this))
+            .append($('<span/>').text('Remove')
+                ));
+    },
+
+    removePoolModal: function() {
+        let body = $('<div/>');
+        body.append($('<p/>').text('Are you sure you want to delete the task pool?'));
+        body.append($('<p/>').text('It contains ' + this.model.get('tasks') + ' tasks that will be deleted!'));
+        body.append($('<p/>').text('This action can\'t be undone!'));
+
+        this.openRemoveModal(body, "Delete pool " + this.model.get('name') + "?");
+    },
 
 });
 
@@ -43,40 +53,95 @@ function insertRow(table) {
     let row = $('<tr/>');
     row.append($('<td/>').addClass('pool-name'));
     row.append($('<td/>').addClass('number-of-tasks'));
-    row.append($('<td/>').addClass('edit-pool'));
     row.append($('<td/>').addClass('remove-pool'));
     table.append(row);
+    dataTable.row.add(row).draw();
     return row;
 }
 
+function addView(model, table) {
+    let view = new PoolUI({
+        'model': model,
+        'el': insertRow(table)
+    });
+    views.push(view);
+}
+
 function loadPools() {
-    console.log('Loading the pools');
-    let tbl = $('#pool_table');
+    let tbl = $('#main_table');
     models = new Pools();
     views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
             tbl.empty();
-            models.each(function (model) {
-                let view = new PoolUI({
-                    'model': model,
-                    'el': insertRow(tbl)
-                });
-                views.push(view);
+            dataTable = tbl.parent().DataTable({
+                'columnDefs': [
+                    {'orderable': false, 'targets': [-1]},
+                    {'searchable': false, 'targets': [-1]}
+                ]
             });
-            //insertDataTable(tbl.parent());
-            tbl.parent().DataTable();
-
+            models.each((model) => addView(model, tbl));
             models.loaded = true;
         }
+    });
+}
+
+function newPool() {
+    let body = $('<div/>').append($('</p>').text(
+        `Please specify the name of the new pool. Names can consist of characters, 
+         digits, spaces and underscores.`));
+    let table = $('<table/>').addClass('table table-striped form-table');
+    let tablebody = $('<tbody/>');
+    body.append(table);
+    table.append(tablebody);
+    let name = $('<tr/>');
+    tablebody.append(name);
+    name.append($('<td/>').addClass('align-middle').text('Name'));
+    name.append($('<td/>').append($('<input/>')
+        .addClass('modal-name')
+        .attr('pattern', '[A-Za-z0-9]+')
+        .attr('type', 'text')));
+    let footer = $('<div/>');
+    footer.append($('<button/>')
+        .addClass('btn btn-primary save')
+        .text('Add Task Pool'));
+    footer.append($('<button/>')
+        .addClass('btn btn-danger')
+        .attr('data-dismiss', 'modal')
+        .text('Cancel'));
+
+    $modal = createModal("new-pool-modal", "Create a new task pool", body, footer);
+    
+    $modal_save = $modal.find('button.save');
+    $modal_save.click(function () {
+        $modal_name = $modal.find('input.modal-name').val();
+        let pool = new Pool();
+        pool.save({
+            'name': $modal_name,
+            'tasks': 0
+        }, {
+            success: function(pool) {
+            if (pool.get('success')) {
+                $modal.modal('hide');
+                addView(pool, $('#main_table'));
+                models.add([pool]);
+            } else {
+                createLogModal(
+                    'error-modal',
+                    'Error',
+                    'There was an error creating the pool ' + pool.get('name') + '!',                    
+                    pool.get('error'));
+            }
+        }});
     })
 
 }
 
 let models = undefined;
 let views = [];
+let dataTable = undefined;
 
 $(window).on('load', function () {
     loadPools();
-})
+});

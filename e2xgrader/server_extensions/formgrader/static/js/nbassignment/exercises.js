@@ -43,7 +43,7 @@ function insertRow(table) {
 
 function loadExercises() {
     console.log('Loading the exercises');
-    let tbl = $('#exercise_table');
+    let tbl = $('#main_table');
     models = new Exercises();
     views = [];
     models.loaded = false;
