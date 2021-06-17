@@ -1,10 +1,13 @@
 import os
+import sys
 
 from tornado import web
 from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
+
+from ...models import (AssignmentModel, TemplateModel)
 
 
 class ExportGradesHandler(BaseHandler):
@@ -238,13 +241,109 @@ class SubmissionHandler(BaseHandler):
             self.write(html)
 
 
+class TaskcreatorHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        self.redirect(f'{self.base_url}/taskcreator/assignments')
+
+
+class ManageAssignmentsHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        html = self.render(
+            os.path.join("nbassignment", "assignments.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+
+class ManageExercisesHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, assignment):
+        html = self.render(
+            os.path.join("nbassignment", "exercises.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            assignment=assignment,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+
+class ManagePoolsHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        html = self.render(
+            os.path.join("nbassignment", "taskpools.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+
+class ManageTasksHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, pool):
+        html = self.render(
+            os.path.join("nbassignment", "tasks.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            pool=pool,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+
+class ManageTemplatesHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        html = self.render(
+            os.path.join("nbassignment", "templates.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
+
+class TemplateHandler(BaseHandler):
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, template):
+        self.log.info(self.base_url)
+        path = os.path.join(self.base_url, 'notebooks', TemplateModel(self.coursedir).directory, template, template + '.ipynb')
+        self.log.info(path)
+        self.log.info(template)
+        self.log.info(self.url_prefix)
+        return self.redirect(path, permanent=True)
+
+
+
+
 root_path = os.path.dirname(__file__)
 template_path = os.path.join(root_path, 'templates')
 static_path = os.path.join(root_path, 'static')
 
 _navigation_regex = r"(?P<action>next_incorrect|prev_incorrect|next|prev)"
 
-default_handlers = [
+formgrade_handlers = [
     (r'/formgrader/export_grades/?', ExportGradesHandler),
     (r'/formgrader/export_grades/assignments/?', ExportAssignmentGradesHandler),
     (r'/formgrader/export_grades/notebooks/?', ExportNotebookGradesHandler),
@@ -256,3 +355,15 @@ default_handlers = [
     (r'/formgrader/submissions/(?P<submission_id>[^/]+)/%s/?' % _navigation_regex, SubmissionNavigationHandler),
     (r'/formgrader/submissions/([^/]+)/?', SubmissionHandler),
 ]
+
+nbassignment_handlers = [
+    (r"/taskcreator/?", TaskcreatorHandler),
+    (r"/taskcreator/assignments/?", ManageAssignmentsHandler),
+    (r"/taskcreator/assignments/(?P<assignment>[^/]+)/?", ManageExercisesHandler),
+    (r"/taskcreator/pools/?", ManagePoolsHandler),
+    (r"/taskcreator/pools/(?P<pool>[^/]+)/?", ManageTasksHandler),
+    (r"/taskcreator/templates/?", ManageTemplatesHandler),
+    (r"/taskcreator/templates/(?P<template>[^/]+)/?", TemplateHandler),
+]
+
+default_handlers = formgrade_handlers + nbassignment_handlers
