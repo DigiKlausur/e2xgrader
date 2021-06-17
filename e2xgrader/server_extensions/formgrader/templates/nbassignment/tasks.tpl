@@ -1,4 +1,4 @@
-{%- extends 'nbassignment/base.tpl' -%}
+{%- extends 'nbassignment/tablebase.tpl' -%}
 
 {% block head %}
 <script type="text/javascript">
@@ -15,35 +15,29 @@
 </script>
 {% endblock sidebar %}
 
-{% block body %}
-
+{% block headline %}
 <h1>Tasks</h1>
-<div class='breadcrumbs'>
-<ul>
-    <li><a href="{{ base_url }}/taskcreator/pools">Task Pools</a></li>
-    <li>> {{ pool }}</li>
-</ul>
-</div>
+{% endblock headline %}
+{% block breadcrumbs %}
+<li><a href="{{ base_url }}/taskcreator/pools">Task Pools</a></li>
+<li>> {{ pool }}</li>
+{% endblock breadcrumbs %}
 
-<div class='help'>
+{% block help %}
 <h3>Tasks</h3>
 <p>Dummy help.</p>
-</div>
+{% endblock help %}
 
-
-<div class='test'>
-    <table class='e2xtable'>
-        <thead>
-            <th>Name</th>
-            <th># of Questions</th>
-            <th>Points</th>
-            <th>Edit</th>
-            <th>Remove</th>
-        </thead>
-        <tbody id='task_table'>
-            <tr><td>Loading...</td><td></td><td></td><td></td><td></td></tr>
-        </tbody>
-    </table>
-</div>
-
-{% endblock body %}
+{% block table_head %}
+<th>Name</th>
+<th># of Questions</th>
+<th>Points</th>
+<th>Edit</th>
+<th>Remove</th>
+{% endblock table_head %}
+{% block table_body %}
+<tr><td>Loading...</td><td></td><td></td><td></td><td></td></tr>
+{% endblock table_body %}
+{% block add_new %}
+<button onclick="newTask()" class="btn btn-primary">Add Task</button>
+{% endblock add_new %}

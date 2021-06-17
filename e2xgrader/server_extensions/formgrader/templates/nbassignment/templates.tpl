@@ -1,4 +1,4 @@
-{%- extends 'nbassignment/base.tpl' -%}
+{%- extends 'nbassignment/tablebase.tpl' -%}
 
 {% block head %}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/templates.js'></script>
@@ -11,34 +11,30 @@
 </script>
 {% endblock sidebar %}
 
-{% block body %}
 
+{% block headline %}
 <h1>Templates</h1>
-<div class='breadcrumbs'>
-<ul>
-    <li><a href="{{ base_url }}/taskcreator/templates">Templates</a></li>
-</ul>
-</div>
+{% endblock headline %}
+{% block breadcrumbs %}
+<li><a href="{{ base_url }}/taskcreator/templates">Templates</a></li>
+{% endblock breadcrumbs %}
 
-<div class='help'>
+{% block help %}
 <h3>Create and edit templates</h3>
 <p>Templates are used for creating exercises. A template consists of header and footer cells and special cells like student info.
 You can use variables in templates by enclosing them in double curly braces (e.g. <strong>{{ my_var }}</strong>. 
 When creating an exercise you can set the values for those variables.</p>
-</div>
+{% endblock help %}
 
 
-<div class='test'>
-    <table class='e2xtable'>
-        <thead>
-            <th>Name</th>
-            <th>Edit</th>
-            <th>Remove</th>
-        </thead>
-        <tbody id='template_table'>
-            <tr><td>Loading...</td><td></td><td></td></tr>
-        </tbody>
-    </table>
-</div>
-
-{% endblock body %}
+{% block table_head %}
+<th>Name</th>
+<th>Edit</th>
+<th>Remove</th>
+{% endblock table_head %}
+{% block table_body %}
+<tr><td>Loading...</td><td></td><td></td></tr>
+{% endblock table_body %}
+{% block add_new %}
+<button onclick="newTemplate()" class="btn btn-primary">Add Template</button>
+{% endblock add_new %}

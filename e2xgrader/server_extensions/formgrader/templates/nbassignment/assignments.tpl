@@ -1,4 +1,4 @@
-{%- extends 'nbassignment/base.tpl' -%}
+{%- extends 'nbassignment/tablebase.tpl' -%}
 
 {% block head %}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/assignments.js'></script>
@@ -11,31 +11,22 @@
 </script>
 {% endblock sidebar %}
 
-{% block body %}
-
+{% block headline %}
 <h1>Assignments</h1>
-<div class='breadcrumbs'>
-<ul>
-    <li><a href="{{ base_url }}/taskcreator/assignments">Assignments</a></li>
-</ul>
-</div>
+{% endblock headline %}
+{% block breadcrumbs %}
+<li><a href="{{ base_url }}/taskcreator/assignments">Assignments</a></li>
+{% endblock breadcrumbs %}
 
-<div class='help'>
+{% block help %}
 <h3>Choose your assignment</h3>
 <p>Here you can choose which assignment you want to create an exercise for. An exercise is a single Jupyter Notebook consisting of tasks. Assignments have to be created via <a href="{{ base_url }}/formgrader/" target="_blank">nbgrader</a>.</p>
-</div>
+{% endblock help %}
 
-
-<div class='test'>
-    <table class='e2xtable'>
-        <thead>
-            <th>Name</th>
-            <th># of Exercises</th>
-        </thead>
-        <tbody id='assignment_table'>
-            <tr><td>Loading...</td><td></td></tr>
-        </tbody>
-    </table>
-</div>
-
-{% endblock body %}
+{% block table_head %}
+<th>Name</th>
+<th>Number of Exercises</th>
+{% endblock table_head %}
+{% block table_body %}
+<tr><td>Loading...</td><td></td></tr>
+{% endblock table_body %}

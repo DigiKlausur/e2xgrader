@@ -1,4 +1,4 @@
-{%- extends 'nbassignment/base.tpl' -%}
+{%- extends 'nbassignment/tablebase.tpl' -%}
 
 {% block head %}
 <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/taskpools.js'></script>
@@ -12,33 +12,26 @@
 </script>
 {% endblock sidebar %}
 
-{% block body %}
-
+{% block headline %}
 <h1>Task Pools</h1>
-<div class='breadcrumbs'>
-<ul>
-    <li><a href="{{ base_url }}/taskcreator/pools">Task Pools</a></li>
-</ul>
-</div>
+{% endblock headline %}
+{% block breadcrumbs %}
+<li><a href="{{ base_url }}/taskcreator/pools">Task Pools</a></li>
+{% endblock breadcrumbs %}
 
-<div class='help'>
+{% block help %}
 <h3>Manage task pools</h3>
 <p>Task pools are collections of tasks about the same topic. A task consists of a collection of related questions.</p>
-</div>
+{% endblock help %}
 
-
-<div class='test'>
-    <table class='e2xtable'>
-        <thead>
-            <th>Name</th>
-            <th># of Tasks</th>
-            <th>Edit</th>
-            <th>Remove</th>
-        </thead>
-        <tbody id='pool_table'>
-            <tr><td>Loading...</td><td></td><td></td><td></td></tr>
-        </tbody>
-    </table>
-</div>
-
-{% endblock body %}
+{% block table_head %}
+<th>Name</th>
+<th>Number of Tasks</th>
+<th>Remove</th>
+{% endblock table_head %}
+{% block table_body %}
+<tr><td>Loading...</td><td></td><td></td><td></td></tr>
+{% endblock table_body %}
+{% block add_new %}
+<button onclick="newPool()" class="btn btn-primary">Add Task Pool</button>
+{% endblock add_new %}
