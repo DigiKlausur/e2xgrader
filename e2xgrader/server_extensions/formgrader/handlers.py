@@ -7,7 +7,7 @@ from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, 
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
 
-from ...models import (AssignmentModel, TemplateModel)
+from ...models import (AssignmentModel, TemplateModel, ExerciseModel, TaskPoolModel)
 
 
 class ExportGradesHandler(BaseHandler):
@@ -321,18 +321,26 @@ class ManageTemplatesHandler(BaseHandler):
             windows=(sys.prefix == 'win32'))
         self.write(html)
 
-class TemplateHandler(BaseHandler):
+
+class EditExercisesHandler(BaseHandler):
+
+    def initialize(self):
+        self._model = ExerciseModel(self.coursedir)
 
     @web.authenticated
     @check_xsrf
     @check_notebook_dir
-    def get(self, template):
-        self.log.info(self.base_url)
-        path = os.path.join(self.base_url, 'notebooks', TemplateModel(self.coursedir).directory, template, template + '.ipynb')
-        self.log.info(path)
-        self.log.info(template)
-        self.log.info(self.url_prefix)
-        return self.redirect(path, permanent=True)
+    def get(self, assignment, exercise):
+        html = self.render(
+            os.path.join("nbassignment", "editexercise.tpl"),
+            url_prefix=self.url_prefix,
+            base_url=self.base_url,
+            exercise=exercise,
+            assignment=assignment,
+            templates=TemplateModel(self.coursedir).list(),
+            pools=TaskPoolModel(self.coursedir).list(),
+            windows=(sys.prefix == 'win32'))
+        self.write(html)
 
 
 
@@ -363,7 +371,7 @@ nbassignment_handlers = [
     (r"/taskcreator/pools/?", ManagePoolsHandler),
     (r"/taskcreator/pools/(?P<pool>[^/]+)/?", ManageTasksHandler),
     (r"/taskcreator/templates/?", ManageTemplatesHandler),
-    (r"/taskcreator/templates/(?P<template>[^/]+)/?", TemplateHandler),
+    (r"/taskcreator/assignments/(?P<assignment>[^/]+)/(?P<exercise>[^/]+)/?", EditExercisesHandler),
 ]
 
 default_handlers = formgrade_handlers + nbassignment_handlers

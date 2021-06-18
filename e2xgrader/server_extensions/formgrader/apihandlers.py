@@ -1,3 +1,4 @@
+import os
 import json
 
 from tornado import web
@@ -8,6 +9,9 @@ from ...models import (PresetModel, AssignmentModel, ExerciseModel,
 from .base import E2xBaseApiHandler as BaseApiHandler
 from .base import BaseApiManageHandler, BaseApiListHandler
 
+from ...utils import NotebookVariableExtractor
+from ...converters import GenerateExercise
+from jupyter_client.kernelspec import KernelSpecManager
 
 class SolutionCellCollectionHandler(BaseApiHandler):
     @web.authenticated
@@ -91,6 +95,29 @@ class ManageTasksHandler(BaseApiManageHandler):
     def initialize(self):
         super().initialize(TaskModel(self.coursedir))
 
+class TemplateVariableHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        template = self.get_argument("template");
+        variables = NotebookVariableExtractor().extract(os.path.join(self.url_prefix, 'templates', template, '{}.ipynb'.format(template)))
+        self.write(json.dumps(variables))
+
+class KernelSpecHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        self.write(json.dumps(KernelSpecManager().get_all_specs()))
+
+class GenerateExerciseHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        resources = json.loads(self.get_argument("resources"))
+        self.log.info(resources);
+        GenerateExercise(coursedir=self.coursedir).convert(resources)
+        self.write({"status": True})
+
 formgrade_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (r"/formgrader/api/submitted_tasks/([^/]+)/([^/]+)/([^/]+)", SubmittedTaskCollectionHandler),
@@ -106,6 +133,9 @@ nbassignment_handlers = [
     (r"/taskcreator/api/pools/(?P<pool>[^/]+)/?", ListTasksHandler),
     (r"/taskcreator/api/task/(?P<pool>[^/]+)/(?P<name>[^/]+)/?", ManageTasksHandler),
     (r"/taskcreator/api/assignments/(?P<assignment>[^/]+)/?", ListExercisesHandler),
+    (r"/taskcreator/api/templates/variables", TemplateVariableHandler),
+    (r"/taskcreator/api/kernelspec", KernelSpecHandler),
+    (r"/taskcreator/api/generate_exercise", GenerateExerciseHandler),
 ]
 
 default_handlers = formgrade_handlers + nbassignment_handlers
