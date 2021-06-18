@@ -15,6 +15,10 @@ for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formg
     root = os.path.relpath(dirname, "e2xgrader/server_extensions/formgrader")
     for filename in filenames:
         static_files.append(os.path.join(root, filename))
+for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formgrader/presets"):
+    root = os.path.relpath(dirname, "e2xgrader/server_extensions/formgrader")
+    for filename in filenames:
+        static_files.append(os.path.join(root, filename))
 
 base_static_files = []
 for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/e2xbase/static"):
