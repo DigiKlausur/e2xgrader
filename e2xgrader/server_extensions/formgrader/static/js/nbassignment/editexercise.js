@@ -113,6 +113,7 @@ export function templateOptions(base_url) {
 
 export function generateExercise(exercise, assignment, url_prefix, base_url) {
     let generate_button = $('<button/>')
+        .addClass('btn btn-primary')
         .attr('id', 'generate-exercise')
         .text('Generate Exercise');
 
@@ -256,7 +257,7 @@ export function addTaskSelector2(pools, base_url) {
     body.append(selected_tasks_col);
 
     let button_col = $('<td/>').addClass('mid-col');
-    button_col.append($('<button/>').text('Add').click(function () {
+    button_col.append($('<button/>').addClass('btn btn-primary').text('Add').click(function () {
         let tasks = $('#pool-tasks').val();
         if (tasks != null) {
             tasks.forEach(function (task) {
@@ -269,7 +270,7 @@ export function addTaskSelector2(pools, base_url) {
             });
         }
     }));
-    button_col.append($('<button/>').text('Remove').click(function () {
+    button_col.append($('<button/>').addClass('btn btn-primary').text('Remove').click(function () {
         let tasks = $('#selected-tasks').val();
         if (tasks != null) {
             tasks.forEach(function (task) {

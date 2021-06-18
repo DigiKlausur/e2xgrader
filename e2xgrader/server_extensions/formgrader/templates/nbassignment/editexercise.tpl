@@ -1,6 +1,7 @@
 {%- extends 'nbassignment/base.tpl' -%}
 
 {% block head %}
+{{ super() }}
 <link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/editexercise.css" type="text/css">
 <script type="module">    
     import {addTaskSelector, generateExercise, templateOptions, exerciseOptions} from "{{ base_url }}/e2xgrader/static/js/nbassignment/editexercise.js";
