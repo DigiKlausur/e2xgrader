@@ -359,21 +359,56 @@ function startup(){
     autograde_all.addClass("autograde_all")
     .append("Autograde All: ").append($("<a/>")
         .click(function(e){
-              $.ajax({
-                url: base_url + '/formgrader/api/autograde_all',
+            $.ajax({
+                url: base_url + '/formgrader/api/student_num',
                 type: 'get',
                 data: {
                   'assignment_id' : assignment_id
                 },
                 success: function(response) {
-                    console.log(response);
+                    var students = JSON.parse(response)['student_num'];
+                    var instructions = "<div id = 'notebook_cells'><p>There are a total of " + students + " students. Do you want to autograde all the notebooks?</p><p></p>";
+                    var container_start = "<div>";
+                    var container_end = "</div></div>";
+                    container = container_start + container_end;
+                    var body = $(instructions + container);
+                    var footer = $("<div/>");
+                    footer.append($("<button/>")
+                        .addClass("btn btn-primary all_autograde")
+                        .attr("type", "button")
+                        .text("Autograde All"));
+                    footer.append($("<button/>")
+                        .addClass("btn btn-danger")
+                        .attr("type", "button")
+                        .attr("data-dismiss", "modal")
+                        .text("Cancel"));
+            
+                    $modal = createModal("update-assignment-modal", "Confirmation" , body, footer);
+                    $modal_select = $modal.find("button.all_autograde");
+                    $modal_select.click(function(e){
+                        $.ajax({
+                        url: base_url + '/formgrader/api/autograde_all',
+                        type: 'get',
+                        data: {
+                          'assignment_id' : assignment_id
+                        },
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        },
+                        async: false
+                      }); 
+                      async_progress();
+                      $modal.modal('hide');
+                    });
                 },
                 error: function(e) {
                     console.log(e);
                 },
                 async: false
               }); 
-              async_progress();
         })
         .attr("href", "#")
         .append($("<span/>")

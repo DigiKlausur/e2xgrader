@@ -34,6 +34,15 @@ class AutogradeLog(BaseApiHandler):
         result = {'autograde_log' : autograde_log}
         self.write(json.dumps(result))
 
+class StudentNum(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        students = self.api.get_submitted_students(assignment_id)
+        result = {'student_num' : str(len(students))}
+        self.write(json.dumps(result))
+
 
 class AutogradeAll(BaseApiHandler):
     @web.authenticated
@@ -144,6 +153,7 @@ default_handlers = [
     (r'/formgrader/api/get_notebook/?', GetNotebook),
     (r'/formgrader/api/find_updated_cell/?', FindUpdatedCells),
     (r'/formgrader/api/update_notebook/?', UpdateNotebook),
+    (r'/formgrader/api/student_num/?', StudentNum),
     (r'/formgrader/api/autograde_all/?', AutogradeAll),
     (r'/formgrader/api/autograde_cells/?', AutogradeCells),
     (r'/formgrader/api/autograding_log/?', AutogradeLog),
