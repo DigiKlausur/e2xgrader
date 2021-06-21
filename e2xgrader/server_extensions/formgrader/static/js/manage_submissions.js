@@ -310,6 +310,7 @@ function sleep(ms) {
 }  
 
 function startup(){
+    async_progress();
     var select_cells = $('#select_cells');
     var log_time = $('#log_time');
     var autograde_all = $('#autograde_all');
@@ -541,10 +542,13 @@ async function async_progress() {
                 autograde_cell_div.hide();
                 if (progress['autograde_assignment'] == assignment_id){
                     progress_value.show();
-                    autograde_percentage.html('Autograding progress: ' + autograde_progress.toFixed(0).toString() + '%');
+                    autograde_percentage.html('Autograding progress: ' + autograde_progress.toFixed(0).toString() + '% &emsp;'
+                                                 + '(' + progress['autograde_idx'] + '/' + progress['autograde_total'] + ')') ;
                     progress_value.val(autograde_progress);
                 }else{
                     progress_value.hide();
+                    autograde_stop_text.hide();
+                    autograde_stop.hide();
                     autograde_percentage.html('\'' + progress['autograde_assignment'] + '\' autograding in progress. Please wait...');
                 }
             }
