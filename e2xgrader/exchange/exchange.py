@@ -38,8 +38,9 @@ class E2xExchange(Exchange):
     def __init__(self, coursedir=None, authenticator=None, **kwargs):
         super().__init__(coursedir=coursedir, authenticator=authenticator, **kwargs)
 
+        # if personalized-outbound: exchange/personalized-outbound/<username>/<assignment_id>
         if self.personalized_outbound:
-            self.outbound_directory = 'personalized-outbound'
+            self.outbound_directory = os.path.join("personalized-outbound", os.getenv('JUPYTERHUB_USER'))
 
         if self.personalized_inbound:
             self.inbound_directory = 'personalized-inbound'
