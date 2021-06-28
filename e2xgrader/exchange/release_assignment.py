@@ -21,7 +21,10 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
         self.course_path = os.path.join(self.root, self.coursedir.course_id)
         self.outbound_path = os.path.join(self.course_path, self.outbound_directory)
         self.inbound_path = os.path.join(self.course_path, self.inbound_directory)
-        self.dest_path = os.path.join(self.outbound_path, self.coursedir.assignment_id)
+        if self.personalized_outbound:
+            self.dest_path = os.path.join(self.outbound_path)
+        else:
+            self.dest_path = os.path.join(self.outbound_path, self.coursedir.assignment_id)
         # 0755
         # groupshared: +2040
         self.ensure_directory(
@@ -46,7 +49,7 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
 
     def copy_files(self):
         if os.path.isdir(self.dest_path):
-            if self.force:
+            if self.force or self.personalized_outbound:
                 self.log.info("Overwriting files: {} {}".format(
                     self.coursedir.course_id, self.coursedir.assignment_id
                 ))
