@@ -24,8 +24,6 @@
         var base_url = "{{ base_url }}";
     </script>
     <script src="{{ base_url }}/formgrader/static/js/utils.js"></script>
-    <script src="{{ base_url }}/grader/static/js/manage_assignments.js"></script>
-    <script src="{{ base_url }}/formgrader/static/js/manage_students.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
     <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/bootstrap/css/bootstrap.min.css" />
@@ -53,6 +51,20 @@
         </div>
         <div id="body">
             {%- block body -%}
+            {%- block messages -%}
+            {%- endblock -%}
+            <table class="display" style="width:100%" id="base-table">
+            <thead>
+                {%- block table_header -%}
+                {%- endblock -%}
+            </thead>
+            <tbody id="main-table">
+                {%- block table_body -%}
+                {%- endblock -%}
+            </tbody>
+            </table>
+            {%- block button_holder -%}
+            {%- endblock -%}
             {%- endblock -%}
         </div>
     </div>

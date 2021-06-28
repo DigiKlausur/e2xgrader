@@ -218,3 +218,7 @@ a {
   text-decoration: none;
   color: black;
 }
+
+table.dataTable {
+  margin: 0 auto;
+}

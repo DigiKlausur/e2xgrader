@@ -22,7 +22,14 @@ var AssignmentUI = Backbone.View.extend({
         this.$name = this.$el.find(".name");
         this.$duedate = this.$el.find(".duedate");
         this.$status = this.$el.find(".status");
+        this.$edit = this.$el.find(".edit");
+        this.$assign = this.$el.find(".assign");
+        this.$preview = this.$el.find(".preview");
+        this.$release = this.$el.find(".release");
+        this.$collect = this.$el.find(".collect");
         this.$num_submissions = this.$el.find(".num-submissions");
+        this.$generate_feedback = this.$el.find(".generate-feedback");
+        this.$release_feedback = this.$el.find(".release-feedback");
 
         this.listenTo(this.model, "change", this.render);
         this.listenTo(this.model, "request", this.animateSaving);
@@ -78,18 +85,26 @@ var AssignmentUI = Backbone.View.extend({
         this.$name.empty();
         this.$duedate.empty();
         this.$status.empty();
+        this.$edit.empty();
+        this.$assign.empty();
+        this.$preview.empty();
+        this.$release.empty();
+        this.$collect.empty();
         this.$num_submissions.empty();
+        this.$generate_feedback.empty();
+        this.$release_feedback.empty();
     },
 
     render: function () {
         this.clear();
 
         // assignment name
+        console.log(this.model)
         var name = this.model.get("name")
         this.$name.attr("data-order", name);
         this.$name.append($("<a/>")
             .attr("target", "_blank")
-            .attr("href", base_url + "/tree/" + url_prefix + "/" + this.model.get("source_path"))
+            .attr("href", base_url+"/grader/assignments/assignment_common/?assignment_id="+name)
             .text(name));
 
         // duedate
@@ -112,7 +127,7 @@ var AssignmentUI = Backbone.View.extend({
             this.$status.append($("<span/>").addClass("label label-success").text("released"));
         }
 
-        /* edit metadata
+        // edit metadata
         this.$edit.append($("<a/>")
             .attr("href", "#")
             .click(_.bind(this.openModal, this))
@@ -126,7 +141,7 @@ var AssignmentUI = Backbone.View.extend({
             .click(_.bind(this.assign, this))
             .append($("<span/>")
                 .addClass("glyphicon glyphicon-education")
-                .attr("aria-hidden", "true")));*/
+                .attr("aria-hidden", "true")));
 
         // preview student version
         var release_path = this.model.get("release_path");
@@ -356,7 +371,6 @@ var AssignmentUI = Backbone.View.extend({
             timezone = null;
         }
         this.model.save({"duedate_notimezone": duedate, "duedate_timezone": timezone});
-
     },
 
     animateSaving: function () {
@@ -455,12 +469,19 @@ var insertRow = function (table) {
     row.append($("<td/>").addClass("name"));
     row.append($("<td/>").addClass("text-center duedate"));
     row.append($("<td/>").addClass("text-center status"));
+    row.append($("<td/>").addClass("text-center edit"));
+    row.append($("<td/>").addClass("text-center assign"));
+    row.append($("<td/>").addClass("text-center preview"));
+    row.append($("<td/>").addClass("text-center release"));
+    row.append($("<td/>").addClass("text-center collect"));
     row.append($("<td/>").addClass("text-center num-submissions"));
-    table.append(row);
+    row.append($("<td/>").addClass("text-center generate-feedback"));
+    row.append($("<td/>").addClass("text-center release-feedback"));
+    table.append(row)
     return row;
 };
 
-function createAssignmentModal () {
+var createAssignmentModal = function () {
     var modal;
     var createAssignment = function () {
         var name = modal.find(".name").val();
@@ -470,13 +491,14 @@ function createAssignmentModal () {
             duedate = null;
             timezone = null;
         }
-        if (timezone === "") {
+        if (timezone == "") {
             timezone = null;
         }
         if (name === "") {
             modal.modal('hide');
             return;
-        } else if (name.indexOf("+") != -1) {
+        }
+        if (name.indexOf("+") != -1) {
             var err = $("#create-error");
             err.text("Assignment names may not include the '+' character.");
             err.show();
@@ -494,7 +516,7 @@ function createAssignmentModal () {
             "collection": models
         });
 
-        var tbl = $("#main_table");
+        var tbl = $("#main-table");
         var row = insertRow(tbl);
         var view = new AssignmentUI({
             "model": model,
@@ -503,9 +525,8 @@ function createAssignmentModal () {
         views.push(view);
         model.save();
         tbl.parent().DataTable().row.add(row).draw();
+
         modal.modal('hide');
-        console.log('modal hide done');
-        location.reload();
     };
 
     var body = $("<p/>")
@@ -543,8 +564,9 @@ function createAssignmentModal () {
     modal = createModal("add-assignment-modal", "Add New Assignment", body, footer);
 };
 
-function loadAssignments () {
+var loadAssignments = function () {
     var tbl = $("#main-table");
+
     models = new Assignments();
     views = [];
     models.loaded = false;
@@ -564,7 +586,8 @@ function loadAssignments () {
     });
 };
 
-function fetchAssignment () {
+
+function fetchAssignments () {
     $.ajax({
       url: base_url+"/formgrader/api/assignments",
       type: 'get',
@@ -611,6 +634,6 @@ function fetchAssignment () {
 var models = undefined;
 var views = [];
 $(window).on('load', function () {
-    fetchAssignment();
+    fetchAssignments();
 });
 

@@ -27,7 +27,7 @@ function loadNotebooks(){
                                             data = base_url+"/formgrader/submissions/" + name + "/?task=" + task_id;
                                         }
                                     }catch(err) {
-                                        data = base_url+"/formgrader/submissions/" + name + "/?task=" + task_id;
+                                        data = base_url+"/formgrader/submissions/" + name ;
                                     }
                                     //var data = base_url+"/formgrader/submissions/" + name;
                                     return '<a href='+data+'>Submission #'+row['index']+'</a>';
