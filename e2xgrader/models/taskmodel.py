@@ -77,6 +77,17 @@ class TaskModel(BaseModel):
         pool = kwargs['pool']
         base_path = os.path.join(self.base_path(), pool)
         shutil.rmtree(os.path.join(base_path, name))
+
+    def get(self, **kwargs):
+        name = kwargs['name']
+        pool = kwargs['pool']
+        points, questions = self.__get_task_info(name, pool)
+        return {
+            'name': name,
+            'points': points,
+            'questions': questions,
+            'pool': pool,
+        }
     
     def list(self, **kwargs):
         pool = kwargs['pool']
@@ -91,6 +102,7 @@ class TaskModel(BaseModel):
                 'name': taskfolder,
                 'points': points,
                 'questions': questions,
+                'pool': pool,
                 'link': os.path.join('tree', base_path, taskfolder)
             })
         
