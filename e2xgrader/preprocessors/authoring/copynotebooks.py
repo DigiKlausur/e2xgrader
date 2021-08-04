@@ -5,7 +5,10 @@ from .preprocessor import Preprocessor
 class CopyNotebooks(Preprocessor):
     
     def preprocess(self, resources):
-        for task in resources['tasks']:
+        for task_dict in resources['tasks']:
+            task = task_dict['task']
+            pool = task_dict['pool']
+            task = os.path.join(pool, task)
             src = os.path.join(resources['course_prefix'], self.task_path, task)
             dst = os.path.join(resources['tmp_dir'], 'tasks', task)
             shutil.copytree(src, dst)

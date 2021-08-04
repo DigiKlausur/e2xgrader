@@ -38,7 +38,8 @@ class GenerateTaskIDs(Preprocessor):
         return nb
     
     def preprocess(self, resources):
-        for task in resources['tasks']:
+        for task_dict in resources['tasks']:
+            task = os.path.join(task_dict['pool'], task_dict['task'])
             task_path = os.path.join(
                 resources['tmp_dir'],
                 'tasks',

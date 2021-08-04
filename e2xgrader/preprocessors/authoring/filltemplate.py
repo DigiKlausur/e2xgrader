@@ -29,5 +29,5 @@ class FillTemplate(Preprocessor):
         )
         
         template_nb = nbformat.read(template_path, as_version=4)
-        template_nb = self.replace(template_nb, resources['template_options'])
+        template_nb = self.replace(template_nb, resources['template-options'])
         nbformat.write(template_nb, template_path)

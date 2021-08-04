@@ -78,7 +78,8 @@ class CopyFiles(Preprocessor):
         )
         os.makedirs(file_folder, exist_ok=True)
         
-        for task in resources['tasks']:
+        for task_dict in resources['tasks']:
+            task = os.path.join(task_dict['pool'], task_dict['task'])
             task_path = os.path.join(
                 resources['tmp_dir'],
                 'tasks',
