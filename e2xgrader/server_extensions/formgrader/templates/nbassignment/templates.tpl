@@ -37,5 +37,5 @@ When creating an exercise you can set the values for those variables.</p>
 <tr><td>Loading...</td><td></td><td></td></tr>
 {% endblock table_body %}
 {% block add_new %}
-<button onclick="newTemplate()" class="btn btn-primary">Add Template</button>
+<button onclick="newTemplate()" id="add-template" class="btn btn-primary">Add Template</button>
 {% endblock add_new %}
