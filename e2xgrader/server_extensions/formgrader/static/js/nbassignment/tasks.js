@@ -53,17 +53,17 @@ function insertRow(table) {
     row.append($('<td/>').addClass('edit-task'));
     row.append($('<td/>').addClass('remove-task'));
     table.append(row);
-    dataTable.row.add(row).draw();
     return row;
 }
 
 function addView(model, table) {
+    let row = insertRow(table);
     let view = new TaskUI({
         'model': model,
-        'el': insertRow(table)
+        'el': row
     });
     views.push(view);
-    return view;
+    return row;
 }
 
 function loadTasks() {
@@ -74,14 +74,14 @@ function loadTasks() {
     models.fetch({
         success: function () {
             tbl.empty();
+
+            models.each((model) => addView(model, tbl));
             dataTable = tbl.parent().DataTable({
                 'columnDefs': [
                     {'orderable': false, 'targets': [-1, -2]},
                     {'searchable': false, 'targets': [-1, -2]}
                 ]
             });
-            models.each((model) => addView(model, tbl));
-            
             models.loaded = true;
         }
     })
@@ -117,26 +117,33 @@ function newTask() {
     $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
         $modal_name = $modal.find('input.modal-name').val();
-        let task = new Task({pool: pool});
-        task.save({
-            'name': $modal_name,
-            'tasks': 0
-        }, {
-            success: function(task) {
-            if (task.get('success')) {
-                $modal.modal('hide');
-                let view = addView(task, $('#main_table'));
-                models.add([task]);
-            } else {
-                createLogModal(
-                    'error-modal',
-                    'Error',
-                    'There was an error creating the task ' + task.get('name') + '!',                    
-                    task.get('error'));
-            }
-        }});
-    })
+        let task = new Task({
+            pool: pool,
+            name: $modal_name,
+        });
 
+        task.save(undefined, {
+            success: function () {
+                if (task.get('success')) {
+                    task.fetch({
+                        success: function () {
+                            $modal.modal('hide');
+                            let row = addView(task, $('#main_table'));
+                            dataTable.row.add(row).draw();
+                            models.add([task]);
+                            window.location.href=base_url + '/notebooks/pools/' + pool + '/' + $modal_name + '/' + $modal_name + '.ipynb';
+                        }
+                    });
+                } else {
+                    createLogModal(
+                        'error-modal',
+                        'Error',
+                        'There was an error creating the task ' + task.get('name') + '!',                    
+                        task.get('error'));
+                }
+            }
+        });
+    });
 }
 
 let models = undefined;
