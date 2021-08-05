@@ -12,6 +12,12 @@ class ExerciseModel(BaseModel):
         help='The directory where assignments go.'
     )
 
+    def get(self, **kwargs):
+        return {
+            'name': kwargs['name'],
+            'assignment': kwargs['assignment']
+        }
+
     def remove(self, **kwargs):
         assignment = kwargs['assignment']
         name = kwargs['name']
@@ -32,7 +38,8 @@ class ExerciseModel(BaseModel):
             name = os.path.split(exercisenb)[-1].replace('.ipynb', '')
             exercises.append({
                 'name': name,
-                'link': os.path.join('taskcreator', 'assignments', assignment, name)
+                'assignment': assignment,
+                'link': os.path.join('taskcreator', 'assignments', assignment, name),
             })
         
         return exercises
