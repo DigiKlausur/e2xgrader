@@ -18,11 +18,13 @@
 }
 
 #selected-tasks {
-  width: 100%;
+  min-width: 100%;
+  min-height: 15em;
 }
 
-#pool-tasks {
-  width: 100%;
+#available-tasks {
+  min-width: 100%;
+  min-height: 15em;
 }
 
 #template-options {
@@ -35,4 +37,14 @@ select[name=pool] {
 
 .e2xtable {
   min-width: 40%;
+}
+
+.e2xtable th {
+  text-align: center;
+}
+
+.btn-controls {
+  display: block;
+  width: 6em;
+  margin: .1em;
 }
