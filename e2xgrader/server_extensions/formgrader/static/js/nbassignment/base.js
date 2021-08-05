@@ -10,7 +10,9 @@ let Assignments = Backbone.Collection.extend({
 
 let Exercise = Backbone.Model.extend({
     idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/exercise'
+    initialize: function(options) {
+        this.urlRoot = base_url + '/taskcreator/api/exercise/' + options.assignment;
+    }
 });
 
 let Exercises = Backbone.Collection.extend({
@@ -22,12 +24,14 @@ let Exercises = Backbone.Collection.extend({
 
 let Pool = Backbone.Model.extend({
     idAttribute: 'name',
-    urlRoot: base_url + '/taskcreator/api/pool'
+    urlRoot: base_url + '/taskcreator/api/pool',
+
 });
 
 let Pools = Backbone.Collection.extend({
     model: Pool,
-    url: base_url + '/taskcreator/api/pools/'
+    url: base_url + '/taskcreator/api/pools/',
+    comparator: 'name'
 });
 
 let Task = Backbone.Model.extend({
@@ -41,7 +45,8 @@ let Tasks = Backbone.Collection.extend({
     model: Task,
     initialize: function(options) {
         this.url = base_url + '/taskcreator/api/pools/' + options.pool;
-    }
+    },
+    comparator: 'name'
 });
 
 let Template = Backbone.Model.extend({
