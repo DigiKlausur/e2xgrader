@@ -85,6 +85,11 @@ class ManageTaskPoolHandler(BaseApiManageHandler):
     def initialize(self):
         super().initialize(TaskPoolModel(self.coursedir))
 
+class ManageExerciseHandler(BaseApiManageHandler):
+
+    def initialize(self):
+        super().initialize(ExerciseModel(self.coursedir))
+
 class ListTasksHandler(BaseApiListHandler):
 
     def initialize(self):
@@ -132,6 +137,7 @@ nbassignment_handlers = [
     (r"/taskcreator/api/pools/?", ListTaskPoolsHandler),
     (r"/taskcreator/api/pools/(?P<pool>[^/]+)/?", ListTasksHandler),
     (r"/taskcreator/api/task/(?P<pool>[^/]+)/(?P<name>[^/]+)/?", ManageTasksHandler),
+    (r"/taskcreator/api/exercise/(?P<assignment>[^/]+)/(?P<name>[^/]+)/?", ManageExerciseHandler),
     (r"/taskcreator/api/assignments/(?P<assignment>[^/]+)/?", ListExercisesHandler),
     (r"/taskcreator/api/templates/variables", TemplateVariableHandler),
     (r"/taskcreator/api/kernelspec", KernelSpecHandler),
