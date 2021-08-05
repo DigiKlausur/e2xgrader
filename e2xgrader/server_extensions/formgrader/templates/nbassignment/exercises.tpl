@@ -36,5 +36,5 @@
 <tr><td>Loading...</td><td></td></tr>
 {% endblock table_body %}
 {% block add_new %}
-<button class="btn btn-primary">Add Exercise</button>
+<button class="btn btn-primary"><a href="{{ base_url }}/taskcreator/assignments/{{ assignment }}/new">Add Exercise</a></button>
 {% endblock add_new %}

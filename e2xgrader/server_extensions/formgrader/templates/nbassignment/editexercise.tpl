@@ -3,19 +3,13 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/editexercise.css" type="text/css">
-<script type="module">    
-    import {addTaskSelector, generateExercise, templateOptions, exerciseOptions} from "{{ base_url }}/e2xgrader/static/js/nbassignment/editexercise.js";
-    console.log("{{ pools }}");
-    addTaskSelector("{{ base_url }}");
-    templateOptions("{{ base_url }}");
-    exerciseOptions("{{ base_url }}");
-    generateExercise("{{ exercise }}", "{{ assignment }}", "{{ url_prefix }}", "{{ base_url }}");
-</script>
+<script src="{{ base_url }}/e2xgrader/static/js/nbassignment/makeexercise.js"></script>
 {% endblock head %}
 
 {% block sidebar %}
 {{ super() }}
 <script type="text/javascript">
+    let assignment = "{{ assignment }}";
     $('#exercise-link').addClass("active");
 </script>
 {% endblock sidebar %}
@@ -32,26 +26,72 @@
 </div>
 
 <div>
-    <div id="template-select">
-        <h3>1. Template</h3>
-        <label for="template">Choose a template:</label>
-        <select name="template" id="template">
-            <option value="">Choose a template</option>
-            {% for template in templates %}
-                <option value="{{ template.name }}">{{ template.name }}</option>
-            {% endfor %}
-        </select>
-        <div id="template-options">
-        </div>
+    <div id="exercise">
+        <h3>1. Please choose a name for your exercise</h3>
+        <p class='help'>The name can contain upper and lower case letters. etc</p>
+        <table class='e2xtable'>
+            <tr>
+                <td>Name</td><td><input type="text" id="exercise-name"></td>
+            </tr>
+        </table>
     </div>
-    <div id="task-select">
-        <h3>2. Tasks</h3>
+    <div id="template" hidden>
+        <h3>2. Please choose a template for your exercise</h3>
+        <h4>2.1 Select the template</h4>
+        <table class='e2xtable'>
+            <tr>
+                <td>Template</td><td><select id="template-select"><option value="">Choose a template</option></select></td>
+            </tr>
+        </table>
+        <h4>2.2 Set variables of template</h4>
+        <p>You can define variables in templates by enclosing them in curly braces (e.g.  <code>&#123;&#123; var &#125;&#125;</code> ). You can set the values here.</p>
+        <table id='template-variables' class='e2xtable'>
+            <thead><th>Variable</th><th>Value</th></thead>
+            <tbody></tbody>
+        </table>
     </div>
-    <div id="exercise-options">
-        <h3>3. Exercise Options</h3>
+    <div id="tasks" hidden>
+        <h3>3. Please select the tasks for your exercise</h3>
+        <table class='e2xtable'>
+            <tr>
+                <td>Pool</td><td><select id="pool-select"><option value="">Choose a task pool</option></select></td>
+            </tr>
+        </table>
+        <table class='e2xtable'>
+            <thead>
+                <tr><th>Selected Tasks</th><th>Controls</th><th>Available Tasks</th></tr>
+            </thead>
+            <tbody>
+            
+                <tr><td></td><td></td><td>Search<input type='search'></td></tr>
+                <tr>
+                    <td>
+                        <select multiple="multiple" size="10" id='selected-tasks'></select>
+                    </td>
+                    <td>
+                        <div id="task-controls">
+                            <button class="btn-controls" id="add">Add</button>
+                            <button class="btn-controls" id="remove">Remove</button>
+                            <button class="btn-controls" id="up">Up</button>
+                            <button class="btn-controls" id="down">Down</button>
+                        </div>
+                    </td>
+                    <td>
+                        <select multiple="multiple" size="10" id='available-tasks'></select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div id="generate">
-        <h3>4. Generate Exercise</h3>
+    <div id="options" hidden>
+        <h3>4. General options for the exercise</h3>
+        <table id='exercise-options' class='e2xtable'>
+            <thead><th>Option</th><th>Value</th></thead>
+            <tbody>
+                <tr><td>Add Task Headers</td><td><input type='checkbox' id='task-headers'></td></tr>
+                <tr><td>Kernel</td><td><select id='kernel-select'></select></td></tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
