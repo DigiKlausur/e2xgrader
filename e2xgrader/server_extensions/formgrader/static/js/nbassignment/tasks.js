@@ -57,6 +57,7 @@ function insertRow(table) {
 }
 
 function addView(model, table) {
+    console.log(model);
     let row = insertRow(table);
     let view = new TaskUI({
         'model': model,

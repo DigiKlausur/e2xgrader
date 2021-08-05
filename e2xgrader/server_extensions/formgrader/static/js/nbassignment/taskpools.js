@@ -45,16 +45,17 @@ function insertRow(table) {
     row.append($('<td/>').addClass('number-of-tasks'));
     row.append($('<td/>').addClass('remove-pool'));
     table.append(row);
-    dataTable.row.add(row).draw();
     return row;
 }
 
 function addView(model, table) {
+    let row = insertRow(table);
     let view = new PoolUI({
         'model': model,
-        'el': insertRow(table)
+        'el': row
     });
     views.push(view);
+    return row;
 }
 
 function loadPools() {
@@ -64,14 +65,14 @@ function loadPools() {
     models.loaded = false;
     models.fetch({
         success: function () {
-            tbl.empty();
+            tbl.empty();            
+            models.each((model) => addView(model, tbl));
             dataTable = tbl.parent().DataTable({
                 'columnDefs': [
                     {'orderable': false, 'targets': [-1]},
                     {'searchable': false, 'targets': [-1]}
                 ]
             });
-            models.each((model) => addView(model, tbl));
             models.loaded = true;
         }
     });
@@ -114,7 +115,8 @@ function newPool() {
             success: function(pool) {
             if (pool.get('success')) {
                 $modal.modal('hide');
-                addView(pool, $('#main_table'));
+                let row = addView(pool, $('#main_table'));
+                dataTable.row.add(row).draw();
                 models.add([pool]);
             } else {
                 createLogModal(

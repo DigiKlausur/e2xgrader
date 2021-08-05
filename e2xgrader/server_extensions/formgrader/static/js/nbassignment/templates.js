@@ -46,16 +46,17 @@ function insertRow(table) {
     row.append($('<td/>').addClass('edit-template'));
     row.append($('<td/>').addClass('remove-template'));
     table.append(row);
-    dataTable.row.add(row).draw();
     return row;
 }
 
 function addView(model, table) {
+    let row = insertRow(table);
     let view = new TemplateUI({
         'model': model,
-        'el': insertRow(table)
+        'el': row
     });
     views.push(view);
+    return row;
 }
 
 function loadTemplates() {
@@ -66,13 +67,13 @@ function loadTemplates() {
     models.fetch({
         success: function () {
             tbl.empty();
+            models.each((model) => addView(model, tbl));
             dataTable = tbl.parent().DataTable({
                 'columnDefs': [
                     {'orderable': false, 'targets': [-1, -2]},
                     {'searchable': false, 'targets': [-1, -2]}
                 ]
             });
-            models.each((model) => addView(model, tbl));
             
             models.loaded = true;
         }
@@ -116,8 +117,10 @@ function newTemplate() {
             success: function(template) {
             if (template.get('success')) {
                 $modal.modal('hide');
-                addView(template, $('#main_table'));
+                let row = addView(template, $('#main_table'));
+                dataTable.row.add(row).draw();
                 models.add([template]);
+                window.location.href=base_url + '/notebooks/templates/' + $modal_name + '/' + $modal_name + '.ipynb';
             } else {
                 createLogModal(
                     'error-modal',

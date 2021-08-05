@@ -1,4 +1,4 @@
-let ExerciseUI = Backbone.View.extend({
+let ExerciseUI = BaseUI.extend({
 
     events: {},
 
@@ -14,11 +14,22 @@ let ExerciseUI = Backbone.View.extend({
         let name = this.model.get('name');
         //this.$exercise_name.text(name);
         this.$exercise_name.append($('<a/>')
-            .attr('href', base_url + '/taskcreator/exercises/' + name)
+            .attr('href', base_url + '/notebooks/source/' + assignment + '/' + name + '.ipynb')
             .text(name));
+        
         this.$remove_exercise.append($('<a/>')
-            .attr('href', base_url + '/taskcreator/api/exercise/' + name)
-            .text('Remove'));
+            .attr('href', '#')
+            .click(_.bind(this.removeExerciseModal, this))
+            .append($('<span/>').text('Remove')
+                ));
+    },
+    
+    removeExerciseModal: function() {
+        let body = $('<div/>');
+        body.append($('<p/>').text('Are you sure you want to delete the exercise?'));
+        body.append($('<p/>').text('This action can\'t be undone!'));
+
+        this.openRemoveModal(body, "Delete exercise " + this.model.get('name') + "?");
     }
 
 });
@@ -41,6 +52,7 @@ function loadExercises() {
         success: function () {
             tbl.empty();
             models.each(function (model) {
+                console.log(model);
                 let view = new ExerciseUI({
                     'model': model,
                     'el': insertRow(tbl)
@@ -48,7 +60,7 @@ function loadExercises() {
                 views.push(view);
             });
             //insertDataTable(tbl.parent());
-            tbl.parent().DataTable();
+            dataTable = tbl.parent().DataTable();
 
             models.loaded = true;
         }
@@ -58,6 +70,7 @@ function loadExercises() {
 
 let models = undefined;
 let views = [];
+let dataTable = undefined;
 
 $(window).on('load', function () {
     loadExercises();
