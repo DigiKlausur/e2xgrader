@@ -14,7 +14,7 @@ let ExerciseUI = BaseUI.extend({
         let name = this.model.get('name');
         //this.$exercise_name.text(name);
         this.$exercise_name.append($('<a/>')
-            .attr('href', base_url + '/notebooks/source/' + assignment + '/' + name + '.ipynb')
+            .attr('href', notebook_url + 'source/' + assignment + '/' + name + '.ipynb')
             .text(name));
         
         this.$remove_exercise.append($('<a/>')

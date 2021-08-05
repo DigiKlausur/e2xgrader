@@ -132,7 +132,7 @@ function newTask() {
                             let row = addView(task, $('#main_table'));
                             dataTable.row.add(row).draw();
                             models.add([task]);
-                            window.location.href=base_url + '/notebooks/pools/' + pool + '/' + $modal_name + '/' + $modal_name + '.ipynb';
+                            window.location.href= notebook_url + 'pools/' + pool + '/' + $modal_name + '/' + $modal_name + '.ipynb';
                         }
                     });
                 } else {

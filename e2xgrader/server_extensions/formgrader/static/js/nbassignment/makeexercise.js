@@ -359,7 +359,7 @@ class TabView {
                 'resources': JSON.stringify(data)
             },
             success: function(response) {
-                window.location.href = base_url + '/notebooks/source/' + assignment + '/' + data['exercise'] + '.ipynb';
+                window.location.href = notebook_url + 'source/' + assignment + '/' + data['exercise'] + '.ipynb';
             },
             error: function(xhr) {
                 console.log('OH NO!');
