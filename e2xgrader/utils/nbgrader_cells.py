@@ -1,4 +1,25 @@
 from nbgrader.utils import (is_grade, is_solution, is_locked)
+from nbformat.v4 import new_markdown_cell, new_code_cell
+
+
+def new_read_only_cell(grade_id, source=None, cell_type='markdown'):
+    if source is None:
+        source = ''
+    if cell_type == 'markdown':
+        cell = new_markdown_cell(source)
+    elif cell_type == 'code':
+        cell = new_code_cell(source)
+    else:
+        raise NameError(f'{cell_type} is not a supported cell type!')
+    cell.metadata['nbgrader'] = {
+        'grade': False,
+        'grade_id': grade_id,
+        'locked': True,
+        'schema_version': 3,
+        'solution': False,
+        'task': False
+    }
+    return cell
 
 
 def is_nbgrader_cell(cell):
