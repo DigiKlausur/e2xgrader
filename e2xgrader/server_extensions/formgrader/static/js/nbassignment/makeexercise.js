@@ -25,6 +25,9 @@ class ExerciseName extends FormTab {
         if (this.$input.val().trim() === '') {
             createLogModal('validate-exercise-name', 'Invalid exercise name', 'The name of the exercise cannot be empty!');
             return false;
+        } else if (!/^[a-zA-Z0-9_-]+$/.test(this.$input.val())) {
+            createLogModal('validate-exercise-name', 'Invalid exercise name', 'The name of the exercise can only consist of the following characters: A-Z, a-z, 0-9, -, _');
+            return false;
         }
         return true;
     }
@@ -145,8 +148,6 @@ class TaskSelect extends FormTab {
         this.$available_tasks = $('#available-tasks');
         this.$add = $('#add');
         this.$remove = $('#remove');
-        this.$up = $('#up');
-        this.$down = $('#down');
         this.registerControls();
         this.pools = new Pools();
         this.data = {};
@@ -171,7 +172,7 @@ class TaskSelect extends FormTab {
                     that.$selected_tasks.append($('<option/>')
                         .attr('value', option)
                         .attr('data-pool', pool)
-                        .text(option));
+                        .text(pool + '/' + option));
                 }
             });
         });
@@ -180,11 +181,6 @@ class TaskSelect extends FormTab {
             $('#selected-tasks option:selected').each(function(idx, el) {$(this).remove()});
         })
 
-        this.$up.click(function () {
-            
-            console.log(tasks);
-
-        });
 
     }
 
@@ -214,8 +210,6 @@ class TaskSelect extends FormTab {
             .text('Select your task pool'));
         let that = this;
         this.pools.each(function (pool) {
-            console.log(pool);
-            console.log(pool.get('name'));
             that.$select.append($('<option/>')
                 .attr('value', pool.get('name'))
                 .text(pool.get('name')));
@@ -239,8 +233,6 @@ class TaskSelect extends FormTab {
     }
 
     handleLoadTasks() {
-        console.log('Loaded tasks');
-        console.log(this.tasks);
         let that = this;
         this.$available_tasks.empty();
         this.tasks.each(function (task) {
@@ -346,7 +338,6 @@ class TabView {
     }
 
     finalize() {
-        alert('Done!');
         let data = {
             assignment: assignment
         };
