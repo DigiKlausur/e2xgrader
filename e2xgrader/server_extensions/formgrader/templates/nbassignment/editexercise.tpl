@@ -62,18 +62,14 @@
                 <tr><th>Selected Tasks</th><th>Controls</th><th>Available Tasks</th></tr>
             </thead>
             <tbody>
-            
-                <tr><td></td><td></td><td>Search<input type='search'></td></tr>
                 <tr>
                     <td>
                         <select multiple="multiple" size="10" id='selected-tasks'></select>
                     </td>
                     <td>
                         <div id="task-controls">
-                            <button class="btn-controls" id="add">Add</button>
-                            <button class="btn-controls" id="remove">Remove</button>
-                            <button class="btn-controls" id="up">Up</button>
-                            <button class="btn-controls" id="down">Down</button>
+                            <button class="btn btn-primary btn-controls" id="add">Add</button>
+                            <button class="btn btn-primary btn-controls" id="remove">Remove</button>
                         </div>
                     </td>
                     <td>
