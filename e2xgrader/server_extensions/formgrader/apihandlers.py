@@ -4,7 +4,7 @@ import json
 from tornado import web
 from nbgrader.server_extensions.formgrader.base import check_xsrf
 
-from ...models import (PresetModel, AssignmentModel, ExerciseModel, 
+from ...models import (PresetModel, AssignmentModel, ExerciseModel,
                        TaskPoolModel, TaskModel, TemplateModel)
 from .base import E2xBaseApiHandler as BaseApiHandler
 from .base import BaseApiManageHandler, BaseApiListHandler
@@ -12,6 +12,7 @@ from .base import BaseApiManageHandler, BaseApiListHandler
 from ...utils import NotebookVariableExtractor
 from ...converters import GenerateExercise
 from jupyter_client.kernelspec import KernelSpecManager
+
 
 class SolutionCellCollectionHandler(BaseApiHandler):
     @web.authenticated
@@ -27,6 +28,7 @@ class SubmittedTaskCollectionHandler(BaseApiHandler):
     def get(self, assignment_id, notebook_id, task_id):
         submissions = self.api.get_task_submissions(assignment_id, notebook_id, task_id)
         self.write(json.dumps(submissions))
+
 
 class PresetHandler(BaseApiHandler):
 
@@ -55,58 +57,70 @@ class PresetHandler(BaseApiHandler):
         handler = getattr(self, '_{}_{}'.format(action, preset_type))
         handler()
 
+
 class ListAssignmentsHandler(BaseApiListHandler):
 
     def initialize(self):
         super().initialize(AssignmentModel(self.coursedir))
+
 
 class ListExercisesHandler(BaseApiListHandler):
 
     def initialize(self):
         super().initialize(ExerciseModel(self.coursedir))
 
+
 class ListTemplatesHandler(BaseApiListHandler):
 
     def initialize(self):
         super().initialize(TemplateModel(self.coursedir))
+
 
 class ManageTemplateHandler(BaseApiManageHandler):
 
     def initialize(self):
         super().initialize(TemplateModel(self.coursedir))
 
+
 class ListTaskPoolsHandler(BaseApiListHandler):
 
     def initialize(self):
         super().initialize(TaskPoolModel(self.coursedir))
+
 
 class ManageTaskPoolHandler(BaseApiManageHandler):
 
     def initialize(self):
         super().initialize(TaskPoolModel(self.coursedir))
 
+
 class ManageExerciseHandler(BaseApiManageHandler):
 
     def initialize(self):
         super().initialize(ExerciseModel(self.coursedir))
+
 
 class ListTasksHandler(BaseApiListHandler):
 
     def initialize(self):
         super().initialize(TaskModel(self.coursedir))
 
+
 class ManageTasksHandler(BaseApiManageHandler):
 
     def initialize(self):
         super().initialize(TaskModel(self.coursedir))
 
+
 class TemplateVariableHandler(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
-        template = self.get_argument("template");
-        variables = NotebookVariableExtractor().extract(os.path.join(self.url_prefix, 'templates', template, '{}.ipynb'.format(template)))
+        template = self.get_argument("template")
+        variables = NotebookVariableExtractor().extract(
+            os.path.join(self.url_prefix, 'templates', template, '{}.ipynb'.format(template)))
         self.write(json.dumps(variables))
+
 
 class KernelSpecHandler(BaseApiHandler):
     @web.authenticated
@@ -114,14 +128,15 @@ class KernelSpecHandler(BaseApiHandler):
     def get(self):
         self.write(json.dumps(KernelSpecManager().get_all_specs()))
 
+
 class GenerateExerciseHandler(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
         resources = json.loads(self.get_argument("resources"))
-        self.log.info(resources);
         GenerateExercise(coursedir=self.coursedir).convert(resources)
         self.write({"status": True})
+
 
 formgrade_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),

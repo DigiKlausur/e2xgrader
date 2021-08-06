@@ -1,8 +1,8 @@
 import os
-import nbformat
 import shutil
 from .basemodel import BaseModel
 from traitlets import Unicode
+
 
 class TaskPoolModel(BaseModel):
 
@@ -13,7 +13,7 @@ class TaskPoolModel(BaseModel):
 
     def new(self, **kwargs):
         name = kwargs['name']
-        if (self.is_valid_name(name)):            
+        if (self.is_valid_name(name)):
             path = os.path.join(self.base_path(), name)
             if (os.path.exists(path)):
                 return {
@@ -45,7 +45,7 @@ class TaskPoolModel(BaseModel):
             'tasks': tasks,
             'link': os.path.join('taskcreator', 'pools', name)
         }
-    
+
     def list(self, **kwargs):
         if not os.path.isdir(self.base_path()):
             os.makedirs(self.base_path(), exist_ok=True)
@@ -60,7 +60,7 @@ class TaskPoolModel(BaseModel):
                 'tasks': tasks,
                 'link': os.path.join('taskcreator', 'pools', poolfolder)
             })
-        
+
         return pools
 
     def __get_pool_info(self, name):

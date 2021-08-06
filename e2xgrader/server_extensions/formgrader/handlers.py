@@ -7,7 +7,7 @@ from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, 
 from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
 from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter
 
-from ...models import (AssignmentModel, TemplateModel, ExerciseModel, TaskPoolModel)
+from ...models import (TemplateModel, ExerciseModel, TaskPoolModel)
 
 
 class ExportGradesHandler(BaseHandler):
@@ -341,8 +341,6 @@ class EditExercisesHandler(BaseHandler):
             pools=TaskPoolModel(self.coursedir).list(),
             windows=(sys.prefix == 'win32'))
         self.write(html)
-
-
 
 
 root_path = os.path.dirname(__file__)

@@ -41,5 +41,5 @@ class ExerciseModel(BaseModel):
                 'assignment': assignment,
                 'link': os.path.join('taskcreator', 'assignments', assignment, name),
             })
-        
+
         return exercises

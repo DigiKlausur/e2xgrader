@@ -2,6 +2,7 @@ import os
 import shutil
 from .preprocessor import Preprocessor
 
+
 class RemoveExercise(Preprocessor):
 
     def preprocess(self, resources):

@@ -2,12 +2,11 @@ import os
 import nbformat
 from textwrap import dedent
 from .preprocessor import Preprocessor
-from ...utils.nbgrader_cells import (
-    is_grade, is_solution, is_description,
-    get_task_info, get_valid_name, get_points)
+from ...utils.nbgrader_cells import get_task_info, get_points
+
 
 class AddTaskHeader(Preprocessor):
-    
+
     def get_header(self, idx, points):
         header = nbformat.v4.new_markdown_cell()
         header.metadata['nbgrader'] = {
@@ -26,7 +25,7 @@ class AddTaskHeader(Preprocessor):
         **[{} Point(s)]**
         """.format(idx, points))
         return header
-    
+
     def get_sub_header(self, idx, sub_idx, points):
         header = nbformat.v4.new_markdown_cell()
         header.metadata['nbgrader'] = {
@@ -50,32 +49,31 @@ class AddTaskHeader(Preprocessor):
 
         if len(task['subtasks']) < 1:
             return nb
-        
+
         new_cells = []
         header = self.get_header(idx, total_points)
         new_cells.append(header)
         if 'header' in task:
             new_cells.append(nb.cells[task['header']])
-            
+
         if len(task['subtasks']) == 1:
             new_cells.extend([nb.cells[i] for i in task['subtasks'][0]])
             if 'other' in task:
                 new_cells.extend([nb.cells[i] for i in task['other']])
             nb.cells = new_cells
             return nb
-        
-        if len(task['subtasks']) > 1:    
+
+        if len(task['subtasks']) > 1:
             for sub_idx, subtask in enumerate(task['subtasks']):
                 points = sum([get_points(nb.cells[i]) for i in subtask])
                 new_cells.append(self.get_sub_header(idx, sub_idx+1, points))
                 new_cells.extend([nb.cells[i] for i in subtask])
-                
+
         if 'other' in task:
-                new_cells.extend([nb.cells[i] for i in task['other']])
+            new_cells.extend([nb.cells[i] for i in task['other']])
         nb.cells = new_cells
         return nb
-    
-    
+
     def preprocess(self, resources):
         if not resources['exercise_options']['task-headers']:
             return
@@ -87,7 +85,7 @@ class AddTaskHeader(Preprocessor):
                 'tasks',
                 task
             )
-            notebooks = [file for file in os.listdir(task_path) \
+            notebooks = [file for file in os.listdir(task_path)
                          if file.endswith('.ipynb')]
             for nb_file in notebooks:
                 idx += 1

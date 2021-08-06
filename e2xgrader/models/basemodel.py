@@ -2,6 +2,7 @@ from traitlets.config import LoggingConfigurable
 from traitlets import Unicode
 import re
 
+
 class BaseModel(LoggingConfigurable):
 
     directory = Unicode(
@@ -18,4 +19,3 @@ class BaseModel(LoggingConfigurable):
 
     def is_valid_name(self, name):
         return self.__pattern.match(name) is not None
-

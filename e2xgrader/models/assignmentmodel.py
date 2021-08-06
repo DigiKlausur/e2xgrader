@@ -28,5 +28,5 @@ class AssignmentModel(BaseModel):
                 'exercises': exercises,
                 'link': os.path.join('taskcreator', 'assignments', assignmentfolder)
             })
-        
+
         return assignments

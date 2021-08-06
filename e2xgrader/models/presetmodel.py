@@ -1,11 +1,11 @@
-from traitlets.config import LoggingConfigurable
 from traitlets import Unicode
 import os
 import nbformat
 from .basemodel import BaseModel
 
+
 class PresetModel(BaseModel):
-    
+
     task_preset_path = Unicode(
         os.path.join(
             os.path.dirname(__file__),
@@ -36,7 +36,7 @@ class PresetModel(BaseModel):
         path = os.path.join(preset_path, '{}.ipynb'.format(preset_name))
         if os.path.isfile(path):
             nb = nbformat.read(path, as_version=4)
-            return nb.cells 
+            return nb.cells
 
     def list_question_presets(self):
         return self.list_presets(self.task_preset_path)

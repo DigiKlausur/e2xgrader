@@ -15,22 +15,22 @@ class TaskModel(BaseModel):
 
     def new_taskbook(self, name):
         nb = nbformat.v4.new_notebook()
-        
+
         nb.metadata['nbassignment'] = {
             'type': 'task'
         }
         header = nbformat.v4.new_markdown_cell()
-        
+
         header.source = dedent("""
         # {}
-        
+
         Here you should give the general information about the task.
-        
+
         Then add questions via the menu above.
-        
+
         A task should be self contained.
         """.format(name))
-        
+
         header.metadata['nbgrader'] = {
             'grade_id': '{}_Header'.format(name),
             'locked': True,
@@ -39,15 +39,15 @@ class TaskModel(BaseModel):
             'task': False,
             'schema_version': 3
         }
-        
+
         nb.cells = [header]
-        
+
         return nb
 
     def new(self, **kwargs):
         name = kwargs['name']
         pool = kwargs['pool']
-        if (self.is_valid_name(name)):            
+        if (self.is_valid_name(name)):
             path = os.path.join(self.base_path(), pool, name)
             if (os.path.exists(path)):
                 return {
@@ -88,7 +88,7 @@ class TaskModel(BaseModel):
             'questions': questions,
             'pool': pool,
         }
-    
+
     def list(self, **kwargs):
         pool = kwargs['pool']
         base_path = os.path.join(self.base_path(), pool)
@@ -105,7 +105,7 @@ class TaskModel(BaseModel):
                 'pool': pool,
                 'link': os.path.join('tree', base_path, taskfolder)
             })
-        
+
         return tasks
 
     def __get_task_info(self, task, pool):

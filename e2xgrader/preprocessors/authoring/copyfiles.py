@@ -5,8 +5,9 @@ import filecmp
 import nbformat
 from .preprocessor import Preprocessor
 
+
 class CopyFiles(Preprocessor):
-    
+
     def rename(self, task, old_name, new_name):
         old_file_name = os.path.split(old_name)[1]
         new_file_name = os.path.split(new_name)[1]
@@ -17,7 +18,7 @@ class CopyFiles(Preprocessor):
                 if old_file_name != new_file_name:
                     cell.source = cell.source.replace(old_file_name, new_file_name)
             nbformat.write(nb, nb_file)
-            
+
     def get_new_name(self, file, dst):
         suffix = 1
         name, extension = os.path.splitext(file)
@@ -35,17 +36,17 @@ class CopyFiles(Preprocessor):
                 for file in files:
                     finds.append(os.path.relpath(os.path.join(root, file), task))
         return finds
-    
+
     def copyfile(self, src, dst):
         '''
-        Copy file 
-        
+        Copy file
+
         Arguments:
             src -- source file
             dst -- destination file
         Returns:
             status -- True if dst does not exists or is equal to src,
-                      False if dst exists and differs from src. 
+                      False if dst exists and differs from src.
                       In this case nothing is copied
         '''
         if os.path.exists(dst):
@@ -54,7 +55,7 @@ class CopyFiles(Preprocessor):
         os.makedirs(dirs, exist_ok=True)
         shutil.copyfile(src, dst)
         return True
-    
+
     def copyfiles(self, src, dst, resources):
         exercise_base = '{}_files'.format(resources['exercise'])
         for file in self.get_files(src):
@@ -68,7 +69,7 @@ class CopyFiles(Preprocessor):
                 new_name = os.path.join(exercise_base, renamed)
             # Rename in notebook
             self.rename(src, file, new_name)
-    
+
     def preprocess(self, resources):
         file_folder = os.path.join(
             resources['course_prefix'],
@@ -77,7 +78,7 @@ class CopyFiles(Preprocessor):
             '{}_files'.format(resources['exercise'])
         )
         os.makedirs(file_folder, exist_ok=True)
-        
+
         for task_dict in resources['tasks']:
             task = os.path.join(task_dict['pool'], task_dict['task'])
             task_path = os.path.join(
@@ -86,7 +87,7 @@ class CopyFiles(Preprocessor):
                 task
             )
             self.copyfiles(task_path, file_folder, resources)
-            
+
         template_path = os.path.join(
             resources['tmp_dir'],
             'template',

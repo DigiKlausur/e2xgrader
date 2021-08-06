@@ -5,6 +5,7 @@ from ..preprocessors.authoring import (
     RemoveExercise, CopyNotebooks, FillTemplate, CopyFiles,
     GenerateTaskIDs, AddTaskHeader, MakeExercise)
 
+
 class GenerateExercise(Converter):
 
     preprocessors = List([

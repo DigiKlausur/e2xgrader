@@ -3,11 +3,12 @@ import os
 import nbformat
 from .preprocessor import Preprocessor
 
+
 class FillTemplate(Preprocessor):
-    
+
     def __init__(self):
         self.__pattern = re.compile(r'({{\s*(\w+)\s*}})')
-        
+
     def replace(self, nb, replacements):
         replaced = nbformat.v4.new_notebook()
         variables = []
@@ -19,7 +20,7 @@ class FillTemplate(Preprocessor):
                 new_cell.source = new_cell.source.replace(variable[0], replacements[variable[1]])
             replaced.cells.append(new_cell)
         return replaced
-    
+
     def preprocess(self, resources):
         template_path = os.path.join(
             resources['tmp_dir'],
@@ -27,7 +28,7 @@ class FillTemplate(Preprocessor):
             resources['template'],
             '{}.ipynb'.format(resources['template'])
         )
-        
+
         template_nb = nbformat.read(template_path, as_version=4)
         template_nb = self.replace(template_nb, resources['template-options'])
         nbformat.write(template_nb, template_path)

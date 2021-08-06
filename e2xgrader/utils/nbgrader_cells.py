@@ -1,22 +1,28 @@
 from nbgrader.utils import (is_grade, is_solution, is_locked)
 
+
 def is_nbgrader_cell(cell):
     return 'nbgrader' in cell.metadata
+
 
 def is_solution_cell(cell):
     return is_nbgrader_cell(cell) and is_solution(cell)
 
+
 def is_description(cell):
     return is_nbgrader_cell(cell) and not is_grade(cell) and is_locked(cell)
+
 
 def grade_id(cell):
     if is_nbgrader_cell(cell):
         return cell.metadata.nbgrader.grade_id
 
+
 def get_points(cell):
     if is_grade(cell):
         return cell.metadata.nbgrader.points
     return 0
+
 
 def get_valid_name(name):
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
@@ -33,6 +39,7 @@ def get_valid_name(name):
         name = name.replace(char, '_')
     return name
 
+
 def get_task_info(nb):
     subtasks = []
     subtask = []
@@ -48,6 +55,7 @@ def get_task_info(nb):
     if len(subtask) > 0:
         task['other'] = subtask
     return task
+
 
 def get_tasks(nb):
     task_ids = [grade_id(cell) for cell in nb.cells

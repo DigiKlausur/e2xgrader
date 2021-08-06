@@ -5,6 +5,7 @@ from ...apps.api import E2xAPI
 from tornado import web
 from nbgrader.server_extensions.formgrader.base import check_xsrf
 
+
 class E2xBaseApiHandler(BaseApiHandler):
 
     @property
@@ -39,7 +40,7 @@ class BaseApiManageHandler(BaseApiHandler):
 
     @web.authenticated
     @check_xsrf
-    def put(self, **kwargs):        
+    def put(self, **kwargs):
         self.write(self.__model.new(**kwargs))
 
 

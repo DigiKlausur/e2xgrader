@@ -2,8 +2,9 @@ import os
 import shutil
 from .preprocessor import Preprocessor
 
+
 class CopyNotebooks(Preprocessor):
-    
+
     def preprocess(self, resources):
         for task_dict in resources['tasks']:
             task = task_dict['task']

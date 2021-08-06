@@ -14,11 +14,11 @@ class TemplateModel(BaseModel):
 
     def __init__(self, course_prefix):
         super().__init__(course_prefix)
-        os.makedirs(self.base_path(), exist_ok=True)                
+        os.makedirs(self.base_path(), exist_ok=True)
 
     def new(self, **kwargs):
         name = kwargs['name']
-        if (self.is_valid_name(name)):            
+        if (self.is_valid_name(name)):
             path = os.path.join(self.base_path(), name)
             if (os.path.exists(path)):
                 return {
@@ -61,5 +61,5 @@ class TemplateModel(BaseModel):
                 'name': templatefolder,
                 'link': os.path.join('tree', self.base_path(), templatefolder)
             })
-        
+
         return templates
