@@ -23,7 +23,7 @@ class TemplateModel(BaseModel):
             if (os.path.exists(path)):
                 return {
                     'success': False,
-                    'error': f'A pool with the name {name} already exists!'
+                    'error': f'A template with the name {name} already exists!'
                 }
             else:
                 self.log.info('Creating a new template')
