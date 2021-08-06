@@ -202,26 +202,7 @@ class TaskSelect extends FormTab {
 
     }
 
-    loadPools() {
-        let that = this;
-        this.pools.fetch({
-            success: function () {
-                that.pools.each(function (pool) {
-                    //n_pools +=1;
-                    that.data[pool.get('name')] = new Tasks({pool: pool.get('name')});
-                    that.data[pool.get('name')].fetch({
-                        success: function () {
-                        }
-                    })
-
-                });
-                console.log(that.data);
-            }
-        })
-    }
-
     handleLoadPools() {
-        //console.log(this.pools);
         this.$select.empty();
         this.$select.append($('<option/>')
             .attr('value', '')
