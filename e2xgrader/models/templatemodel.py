@@ -3,6 +3,7 @@ import nbformat
 import shutil
 from .basemodel import BaseModel
 from traitlets import Unicode
+from ..utils.nbgrader_cells import new_read_only_cell
 
 
 class TemplateModel(BaseModel):
@@ -35,6 +36,12 @@ class TemplateModel(BaseModel):
                 nb.metadata['nbassignment'] = {
                     'type': 'template'
                 }
+                cell = new_read_only_cell(
+                    grade_id='HeaderA', 
+                    source='### This is a header cell\n\nIt will always appear at the top of the notebook'
+                )
+                cell.metadata['nbassignment'] = {'type': 'header'}
+                nb.cells = [cell]
                 path = os.path.join(self.base_path(), name, filename)
                 nbformat.write(nb, path)
                 return {
