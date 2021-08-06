@@ -12,7 +12,6 @@ let AssignmentUI = Backbone.View.extend({
 
     render: function () {
         let name = this.model.get('name');
-        //this.$assignment_name.text(name);
         this.$assignment_name.append($('<a/>')
             .attr('href', base_url + '/taskcreator/assignments/' + name)
             .text(name));
@@ -45,7 +44,6 @@ function loadAssignments() {
                 });
                 views.push(view);
             });
-            //insertDataTable(tbl.parent());
             tbl.parent().DataTable();
 
             models.loaded = true;
