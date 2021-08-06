@@ -19,7 +19,6 @@ let TaskUI = BaseUI.extend({
     render: function () {
         this.clear();
         let name = this.model.get('name');
-        //this.$task_name.text(name);
         this.$task_name.append($('<a/>')
             .attr('href', tree_url + 'pools/' + pool + '/' + name)
             .text(name));
@@ -113,11 +112,11 @@ function newTask() {
         .attr('data-dismiss', 'modal')
         .text('Cancel'));
 
-    $modal = createModal("new-task-modal", "Create a new task", body, footer);
+    let $modal = createModal("new-task-modal", "Create a new task", body, footer);
     
-    $modal_save = $modal.find('button.save');
+    let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
-        $modal_name = $modal.find('input.modal-name').val();
+        let $modal_name = $modal.find('input.modal-name').val();
         let task = new Task({
             pool: pool,
             name: $modal_name,

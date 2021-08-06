@@ -104,11 +104,11 @@ function newTemplate() {
         .attr('data-dismiss', 'modal')
         .text('Cancel'));
 
-    $modal = createModal("new-template-modal", "Create a new exercise template", body, footer);
+    let $modal = createModal("new-template-modal", "Create a new exercise template", body, footer);
     
-    $modal_save = $modal.find('button.save');
+    let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
-        $modal_name = $modal.find('input.modal-name').val();
+        let $modal_name = $modal.find('input.modal-name').val();
         let template = new Template();
         template.save({
             'name': $modal_name,
