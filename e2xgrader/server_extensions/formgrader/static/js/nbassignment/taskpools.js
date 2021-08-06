@@ -50,7 +50,7 @@ function insertRow(table) {
 
 function addView(model, table) {
     let row = insertRow(table);
-    let view = new PoolUI({
+    new PoolUI({
         'model': model,
         'el': row
     });

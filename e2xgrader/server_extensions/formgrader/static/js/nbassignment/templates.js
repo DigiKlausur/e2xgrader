@@ -51,7 +51,7 @@ function insertRow(table) {
 
 function addView(model, table) {
     let row = insertRow(table);
-    let view = new TemplateUI({
+    new TemplateUI({
         'model': model,
         'el': row
     });

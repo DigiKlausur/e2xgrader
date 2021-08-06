@@ -45,13 +45,12 @@ function loadExercises() {
     console.log('Loading the exercises');
     let tbl = $('#main_table');
     models = new Exercises({assignment: assignment});
-    views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
             tbl.empty();
             models.each(function (model) {
-                let view = new ExerciseUI({
+                new ExerciseUI({
                     'model': model,
                     'el': insertRow(tbl)
                 });
