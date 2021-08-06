@@ -8,12 +8,12 @@ from .filltemplate import FillTemplate
 from .addtaskheader import AddTaskHeader
 
 __all__ = [
-    Preprocessor,
-    RemoveExercise,
-    CopyNotebooks,
-    CopyFiles,
-    GenerateTaskIDs,
-    MakeExercise,
-    FillTemplate,
-    AddTaskHeader
+    'Preprocessor',
+    'RemoveExercise',
+    'CopyNotebooks',
+    'CopyFiles',
+    'GenerateTaskIDs',
+    'MakeExercise',
+    'FillTemplate',
+    'AddTaskHeader'
 ]
