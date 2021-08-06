@@ -19,6 +19,21 @@ class ExerciseName extends FormTab {
     constructor() {
         super($('#exercise'));
         this.$input = this.$el.find('#exercise-name');
+        this.exercise_names = [];
+        this.exercises = new Exercises({assignment: assignment});
+        this.exercises.fetch({
+            success: () => this.handleLoadExercises()
+        });
+    }
+
+    handleLoadExercises() {
+        let that = this;
+
+        this.exercises.each(function (exercise) {
+            that.exercise_names.push(exercise.get('name'));
+        });
+
+        console.log(this.exercise_names);
     }
 
     validate() {
@@ -27,6 +42,9 @@ class ExerciseName extends FormTab {
             return false;
         } else if (!/^[a-zA-Z0-9_-]+$/.test(this.$input.val())) {
             createLogModal('validate-exercise-name', 'Invalid exercise name', 'The name of the exercise can only consist of the following characters: A-Z, a-z, 0-9, -, _');
+            return false;
+        } else if (this.exercise_names.includes(this.$input.val())) {
+            createLogModal('validate-exercise-name', 'Exercise already exists', 'An exercise with this name already exists. Please delete it first if you want to overwrite it.');
             return false;
         }
         return true;
