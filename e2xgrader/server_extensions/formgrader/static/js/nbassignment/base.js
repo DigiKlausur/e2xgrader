@@ -81,8 +81,8 @@ let BaseUI = Backbone.View.extend({
             .attr('data-dismiss', 'modal')
             .text('Cancel'));
 
-        $modal = createModal("remove-pool-modal", title, body, footer);
-        $modal_save = $modal.find('button.save');
+        let $modal = createModal("remove-pool-modal", title, body, footer);
+        let $modal_save = $modal.find('button.save');
         let that = this;
         $modal_save.click(function () {
             that.removeModel();
