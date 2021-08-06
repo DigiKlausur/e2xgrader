@@ -147,3 +147,7 @@ svg {
   text-decoration: none;
   color: #fff;
 }
+
+.btn {
+  margin: .5em;
+}
