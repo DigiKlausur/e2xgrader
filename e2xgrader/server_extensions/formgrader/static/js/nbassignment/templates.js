@@ -120,7 +120,7 @@ function newTemplate() {
                 let row = addView(template, $('#main_table'));
                 dataTable.row.add(row).draw();
                 models.add([template]);
-                window.location.href=base_url + '/notebooks/templates/' + $modal_name + '/' + $modal_name + '.ipynb';
+                window.location.href = notebook_url + 'templates/' + $modal_name + '/' + $modal_name + '.ipynb';
             } else {
                 createLogModal(
                     'error-modal',
