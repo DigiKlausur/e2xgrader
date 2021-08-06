@@ -51,12 +51,10 @@ function loadExercises() {
         success: function () {
             tbl.empty();
             models.each(function (model) {
-                console.log(model);
                 let view = new ExerciseUI({
                     'model': model,
                     'el': insertRow(tbl)
                 });
-                views.push(view);
             });
             dataTable = tbl.parent().DataTable();
 
@@ -67,7 +65,6 @@ function loadExercises() {
 }
 
 let models = undefined;
-let views = [];
 let dataTable = undefined;
 
 $(window).on('load', function () {

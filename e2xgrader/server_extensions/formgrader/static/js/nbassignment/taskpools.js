@@ -54,14 +54,12 @@ function addView(model, table) {
         'model': model,
         'el': row
     });
-    views.push(view);
     return row;
 }
 
 function loadPools() {
     let tbl = $('#main_table');
     models = new Pools();
-    views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
@@ -131,7 +129,6 @@ function newPool() {
 }
 
 let models = undefined;
-let views = [];
 let dataTable = undefined;
 
 $(window).on('load', function () {

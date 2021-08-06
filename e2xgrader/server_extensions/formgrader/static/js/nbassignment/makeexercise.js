@@ -380,5 +380,5 @@ class TabView {
 }
 
 $(window).on('load', function () {
-    let view = new TabView();
+    new TabView();
 })

@@ -55,14 +55,12 @@ function addView(model, table) {
         'model': model,
         'el': row
     });
-    views.push(view);
     return row;
 }
 
 function loadTemplates() {
     let tbl = $('#main_table');
     models = new Templates();
-    views = [];
     models.loaded = false;
     models.fetch({
         success: function () {
@@ -134,7 +132,6 @@ function newTemplate() {
 }
 
 let models = undefined;
-let views = [];
 let dataTable = undefined;
 
 $(window).on('load', function () {
