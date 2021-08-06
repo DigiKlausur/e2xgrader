@@ -12,7 +12,6 @@ let ExerciseUI = BaseUI.extend({
 
     render: function () {
         let name = this.model.get('name');
-        //this.$exercise_name.text(name);
         this.$exercise_name.append($('<a/>')
             .attr('href', notebook_url + 'source/' + assignment + '/' + name + '.ipynb')
             .text(name));
@@ -59,7 +58,6 @@ function loadExercises() {
                 });
                 views.push(view);
             });
-            //insertDataTable(tbl.parent());
             dataTable = tbl.parent().DataTable();
 
             models.loaded = true;
