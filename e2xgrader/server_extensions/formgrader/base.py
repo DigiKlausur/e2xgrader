@@ -19,8 +19,8 @@ class E2xBaseApiHandler(BaseApiHandler):
 
 class BaseApiManageHandler(BaseApiHandler):
 
-    def initialize(self, model):
-        self.__model = model
+    def initialize(self, model_cls):
+        self.__model = model_cls(self.coursedir)
 
     @web.authenticated
     @check_xsrf
@@ -46,8 +46,8 @@ class BaseApiManageHandler(BaseApiHandler):
 
 class BaseApiListHandler(BaseApiHandler):
 
-    def initialize(self, model):
-        self.__model = model
+    def initialize(self, model_cls):
+        self.__model = model_cls(self.coursedir)
 
     @web.authenticated
     @check_xsrf

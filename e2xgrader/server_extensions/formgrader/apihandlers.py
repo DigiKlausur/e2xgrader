@@ -58,60 +58,6 @@ class PresetHandler(BaseApiHandler):
         handler()
 
 
-class ListAssignmentsHandler(BaseApiListHandler):
-
-    def initialize(self):
-        super().initialize(AssignmentModel(self.coursedir))
-
-
-class ListExercisesHandler(BaseApiListHandler):
-
-    def initialize(self):
-        super().initialize(ExerciseModel(self.coursedir))
-
-
-class ListTemplatesHandler(BaseApiListHandler):
-
-    def initialize(self):
-        super().initialize(TemplateModel(self.coursedir))
-
-
-class ManageTemplateHandler(BaseApiManageHandler):
-
-    def initialize(self):
-        super().initialize(TemplateModel(self.coursedir))
-
-
-class ListTaskPoolsHandler(BaseApiListHandler):
-
-    def initialize(self):
-        super().initialize(TaskPoolModel(self.coursedir))
-
-
-class ManageTaskPoolHandler(BaseApiManageHandler):
-
-    def initialize(self):
-        super().initialize(TaskPoolModel(self.coursedir))
-
-
-class ManageExerciseHandler(BaseApiManageHandler):
-
-    def initialize(self):
-        super().initialize(ExerciseModel(self.coursedir))
-
-
-class ListTasksHandler(BaseApiListHandler):
-
-    def initialize(self):
-        super().initialize(TaskModel(self.coursedir))
-
-
-class ManageTasksHandler(BaseApiManageHandler):
-
-    def initialize(self):
-        super().initialize(TaskModel(self.coursedir))
-
-
 class TemplateVariableHandler(BaseApiHandler):
     @web.authenticated
     @check_xsrf
@@ -145,15 +91,15 @@ formgrade_handlers = [
 
 nbassignment_handlers = [
     (r"/taskcreator/api/presets", PresetHandler),
-    (r"/taskcreator/api/assignments/?", ListAssignmentsHandler),
-    (r"/taskcreator/api/template/(?P<name>[^/]+)/?", ManageTemplateHandler),
-    (r"/taskcreator/api/templates/?", ListTemplatesHandler),
-    (r"/taskcreator/api/pool/(?P<name>[^/]+)/?", ManageTaskPoolHandler),
-    (r"/taskcreator/api/pools/?", ListTaskPoolsHandler),
-    (r"/taskcreator/api/pools/(?P<pool>[^/]+)/?", ListTasksHandler),
-    (r"/taskcreator/api/task/(?P<pool>[^/]+)/(?P<name>[^/]+)/?", ManageTasksHandler),
-    (r"/taskcreator/api/exercise/(?P<assignment>[^/]+)/(?P<name>[^/]+)/?", ManageExerciseHandler),
-    (r"/taskcreator/api/assignments/(?P<assignment>[^/]+)/?", ListExercisesHandler),
+    (r"/taskcreator/api/assignments/?", BaseApiListHandler, dict(model_cls=AssignmentModel)),
+    (r"/taskcreator/api/template/(?P<name>[^/]+)/?", BaseApiManageHandler, dict(model_cls=TemplateModel)),
+    (r"/taskcreator/api/templates/?", BaseApiListHandler, dict(model_cls=TemplateModel)),
+    (r"/taskcreator/api/pool/(?P<name>[^/]+)/?", BaseApiManageHandler, dict(model_cls=TaskPoolModel)),
+    (r"/taskcreator/api/pools/?", BaseApiListHandler, dict(model_cls=TaskPoolModel)),
+    (r"/taskcreator/api/pools/(?P<pool>[^/]+)/?", BaseApiListHandler, dict(model_cls=TaskModel)),
+    (r"/taskcreator/api/task/(?P<pool>[^/]+)/(?P<name>[^/]+)/?", BaseApiManageHandler, dict(model_cls=TaskModel)),
+    (r"/taskcreator/api/exercise/(?P<assignment>[^/]+)/(?P<name>[^/]+)/?", BaseApiManageHandler, dict(model_cls=ExerciseModel)),
+    (r"/taskcreator/api/assignments/(?P<assignment>[^/]+)/?", BaseApiListHandler, dict(model_cls=ExerciseModel)),
     (r"/taskcreator/api/templates/variables", TemplateVariableHandler),
     (r"/taskcreator/api/kernelspec", KernelSpecHandler),
     (r"/taskcreator/api/generate_exercise", GenerateExerciseHandler),
