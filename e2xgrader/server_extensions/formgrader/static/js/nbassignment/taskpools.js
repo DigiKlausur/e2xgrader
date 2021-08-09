@@ -50,11 +50,11 @@ function insertRow(table) {
 
 function addView(model, table) {
     let row = insertRow(table);
-    new PoolUI({
+    let ui = new PoolUI({
         'model': model,
         'el': row
     });
-    return row;
+    return ui;
 }
 
 function loadPools() {
