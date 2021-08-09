@@ -13,7 +13,8 @@ class BaseTest(unittest.TestCase):
     def setUpResources(self):
         self.tmp_dir = TemporaryDirectory()
         self.resources = {
-            'tmp_dir': self.tmp_dir.name
+            'tmp_dir': self.tmp_dir.name,
+            'source_dir': 'source'
         }
 
     def setUpCoursedir(self):
