@@ -2,17 +2,22 @@ import unittest
 import os
 
 from os.path import join as pjoin
-from tempfile import TemporaryDirectory
-from nbgrader.coursedir import CourseDirectory
+
+from .base import BaseTest
 from e2xgrader.preprocessors.authoring import CopyNotebooks
 from e2xgrader.models import TaskModel, TemplateModel
 
 
-class TestCopyNotebooks(unittest.TestCase):
+class TestCopyNotebooks(BaseTest):
 
     def setUp(self):
-        self.tmp_dir = TemporaryDirectory()
-        self.resources = {
+        super().setUp()
+        self.createTasks()
+        self.createTemplate()
+
+    def setUpResources(self):
+        super().setUpResources()
+        self.resources.update({
             'tasks': [
                 {
                     'pool': 'TestPool',
@@ -24,17 +29,7 @@ class TestCopyNotebooks(unittest.TestCase):
                 }
             ],
             'template': 'TestTemplate',
-            'tmp_dir': self.tmp_dir.name
-        }
-        self.createTempCourse()
-        self.createTasks()
-        self.createTemplate()
-
-    def createTempCourse(self):
-        self.course_tmp_dir = TemporaryDirectory()
-        self.coursedir = CourseDirectory()
-        self.coursedir.root = self.course_tmp_dir.name
-        self.resources['course_prefix'] = self.coursedir.root
+        })
 
     def createTasks(self):
         self.taskmodel = TaskModel(self.coursedir)
@@ -44,11 +39,6 @@ class TestCopyNotebooks(unittest.TestCase):
     def createTemplate(self):
         self.templatemodel = TemplateModel(self.coursedir)
         self.templatemodel.new(name=self.resources['template'])
-
-    def tearDown(self):
-        # Remove temporary directories
-        self.tmp_dir.cleanup()
-        self.course_tmp_dir.cleanup()
 
     def test_copy(self):
         res = CopyNotebooks().preprocess(self.resources)
