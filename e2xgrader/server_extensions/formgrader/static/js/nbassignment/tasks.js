@@ -56,13 +56,11 @@ function insertRow(table) {
 }
 
 function addView(model, table) {
-    console.log(model);
     let row = insertRow(table);
-    new TaskUI({
+    return new TaskUI({
         'model': model,
         'el': row
     });
-    return row;
 }
 
 function loadTasks() {
@@ -126,7 +124,7 @@ function newTask() {
                     task.fetch({
                         success: function () {
                             $modal.modal('hide');
-                            let row = addView(task, $('#main_table'));
+                            let row = addView(task, $('#main_table')).el;
                             dataTable.row.add(row).draw();
                             models.add([task]);
                             window.location.href= notebook_url + 'pools/' + pool + '/' + $modal_name + '/' + $modal_name + '.ipynb';

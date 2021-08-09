@@ -51,11 +51,10 @@ function insertRow(table) {
 
 function addView(model, table) {
     let row = insertRow(table);
-    new TemplateUI({
+    return new TemplateUI({
         'model': model,
         'el': row
     });
-    return row;
 }
 
 function loadTemplates() {
@@ -115,7 +114,7 @@ function newTemplate() {
             success: function(template) {
             if (template.get('success')) {
                 $modal.modal('hide');
-                let row = addView(template, $('#main_table'));
+                let row = addView(template, $('#main_table')).el;
                 dataTable.row.add(row).draw();
                 models.add([template]);
                 window.location.href = notebook_url + 'templates/' + $modal_name + '/' + $modal_name + '.ipynb';

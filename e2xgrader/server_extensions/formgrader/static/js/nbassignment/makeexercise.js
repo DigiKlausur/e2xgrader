@@ -306,7 +306,7 @@ class ExerciseOptions extends FormTab {
 
 class TabView {
 
-    constructor() {
+    show() {
         this.tabs = [new ExerciseName(), new TemplateSelect(), new TaskSelect(), new ExerciseOptions()];
         this.current = this.tabs[0];
         this.cursor = 0;
@@ -380,5 +380,6 @@ class TabView {
 }
 
 $(window).on('load', function () {
-    new TabView();
+    let view = new TabView();
+    view.show();
 })

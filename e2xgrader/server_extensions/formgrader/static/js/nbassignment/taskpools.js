@@ -50,11 +50,11 @@ function insertRow(table) {
 
 function addView(model, table) {
     let row = insertRow(table);
-    let ui = new PoolUI({
+
+    return new PoolUI({
         'model': model,
         'el': row
     });
-    return ui;
 }
 
 function loadPools() {
@@ -113,7 +113,7 @@ function newPool() {
             success: function(pool) {
             if (pool.get('success')) {
                 $modal.modal('hide');
-                let row = addView(pool, $('#main_table'));
+                let row = addView(pool, $('#main_table')).el;
                 dataTable.row.add(row).draw();
                 models.add([pool]);
             } else {

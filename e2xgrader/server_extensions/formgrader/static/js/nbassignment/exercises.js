@@ -41,6 +41,14 @@ function insertRow(table) {
     return row;
 }
 
+function addView(model, table) {
+    let row = insertRow(table);
+    return new ExerciseUI({
+        'model': model,
+        'el': row
+    });
+}
+
 function loadExercises() {
     console.log('Loading the exercises');
     let tbl = $('#main_table');
@@ -49,12 +57,7 @@ function loadExercises() {
     models.fetch({
         success: function () {
             tbl.empty();
-            models.each(function (model) {
-                new ExerciseUI({
-                    'model': model,
-                    'el': insertRow(tbl)
-                });
-            });
+            models.each((model) => addView(model, tbl));
             dataTable = tbl.parent().DataTable();
 
             models.loaded = true;
