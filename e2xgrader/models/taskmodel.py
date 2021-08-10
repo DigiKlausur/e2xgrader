@@ -92,6 +92,8 @@ class TaskModel(BaseModel):
     def list(self, **kwargs):
         pool = kwargs['pool']
         base_path = os.path.join(self.base_path(), pool)
+        if not os.path.exists(base_path):
+            return []
         taskfolders = os.listdir(base_path)
         tasks = []
         for taskfolder in taskfolders:
