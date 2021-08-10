@@ -6,6 +6,7 @@ from e2xgrader.models import TaskModel
 from e2xgrader.converters import GenerateExercise
 from ..test_utils.test_utils import create_temp_course, add_question_to_task, add_template_with_header
 
+
 class TestGenerateExercise(unittest.TestCase):
 
     def setUp(self):
@@ -39,6 +40,19 @@ class TestGenerateExercise(unittest.TestCase):
 
     def test_convert(self):
         self.converter.convert(self.resources)
+
+        base_path = self.converter.coursedir.format_path(
+            'source',
+            assignment_id=self.resources['assignment'],
+            student_id='.')
+
+        assert os.path.exists(base_path)
+        assert os.path.isfile(pjoin(base_path, f'{self.resources["exercise"]}.ipynb'))
+
+    def test_convert_with_headers(self):
+        self.converter.convert(self.resources)
+
+        self.resources['exercise_options']['task-headers'] = True
 
         base_path = self.converter.coursedir.format_path(
             'source',
