@@ -47,5 +47,17 @@ class TestPresetModel(unittest.TestCase):
         assert self.model.get_question_preset('Invalid Name') is None
         assert self.model.get_template_preset('Invalid Name') is None
 
+    def test_custom_template_preset_path(self):
+        nbformat.write(nbformat.v4.new_notebook(), pjoin(self.tmp_dir.name, 'MyPreset.ipynb'))
+        self.model.template_preset_path = self.tmp_dir.name
+        assert len(self.model.list_template_presets()) == 1
+        assert 'MyPreset' in self.model.list_template_presets()
+
+    def test_custom_task_preset_path(self):
+        nbformat.write(nbformat.v4.new_notebook(), pjoin(self.tmp_dir.name, 'MyPreset.ipynb'))
+        self.model.task_preset_path = self.tmp_dir.name
+        assert len(self.model.list_question_presets()) == 1
+        assert 'MyPreset' in self.model.list_question_presets()
+
     def tearDown(self):
         self.tmp_dir.cleanup()
