@@ -5,20 +5,19 @@ import unittest
 from os.path import join as pjoin
 
 from e2xgrader.models import PresetModel
-from ..test_utils.test_utils import createTempCourse
-
+from ..test_utils.test_utils import create_temp_course
 
 
 class TestPresetModel(unittest.TestCase):
 
     def setUp(self):
-        tmp_dir, coursedir = createTempCourse()
+        tmp_dir, coursedir = create_temp_course()
         self.tmp_dir = tmp_dir
         self.model = PresetModel(coursedir)
 
     def test_list_question_presets(self):
         presets = ['Code (Autograded)', 'Code (Manual)',
-                   'Freetext', 'Multiple Choice',  'Single Choice']
+                   'Freetext', 'Multiple Choice', 'Single Choice']
         questions = self.model.list_question_presets()
         for preset in presets:
             assert preset in questions, f'Preset {preset} not found'

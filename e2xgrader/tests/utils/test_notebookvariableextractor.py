@@ -3,20 +3,20 @@ import unittest
 from e2xgrader.models import TemplateModel
 from e2xgrader.utils import NotebookVariableExtractor
 
-from ..test_utils.test_utils import (createTempCourse, add_template_with_header, 
+from ..test_utils.test_utils import (create_temp_course, add_template_with_header,
                                      add_header_to_template, add_footer_to_template)
 
 
 class TestNotebookVariableExtractor(unittest.TestCase):
 
     def setUp(self):
-        tmp_dir, coursedir = createTempCourse()
+        tmp_dir, coursedir = create_temp_course()
         self.tmp_dir = tmp_dir
         self.coursedir = coursedir
 
     def test_extract_variables_single_cell(self):
         path = add_template_with_header(
-            self.coursedir, 
+            self.coursedir,
             'TestTemplate',
             '# Template\n{{variable1}}\n\n{{variable_2}}\n\n{{ variable_3}}')
 
@@ -41,7 +41,7 @@ class TestNotebookVariableExtractor(unittest.TestCase):
 
     def test_extract_no_variables(self):
         path = add_template_with_header(
-            self.coursedir, 
+            self.coursedir,
             'TestTemplate',
             '# Template')
 

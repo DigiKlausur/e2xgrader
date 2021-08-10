@@ -4,14 +4,13 @@ import unittest
 from os.path import join as pjoin
 
 from e2xgrader.models import TemplateModel
-from ..test_utils.test_utils import createTempCourse
-
+from ..test_utils.test_utils import create_temp_course
 
 
 class TestTemplateModel(unittest.TestCase):
 
     def setUp(self):
-        tmp_dir, coursedir = createTempCourse()
+        tmp_dir, coursedir = create_temp_course()
         self.tmp_dir = tmp_dir
         self.model = TemplateModel(coursedir)
 
@@ -32,7 +31,8 @@ class TestTemplateModel(unittest.TestCase):
         assert res['success'], 'New template could not be created'
         assert os.path.exists(pjoin(self.model.base_path(), name)), 'New template directory missing'
         for directory in ['img', 'data']:
-            assert os.path.exists(pjoin(self.model.base_path(), name, directory)), f'New template subdirectory {directory} missing'
+            msg = f'New template subdirectory {directory} missing!'
+            assert os.path.exists(pjoin(self.model.base_path(), name, directory)), msg
         os.path.exists(pjoin(self.model.base_path(), name, f'{name}.ipynb')), 'New template notebook missing'
 
         self.model.remove(name=name)

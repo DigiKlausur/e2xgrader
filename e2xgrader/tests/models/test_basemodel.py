@@ -1,17 +1,14 @@
 import os
 import unittest
 
-from os.path import join as pjoin
-
 from e2xgrader.models import BaseModel
-from ..test_utils.test_utils import createTempCourse
-
+from ..test_utils.test_utils import create_temp_course
 
 
 class TestBaseModel(unittest.TestCase):
 
     def setUp(self):
-        tmp_dir, coursedir = createTempCourse()
+        tmp_dir, coursedir = create_temp_course()
         self.tmp_dir = tmp_dir
         self.model = BaseModel(coursedir)
 
