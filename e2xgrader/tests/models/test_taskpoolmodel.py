@@ -14,6 +14,15 @@ class TestTaskPoolModel(unittest.TestCase):
         self.tmp_dir = tmp_dir
         self.model = TaskPoolModel(coursedir)
 
+    def test_create_existing_taskpool(self):
+        name = 'TestPool'
+        res = self.model.new(name=name)
+        assert res['success'], 'New pool could not be created'
+
+        res = self.model.new(name=name)
+        assert not res['success']
+        assert res['error'] == f'A pool with the name {name} already exists!'
+
     def test_list_empty(self):
         assert len(self.model.list()) == 0, 'Model should not list anything in an empty course'
 
@@ -41,6 +50,9 @@ class TestTaskPoolModel(unittest.TestCase):
         assert len(self.model.list()) == 1
         pools = self.model.list()
         assert pools[0]['tasks'] == 1
+
+        assert self.model.get(name=pool)['name'] == pool
+        assert self.model.get(name=pool)['tasks'] == 1
 
     def tearDown(self):
         self.tmp_dir.cleanup()
