@@ -4,7 +4,7 @@ import unittest
 from os.path import join as pjoin
 
 from e2xgrader.models import AssignmentModel
-from ..utils.test_utils import createTempCourse
+from ..test_utils.test_utils import createTempCourse
 
 
 
