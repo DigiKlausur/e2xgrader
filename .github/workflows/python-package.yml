@@ -25,6 +25,13 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: geckodriver/firefox
+      run: |
+        echo "geckodriver/firefox"
+        which geckodriver
+        geckodriver --version
+        which firefox
+        firefox --version
     - name: Install custom nbgrader
       run: |
         pip install --no-cache-dir git+https://github.com/DigiKlausur/nbgrader.git@clean_up
