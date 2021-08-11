@@ -14,15 +14,16 @@ class TestExtraCells(unittest.TestCase):
         tmp_dir, coursedir = create_temp_course()
         self.tmp_dir = tmp_dir
         self.model = PresetModel(coursedir)
+        self.multiplechoice = 'Multiple Choice'
 
     def test_extra_cell(self):
         assert not is_extra_cell(nbformat.v4.new_code_cell())
 
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         assert is_extra_cell(cells[0])
 
     def test_multiplechoice_cell(self):
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         assert is_multiplechoice(cells[0])
 
     def test_singlechoice_cell(self):
@@ -30,7 +31,7 @@ class TestExtraCells(unittest.TestCase):
         assert is_singlechoice(cells[0])
 
     def test_get_choices(self):
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         assert len(get_choices(cells[0])) == 0
 
         cells[0].metadata.extended_cell.choice = [1, 2, 3]
@@ -42,18 +43,18 @@ class TestExtraCells(unittest.TestCase):
         cells = self.model.get_question_preset('Single Choice')
         assert get_num_of_choices(cells[0]) is None
 
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         assert get_num_of_choices(cells[0]) == 3
 
     def test_clear_choices(self):
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         cells[0].metadata.extended_cell.choice = [1, 2, 3]
 
         clear_choices(cells[0])
         assert len(get_choices(cells[0])) == 0
 
     def test_has_solution(self):
-        cells = self.model.get_question_preset('Multiple Choice')
+        cells = self.model.get_question_preset(self.multiplechoice)
         assert not has_solution(cells[0])
 
     def tearDown(self):
