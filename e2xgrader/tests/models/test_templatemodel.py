@@ -47,5 +47,11 @@ class TestTemplateModel(unittest.TestCase):
         assert not res['success']
         assert res['error'] == f'A template with the name {name} already exists!'
 
+    def test_create_invalid_name(self):
+        name = '$Invalid.Name'
+        res = self.model.new(name=name)
+        assert not res['success']
+        assert res['error'] == 'Invalid name'
+
     def tearDown(self):
         self.tmp_dir.cleanup()

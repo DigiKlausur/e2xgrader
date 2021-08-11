@@ -54,5 +54,11 @@ class TestTaskPoolModel(unittest.TestCase):
         assert self.model.get(name=pool)['name'] == pool
         assert self.model.get(name=pool)['tasks'] == 1
 
+    def test_create_invalid_name(self):
+        name = '$Invalid.Name'
+        res = self.model.new(name=name)
+        assert not res['success']
+        assert res['error'] == 'Invalid name'
+
     def tearDown(self):
         self.tmp_dir.cleanup()

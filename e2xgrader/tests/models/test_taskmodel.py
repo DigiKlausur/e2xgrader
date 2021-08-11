@@ -63,5 +63,12 @@ class TestTaskModel(unittest.TestCase):
         assert res['questions'] == 1
         assert res['points'] == points
 
+    def test_create_invalid_name(self):
+        name = '$Invalid.Name'
+        pool = 'TestPool'
+        res = self.model.new(name=name, pool=pool)
+        assert not res['success']
+        assert res['error'] == 'Invalid name'
+
     def tearDown(self):
         self.tmp_dir.cleanup()
