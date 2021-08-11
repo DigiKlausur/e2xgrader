@@ -50,9 +50,8 @@ class TestGenerateExercise(unittest.TestCase):
         assert os.path.isfile(pjoin(base_path, f'{self.resources["exercise"]}.ipynb'))
 
     def test_convert_with_headers(self):
-        self.converter.convert(self.resources)
-
         self.resources['exercise_options']['task-headers'] = True
+        self.converter.convert(self.resources)
 
         base_path = self.converter.coursedir.format_path(
             'source',
