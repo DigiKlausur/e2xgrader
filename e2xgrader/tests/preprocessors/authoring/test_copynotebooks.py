@@ -35,13 +35,13 @@ class TestCopyNotebooks(BaseTest):
         self.taskmodel = TaskModel(self.coursedir)
         for task_dict in self.resources['tasks']:
             self.taskmodel.new(pool=task_dict['pool'], name=task_dict['task'])
-            
+
     def createTemplate(self):
         self.templatemodel = TemplateModel(self.coursedir)
         self.templatemodel.new(name=self.resources['template'])
 
     def test_copy(self):
-        res = CopyNotebooks().preprocess(self.resources)
+        CopyNotebooks().preprocess(self.resources)
         assert os.path.exists(pjoin(self.tmp_dir.name, 'tasks')), 'Tasks folder does not exists'
         assert os.path.exists(pjoin(self.tmp_dir.name, 'template')), 'Template folder does not exists'
         for task_dict in self.resources['tasks']:
