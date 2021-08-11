@@ -21,6 +21,48 @@ class TestE2XGraderApp(unittest.TestCase):
         self.manager = e2xgraderapp.ExtensionManager()
         self.manager.deactivate()
 
+    def get_serverextensions(self, role):
+        serverextensions = {
+            'nbgrader.server_extensions.formgrader': [],
+            'nbgrader.server_extensions.validate_assignment': ['teacher', 'student', 'student_exam'],
+            'nbgrader.server_extensions.assignment_list': [],
+            'nbgrader.server_extensions.course_list': ['teacher', 'student', 'student_exam'],
+            'e2xgrader.server_extensions.formgrader': ['teacher'],
+            'e2xgrader.server_extensions.assignment_list': ['teacher', 'student', 'student_exam'],
+            'e2xgrader.server_extensions.e2xbase': ['teacher', 'student', 'student_exam']
+        }
+
+        for key, value in serverextensions.items():
+            serverextensions[key] = role in value
+
+        return serverextensions
+
+    def get_nbextensions(self, role):
+        nbextensions = {
+            'tree': {
+                'formgrader/main': ['teacher'],
+                'assignment_list/main': ['teacher', 'student', 'student_exam'],
+                'course_list/main': ['teacher'],
+                'taskcreator/main': ['teacher'],
+                'restricted_tree/main': ['student_exam']
+            },
+            'notebook': {
+                'create_assignment/main': ['teacher'],
+                'validate_assignment/main': ['teacher'],
+                'extra_cells/main': ['teacher', 'student', 'student_exam'],
+                'taskeditor/main': ['teacher'],
+                'templatebar/main': ['teacher'],
+                'assignment_extension/main': ['student', 'student_exam'],
+                'exam_view/main': ['student_exam']
+            }
+        }
+
+        for section_dict in nbextensions.values():
+            for key, value in section_dict.items():
+                section_dict[key] = role in value
+
+        return nbextensions
+
     def test_deactivated_serverextensions(self):
         config_dict = {}
         for config_dir in jupyter_config_path():
@@ -31,13 +73,7 @@ class TestE2XGraderApp(unittest.TestCase):
             assert not extensions[serverextension]
 
     def test_teacher_serverextensions(self):
-        teacher_serversextensions = [
-            'nbgrader.server_extensions.validate_assignment',
-            'nbgrader.server_extensions.course_list',
-            'e2xgrader.server_extensions.formgrader',
-            'e2xgrader.server_extensions.assignment_list',
-            'e2xgrader.server_extensions.e2xbase'
-        ]
+        teacher_serverextensions = self.get_serverextensions('teacher')
         self.manager.activate_teacher()
 
         config_dict = {}
@@ -45,31 +81,11 @@ class TestE2XGraderApp(unittest.TestCase):
             cm = BaseJSONConfigManager(config_dir=config_dir)
             config_dict.update(cm.get('jupyter_notebook_config'))
         extensions = config_dict['NotebookApp']['nbserver_extensions']
-        for serverextension in self.serverextensions:
-            if serverextension in teacher_serversextensions:
-                assert extensions[serverextension]
-            else:
-                assert not extensions[serverextension]
+        for serverextension, status in teacher_serverextensions.items():
+                assert extensions[serverextension] == status
 
     def test_teacher_nbextensions(self):
-        teacher_nbextensions = {
-            'tree': {
-                'formgrader/main': True,
-                'assignment_list/main': True,
-                'course_list/main': True,
-                'taskcreator/main': True,
-                'restricted_tree/main': False
-            },
-            'notebook': {
-                'create_assignment/main': True,
-                'validate_assignment/main': True,
-                'extra_cells/main': True,
-                'taskeditor/main': True,
-                'templatebar/main': True,
-                'assignment_extension/main': False,
-                'exam_view/main': False
-            }
-        }
+        teacher_nbextensions = self.get_nbextensions('teacher')
         self.manager.activate_teacher()
         for section, extensions in teacher_nbextensions.items():
             config_dict = {}
@@ -85,12 +101,7 @@ class TestE2XGraderApp(unittest.TestCase):
                     assert not status
 
     def test_student_serverextensions(self):
-        student_serversextensions = [
-            'nbgrader.server_extensions.validate_assignment',
-            'nbgrader.server_extensions.course_list',
-            'e2xgrader.server_extensions.assignment_list',
-            'e2xgrader.server_extensions.e2xbase'
-        ]
+        student_serverextensions = self.get_serverextensions('student')
         self.manager.activate_student()
 
         config_dict = {}
@@ -98,31 +109,11 @@ class TestE2XGraderApp(unittest.TestCase):
             cm = BaseJSONConfigManager(config_dir=config_dir)
             config_dict.update(cm.get('jupyter_notebook_config'))
         extensions = config_dict['NotebookApp']['nbserver_extensions']
-        for serverextension in self.serverextensions:
-            if serverextension in student_serversextensions:
-                assert extensions[serverextension]
-            else:
-                assert not extensions[serverextension]
+        for serverextension, status in student_serverextensions.items():
+                assert extensions[serverextension] == status
 
     def test_student_nbextensions(self):
-        student_nbextensions = {
-            'tree': {
-                'formgrader/main': False,
-                'assignment_list/main': True,
-                'course_list/main': False,
-                'taskcreator/main': False,
-                'restricted_tree/main': False
-            },
-            'notebook': {
-                'create_assignment/main': False,
-                'validate_assignment/main': False,
-                'extra_cells/main': True,
-                'taskeditor/main': False,
-                'templatebar/main': False,
-                'assignment_extension/main': True,
-                'exam_view/main': False
-            }
-        }
+        student_nbextensions = self.get_nbextensions('student')
         self.manager.activate_student()
         for section, extensions in student_nbextensions.items():
             config_dict = {}
@@ -138,12 +129,7 @@ class TestE2XGraderApp(unittest.TestCase):
                     assert not status
 
     def test_student_exam_serverextensions(self):
-        student_serversextensions = [
-            'nbgrader.server_extensions.validate_assignment',
-            'nbgrader.server_extensions.course_list',
-            'e2xgrader.server_extensions.assignment_list',
-            'e2xgrader.server_extensions.e2xbase'
-        ]
+        student_serverextensions = self.get_serverextensions('student_exam')
         self.manager.activate_student_exam()
 
         config_dict = {}
@@ -151,31 +137,11 @@ class TestE2XGraderApp(unittest.TestCase):
             cm = BaseJSONConfigManager(config_dir=config_dir)
             config_dict.update(cm.get('jupyter_notebook_config'))
         extensions = config_dict['NotebookApp']['nbserver_extensions']
-        for serverextension in self.serverextensions:
-            if serverextension in student_serversextensions:
-                assert extensions[serverextension]
-            else:
-                assert not extensions[serverextension]
+        for serverextension, status in student_serverextensions.items():
+                assert extensions[serverextension] == status
 
     def test_student_exam_nbextensions(self):
-        student_exam_nbextensions = {
-            'tree': {
-                'formgrader/main': False,
-                'assignment_list/main': True,
-                'course_list/main': False,
-                'taskcreator/main': False,
-                'restricted_tree/main': True
-            },
-            'notebook': {
-                'create_assignment/main': False,
-                'validate_assignment/main': False,
-                'extra_cells/main': True,
-                'taskeditor/main': False,
-                'templatebar/main': False,
-                'assignment_extension/main': True,
-                'exam_view/main': True
-            }
-        }
+        student_exam_nbextensions = self.get_nbextensions('student_exam')
         self.manager.activate_student_exam()
         for section, extensions in student_exam_nbextensions.items():
             config_dict = {}
