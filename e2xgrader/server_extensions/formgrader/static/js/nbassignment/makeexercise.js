@@ -171,11 +171,10 @@ class TaskSelect extends FormTab {
         this.data = {};
         let that = this;
 
-        
+
         this.pools.fetch({
             success: () => that.handleLoadPools()
         });
-        this.loadPools();
     }
 
     registerControls() {
@@ -213,13 +212,13 @@ class TaskSelect extends FormTab {
                 .attr('value', pool.get('name'))
                 .text(pool.get('name')));
         });
-        
+
         this.$select.change(function () {
-            
+
             let choice = $(this).val();
 
             if (choice !== '') {
-                
+
                 that.tasks = new Tasks({
                     pool: choice
                 });
@@ -227,7 +226,7 @@ class TaskSelect extends FormTab {
                     success: () => that.handleLoadTasks()
                 })
             }
-            
+
         });
     }
 
@@ -328,7 +327,7 @@ class TabView {
                     .addClass('btn btn-primary')
                     .click(() => that.select(i + 1)));
             }
-            
+
         }
         this.tabs[this.tabs.length - 1].$el.append($('<button/>')
                     .text('Finalize')
@@ -375,7 +374,7 @@ class TabView {
             this.cursor = new_index;
             this.current.$el.toggle();
         }
-        
+
     }
 }
 
