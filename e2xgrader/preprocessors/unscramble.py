@@ -5,13 +5,12 @@ from nbgrader.preprocessors import NbGraderPreprocessor
 
 
 class Unscramble(NbGraderPreprocessor):
-
     def __init__(self, **kw):
-        self.__pattern = re.compile('{{([^{]+)}}')
-        self.log.info('Init Unscramble')
+        self.__pattern = re.compile("{{([^{]+)}}")
+        self.log.info("Init Unscramble")
 
     def preprocess(self, nb, resources):
-        if 'scramble_config' not in nb.metadata:
+        if "scramble_config" not in nb.metadata:
             return nb, resources
 
         byte_config = nb.metadata.scramble_config.config
@@ -21,6 +20,8 @@ class Unscramble(NbGraderPreprocessor):
             matches = self.__pattern.findall(cell.source)
             for m in matches:
                 if m.strip() in config:
-                    cell.source = cell.source.replace('{{' + m + '}}', str(config[m.strip()]))
+                    cell.source = cell.source.replace(
+                        "{{" + m + "}}", str(config[m.strip()])
+                    )
 
         return nb, resources

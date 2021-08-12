@@ -5,7 +5,7 @@ from traitlets.utils.importstring import import_item
 
 class Converter(LoggingConfigurable):
 
-    preprocessors = List([], help='List of preprocessors for the converter')
+    preprocessors = List([], help="List of preprocessors for the converter")
 
     def __init__(self, config=None):
         with_default_config = self.default_config()

@@ -9,31 +9,32 @@ class PresetModel(BaseModel):
     task_preset_path = Unicode(
         os.path.join(
             os.path.dirname(__file__),
-            '..',
-            'server_extensions/formgrader/presets/questions/'
+            "..",
+            "server_extensions/formgrader/presets/questions/",
         )
     ).tag(config=True)
 
     template_preset_path = Unicode(
         os.path.join(
             os.path.dirname(__file__),
-            '..',
-            'server_extensions/formgrader/presets/template/'
+            "..",
+            "server_extensions/formgrader/presets/template/",
         )
     ).tag(config=True)
 
     def list_presets(self, preset_path):
         presets = []
         for item in os.listdir(preset_path):
-            if '.ipynb_checkpoints' in item:
+            if ".ipynb_checkpoints" in item:
                 continue
-            if os.path.isfile(os.path.join(preset_path, item)) and \
-               item.endswith('.ipynb'):
+            if os.path.isfile(os.path.join(preset_path, item)) and item.endswith(
+                ".ipynb"
+            ):
                 presets.append(os.path.splitext(item)[0])
         return sorted(presets)
 
     def get_preset(self, preset_path, preset_name):
-        path = os.path.join(preset_path, '{}.ipynb'.format(preset_name))
+        path = os.path.join(preset_path, "{}.ipynb".format(preset_name))
         if os.path.isfile(path):
             nb = nbformat.read(path, as_version=4)
             return nb.cells

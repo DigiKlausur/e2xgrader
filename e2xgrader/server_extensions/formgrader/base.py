@@ -7,18 +7,15 @@ from nbgrader.server_extensions.formgrader.base import check_xsrf
 
 
 class E2xBaseApiHandler(BaseApiHandler):
-
     @property
     def api(self):
         level = self.log.level
-        api = E2xAPI(
-            self.coursedir, self.authenticator, parent=self.coursedir.parent)
+        api = E2xAPI(self.coursedir, self.authenticator, parent=self.coursedir.parent)
         api.log_level = level
         return api
 
 
 class BaseApiManageHandler(BaseApiHandler):
-
     def initialize(self, model_cls):
         self.__model = model_cls(self.coursedir)
 
@@ -45,7 +42,6 @@ class BaseApiManageHandler(BaseApiHandler):
 
 
 class BaseApiListHandler(BaseApiHandler):
-
     def initialize(self, model_cls):
         self.__model = model_cls(self.coursedir)
 
