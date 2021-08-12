@@ -132,6 +132,6 @@ function getNewModalElements(element_name) {
         .text('Cancel'));
     return {
         body: body,
-        footer, footer
+        footer: footer
     }
 }
