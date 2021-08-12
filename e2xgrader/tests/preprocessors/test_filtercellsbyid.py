@@ -5,7 +5,7 @@ from e2xgrader.utils.nbgrader_cells import grade_id
 from e2xgrader.preprocessors import FilterCellsById
 
 
-class TestClearSolutions(unittest.TestCase):
+class TestFilterCellsById(unittest.TestCase):
     def setUp(self):
         self.grade_ids = ["Task", "Task1", "Task12", "Task123", "Task1234", "Task12345"]
         self.nb = new_notebook()
