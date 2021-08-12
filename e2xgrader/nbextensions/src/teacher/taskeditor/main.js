@@ -14,6 +14,7 @@ define([
         open_menu.addClass('e2xbutton e2xsubmenu');
         let menu = $('<ul/>').addClass('question_menu');
         open_menu.append(menu);
+        new manager.QuestionManager();
         return open_menu;
     }
 
@@ -22,6 +23,7 @@ define([
         open_menu.addClass('e2xbutton e2xsubmenu');
         let menu = $('<ul/>').addClass('question_menu');
         open_menu.append(menu);
+        new manager.TemplateManager();
         return open_menu;
     }
 
@@ -43,8 +45,8 @@ define([
                 );
                 let url = Jupyter.utils.url_path_join(
                     Jupyter.notebook.base_url,
-                    'tree', 
-                    notebook_dir, 
+                    'tree',
+                    notebook_dir,
                     option[1]
                 );
                 window.open(url);
@@ -76,14 +78,14 @@ define([
 
     function is_taskbook() {
         let metadata = Jupyter.notebook.metadata;
-        return (metadata.hasOwnProperty('nbassignment')) 
+        return (metadata.hasOwnProperty('nbassignment'))
             && (metadata.nbassignment.hasOwnProperty('type'))
             && (metadata.nbassignment.type === 'task');
     }
 
     function is_templatebook() {
         let metadata = Jupyter.notebook.metadata;
-        return (metadata.hasOwnProperty('nbassignment')) 
+        return (metadata.hasOwnProperty('nbassignment'))
             && (metadata.nbassignment.hasOwnProperty('type'))
             && (metadata.nbassignment.type === 'template');
     }
@@ -137,7 +139,7 @@ define([
         items.push(tag_menu());
         items.push($('#nbgrader-total-points-group'));
         items.push($('#move_up_down'));
-        items.push($('#run_int')); 
+        items.push($('#run_int'));
 
         Jupyter.CellToolbar.activate_preset(preset);
         Jupyter.CellToolbar.global_show();
@@ -147,8 +149,8 @@ define([
         $('<div/>')
             .attr('id', 'e2xheader')
             .append($('<span/>').text(name))
-            .insertAfter($('#ipython_notebook'));               
-        
+            .insertAfter($('#ipython_notebook'));
+
         let div = $('<div/>').attr('id', 'questionbar');
         div.append($('<span/>').text('e²x').addClass('questionbutton'));
 
