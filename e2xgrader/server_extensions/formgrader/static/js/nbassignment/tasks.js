@@ -9,7 +9,7 @@ let TaskUI = BaseUI.extend({
         this.$edit_task = this.$el.find('.edit-task');
         this.$remove_task = this.$el.find('.remove-task');
 
-        this.fields = [this.$task_name, this.$number_of_questions, 
+        this.fields = [this.$task_name, this.$number_of_questions,
                        this.$points, this.$edit_task, this.$remove_task];
 
         this.listenTo(this.model, 'sync', this.render);
@@ -44,19 +44,8 @@ let TaskUI = BaseUI.extend({
 
 });
 
-function insertRow(table) {
-    let row = $('<tr/>');
-    row.append($('<td/>').addClass('task-name'));
-    row.append($('<td/>').addClass('number-of-questions'));
-    row.append($('<td/>').addClass('points'));
-    row.append($('<td/>').addClass('edit-task'));
-    row.append($('<td/>').addClass('remove-task'));
-    table.append(row);
-    return row;
-}
-
 function addView(model, table) {
-    let row = insertRow(table);
+    let row = insertRow(table, ['task-name', 'number-of-questions', 'points', 'edit-task', 'remove-task']);
     return new TaskUI({
         'model': model,
         'el': row
@@ -86,7 +75,7 @@ function loadTasks() {
 
 function newTask() {
     let body = $('<div/>').append($('</p>').text(
-        `Please specify the name of the new task. Names can consist of characters, 
+        `Please specify the name of the new task. Names can consist of characters,
          digits, spaces and underscores.`));
     let table = $('<table/>').addClass('table table-striped form-table');
     let tablebody = $('<tbody/>');
@@ -109,7 +98,7 @@ function newTask() {
         .text('Cancel'));
 
     let $modal = createModal("new-task-modal", "Create a new task", body, footer);
-    
+
     let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
         let $modal_name = $modal.find('input.modal-name').val();
@@ -134,7 +123,7 @@ function newTask() {
                     createLogModal(
                         'error-modal',
                         'Error',
-                        'There was an error creating the task ' + task.get('name') + '!',                    
+                        'There was an error creating the task ' + task.get('name') + '!',
                         task.get('error'));
                 }
             }

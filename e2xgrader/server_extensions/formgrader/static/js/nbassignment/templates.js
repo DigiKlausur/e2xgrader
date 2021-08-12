@@ -16,7 +16,7 @@ let TemplateUI = BaseUI.extend({
     render: function () {
         this.clear();
         let name = this.model.get('name');
-        
+
         this.$template_name.append($('<a/>')
             .attr('href', tree_url + 'templates/' + name)
             .text(name));
@@ -40,17 +40,8 @@ let TemplateUI = BaseUI.extend({
 
 });
 
-function insertRow(table) {
-    let row = $('<tr/>');
-    row.append($('<td/>').addClass('template-name'));
-    row.append($('<td/>').addClass('edit-template'));
-    row.append($('<td/>').addClass('remove-template'));
-    table.append(row);
-    return row;
-}
-
 function addView(model, table) {
-    let row = insertRow(table);
+    let row = insertRow(table, ['template-name', 'edit-template', 'remove-template']);
     return new TemplateUI({
         'model': model,
         'el': row
@@ -71,7 +62,7 @@ function loadTemplates() {
                     {'searchable': false, 'targets': [-1, -2]}
                 ]
             });
-            
+
             models.loaded = true;
         }
     });
@@ -79,7 +70,7 @@ function loadTemplates() {
 
 function newTemplate() {
     let body = $('<div/>').append($('</p>').text(
-        `Please specify the name of the new template. Names can consist of characters, 
+        `Please specify the name of the new template. Names can consist of characters,
          digits, spaces and underscores.`));
     let table = $('<table/>').addClass('table table-striped form-table');
     let tablebody = $('<tbody/>');
@@ -102,7 +93,7 @@ function newTemplate() {
         .text('Cancel'));
 
     let $modal = createModal("new-template-modal", "Create a new exercise template", body, footer);
-    
+
     let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
         let $modal_name = $modal.find('input.modal-name').val();
@@ -122,7 +113,7 @@ function newTemplate() {
                 createLogModal(
                     'error-modal',
                     'Error',
-                    'There was an error creating the template ' + template.get('name') + '!',                    
+                    'There was an error creating the template ' + template.get('name') + '!',
                     template.get('error'));
             }
         }});

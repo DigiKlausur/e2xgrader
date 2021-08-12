@@ -97,3 +97,12 @@ let BaseUI = Backbone.View.extend({
         dataTable.row(this.$el).remove().draw();
     }
 });
+
+function insertRow(table, classes) {
+    let row = $('<tr/>');
+    classes.forEach(function (cls) {
+        row.append($('<td/>').addClass(cls));
+    });
+    table.append(row);
+    return row;
+}

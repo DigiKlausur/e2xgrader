@@ -16,7 +16,7 @@ let PoolUI = BaseUI.extend({
     render: function () {
         this.clear();
         let name = this.model.get('name');
-        
+
         this.$pool_name.append($('<a/>')
             .attr('href', base_url + '/taskcreator/pools/' + name)
             .text(name));
@@ -39,17 +39,8 @@ let PoolUI = BaseUI.extend({
 
 });
 
-function insertRow(table) {
-    let row = $('<tr/>');
-    row.append($('<td/>').addClass('pool-name'));
-    row.append($('<td/>').addClass('number-of-tasks'));
-    row.append($('<td/>').addClass('remove-pool'));
-    table.append(row);
-    return row;
-}
-
 function addView(model, table) {
-    let row = insertRow(table);
+    let row = insertRow(table, ['pool-name', 'number-of-tasks', 'remove-pool']);
 
     return new PoolUI({
         'model': model,
@@ -63,7 +54,7 @@ function loadPools() {
     models.loaded = false;
     models.fetch({
         success: function () {
-            tbl.empty();            
+            tbl.empty();
             models.each((model) => addView(model, tbl));
             dataTable = tbl.parent().DataTable({
                 'columnDefs': [
@@ -78,7 +69,7 @@ function loadPools() {
 
 function newPool() {
     let body = $('<div/>').append($('</p>').text(
-        `Please specify the name of the new pool. Names can consist of characters, 
+        `Please specify the name of the new pool. Names can consist of characters,
          digits, spaces and underscores.`));
     let table = $('<table/>').addClass('table table-striped form-table');
     let tablebody = $('<tbody/>');
@@ -101,7 +92,7 @@ function newPool() {
         .text('Cancel'));
 
     let $modal = createModal("new-pool-modal", "Create a new task pool", body, footer);
-    
+
     let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
         let $modal_name = $modal.find('input.modal-name').val();
@@ -120,7 +111,7 @@ function newPool() {
                 createLogModal(
                     'error-modal',
                     'Error',
-                    'There was an error creating the pool ' + pool.get('name') + '!',                    
+                    'There was an error creating the pool ' + pool.get('name') + '!',
                     pool.get('error'));
             }
         }});
