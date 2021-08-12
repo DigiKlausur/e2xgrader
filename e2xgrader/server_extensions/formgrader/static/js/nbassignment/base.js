@@ -106,3 +106,32 @@ function insertRow(table, classes) {
     table.append(row);
     return row;
 }
+
+function getNewModalElements(element_name) {
+    let body = $('<div/>').append($('</p>').text(
+        'Please specify the name of the new ' + element_name.toLowerCase() +
+        '. Names can consist of characters, digits, spaces and underscores.'));
+    let table = $('<table/>').addClass('table table-striped form-table');
+    let tablebody = $('<tbody/>');
+    body.append(table);
+    table.append(tablebody);
+    let name = $('<tr/>');
+    tablebody.append(name);
+    name.append($('<td/>').addClass('align-middle').text('Name'));
+    name.append($('<td/>').append($('<input/>')
+        .addClass('modal-name')
+        .attr('pattern', '[A-Za-z0-9]+')
+        .attr('type', 'text')));
+    let footer = $('<div/>');
+    footer.append($('<button/>')
+        .addClass('btn btn-primary save')
+        .text('Add ' + element_name));
+    footer.append($('<button/>')
+        .addClass('btn btn-danger')
+        .attr('data-dismiss', 'modal')
+        .text('Cancel'));
+    return {
+        body: body,
+        footer, footer
+    }
+}

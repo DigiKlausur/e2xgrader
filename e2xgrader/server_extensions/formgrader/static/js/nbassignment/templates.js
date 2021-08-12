@@ -69,30 +69,9 @@ function loadTemplates() {
 }
 
 function newTemplate() {
-    let body = $('<div/>').append($('</p>').text(
-        `Please specify the name of the new template. Names can consist of characters,
-         digits, spaces and underscores.`));
-    let table = $('<table/>').addClass('table table-striped form-table');
-    let tablebody = $('<tbody/>');
-    body.append(table);
-    table.append(tablebody);
-    let name = $('<tr/>');
-    tablebody.append(name);
-    name.append($('<td/>').addClass('align-middle').text('Name'));
-    name.append($('<td/>').append($('<input/>')
-        .addClass('modal-name')
-        .attr('pattern', '[A-Za-z0-9]+')
-        .attr('type', 'text')));
-    let footer = $('<div/>');
-    footer.append($('<button/>')
-        .addClass('btn btn-primary save')
-        .text('Add Task Template'));
-    footer.append($('<button/>')
-        .addClass('btn btn-danger')
-        .attr('data-dismiss', 'modal')
-        .text('Cancel'));
+    let elem = getNewModalElements('Template');
 
-    let $modal = createModal("new-template-modal", "Create a new exercise template", body, footer);
+    let $modal = createModal("new-template-modal", "Create a new exercise template", elem.body, elem.footer);
 
     let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {

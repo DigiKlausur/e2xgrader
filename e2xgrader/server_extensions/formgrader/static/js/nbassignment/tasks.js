@@ -74,30 +74,9 @@ function loadTasks() {
 }
 
 function newTask() {
-    let body = $('<div/>').append($('</p>').text(
-        `Please specify the name of the new task. Names can consist of characters,
-         digits, spaces and underscores.`));
-    let table = $('<table/>').addClass('table table-striped form-table');
-    let tablebody = $('<tbody/>');
-    body.append(table);
-    table.append(tablebody);
-    let name = $('<tr/>');
-    tablebody.append(name);
-    name.append($('<td/>').addClass('align-middle').text('Name'));
-    name.append($('<td/>').append($('<input/>')
-        .addClass('modal-name')
-        .attr('pattern', '[A-Za-z0-9]+')
-        .attr('type', 'text')));
-    let footer = $('<div/>');
-    footer.append($('<button/>')
-        .addClass('btn btn-primary save')
-        .text('Add Task'));
-    footer.append($('<button/>')
-        .addClass('btn btn-danger')
-        .attr('data-dismiss', 'modal')
-        .text('Cancel'));
+    let elem = getNewModalElements('Task');
 
-    let $modal = createModal("new-task-modal", "Create a new task", body, footer);
+    let $modal = createModal("new-task-modal", "Create a new task", elem.body, elem.footer);
 
     let $modal_save = $modal.find('button.save');
     $modal_save.click(function () {
