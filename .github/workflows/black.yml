@@ -1,0 +1,13 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Linit
+
+# Controls when the workflow will run
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
