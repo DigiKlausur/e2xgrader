@@ -18,8 +18,7 @@ except ImportError:
         # Additionally check that `file` is not a directory, as on Windows
         # directories pass the os.access check.
         def _access_check(fn, mode):
-            return (os.path.exists(fn) and os.access(fn, mode)
-                    and not os.path.isdir(fn))
+            return os.path.exists(fn) and os.access(fn, mode) and not os.path.isdir(fn)
 
         # If we're given a path with a directory part, look it up directly rather
         # than referring to PATH directories. This includes checking relative to the
@@ -68,9 +67,9 @@ except ImportError:
 
 
 def discover_nbextensions(name):
-    has_npm = which('npm') is not None
-    src_path = pjoin('nbextensions', 'src')
-    lib_path = pjoin('nbextensions', 'lib')
+    has_npm = which("npm") is not None
+    src_path = pjoin("nbextensions", "src")
+    lib_path = pjoin("nbextensions", "lib")
     extension_path = pjoin(name, src_path)
     extension_files = []
     for (dirname, dirnames, filenames) in os.walk(extension_path):
@@ -89,10 +88,12 @@ def discover_nbextensions(name):
 def js_prerelease(command):
 
     """decorator for building es2015 js prior to another command"""
+
     class DecoratedCommand(command):
         def run(self):
-            if which('npm') is not None:
-                assert os.system('npm install') == 0, 'npm install failed'
-                assert os.system('npm run build') == 0, 'npm build failed'
+            if which("npm") is not None:
+                assert os.system("npm install") == 0, "npm install failed"
+                assert os.system("npm run build") == 0, "npm build failed"
             command.run(self)
+
     return DecoratedCommand

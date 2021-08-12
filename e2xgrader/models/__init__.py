@@ -7,11 +7,11 @@ from .presetmodel import PresetModel
 from .basemodel import BaseModel
 
 __all__ = [
-    'TaskModel',
-    'TemplateModel',
-    'TaskPoolModel',
-    'AssignmentModel',
-    'ExerciseModel',
-    'PresetModel',
-    'BaseModel'
+    "TaskModel",
+    "TemplateModel",
+    "TaskPoolModel",
+    "AssignmentModel",
+    "ExerciseModel",
+    "PresetModel",
+    "BaseModel",
 ]
