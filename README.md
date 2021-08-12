@@ -1,5 +1,9 @@
 # e2xgrader
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DigiKlausur_e2xgrader&metric=alert_status)](https://sonarcloud.io/dashboard?id=DigiKlausur_e2xgrader)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DigiKlausur_e2xgrader&metric=coverage)](https://sonarcloud.io/dashboard?id=DigiKlausur_e2xgrader)
+
 E2xgrader is an add on for nbgrader. All information can be found under https://digiklausur.github.io/e2xgrader/e2xgrader.html
 
 It comes with the following features:
