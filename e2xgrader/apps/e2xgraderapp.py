@@ -65,6 +65,12 @@ class ExtensionManager:
                            section='notebook', sys_prefix=sys_prefix, user=user)
         enable_nbextension(require='create_assignment/main',
                            section='notebook', sys_prefix=sys_prefix, user=user)
+        enable_nbextension(require='taskcreator/main',
+                           section='tree', sys_prefix=sys_prefix, user=user)
+        enable_nbextension(require='templatebar/main',
+                           section='notebook', sys_prefix=sys_prefix, user=user)
+        enable_nbextension(require='taskeditor/main',
+                           section='notebook', sys_prefix=sys_prefix, user=user)
 
     def activate_student(self, sys_prefix=True, user=False):
         print(f'Activate student mode with sys_prefix = {sys_prefix} and user = {user}')

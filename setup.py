@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 
 import os
+from os.path import join as pjoin
 from setuptools import setup, find_packages
 from setuptools.command.build_py import build_py
 from setupbase import js_prerelease, discover_nbextensions
 
-
+formgrader_path = "e2xgrader/server_extensions/formgrader"
 static_files = []
-for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formgrader/static"):
-    root = os.path.relpath(dirname, "e2xgrader/server_extensions/formgrader")
+for (dirname, dirnames, filenames) in os.walk(pjoin(formgrader_path, "static")):
+    root = os.path.relpath(dirname, formgrader_path)
     for filename in filenames:
         static_files.append(os.path.join(root, filename))
-for (dirname, dirnames, filenames) in os.walk("e2xgrader/server_extensions/formgrader/templates"):
-    root = os.path.relpath(dirname, "e2xgrader/server_extensions/formgrader")
+for (dirname, dirnames, filenames) in os.walk(pjoin(formgrader_path, "templates")):
+    root = os.path.relpath(dirname, formgrader_path)
+    for filename in filenames:
+        static_files.append(os.path.join(root, filename))
+for (dirname, dirnames, filenames) in os.walk(pjoin(formgrader_path, "presets")):
+    root = os.path.relpath(dirname, formgrader_path)
     for filename in filenames:
         static_files.append(os.path.join(root, filename))
 
