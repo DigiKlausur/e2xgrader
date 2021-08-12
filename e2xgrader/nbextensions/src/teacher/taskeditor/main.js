@@ -14,7 +14,8 @@ define([
         open_menu.addClass('e2xbutton e2xsubmenu');
         let menu = $('<ul/>').addClass('question_menu');
         open_menu.append(menu);
-        new manager.QuestionManager();
+        let question_manager = new manager.QuestionManager();
+        question_manager.load_list();
         return open_menu;
     }
 
@@ -23,7 +24,8 @@ define([
         open_menu.addClass('e2xbutton e2xsubmenu');
         let menu = $('<ul/>').addClass('question_menu');
         open_menu.append(menu);
-        new manager.TemplateManager();
+        let template_manager = new manager.TemplateManager();
+        template_manager.load_list();
         return open_menu;
     }
 

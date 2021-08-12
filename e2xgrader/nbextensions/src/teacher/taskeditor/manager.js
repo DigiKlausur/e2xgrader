@@ -15,7 +15,6 @@ define([
             this.menu_selector = '.question_menu';
             this.option_class = 'question_item';
             this.preset_type = preset_type;
-            this.load_list();
         }
 
         randomString(len) {
@@ -24,7 +23,7 @@ define([
             for (let i=0; i < len; i++) {
                 result += chars[Math.floor(Math.random() * chars.length)];
             }
-            return result; 
+            return result;
         }
 
         handle_load_list(options) {
@@ -98,7 +97,7 @@ define([
             Jupyter.notebook.get_cells().forEach(function (cell) {
                 if (that.model.is_nbgrader(cell)) {
                     ids.add(that.model.get_id(cell));
-                }                
+                }
             });
             let char = 65;
             let task_name = nb_name + '_' + String.fromCharCode(char);
@@ -113,7 +112,7 @@ define([
             let that = this;
             let descriptions = 0;
             let tests = 0;
-            
+
             cells.forEach(function (cell) {
                 if (that.model.is_grade(cell)) {
                     that.model.set_points(cell, points);
@@ -144,7 +143,7 @@ define([
         }
 
         insert_dialog(preset) {
-            let that = this;            
+            let that = this;
             let table = $('<table/>').addClass('e2xtable');
 
             let nameRow = $('<tr/>')
@@ -175,7 +174,7 @@ define([
                 buttons: {
                     OK: {
                         click: () => that.insert_preset(
-                            preset, 
+                            preset,
                             {'name': $('#taskname').val(),
                              'points': Number($('#points').val())}
                         )
@@ -184,7 +183,7 @@ define([
                 }});
         }
 
-    }    
+    }
 
     class TemplateManager extends PresetManager {
 
@@ -199,7 +198,7 @@ define([
                 if (model.is_nbgrader(cell)) {
                     model.set_id(cell, name + '_' + counter);
                     counter += 1;
-                }                
+                }
             });
         }
 
