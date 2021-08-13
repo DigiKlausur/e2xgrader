@@ -1,7 +1,4 @@
-import os
 import unittest
-
-from os.path import join as pjoin
 
 from e2xgrader.converters import GenerateExercise
 from e2xgrader.models import ExerciseModel, TaskModel
