@@ -10,7 +10,7 @@ from traitlets import Unicode, List
 from textwrap import dedent
 
 class SaveAutoGrades(NbgraderSaveAutoGrades):
- 
+
     cell_ids = List([],
         help=dedent(
             """
