@@ -2,13 +2,15 @@ from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell, Gradebook
 from nbgrader.coursedir import CourseDirectory
 from e2xgrader.utils.nbgrader_cells import grade_id
-from nbgrader.utils import is_grade, is_solution, compute_checksum
+from nbgrader.utils import is_grade, is_solution, compute_checksum, temp_attrs, capture_log
+from nbgrader.converters import GenerateFeedback
 import nbformat
 import os
 import json
 import time
 import subprocess
 from multiprocessing import Value
+from traitlets.config import Config
 
 class E2xAPI(NbGraderAPI):
 
@@ -34,7 +36,7 @@ class E2xAPI(NbGraderAPI):
         self.autograde_total.value = len(students)
         result_log = {}
         for idx, student in enumerate(students):
-            if self.autograde_stop.value == True:
+            if self.autograde_stop.value:
                 self.autograde_stop.value = False
                 break
             autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
@@ -308,3 +310,47 @@ class E2xAPI(NbGraderAPI):
         solution_cell_names = [cell.name for cell in updated_notebook.solution_cells]
         autograde_cells = set(grade_cell_names).difference(set(solution_cell_names))
         return list(autograde_cells)
+
+    def generate_feedback_hide(self, assignment_id, student_id=None, force=True):
+        """Run ``nbgrader generate_feedback`` for a particular assignment and student.
+
+        Arguments
+        ---------
+        assignment_id: string
+            The name of the assignment
+        student_id: string
+            The name of the student (optional). If not provided, then generate
+            feedback from autograded submissions.
+        force: bool
+            Whether to force generating feedback, even if it already exists.
+
+        Returns
+        -------
+        result: dict
+            A dictionary with the following keys (error and log may or may not be present):
+
+            - success (bool): whether or not the operation completed successfully
+            - error (string): formatted traceback
+            - log (string): captured log output
+
+        """
+        # Because we may be using HTMLExporter.template_file in other
+        # parts of the the UI, we need to make sure that the template
+        # is explicitply 'feedback_hide.tpl` here:
+        c = Config()
+        c.HTMLExporter.template_file = 'feedback_hide.tpl'
+        if student_id is not None:
+            with temp_attrs(self.coursedir,
+                            assignment_id=assignment_id,
+                            student_id=student_id):
+                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
+                app.update_config(c)
+                app.force = force
+                return capture_log(app)
+        else:
+            with temp_attrs(self.coursedir,
+                            assignment_id=assignment_id):
+                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
+                app.update_config(c)
+                app.force = force
+                return capture_log(app)

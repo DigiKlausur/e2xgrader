@@ -34,6 +34,7 @@ class AutogradeLog(BaseApiHandler):
         result = {'autograde_log' : autograde_log}
         self.write(json.dumps(result))
 
+
 class StudentNum(BaseApiHandler):
     @web.authenticated
     @check_xsrf
@@ -147,6 +148,20 @@ class SubmittedTaskCollectionHandler(BaseApiHandler):
         self.write(json.dumps(submissions))
 
 
+class GenerateAllFeedbackHandlerHide(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def post(self, assignment_id):
+        self.write(json.dumps(self.api.generate_feedback_hide(assignment_id)))
+
+
+class GenerateFeedbackHandlerHide(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def post(self, assignment_id, student_id):
+        self.write(json.dumps(self.api.generate_feedback_hide(assignment_id, student_id)))
+
+
 default_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (r"/formgrader/api/submitted_tasks/([^/]+)/([^/]+)/([^/]+)", SubmittedTaskCollectionHandler),
@@ -160,4 +175,6 @@ default_handlers = [
     (r'/formgrader/api/list_cells/?', ListCells),
     (r'/formgrader/api/autograding_progress/?', AutogradingProgess),
     (r'/formgrader/api/autograding_stop/?', AutogradingStop),
+    (r'/formgrader/api/assignment/([^/]+)/generate_feedback_hide', GenerateAllFeedbackHandlerHide),
+    (r'/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback_hide', GenerateFeedbackHandlerHide),
 ]

@@ -531,11 +531,45 @@ var AssignmentUI = Backbone.View.extend({
     },
 
     generate_feedback: function () {
-        this.clear();
-        this.$name.text("Please wait...");
-        $.post(base_url + "/formgrader/api/assignment/" + this.model.get("name") + "/generate_feedback")
-            .done(_.bind(this.generate_feedback_success, this))
-            .fail(_.bind(this.generate_feedback_failure, this));
+        var select = "<form id=\"feedback_form\"><strong>Please select the version of feedback to be generated.</strong><br><br>\
+        <input type=\"radio\" name=\"feedback_radio\" id=\"show_cells\" checked=\"checked\"> <label for=\"show_cells\">Show autograded cells</label><br>\
+        <input type=\"radio\" name=\"feedback_radio\" id=\"hide_cells\"> <label for=\"hide_cells\">Hide autograded cells</label></form>"
+
+        var container_start = "<div>";
+        var container_end = "</div></div>";
+        var body = $(container_start + select + container_end);
+
+        var footer = $("<div/>");
+        footer.append($("<button/>")
+            .addClass("btn btn-primary feedback")
+            .attr("type", "button")
+            .text("Select"));
+        footer.append($("<button/>")
+            .addClass("btn btn-danger")
+            .attr("type", "button")
+            .attr("data-dismiss", "modal")
+            .text("Cancel"));
+
+        this.$modal = createModal("generate-feedback-modal", "Generate feedback: " + this.model.get("name"), body, footer);        
+        this.$modal_select = this.$modal.find("button.feedback");
+        this.$modal_select.click(_.bind(this.feedback, this));
+    },
+
+    feedback: function (){
+        $('#generate-feedback-modal').modal('hide');
+        if(document.getElementById("show_cells").checked){
+            this.clear();
+            this.$name.text("Please wait...");
+            $.post(base_url + "/formgrader/api/assignment/" + this.model.get("name") + "/generate_feedback")
+                .done(_.bind(this.generate_feedback_success, this))
+                .fail(_.bind(this.generate_feedback_failure, this));
+        }else{
+            this.clear();
+            this.$name.text("Please wait...");
+            $.post(base_url + "/formgrader/api/assignment/" + this.model.get("name") + "/generate_feedback_hide")
+                .done(_.bind(this.generate_feedback_success, this))
+                .fail(_.bind(this.generate_feedback_failure, this));
+        }
     },
 
     generate_feedback_success: function (response) {
