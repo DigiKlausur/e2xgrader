@@ -102,16 +102,17 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                          if os.path.isdir(os.path.join(self.src_path, user)) \
                          and user != self.coursedir.assignment_id]
             for user in user_list:
-                released_user_assignment = os.path.join(self.dest_path, user, self.coursedir.assignment_id)
+                released_assignment_root = os.path.join(self.dest_path, user)
+                released_user_assignment = os.path.join(released_assignment_root, self.coursedir.assignment_id)
                 if os.path.isdir(released_user_assignment):
                     shutil.rmtree(released_user_assignment)
 
-                src_assignment = os.path.join(self.src_path, user)
+                src_assignment = os.path.join(self.src_path, user, self.coursedir.assignment_id)
                 if os.path.isdir(src_assignment):
                     self.log.info(f"Source: {src_assignment}")
                     self.log.info(f"Destination: {released_user_assignment}")
                     self.do_copy(src_assignment, released_user_assignment)
-                    self.set_released_assignment_perm(released_user_assignment)
+                    self.set_released_assignment_perm(released_assignment_root)
                 else:
                     self.log.info(f"Src assignment not found: {src_assignment}")
         else:
@@ -122,13 +123,14 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                             self.coursedir.course_id, self.coursedir.assignment_id
                         )
                     )
-                shutil.rmtree(self.dest_path)
-            else:
-                self.fail(
-                    "Destination already exists, add --force to overwrite: {} {}".format(
-                        self.coursedir.course_id, self.coursedir.assignment_id
+                    shutil.rmtree(self.dest_path)
+                else:
+                    self.fail(
+                        "Destination already exists, add --force to overwrite: {} {}".format(
+                            self.coursedir.course_id, self.coursedir.assignment_id
+                        )
                     )
-                )
+
             self.log.info(f"Source: {self.src_path}")
             self.log.info(f"Destination: {self.dest_path}")
             self.do_copy(self.src_path, self.dest_path)
