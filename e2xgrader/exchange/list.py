@@ -46,12 +46,22 @@ class E2xExchangeList(E2xExchange, ExchangeList):
                 self.cache, course_id, "{}+{}+*".format(student_id, assignment_id)
             )
         else:
-            pattern = os.path.join(
-                self.root,
-                course_id,
-                self.outbound_directory,
-                "{}".format(assignment_id),
-            )
+            if self.personalized_outbound:
+                # list all assignments here
+                pattern = os.path.join(
+                    self.root,
+                    course_id,
+                    self.outbound_directory,
+                    student_id,
+                    "{}".format(assignment_id),
+                )
+            else:
+                pattern = os.path.join(
+                    self.root,
+                    course_id,
+                    self.outbound_directory,
+                    "{}".format(assignment_id),
+                )
 
         self.assignments = sorted(glob.glob(pattern))
 
@@ -65,17 +75,26 @@ class E2xExchangeList(E2xExchange, ExchangeList):
         elif self.cached:
             regexp = r".*/(?P<course_id>.*)/(?P<student_id>.*)\+(?P<assignment_id>.*)\+(?P<timestamp>.*)"
         else:
-            regexp = (
-                r".*/(?P<course_id>.*)/"
-                + self.outbound_directory
-                + r"/(?P<assignment_id>.*)"
-            )
+            if self.personalized_outbound:
+                regexp = (
+                    r".*/(?P<course_id>.*)/"
+                    + self.outbound_directory
+                    + r"/(?P<student_id>.*)"
+                    + r"/(?P<assignment_id>.*)"
+                )
+            else:
+                regexp = (
+                    r".*/(?P<course_id>.*)/"
+                    + self.outbound_directory
+                    + r"/(?P<assignment_id>.*)"
+                )
 
         m = re.match(regexp, assignment)
         if m is None:
             raise RuntimeError(
                 "Could not match '%s' with regexp '%s'", assignment, regexp
             )
+
         return m.groupdict()
 
     def parse_assignments(self):
@@ -87,6 +106,9 @@ class E2xExchangeList(E2xExchange, ExchangeList):
         assignments = []
         for path in self.assignments:
             info = self.parse_assignment(path)
+            #if self.personalized_outbound and info["student_id"] != os.getenv("JUPYTERHUB_USER"):
+            #    continue
+
             if courses is not None and info["course_id"] not in courses:
                 continue
 
