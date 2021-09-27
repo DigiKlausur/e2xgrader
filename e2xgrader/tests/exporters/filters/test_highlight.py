@@ -10,7 +10,7 @@ class TestHighlight2HTMLwithLineNumbers(unittest.TestCase):
         highlighter = Highlight2HTMLwithLineNumbers()
         html = highlighter.__call__(source)
 
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, features="html.parser")
         line_numbers = soup.find_all("span", attrs={"class": "linenos"})
         assert len(line_numbers) == len(source.split("\n"))
 
@@ -19,6 +19,6 @@ class TestHighlight2HTMLwithLineNumbers(unittest.TestCase):
         highlighter = Highlight2HTMLwithLineNumbers()
         html = highlighter(source, language="ipython3")
 
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, features="html.parser")
         line_numbers = soup.find_all("span", attrs={"class": "linenos"})
         assert len(line_numbers) == len(source.split("\n"))
