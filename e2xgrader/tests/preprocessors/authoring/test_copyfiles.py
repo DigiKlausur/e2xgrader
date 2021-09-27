@@ -40,11 +40,11 @@ class TestCopyFiles(BaseTest):
     def test_copy_identical_files(self):
         # Create files with the same name and same content for each task
         pool_path = pjoin(self.resources["course_prefix"], "pools")
-        rand_data = str([rd.randint(1, 100000) for _ in range(1000)])
+        rand_data = str([i for i in range(10000)])
 
         for task_dict in self.resources["tasks"]:
             data_path = pjoin(pool_path, task_dict["pool"], task_dict["task"], "data")
-            with open(pjoin(data_path, "randfile"), "w") as f:
+            with open(pjoin(data_path, "somefile"), "w") as f:
                 f.write(rand_data)
 
         res = CopyNotebooks().preprocess(self.resources)
@@ -61,16 +61,19 @@ class TestCopyFiles(BaseTest):
         assert os.path.exists(data_path)
         data_files = os.listdir(data_path)
         assert len(data_files) == 1
-        assert data_files[0] == "randfile"
+        assert data_files[0] == "somefile"
 
     def test_copy_different_files(self):
         # Create files with the same name but different content for each task
         pool_path = pjoin(self.resources["course_prefix"], "pools")
 
+        j = 0
+
         for task_dict in self.resources["tasks"]:
             data_path = pjoin(pool_path, task_dict["pool"], task_dict["task"], "data")
-            with open(pjoin(data_path, "randfile"), "w") as f:
-                f.write(str([rd.randint(1, 100000) for _ in range(1000)]))
+            with open(pjoin(data_path, "somefile"), "w") as f:
+                f.write(str([i + j for i in range(10000)]))
+            j += 1
 
         res = CopyNotebooks().preprocess(self.resources)
         res = CopyFiles().preprocess(res)
@@ -86,6 +89,6 @@ class TestCopyFiles(BaseTest):
         assert os.path.exists(data_path)
         data_files = os.listdir(data_path)
         assert len(data_files) == len(self.resources["tasks"])
-        assert "randfile" in data_files
+        assert "somefile" in data_files
         for i in range(len(self.resources["tasks"]) - 1):
-            assert f"randfile_{i+1}" in data_files
+            assert f"somefile_{i+1}" in data_files
