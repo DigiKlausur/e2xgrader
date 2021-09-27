@@ -106,7 +106,7 @@ class E2xExchangeList(E2xExchange, ExchangeList):
         assignments = []
         for path in self.assignments:
             info = self.parse_assignment(path)
-            #if self.personalized_outbound and info["student_id"] != os.getenv("JUPYTERHUB_USER"):
+            # if self.personalized_outbound and info["student_id"] != os.getenv("JUPYTERHUB_USER"):
             #    continue
 
             if courses is not None and info["course_id"] not in courses:

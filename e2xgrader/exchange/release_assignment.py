@@ -64,7 +64,9 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                 ),
             )
         else:
-            self.dest_path = os.path.join(self.outbound_path, self.coursedir.assignment_id)
+            self.dest_path = os.path.join(
+                self.outbound_path, self.coursedir.assignment_id
+            )
 
             # 0755
             # groupshared: +2040
@@ -98,16 +100,23 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
     def copy_files(self):
         if self.personalized_outbound:
             # check available users under course_path/<assignmet_dir>/<username>
-            user_list = [user for user in os.listdir(self.src_path) \
-                         if os.path.isdir(os.path.join(self.src_path, user)) \
-                         and user != self.coursedir.assignment_id]
+            user_list = [
+                user
+                for user in os.listdir(self.src_path)
+                if os.path.isdir(os.path.join(self.src_path, user))
+                and user != self.coursedir.assignment_id
+            ]
             for user in user_list:
                 released_assignment_root = os.path.join(self.dest_path, user)
-                released_user_assignment = os.path.join(released_assignment_root, self.coursedir.assignment_id)
+                released_user_assignment = os.path.join(
+                    released_assignment_root, self.coursedir.assignment_id
+                )
                 if os.path.isdir(released_user_assignment):
                     shutil.rmtree(released_user_assignment)
 
-                src_assignment = os.path.join(self.src_path, user, self.coursedir.assignment_id)
+                src_assignment = os.path.join(
+                    self.src_path, user, self.coursedir.assignment_id
+                )
                 if os.path.isdir(src_assignment):
                     self.log.info(f"Source: {src_assignment}")
                     self.log.info(f"Destination: {released_user_assignment}")
@@ -162,4 +171,3 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                 | ((S_ISGID | S_IWGRP) if self.coursedir.groupshared else 0)
             ),
         )
-
