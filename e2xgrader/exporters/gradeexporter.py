@@ -50,17 +50,17 @@ class GradeTaskExporter(LoggingConfigurable):
         table["Total"] = table.sum(axis=1, numeric_only=True)
         return table
 
+
 class GradeSelectedAssignmentExporter(LoggingConfigurable):
-    
     def __init__(self, gradebook, selected_assignments):
         self.gb = gradebook
         self.selected_assignments = selected_assignments
 
     def make_table(self):
         data = []
-        
+
         assignments = sorted(self.selected_assignments)
-        columns = ['Student ID'] + [assignment for assignment in assignments]
+        columns = ["Student ID"] + [assignment for assignment in assignments]
 
         for student in self.gb.students:
             row = [student.id]
@@ -68,17 +68,18 @@ class GradeSelectedAssignmentExporter(LoggingConfigurable):
                 score = 0
                 try:
                     submission = self.gb.find_submission(assignment, student.id)
-                    score = submission.score                     
+                    score = submission.score
                 except MissingEntry:
                     pass
                 finally:
                     row.append(score)
-                
+
             data.append(row)
-            
-        table = pd.DataFrame(data, columns=columns)        
-        table['Total'] = table.sum(axis=1, numeric_only=True)
+
+        table = pd.DataFrame(data, columns=columns)
+        table["Total"] = table.sum(axis=1, numeric_only=True)
         return table
+
 
 class GradeAssignmentExporter(LoggingConfigurable):
     def __init__(self, gradebook):

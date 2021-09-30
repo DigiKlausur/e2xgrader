@@ -2,7 +2,13 @@ from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell, Gradebook
 from nbgrader.coursedir import CourseDirectory
 from e2xgrader.utils.nbgrader_cells import grade_id
-from nbgrader.utils import is_grade, is_solution, compute_checksum, temp_attrs, capture_log
+from nbgrader.utils import (
+    is_grade,
+    is_solution,
+    compute_checksum,
+    temp_attrs,
+    capture_log,
+)
 from nbgrader.converters import GenerateFeedback
 import nbformat
 import os
@@ -12,12 +18,13 @@ import subprocess
 from multiprocessing import Value
 from traitlets.config import Config
 
+
 class E2xAPI(NbGraderAPI):
 
-    autograde_flag = Value('b', False)
-    autograde_idx = Value('i', 0)
-    autograde_total = Value('i', 0)
-    autograde_stop = Value('b', False)
+    autograde_flag = Value("b", False)
+    autograde_idx = Value("i", 0)
+    autograde_total = Value("i", 0)
+    autograde_stop = Value("b", False)
 
     def autograde_all(self, assignment_id):
         """Autogrades notebooks all the students for the given assignment id.
@@ -39,16 +46,22 @@ class E2xAPI(NbGraderAPI):
             if self.autograde_stop.value:
                 self.autograde_stop.value = False
                 break
-            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
+            autograde_command = (
+                "python3 -m e2xgrader autograde "
+                + assignment_id
+                + " --student "
+                + student
+                + " --force"
+            )
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
         self.autograde_idx.value = 0
         self.autograde_total.value = 0
         self.autograde_flag.value = False
-        result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log/')
+        result_log["time"] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(self.coursedir.root, "log/")
         os.makedirs(path, exist_ok=True)
-        with open(path + assignment_id + '.txt', 'w') as outfile:
+        with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
     def autograde_cells(self, assignment_id, selected_cells):
@@ -73,16 +86,24 @@ class E2xAPI(NbGraderAPI):
             if self.autograde_stop.value == True:
                 self.autograde_stop.value = False
                 break
-            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
+            autograde_command = (
+                "python3 -m e2xgrader autograde "
+                + assignment_id
+                + " --student "
+                + student
+                + " --cell-id "
+                + selected_cells
+                + " --force"
+            )
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
         self.autograde_idx.value = 0
         self.autograde_total.value = 0
         self.autograde_flag.value = False
-        result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log/')
+        result_log["time"] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(self.coursedir.root, "log/")
         os.makedirs(path, exist_ok=True)
-        with open(path + assignment_id + '.txt', 'w') as outfile:
+        with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
@@ -253,15 +274,18 @@ class E2xAPI(NbGraderAPI):
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
         assignment_path = self.coursedir.format_path(
-            nbgrader_step = self.coursedir.source_directory, 
-            student_id = '.', 
-            assignment_id = assignment
+            nbgrader_step=self.coursedir.source_directory,
+            student_id=".",
+            assignment_id=assignment,
         )
-        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
-        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+        nb_path = os.path.join(assignment_path, notebook + ".ipynb")
+        nb = nbformat.read(nb_path, as_version=nbformat.NO_CONVERT)
 
-        nb_test_cells = {grade_id(cell): cell for cell in nb.cells 
-                 if is_grade(cell) and not is_solution(cell)}
+        nb_test_cells = {
+            grade_id(cell): cell
+            for cell in nb.cells
+            if is_grade(cell) and not is_solution(cell)
+        }
 
         updated_notebook = self.gradebook.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
@@ -270,8 +294,11 @@ class E2xAPI(NbGraderAPI):
         gb_test_cells = [cell for cell in source_cells if cell.name in test_cell_names]
 
         updated_cells = []
-        for cell in gb_test_cells:                
-            if cell.name in test_cell_names and compute_checksum(nb_test_cells[cell.name]) != cell.checksum:
+        for cell in gb_test_cells:
+            if (
+                cell.name in test_cell_names
+                and compute_checksum(nb_test_cells[cell.name]) != cell.checksum
+            ):
                 updated_cells.append(cell.name)
         return updated_cells
 
@@ -294,18 +321,28 @@ class E2xAPI(NbGraderAPI):
             Generates new checksum id after changes.
         """
         assignment_path = self.coursedir.format_path(
-            nbgrader_step = self.coursedir.source_directory, 
-            student_id = '.', 
-            assignment_id = assignment
+            nbgrader_step=self.coursedir.source_directory,
+            student_id=".",
+            assignment_id=assignment,
         )
-        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
-        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+        nb_path = os.path.join(assignment_path, notebook + ".ipynb")
+        nb = nbformat.read(nb_path, as_version=nbformat.NO_CONVERT)
 
         for cell in nb.cells:
             if cell.metadata.nbgrader.grade_id == cell_id:
                 cell_content = cell.source
-                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = compute_checksum(cell))
+                self.gradebook.update_or_create_source_cell(
+                    name=cell_id,
+                    notebook=notebook,
+                    assignment=assignment,
+                    source=cell_content,
+                )
+                self.gradebook.update_or_create_source_cell(
+                    name=cell_id,
+                    notebook=notebook,
+                    assignment=assignment,
+                    checksum=compute_checksum(cell),
+                )
                 return compute_checksum(cell)
 
     def list_autograde_testcells(self, notebook: str, assignment: str) -> dict:
@@ -355,18 +392,17 @@ class E2xAPI(NbGraderAPI):
         # parts of the the UI, we need to make sure that the template
         # is explicitply 'feedback_hide.tpl` here:
         c = Config()
-        c.HTMLExporter.template_file = 'feedback_hide.tpl'
+        c.HTMLExporter.template_file = "feedback_hide.tpl"
         if student_id is not None:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id,
-                            student_id=student_id):
+            with temp_attrs(
+                self.coursedir, assignment_id=assignment_id, student_id=student_id
+            ):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force
                 return capture_log(app)
         else:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id):
+            with temp_attrs(self.coursedir, assignment_id=assignment_id):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force

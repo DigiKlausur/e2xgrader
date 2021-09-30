@@ -3,23 +3,38 @@ import sys
 
 from tornado import web
 from nbgrader.api import MissingEntry
-from nbgrader.server_extensions.formgrader.base import BaseHandler, check_xsrf, check_notebook_dir
-from nbgrader.server_extensions.formgrader.handlers import SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler
-from ...exporters import GradeTaskExporter, GradeNotebookExporter, GradeAssignmentExporter, GradeSelectedAssignmentExporter
+from nbgrader.server_extensions.formgrader.base import (
+    BaseHandler,
+    check_xsrf,
+    check_notebook_dir,
+)
+from nbgrader.server_extensions.formgrader.handlers import (
+    SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler,
+)
+from ...exporters import (
+    GradeTaskExporter,
+    GradeNotebookExporter,
+    GradeAssignmentExporter,
+    GradeSelectedAssignmentExporter,
+)
 from ...models import TemplateModel, ExerciseModel, TaskPoolModel
 import json
+
 
 class ExportSelectedAssignmentGradesHandler(BaseHandler):
     @web.authenticated
     @check_xsrf
     def get(self):
-        assignment_ids = self.get_argument('assignment_id')
+        assignment_ids = self.get_argument("assignment_id")
         assignment_ids = json.loads(assignment_ids)
-        self.__exporter = GradeSelectedAssignmentExporter(self.gradebook, assignment_ids)
-        self.set_header('Content-Type', 'text/csv; charset="utf-8"')
-        self.set_header('Content-Disposition', 'attachment; filename=grades.csv')
+        self.__exporter = GradeSelectedAssignmentExporter(
+            self.gradebook, assignment_ids
+        )
+        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
+        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
         self.write(self.__exporter.make_table().to_csv(index=False))
         self.finish()
+
 
 class ExportGradesHandler(BaseHandler):
     @web.authenticated
@@ -399,7 +414,10 @@ formgrade_handlers = [
         SubmissionNavigationHandler,
     ),
     (r"/formgrader/submissions/([^/]+)/?", SubmissionHandler),
-    (r'/formgrader/export_grades/selected_assignments/?', ExportSelectedAssignmentGradesHandler),
+    (
+        r"/formgrader/export_grades/selected_assignments/?",
+        ExportSelectedAssignmentGradesHandler,
+    ),
 ]
 
 nbassignment_handlers = [

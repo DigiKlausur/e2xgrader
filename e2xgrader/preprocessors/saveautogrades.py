@@ -9,14 +9,16 @@ from ..utils.nbgrader_cells import grade_id
 from traitlets import Unicode, List
 from textwrap import dedent
 
+
 class SaveAutoGrades(NbgraderSaveAutoGrades):
 
-    cell_ids = List([],
+    cell_ids = List(
+        [],
         help=dedent(
             """
             List of cell ids of autograde test cells for forced grading.
             """
-        )
+        ),
     ).tag(config=True)
 
     def _add_score(self, cell: NotebookNode, resources: ResourcesDict) -> None:
@@ -51,5 +53,5 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
             grade.manual_score = None
             grade.needs_manual_grade = True
             grade.manual_score = auto_score
-        
+
         self.gradebook.db.commit()
