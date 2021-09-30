@@ -50,11 +50,13 @@ setup_args = dict(
     ],
     packages=find_packages(),
     package_data={
-        "e2xgrader": discover_nbextensions(name),
-        "e2xgrader.server_extensions.formgrader": static_files,
-        "e2xgrader.server_extensions.e2xbase": base_static_files,
+        'e2xgrader': discover_nbextensions(name),
+        'e2xgrader.server_extensions.formgrader': static_files,
+        'e2xgrader.server_extensions.e2xbase': base_static_files,
     },
-    entry_points={"console_scripts": ["e2xgrader=e2xgrader.apps.e2xgraderapp:main"]},
+    entry_points={
+        'console_scripts': ['e2xgrader=e2xgrader.__main__:main']
+    },
     install_requires=[
         "jupyter",
         "notebook>=6.1.6",

@@ -176,7 +176,7 @@ span.nbgrader-label {
 {%- endif -%}
 <div class="panel-heading">
 {%- if cell.metadata.nbgrader.solution -%}
-  <span class="nbgrader-label">Student's answer</span>
+  <span class="nbgrader-label">Student's answer: <code>{{ cell.metadata.nbgrader.grade_id }}</code></span>
   {%- if cell.metadata.nbgrader.grade  -%}
   {{ score(cell) }}
   {%- else -%}
@@ -234,7 +234,7 @@ span.nbgrader-label {
 {% endblock markdowncell %}
 
 {% block input %}
-  {%- if 'nbgrader' in cell.metadata and (cell.metadata.nbgrader.solution or cell.metadata.nbgrader.grade) -%}
+  {%- if 'nbgrader' in cell.metadata and cell.metadata.nbgrader.solution -%}
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
@@ -242,6 +242,13 @@ span.nbgrader-label {
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
     </div>
+    {{ nbgrader_footer(cell) }}
+  </div>
+
+  {%- elif 'nbgrader' in cell.metadata and  cell.metadata.nbgrader.grade -%}
+
+<div class="panel panel-primary nbgrader_cell">
+    {{ nbgrader_heading(cell) }}
     {{ nbgrader_footer(cell) }}
   </div>
 
@@ -255,3 +262,8 @@ span.nbgrader-label {
   {%- endif -%}
 
 {% endblock input %}
+
+{% block error -%}
+<div class="output_subarea output_text output_error">
+</div>
+{%- endblock error %}

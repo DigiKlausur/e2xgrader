@@ -5,8 +5,8 @@
 var assignment_id = "{{ assignment_id }}";
 </script>
 
-<script src="{{ base_url }}/formgrader/static/js/manage_submissions.js"></script>
-{%- endblock head -%}
+<script src="{{ base_url }}/e2xgrader/static/js/manage_submissions.js"></script>
+{%- endblock head -%} 
 
 {%- block title -%}
 Manage Submissions
@@ -46,12 +46,22 @@ Manage Submissions
         </p>
         <p>
         <pre>
-cd "{{ course_dir }}"
-nbgrader autograde "{{ assignment_id }}"</pre>
+          cd "{{ course_dir }}"
+          nbgrader autograde "{{ assignment_id }}"</pre>
         </p>
       </div>
     </div>
   </div>
+</div>
+<div>
+  <div id = 'autograde_all' style = 'display : inline-block; width : 200px'></div>
+  <div id = 'autograde_cell' style = 'display : inline-block; width : 200px'>Select cells: <a id = 'select_cells' style="font-size:15px" href = '#top'><strong>[≡]</strong></a></div>
+  <div id = 'autograde_log' style = 'display : inline-block'>Last autograded: <a id = 'log_time' href = '#top'></a></div>
+</div>
+<div hidden id = 'progress_bar'>
+  <label id = 'autograde_percentage' style = 'display : inline-block; width : 300px'>Autograding progress: 0% </label> 
+  <div id = 'autograde_stop_text' style = 'display : inline-block; width : 300px'>Stop Autograding: <a id = 'autograde_stop' style="font-size:15px" href = '#top'><strong>⦿</strong></a></div>
+  <progress id="progress" style="width: 100%; height: 35px;" value="0" max="100"> 0% </progress>
 </div>
 {%- endblock -%}
 
