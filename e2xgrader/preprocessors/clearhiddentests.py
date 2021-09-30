@@ -8,12 +8,9 @@ from ..utils.extra_cells import is_singlechoice, is_multiplechoice, clear_choice
 
 
 class ClearHiddenTests(NbgraderClearHiddenTests):
-
-    def preprocess_cell(self,
-                        cell: NotebookNode,
-                        resources: ResourcesDict,
-                        cell_index: int
-                        ) -> Tuple[NotebookNode, ResourcesDict]:
+    def preprocess_cell(
+        self, cell: NotebookNode, resources: ResourcesDict, cell_index: int
+    ) -> Tuple[NotebookNode, ResourcesDict]:
         if is_singlechoice(cell) or is_multiplechoice(cell):
             clear_choices(cell)
             return cell, resources

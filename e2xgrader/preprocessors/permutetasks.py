@@ -6,11 +6,10 @@ from ..utils.nbgrader_cells import grade_id, get_tasks
 
 
 class PermuteTasks(NbGraderPreprocessor):
-
     def __init__(self, **kw):
         self.rand = random.Random()
-        if kw and 'seed' in kw:
-            self.rand = random.Random(kw['seed'])
+        if kw and "seed" in kw:
+            self.rand = random.Random(kw["seed"])
 
     def permute(self, nb):
         permuted_nb = new_notebook()
@@ -37,9 +36,11 @@ class PermuteTasks(NbGraderPreprocessor):
             cursor = task[-1] + 1
 
         # Add remaining cells at the bottom of the notebook
-        permuted_nb.cells.extend([nb.cells[idx] for idx in range(cursor, len(nb.cells))])
+        permuted_nb.cells.extend(
+            [nb.cells[idx] for idx in range(cursor, len(nb.cells))]
+        )
         # Save order
-        permuted_nb.metadata['original_order'] = original_order
+        permuted_nb.metadata["original_order"] = original_order
 
         return permuted_nb
 
