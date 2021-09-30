@@ -8,12 +8,9 @@ from ..utils.extra_cells import is_extra_cell
 
 
 class ClearSolutions(NbgraderClearSolutions):
-
-    def preprocess_cell(self,
-                        cell: NotebookNode,
-                        resources: ResourcesDict,
-                        cell_index: int
-                        ) -> Tuple[NotebookNode, ResourcesDict]:
+    def preprocess_cell(
+        self, cell: NotebookNode, resources: ResourcesDict, cell_index: int
+    ) -> Tuple[NotebookNode, ResourcesDict]:
         if is_extra_cell(cell):
             return cell, resources
         else:

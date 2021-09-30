@@ -7,18 +7,22 @@ from ..utils.extra_cells import is_singlechoice
 
 
 class ExtraCellValidator:
-
     def validate_cell(self, cell):
 
-        if 'nbgrader' not in cell.metadata:
+        if "nbgrader" not in cell.metadata:
             return
 
         # check if there is a single choice cell without a solution
         if is_singlechoice(cell):
             extended_metadata = cell.metadata.extended_cell
-            if ('choice' not in extended_metadata) or (len(extended_metadata.choice) < 1):
+            if ("choice" not in extended_metadata) or (
+                len(extended_metadata.choice) < 1
+            ):
                 raise ValidationError(
-                    "single choice nbgrader cell {} does not have a solution".format(cell.metadata.nbgrader.grade_id))
+                    "single choice nbgrader cell {} does not have a solution".format(
+                        cell.metadata.nbgrader.grade_id
+                    )
+                )
 
     def validate_nb(self, nb):
         for cell in nb.cells:

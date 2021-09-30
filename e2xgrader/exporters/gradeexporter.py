@@ -4,7 +4,6 @@ import pandas as pd
 
 
 class GradeTaskExporter(LoggingConfigurable):
-
     def __init__(self, gradebook):
         self.gb = gradebook
 
@@ -15,7 +14,7 @@ class GradeTaskExporter(LoggingConfigurable):
             for notebook in assignment.notebooks:
                 for gradecell in notebook.grade_cells:
                     name = gradecell.name
-                    if name.startswith('test_'):
+                    if name.startswith("test_"):
                         name = gradecell.name[5:]
                     columns.append((assignment.name, notebook.name, name))
         return columns
@@ -24,7 +23,7 @@ class GradeTaskExporter(LoggingConfigurable):
         data = []
 
         assignments = sorted(self.gb.assignments, key=lambda x: x.name)
-        columns = ['Student ID'] + ['.'.join(col) for col in self.get_columns()]
+        columns = ["Student ID"] + [".".join(col) for col in self.get_columns()]
 
         for student in self.gb.students:
             row = [student.id]
@@ -33,7 +32,12 @@ class GradeTaskExporter(LoggingConfigurable):
                     for gradecell in notebook.grade_cells:
                         score = 0
                         try:
-                            submission = self.gb.find_grade(gradecell.name, notebook.name, assignment.name, student.id)
+                            submission = self.gb.find_grade(
+                                gradecell.name,
+                                notebook.name,
+                                assignment.name,
+                                student.id,
+                            )
                             score = submission.score
                         except MissingEntry:
                             pass
@@ -43,7 +47,7 @@ class GradeTaskExporter(LoggingConfigurable):
             data.append(row)
 
         table = pd.DataFrame(data, columns=columns)
-        table['Total'] = table.sum(axis=1, numeric_only=True)
+        table["Total"] = table.sum(axis=1, numeric_only=True)
         return table
 
 class GradeSelectedAssignmentExporter(LoggingConfigurable):
@@ -77,7 +81,6 @@ class GradeSelectedAssignmentExporter(LoggingConfigurable):
         return table
 
 class GradeAssignmentExporter(LoggingConfigurable):
-
     def __init__(self, gradebook):
         self.gb = gradebook
 
@@ -85,7 +88,7 @@ class GradeAssignmentExporter(LoggingConfigurable):
         data = []
 
         assignments = sorted(self.gb.assignments, key=lambda x: x.name)
-        columns = ['Student ID'] + [assignment.name for assignment in assignments]
+        columns = ["Student ID"] + [assignment.name for assignment in assignments]
 
         for student in self.gb.students:
             row = [student.id]
@@ -102,12 +105,11 @@ class GradeAssignmentExporter(LoggingConfigurable):
             data.append(row)
 
         table = pd.DataFrame(data, columns=columns)
-        table['Total'] = table.sum(axis=1, numeric_only=True)
+        table["Total"] = table.sum(axis=1, numeric_only=True)
         return table
 
 
 class GradeNotebookExporter(LoggingConfigurable):
-
     def __init__(self, gradebook):
         self.gb = gradebook
 
@@ -123,7 +125,7 @@ class GradeNotebookExporter(LoggingConfigurable):
         data = []
 
         assignments = sorted(self.gb.assignments, key=lambda x: x.name)
-        columns = ['Student ID'] + ['.'.join(col) for col in self.get_columns()]
+        columns = ["Student ID"] + [".".join(col) for col in self.get_columns()]
 
         for student in self.gb.students:
             row = [student.id]
@@ -131,7 +133,9 @@ class GradeNotebookExporter(LoggingConfigurable):
                 for notebook in assignment.notebooks:
                     score = 0
                     try:
-                        submission = self.gb.find_submission_notebook(notebook.name, assignment.name, student.id)
+                        submission = self.gb.find_submission_notebook(
+                            notebook.name, assignment.name, student.id
+                        )
                         score = submission.score
                     except MissingEntry:
                         pass
@@ -141,5 +145,5 @@ class GradeNotebookExporter(LoggingConfigurable):
             data.append(row)
 
         table = pd.DataFrame(data, columns=columns)
-        table['Total'] = table.sum(axis=1, numeric_only=True)
+        table["Total"] = table.sum(axis=1, numeric_only=True)
         return table

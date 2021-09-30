@@ -4,7 +4,6 @@ from ..utils.nbgrader_cells import grade_id, get_tasks
 
 
 class UnpermuteTasks(NbGraderPreprocessor):
-
     def unpermute(self, nb):
         unpermuted_nb = new_notebook()
         # Get original order
@@ -20,20 +19,23 @@ class UnpermuteTasks(NbGraderPreprocessor):
                 unpermuted_nb.cells.append(nb.cells[idx])
             # Get name and cells of next task in the original order
             next_task_id = original_order.pop(0)
-            next_task = [task for task in tasks
-                         if grade_id(nb.cells[task[0]]) == next_task_id][0]
+            next_task = [
+                task for task in tasks if grade_id(nb.cells[task[0]]) == next_task_id
+            ][0]
             # Add cells of the next task
             unpermuted_nb.cells.extend([nb.cells[idx] for idx in next_task])
             # Set the cursor to the idx after the inserted task
             cursor = task[-1] + 1
 
         # Add remaining cells at the bottom of the notebook
-        unpermuted_nb.cells.extend([nb.cells[idx] for idx in range(cursor, len(nb.cells))])
+        unpermuted_nb.cells.extend(
+            [nb.cells[idx] for idx in range(cursor, len(nb.cells))]
+        )
 
         return unpermuted_nb
 
     def preprocess(self, nb, resources):
-        if 'original_order' not in nb.metadata:
+        if "original_order" not in nb.metadata:
             return nb, resources
 
         perm = nb.metadata.permutation

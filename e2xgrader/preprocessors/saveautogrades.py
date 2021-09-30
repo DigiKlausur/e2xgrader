@@ -30,10 +30,11 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         # these are the fields by which we will identify the score
         # information
         grade = self.gradebook.find_grade(
-            cell.metadata['nbgrader']['grade_id'],
+            cell.metadata["nbgrader"]["grade_id"],
             self.notebook_id,
             self.assignment_id,
-            self.student_id)
+            self.student_id,
+        )
 
         # determine what the grade is
         auto_score, _ = determine_grade(cell, self.log)

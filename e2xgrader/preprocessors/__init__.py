@@ -12,16 +12,16 @@ from .validateextracells import ValidateExtraCells
 from .extractattachments import ExtractAttachments
 
 __all__ = [
-    'FilterCellsById',
-    'SaveCells',
-    'ClearSolutions',
-    'ClearHiddenTests',
-    'OverwriteCells',
-    'SaveAutoGrades',
-    'PermuteTasks',
-    'UnpermuteTasks',
-    'Scramble',
-    'Unscramble',
-    'ValidateExtraCells',
-    'ExtractAttachments',
+    "FilterCellsById",
+    "SaveCells",
+    "ClearSolutions",
+    "ClearHiddenTests",
+    "OverwriteCells",
+    "SaveAutoGrades",
+    "PermuteTasks",
+    "UnpermuteTasks",
+    "Scramble",
+    "Unscramble",
+    "ValidateExtraCells",
+    "ExtractAttachments",
 ]
