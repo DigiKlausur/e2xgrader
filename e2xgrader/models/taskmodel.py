@@ -3,6 +3,7 @@ import nbformat
 import shutil
 from textwrap import dedent
 from .basemodel import BaseModel
+from ..utils.nbgrader_cells import get_valid_name
 from traitlets import Unicode
 
 
@@ -31,7 +32,7 @@ class TaskModel(BaseModel):
         )
 
         header.metadata["nbgrader"] = {
-            "grade_id": "{}_Header".format(name),
+            "grade_id": "{}_Header".format(get_valid_name(name)),
             "locked": True,
             "solution": False,
             "grade": False,
