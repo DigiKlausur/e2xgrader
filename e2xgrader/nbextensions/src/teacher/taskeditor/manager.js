@@ -90,10 +90,33 @@ define([
             this.model = new nbmodel.NbgraderModel();
         }
 
+        get_valid_name(name) {
+            let alphabet_upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let alphabet_lower = alphabet_upper.toLowerCase();
+            let digits = '0123456789';
+            let special = '_';
+            let valid = alphabet_upper + alphabet_lower + digits + special;
+            let invalid = '';
+            for (let i = 0; i < name.length; i++) {
+
+               if (valid.indexOf(name.charAt(i)) < 0) {
+                   invalid += name.charAt(i);
+               }
+            }
+
+            for (let i = 0; i < invalid.length; i++) {
+                name = name.replace(invalid.charAt(i), '_');
+            }
+            return name;
+        }
+
         get_task_name() {
             let that = this;
             let ids = new Set();
             let nb_name = Jupyter.notebook.notebook_name.split('.ipynb')[0];
+            // Validate the name
+            nb_name = this.get_valid_name(nb_name);
+
             Jupyter.notebook.get_cells().forEach(function (cell) {
                 if (that.model.is_nbgrader(cell)) {
                     ids.add(that.model.get_id(cell));
