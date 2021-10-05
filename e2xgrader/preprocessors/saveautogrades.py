@@ -2,9 +2,9 @@ from nbformat.notebooknode import NotebookNode
 from nbconvert.exporters.exporter import ResourcesDict
 
 from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
+from nbgrader.utils import determine_grade
 
 from ..utils.extra_cells import is_extra_cell
-from nbgrader.utils import determine_grade
 from ..graders import BaseGrader, MultipleChoiceGrader, SingleChoiceGrader, CodeGrader
 
 from traitlets import Dict, Unicode, Instance
