@@ -28,7 +28,7 @@ class CodeGrader(BaseGrader):
             # Try casting result to float
             try:
                 points = float("".join(grade_lines))
-            except ValueError as ve:
+            except ValueError:
                 pass
         return points
 
