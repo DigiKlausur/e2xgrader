@@ -52,13 +52,11 @@ class TestBaseGrader(unittest.TestCase):
         return cell
 
     def test_cell_unchanged(self):
-        grader = BaseGrader()
         assert not BaseGrader().cell_changed(
             self.create_unchanged_code_cell("mycell")
         ), "cell should not have changed"
 
     def test_cell_changed(self):
-        grader = BaseGrader()
         assert BaseGrader().cell_changed(
             self.create_changed_code_cell("mycell")
         ), "cell should have changed"
