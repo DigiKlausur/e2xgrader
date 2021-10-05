@@ -16,9 +16,9 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         key_trait=Unicode(),
         value_trait=Instance(klass=BaseGrader),
         default_value={
-            "code": Code(),
-            "singlechoice": SingleChoice(),
-            "multiplechoice": MultipleChoice(),
+            "code": CodeGrader(),
+            "singlechoice": SingleChoiceGrader(),
+            "multiplechoice": MultipleChoiceGrader(),
         },
     ).tag(config=True)
 
