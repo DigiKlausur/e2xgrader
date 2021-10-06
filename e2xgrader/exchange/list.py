@@ -104,8 +104,6 @@ class E2xExchangeList(E2xExchange, ExchangeList):
             courses = None
 
         assignments = []
-        # a flag used by formgrader and lister to stop looking into the released assignment if one
-        # form one of the students has been found
         released_assignments = []
         for path in self.assignments:
             info = self.parse_assignment(path)
