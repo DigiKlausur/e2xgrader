@@ -109,9 +109,15 @@ class E2xExchangeList(E2xExchange, ExchangeList):
         released_assignments = []
         for path in self.assignments:
             info = self.parse_assignment(path)
-            # if grader and the assignment is already known as released assignment, skip looking 
-            if self.personalized_outbound and self.grader and info["assignment_id"] in released_assignments:
-                self.log.debug("Grader role and personalized-outbound are enabled, and the assignment is known to be released already")
+            # if grader and the assignment is already known as released assignment, skip looking
+            if (
+                self.personalized_outbound
+                and self.grader
+                and info["assignment_id"] in released_assignments
+            ):
+                self.log.debug(
+                    "Grader role and personalized-outbound are enabled, and the assignment is known to be released already"
+                )
                 continue
 
             if courses is not None and info["course_id"] not in courses:
