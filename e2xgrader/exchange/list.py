@@ -104,10 +104,15 @@ class E2xExchangeList(E2xExchange, ExchangeList):
             courses = None
 
         assignments = []
+        # a flag used by formgrader and lister to stop looking into the released assignment if one
+        # form one of the students has been found
+        released_assignments = []
         for path in self.assignments:
             info = self.parse_assignment(path)
-            # if self.personalized_outbound and info["student_id"] != os.getenv("JUPYTERHUB_USER"):
-            #    continue
+            # if grader and the assignment is already known as released assignment, skip looking 
+            if self.personalized_outbound and self.grader and info["assignment_id"] in released_assignments:
+                self.log.debug("Grader role and personalized-outbound are enabled, and the assignment is known to be released already")
+                continue
 
             if courses is not None and info["course_id"] not in courses:
                 continue
@@ -130,6 +135,9 @@ class E2xExchangeList(E2xExchange, ExchangeList):
             else:
                 info["status"] = "released"
                 info["path"] = path
+                # update released assignments
+                if self.personalized_outbound and self.grader:
+                    released_assignments.append(info["assignment_id"])
 
             if self.remove:
                 info["status"] = "removed"
