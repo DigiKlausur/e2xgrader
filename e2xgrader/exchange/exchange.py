@@ -1,6 +1,7 @@
 from nbgrader.exchange.default import Exchange
 from nbgrader.utils import check_directory
 from traitlets import Bool, Unicode
+from textwrap import dedent
 
 
 class E2xExchange(Exchange):
@@ -25,7 +26,7 @@ class E2xExchange(Exchange):
                lister only shows one released assignment instead of showing all
                individualized assignments from all users
             """
-        ),
+        )
     ).tag(config=True)
 
     outbound_directory = Unicode("outbound", help="The name of the outbound directory")
