@@ -12,6 +12,7 @@ from stat import (
     S_IROTH,
     S_IWOTH,
     S_IXOTH,
+    S_ISGID,
 )
 from nbgrader.exchange.default import ExchangeSubmit
 from nbgrader.utils import check_mode, get_username
@@ -44,6 +45,28 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             self.inbound_path = os.path.join(
                 self.inbound_path, os.getenv("JUPYTERHUB_USER")
             )
+
+            if not os.path.isdir(self.inbound_path):
+                self.log.warning(
+                    "Inbound directory doesn't exist, creating {}".format(
+                        self.inbound_path
+                    )
+                )
+                # 0777 with set GID so student instructors can read students' submissions
+                self.ensure_directory(
+                    self.inbound_path,
+                    S_ISGID
+                    | S_IRUSR
+                    | S_IWUSR
+                    | S_IXUSR
+                    | S_IRGRP
+                    | S_IWGRP
+                    | S_IXGRP
+                    | S_IROTH
+                    | S_IWOTH
+                    | S_IXOTH
+                    | (S_IRGRP if self.coursedir.groupshared else 0),
+                )
 
         if not os.path.isdir(self.inbound_path):
             self.fail("Inbound directory doesn't exist: {}".format(self.inbound_path))
@@ -174,7 +197,17 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
 
         course_path = os.path.join(self.root, self.coursedir.course_id)
         outbound_path = os.path.join(course_path, self.outbound_directory)
-        self.release_path = os.path.join(outbound_path, self.coursedir.assignment_id)
+        if self.personalized_outbound:
+            self.release_path = os.path.join(
+                outbound_path,
+                os.getenv("JUPYTERHUB_USER"),
+                self.coursedir.assignment_id,
+            )
+        else:
+            self.release_path = os.path.join(
+                outbound_path, self.coursedir.assignment_id
+            )
+
         if not os.path.isdir(self.release_path):
             self.fail("Assignment not found: {}".format(self.release_path))
         if not check_mode(self.release_path, read=True, execute=True):
