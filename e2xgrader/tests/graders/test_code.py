@@ -31,7 +31,10 @@ class TestCodeGrader(unittest.TestCase):
         cell = self.create_autograded_code_cell("mycell", 10)
 
         cell.outputs.append(
-            new_output(output_type='error', ename='MyError', evalue='Something went wrong.'))
+            new_output(
+                output_type="error", ename="MyError", evalue="Something went wrong."
+            )
+        )
         grader = CodeGrader()
 
         points, max_points = grader.determine_grade(cell)
@@ -41,8 +44,7 @@ class TestCodeGrader(unittest.TestCase):
     def test_stderrored_cell(self):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
-        cell.outputs.append(
-            new_output(output_type='stream', name='stderr'))
+        cell.outputs.append(new_output(output_type="stream", name="stderr"))
 
         points, max_points = grader.determine_grade(cell)
         assert points == 0
@@ -52,7 +54,8 @@ class TestCodeGrader(unittest.TestCase):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
         cell.outputs.append(
-            new_output(output_type='execute_result', data={'text/plain': '5.0'}))
+            new_output(output_type="execute_result", data={"text/plain": "5.0"})
+        )
         points, max_points = grader.determine_grade(cell)
         assert points == 5
         assert max_points == 10
@@ -61,7 +64,8 @@ class TestCodeGrader(unittest.TestCase):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
         cell.outputs.append(
-            new_output(output_type='execute_result', data={'text/plain': 'five'}))
+            new_output(output_type="execute_result", data={"text/plain": "five"})
+        )
         points, max_points = grader.determine_grade(cell)
         assert points == max_points
         assert max_points == 10
@@ -70,7 +74,12 @@ class TestCodeGrader(unittest.TestCase):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
         cell.outputs.append(
-            new_output(output_type='stream', name='stdout', text='### BEGIN GRADE\n5.0\n### END GRADE\n'))
+            new_output(
+                output_type="stream",
+                name="stdout",
+                text="### BEGIN GRADE\n5.0\n### END GRADE\n",
+            )
+        )
         points, max_points = grader.determine_grade(cell)
         assert points == 5
         assert max_points == 10
@@ -79,7 +88,12 @@ class TestCodeGrader(unittest.TestCase):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
         cell.outputs.append(
-            new_output(output_type='stream', name='stdout', text='### BEGIN GRADE\nfive\n### END GRADE\n'))
+            new_output(
+                output_type="stream",
+                name="stdout",
+                text="### BEGIN GRADE\nfive\n### END GRADE\n",
+            )
+        )
         points, max_points = grader.determine_grade(cell)
         assert points is max_points
         assert max_points == 10
