@@ -48,13 +48,13 @@ jobs:
 
     - name: Trigger docker-stacks
       run: |
-          GH_BRANCH=${{ steps.get-branch.outputs.branch}}
+          GH_BRANCH=${{ steps.get-branch.outputs.branch }}
           if [ "$GH_BRANCH" = "dev" ]
           then
-            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "dev"}'
+            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "dev"}'
           elif [ "$GH_BRANCH" = "master" ]
           then
-            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "master"}'
+            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "master"}'
           else
             echo "Nothing to dispatch"
           fi
