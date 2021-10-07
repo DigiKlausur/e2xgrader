@@ -1,0 +1,61 @@
+name: Workflow dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      black:
+        description: 'Lint with black'
+        required: false
+        default: 'black.yml'
+      python-package:
+        description: 'Python package'
+        required: false
+        default: 'python-package.yml'
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - name: Check black ci status
+      id: check-black
+      run: |
+        output=$(curl -sSL -X GET -G -H "Accept: application/vnd.github.v3+json" -d "branch=${{ env.GITHUB_REF_SLUG }}" -d "event=push" https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ github.event.inputs.black }}/runs | jq -r '.workflow_runs[0] | "\(.conclusion)"')
+        echo "::set-output name=black-status::$output"
+
+    - name: Abort if black ci not successful
+      if: steps.check.outputs.black-status != 'success'
+      run: |
+          echo ${{ steps.check-black.outputs.black-status }}
+          exit 1
+
+    - name: Check python ci status
+      id: check-python
+      run: |
+        output=$(curl -sSL -X GET -G -H "Accept: application/vnd.github.v3+json" -d "branch=${{ env.GITHUB_REF_SLUG }}" -d "event=push" https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ github.event.inputs.python-package }}/runs | jq -r '.workflow_runs[0] | "\(.conclusion)"')
+        echo "::set-output name=python-status::$output"
+
+    - name: Abort if black ci not successful
+      if: steps.check.outputs.python-status != 'success'
+      run: |
+          echo ${{ steps.check-python.outputs.python-status }}
+          exit 1
+
+    - name: Get current branch
+      id: get-branch
+      run: |
+        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
+    - name: Trigger docker-stacks
+      run: |
+          GH_BRANCH=${{ steps.get-branch.outputs.branch}}
+          if [ "$GH_BRANCH" = "dev" ]
+          then
+            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "dev"}'
+          elif [ "$GH_BRANCH" = "master" ]
+          then
+            curl -XPOST -u "${{secrets.GH_USERNAME}}:${{secrets.GH_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/digiklausur/docker-stacks/actions/workflows/ci-ghcr.yml/dispatches --data '{"ref": "master"}'
+          else
+            echo "Nothing to dispatch"
+          fi
+
