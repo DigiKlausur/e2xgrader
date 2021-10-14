@@ -21,7 +21,17 @@ class E2xExchangeFetchAssignment(E2xExchange, ExchangeFetchAssignment):
 
         self.course_path = os.path.join(self.root, self.coursedir.course_id)
         self.outbound_path = os.path.join(self.course_path, self.outbound_directory)
-        self.src_path = os.path.join(self.outbound_path, self.coursedir.assignment_id)
+        if self.personalized_outbound:
+            self.src_path = os.path.join(
+                self.outbound_path,
+                os.getenv("JUPYTERHUB_USER"),
+                self.coursedir.assignment_id,
+            )
+        else:
+            self.src_path = os.path.join(
+                self.outbound_path, self.coursedir.assignment_id
+            )
+
         if not os.path.isdir(self.src_path):
             self._assignment_not_found(
                 self.src_path, os.path.join(self.outbound_path, "*")

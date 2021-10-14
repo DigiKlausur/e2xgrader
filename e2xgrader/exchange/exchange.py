@@ -1,6 +1,7 @@
 from nbgrader.exchange.default import Exchange
 from nbgrader.utils import check_directory
 from traitlets import Bool, Unicode
+from textwrap import dedent
 
 
 class E2xExchange(Exchange):
@@ -15,6 +16,17 @@ class E2xExchange(Exchange):
 
     personalized_feedback = Bool(
         False, help="Whether to use a personalized feedback directory per student"
+    ).tag(config=True)
+
+    grader = Bool(
+        False,
+        help=dedent(
+            """A flag whether the current user is grader. Used for personalized-outbound
+               to retrive the released assignment for one of the students,so that
+               lister only shows one released assignment instead of showing all
+               individualized assignments from all users
+            """
+        ),
     ).tag(config=True)
 
     outbound_directory = Unicode("outbound", help="The name of the outbound directory")
