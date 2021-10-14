@@ -47,21 +47,20 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
             # <username> here is deterministic and has to be in the release directory
             self.dest_path = self.outbound_path
 
-            # Make assignment directory writable so that spawner can create it (used only in k8s)
-            # 0777
-            os.chmod(
+            # 0777 for personalized_outbound
+            # groupshared: +2040
+            self.ensure_directory(
                 self.dest_path,
-                (
-                    S_IRUSR
-                    | S_IWUSR
-                    | S_IXUSR
-                    | S_IRGRP
-                    | S_IWGRP
-                    | S_IXGRP
-                    | S_IROTH
-                    | S_IWOTH
-                    | S_IXOTH
-                ),
+                S_IRUSR
+                | S_IWUSR
+                | S_IXUSR
+                | S_IRGRP
+                | S_IWGRP
+                | S_IXGRP
+                | S_IROTH
+                | S_IWOTH
+                | S_IXOTH
+                | ((S_ISGID | S_IWGRP) if self.coursedir.groupshared else 0),
             )
         else:
             self.dest_path = os.path.join(
