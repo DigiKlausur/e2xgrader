@@ -113,9 +113,7 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                 if os.path.isdir(released_user_assignment):
                     shutil.rmtree(released_user_assignment)
 
-                src_assignment = os.path.join(
-                    self.src_path, user, self.coursedir.assignment_id
-                )
+                src_assignment = os.path.join(self.src_path, user)
                 if os.path.isdir(src_assignment):
                     self.log.info(f"Source: {src_assignment}")
                     self.log.info(f"Destination: {released_user_assignment}")
