@@ -94,7 +94,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             ]
         else:
             self.log.info(
-                "Duedate is enabled. Collecting assingments submitted before duedate..."
+                "Duedate is enabled. Collecting assignments submitted before duedate..."
             )
             self.src_records = []
             for v in usergroups.values():
