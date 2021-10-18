@@ -93,6 +93,9 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                 self._sort_by_timestamp(v)[0] for v in usergroups.values()
             ]
         else:
+            self.log.info(
+                "Duedate is enabled. Collecting assignments submitted before duedate..."
+            )
             self.src_records = []
             for v in usergroups.values():
                 records = self._sort_by_timestamp(v)
