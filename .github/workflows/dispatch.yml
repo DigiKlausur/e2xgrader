@@ -2,7 +2,7 @@ name: Dispatch
 
 on:
   workflow_run:
-    workflows: ["Lint with black", "Python package"]
+    workflows: ["Python package"]
     branches: [master, dev]
     types:
       - completed
