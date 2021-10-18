@@ -1,6 +1,7 @@
 import os
 import glob
 from collections import defaultdict
+from traitlets import Bool
 
 from nbgrader.exchange.default.collect import ExchangeCollect, groupby
 from .exchange import E2xExchange
