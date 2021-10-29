@@ -1,5 +1,9 @@
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell
+from nbgrader.utils import is_grade, is_solution, compute_checksum
+from e2xgrader.utils.nbgrader_cells import grade_id
+import os
+import nbformat
 
 
 class E2xAPI(NbGraderAPI):
@@ -156,3 +160,93 @@ class E2xAPI(NbGraderAPI):
             submission["index"] = idx
 
         return submissions
+
+    def list_updated_cells(self, notebook: str, assignment: str) -> dict:
+        """Lists the updated autograde cell id and content from the source directory.
+
+        Arguments
+        ---------
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        Returns
+        -------
+        updated_cells: list
+            Dictionary where the keys are the ids of the cell and the values are the content.
+        """
+        assignment_path = self.coursedir.format_path(
+            nbgrader_step = self.coursedir.source_directory, 
+            student_id = '.', 
+            assignment_id = assignment
+        )
+        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
+        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+
+        nb_test_cells = {grade_id(cell): cell for cell in nb.cells 
+                 if is_grade(cell) and not is_solution(cell)}
+
+        updated_notebook = self.gradebook.find_notebook(notebook, assignment)
+        source_cells = updated_notebook.source_cells
+
+        test_cell_names = self.list_autograde_testcells(notebook, assignment)
+        gb_test_cells = [cell for cell in source_cells if cell.name in test_cell_names]
+
+        updated_cells = []
+        for cell in gb_test_cells:                
+            if cell.name in test_cell_names and compute_checksum(nb_test_cells[cell.name]) != cell.checksum:
+                updated_cells.append(cell.name)
+        return updated_cells
+
+    def list_autograde_testcells(self, notebook: str, assignment: str) -> dict:
+        """Lists the autograde test cell ids from the given assignment and notebook.
+
+        Arguments
+        ---------
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        Returns
+        -------
+        autograde_cells: list
+            List of autograde test cells in the notebook.
+        """
+        updated_notebook = self.gradebook.find_notebook(notebook, assignment)
+        grade_cell_names = [cell.name for cell in updated_notebook.grade_cells]
+        solution_cell_names = [cell.name for cell in updated_notebook.solution_cells]
+        autograde_cells = set(grade_cell_names).difference(set(solution_cell_names))
+        return list(autograde_cells)
+
+    def update_cell_content(self, cell_id: str, notebook: str, assignment: str) -> str:
+        """Updates cell content.
+
+        Arguments
+        ---------
+        cell_id: string
+            The name of the cell
+        notebook: string
+            The name of the notebook
+        assignment: string
+            The name of the assignment
+        cell_content: string
+            The updated content of the cell
+        Returns
+        -------
+        checksum_id: str
+            Generates new checksum id after changes.
+        """
+        assignment_path = self.coursedir.format_path(
+            nbgrader_step = self.coursedir.source_directory, 
+            student_id = '.', 
+            assignment_id = assignment
+        )
+        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
+        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+
+        for cell in nb.cells:
+            if cell.metadata.nbgrader.grade_id == cell_id:
+                cell_content = cell.source
+                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
+                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = compute_checksum(cell))
+                return compute_checksum(cell)

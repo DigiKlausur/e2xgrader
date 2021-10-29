@@ -92,12 +92,54 @@ class GenerateExerciseHandler(BaseApiHandler):
         self.write({"status": True})
 
 
+class GetNotebook(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        assignment_object = self.api.gradebook.find_assignment(assignment_id)
+        notebooks = []
+        for assignment in assignment_object.notebooks:
+            notebooks.append(assignment.name)
+        self.write(json.dumps(notebooks))
+
+
+class FindUpdatedCells(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        notebook_id = self.get_argument('notebook_id')
+        updated_cells = self.api.list_updated_cells(notebook_id, assignment_id)
+        self.write(json.dumps(updated_cells))
+
+
+class UpdateNotebook(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        assignment_id = self.get_argument('assignment_id')
+        notebook_id = self.get_argument('notebook_id')
+        cells = self.get_argument('cells')
+        cells = eval(cells.split()[0])
+        checksum_id = []
+        for cell in cells:
+            checksum_single = self.api.update_cell_content(cell, notebook_id, assignment_id)
+            checksum_id.append(checksum_single)
+            self.api.gradebook.update_or_create_source_cell(name = cell, notebook = notebook_id, 
+                                                            assignment = assignment_id, checksum = checksum_single)
+        self.write(json.dumps(checksum_id))
+
+
 formgrade_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (
         r"/formgrader/api/submitted_tasks/([^/]+)/([^/]+)/([^/]+)",
         SubmittedTaskCollectionHandler,
     ),
+    (r'/formgrader/api/get_notebook/?', GetNotebook),
+    (r'/formgrader/api/find_updated_cell/?', FindUpdatedCells),
+    (r'/formgrader/api/update_notebook/?', UpdateNotebook),
 ]
 
 nbassignment_handlers = [
