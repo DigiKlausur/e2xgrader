@@ -3,11 +3,13 @@ from nbconvert.exporters.exporter import ResourcesDict
 
 from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
 from nbgrader.utils import determine_grade
+from ..utils.nbgrader_cells import grade_id
 
 from ..utils.extra_cells import is_extra_cell
 from ..graders import BaseGrader, MultipleChoiceGrader, SingleChoiceGrader, CodeGrader
 
-from traitlets import Dict, Unicode, Instance
+from traitlets import Dict, Unicode, Instance, List
+from textwrap import dedent
 
 
 class SaveAutoGrades(NbgraderSaveAutoGrades):
@@ -20,6 +22,14 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
             "singlechoice": SingleChoiceGrader(),
             "multiplechoice": MultipleChoiceGrader(),
         },
+    ).tag(config=True)
+
+    cell_ids = List([],
+        help=dedent(
+            """
+            List of cell ids of autograde test cells for forced grading.
+            """
+        )
     ).tag(config=True)
 
     def cell_type(self, cell: NotebookNode):
@@ -60,5 +70,10 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
             grade.needs_manual_grade = True
         else:
             grade.needs_manual_grade = False
+
+        if len(self.cell_ids) < 1 or grade_id(cell) in self.cell_ids:
+            grade.manual_score = None
+            grade.needs_manual_grade = True
+            grade.manual_score = auto_score
 
         self.gradebook.db.commit()
