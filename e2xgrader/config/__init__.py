@@ -33,6 +33,11 @@ def configure_base(config):
         "nbgrader.preprocessors.ComputeChecksums",
         "nbgrader.preprocessors.CheckCellMetadata",
     ]
+    config.GenerateFeedback.preprocessors = [
+        "nbgrader.preprocessors.GetGrades",
+        "e2xgrader.preprocessors.FilterTests",
+        "nbconvert.preprocessors.CSSHTMLHeaderPreprocessor"
+    ]
     config.GenerateFeedback.exporter_class = E2xExporter
 
 

@@ -326,3 +326,34 @@ class E2xAPI(NbGraderAPI):
         os.makedirs(path, exist_ok=True)
         with open(path + assignment_id + '.txt', 'w') as outfile:
             json.dump(result_log, outfile)
+
+    def generate_feedback_hide(self, assignment_id, student_id=None):
+        """Run ``nbgrader generate_feedback`` for a particular assignment and student.
+
+        Arguments
+        ---------
+        assignment_id: string
+            The name of the assignment
+        student_id: string
+            The name of the student (optional). If not provided, then generate
+            feedback from autograded submissions.
+        """
+        result_log = {}
+        if student_id is None:
+            feedback_command = "python3 -m e2xgrader generate_feedback " + assignment_id + " --hidecells --force"
+            result_log['log'] = subprocess.getoutput(feedback_command)
+            if result_log['log'].find("Setting destination file permissions to 644") != -1:
+                result_log['success'] = True
+                return result_log
+            else:
+                result_log['success'] = False
+                return result_log
+        else:
+            feedback_command = "python3 -m e2xgrader generate_feedback " + assignment_id + " --student " + str(student_id) + " --hidecells --force"
+            result_log['log'] = subprocess.getoutput(feedback_command)
+            if result_log['log'].find("Setting destination file permissions to 644") != -1:
+                result_log['success'] = True
+                return result_log
+            else:
+                result_log['success'] = False
+                return result_log

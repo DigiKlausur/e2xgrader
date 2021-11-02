@@ -3,6 +3,7 @@
 
 from nbgrader.apps.nbgraderapp import NbGraderApp
 from .autogradeapp import E2xAutogradeApp
+from .generatefeedbackapp import E2xGenerateFeedbackApp
 from textwrap import dedent
 
 
@@ -17,7 +18,14 @@ class E2xNbGraderApp(NbGraderApp):
                 only.
                 """
             ).strip())
-
+    subcommands['generate_feedback'] = (
+            E2xGenerateFeedbackApp,
+            dedent(
+                """
+                Generate feedback (after autograding and manual grading).
+                Intended for use by instructors only.
+                """
+            ).strip())
 
 def main():
     E2xNbGraderApp.launch_instance()

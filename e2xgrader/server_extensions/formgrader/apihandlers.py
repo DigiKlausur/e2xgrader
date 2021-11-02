@@ -218,6 +218,20 @@ class AutogradingProgess(BaseApiHandler):
         self.write(json.dumps(result))
 
 
+class GenerateAllFeedbackHandlerHide(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def post(self, assignment_id):
+        self.write(json.dumps(self.api.generate_feedback_hide(assignment_id)))
+
+
+class GenerateFeedbackHandlerHide(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    def post(self, assignment_id, student_id):
+        self.write(json.dumps(self.api.generate_feedback_hide(assignment_id, student_id)))
+
+
 formgrade_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (
@@ -234,6 +248,8 @@ formgrade_handlers = [
     (r'/formgrader/api/list_cells/?', ListCells),
     (r'/formgrader/api/autograding_progress/?', AutogradingProgess),
     (r'/formgrader/api/autograding_stop/?', AutogradingStop),
+    (r'/formgrader/api/assignment/([^/]+)/generate_feedback_hide', GenerateAllFeedbackHandlerHide),
+    (r'/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback_hide', GenerateFeedbackHandlerHide),
 ]
 
 nbassignment_handlers = [
