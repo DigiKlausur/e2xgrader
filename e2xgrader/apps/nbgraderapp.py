@@ -10,22 +10,25 @@ from textwrap import dedent
 class E2xNbGraderApp(NbGraderApp):
 
     subcommands = NbGraderApp.subcommands.copy()
-    subcommands['autograde'] = (
-            E2xAutogradeApp,
-            dedent(
-                """
+    subcommands["autograde"] = (
+        E2xAutogradeApp,
+        dedent(
+            """
                 Autograde submitted assignments. Intended for use by instructors
                 only.
                 """
-            ).strip())
-    subcommands['generate_feedback'] = (
-            E2xGenerateFeedbackApp,
-            dedent(
-                """
+        ).strip(),
+    )
+    subcommands["generate_feedback"] = (
+        E2xGenerateFeedbackApp,
+        dedent(
+            """
                 Generate feedback (after autograding and manual grading).
                 Intended for use by instructors only.
                 """
-            ).strip())
+        ).strip(),
+    )
+
 
 def main():
     E2xNbGraderApp.launch_instance()

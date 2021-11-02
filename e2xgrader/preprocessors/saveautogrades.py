@@ -24,12 +24,13 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         },
     ).tag(config=True)
 
-    cell_ids = List([],
+    cell_ids = List(
+        [],
         help=dedent(
             """
             List of cell ids of autograde test cells for forced grading.
             """
-        )
+        ),
     ).tag(config=True)
 
     def cell_type(self, cell: NotebookNode):

@@ -4,7 +4,7 @@
 from nbgrader.apps import AutogradeApp
 from nbgrader.apps.autogradeapp import aliases, flags
 
-aliases['cell-id'] = 'SaveAutoGrades.cell_ids'
+aliases["cell-id"] = "SaveAutoGrades.cell_ids"
 
 
 class E2xAutogradeApp(AutogradeApp):

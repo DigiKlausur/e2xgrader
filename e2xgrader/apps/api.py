@@ -12,10 +12,10 @@ from multiprocessing import Value
 
 class E2xAPI(NbGraderAPI):
 
-    autograde_flag = Value('b', False)
-    autograde_idx = Value('i', 0)
-    autograde_total = Value('i', 0)
-    autograde_stop = Value('b', False)
+    autograde_flag = Value("b", False)
+    autograde_idx = Value("i", 0)
+    autograde_total = Value("i", 0)
+    autograde_stop = Value("b", False)
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook
@@ -186,15 +186,18 @@ class E2xAPI(NbGraderAPI):
             Dictionary where the keys are the ids of the cell and the values are the content.
         """
         assignment_path = self.coursedir.format_path(
-            nbgrader_step = self.coursedir.source_directory, 
-            student_id = '.', 
-            assignment_id = assignment
+            nbgrader_step=self.coursedir.source_directory,
+            student_id=".",
+            assignment_id=assignment,
         )
-        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
-        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+        nb_path = os.path.join(assignment_path, notebook + ".ipynb")
+        nb = nbformat.read(nb_path, as_version=nbformat.NO_CONVERT)
 
-        nb_test_cells = {grade_id(cell): cell for cell in nb.cells 
-                 if is_grade(cell) and not is_solution(cell)}
+        nb_test_cells = {
+            grade_id(cell): cell
+            for cell in nb.cells
+            if is_grade(cell) and not is_solution(cell)
+        }
 
         updated_notebook = self.gradebook.find_notebook(notebook, assignment)
         source_cells = updated_notebook.source_cells
@@ -203,8 +206,11 @@ class E2xAPI(NbGraderAPI):
         gb_test_cells = [cell for cell in source_cells if cell.name in test_cell_names]
 
         updated_cells = []
-        for cell in gb_test_cells:                
-            if cell.name in test_cell_names and compute_checksum(nb_test_cells[cell.name]) != cell.checksum:
+        for cell in gb_test_cells:
+            if (
+                cell.name in test_cell_names
+                and compute_checksum(nb_test_cells[cell.name]) != cell.checksum
+            ):
                 updated_cells.append(cell.name)
         return updated_cells
 
@@ -247,18 +253,28 @@ class E2xAPI(NbGraderAPI):
             Generates new checksum id after changes.
         """
         assignment_path = self.coursedir.format_path(
-            nbgrader_step = self.coursedir.source_directory, 
-            student_id = '.', 
-            assignment_id = assignment
+            nbgrader_step=self.coursedir.source_directory,
+            student_id=".",
+            assignment_id=assignment,
         )
-        nb_path = os.path.join(assignment_path, notebook + '.ipynb')
-        nb = nbformat.read(nb_path, as_version = nbformat.NO_CONVERT)
+        nb_path = os.path.join(assignment_path, notebook + ".ipynb")
+        nb = nbformat.read(nb_path, as_version=nbformat.NO_CONVERT)
 
         for cell in nb.cells:
             if cell.metadata.nbgrader.grade_id == cell_id:
                 cell_content = cell.source
-                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, source = cell_content)
-                self.gradebook.update_or_create_source_cell(name = cell_id, notebook = notebook, assignment = assignment, checksum = compute_checksum(cell))
+                self.gradebook.update_or_create_source_cell(
+                    name=cell_id,
+                    notebook=notebook,
+                    assignment=assignment,
+                    source=cell_content,
+                )
+                self.gradebook.update_or_create_source_cell(
+                    name=cell_id,
+                    notebook=notebook,
+                    assignment=assignment,
+                    checksum=compute_checksum(cell),
+                )
                 return compute_checksum(cell)
 
     def autograde_all(self, assignment_id):
@@ -281,16 +297,22 @@ class E2xAPI(NbGraderAPI):
             if self.autograde_stop.value:
                 self.autograde_stop.value = False
                 break
-            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --force"
+            autograde_command = (
+                "python3 -m e2xgrader autograde "
+                + assignment_id
+                + " --student "
+                + student
+                + " --force"
+            )
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
         self.autograde_idx.value = 0
         self.autograde_total.value = 0
         self.autograde_flag.value = False
-        result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log/')
+        result_log["time"] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(self.coursedir.root, "log/")
         os.makedirs(path, exist_ok=True)
-        with open(path + assignment_id + '.txt', 'w') as outfile:
+        with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
     def autograde_cells(self, assignment_id, selected_cells):
@@ -315,16 +337,24 @@ class E2xAPI(NbGraderAPI):
             if self.autograde_stop.value == True:
                 self.autograde_stop.value = False
                 break
-            autograde_command = "python3 -m e2xgrader autograde " + assignment_id + " --student " + student + " --cell-id " + selected_cells + " --force"
+            autograde_command = (
+                "python3 -m e2xgrader autograde "
+                + assignment_id
+                + " --student "
+                + student
+                + " --cell-id "
+                + selected_cells
+                + " --force"
+            )
             result_log[student] = subprocess.getoutput(autograde_command)
             self.autograde_idx.value = idx + 1
         self.autograde_idx.value = 0
         self.autograde_total.value = 0
         self.autograde_flag.value = False
-        result_log['time'] = str(time.asctime(time.localtime(time.time())))
-        path = os.path.join(self.coursedir.root, 'log/')
+        result_log["time"] = str(time.asctime(time.localtime(time.time())))
+        path = os.path.join(self.coursedir.root, "log/")
         os.makedirs(path, exist_ok=True)
-        with open(path + assignment_id + '.txt', 'w') as outfile:
+        with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
     def generate_feedback_hide(self, assignment_id, student_id=None):
@@ -340,20 +370,36 @@ class E2xAPI(NbGraderAPI):
         """
         result_log = {}
         if student_id is None:
-            feedback_command = "python3 -m e2xgrader generate_feedback " + assignment_id + " --hidecells --force"
-            result_log['log'] = subprocess.getoutput(feedback_command)
-            if result_log['log'].find("Setting destination file permissions to 644") != -1:
-                result_log['success'] = True
+            feedback_command = (
+                "python3 -m e2xgrader generate_feedback "
+                + assignment_id
+                + " --hidecells --force"
+            )
+            result_log["log"] = subprocess.getoutput(feedback_command)
+            if (
+                result_log["log"].find("Setting destination file permissions to 644")
+                != -1
+            ):
+                result_log["success"] = True
                 return result_log
             else:
-                result_log['success'] = False
+                result_log["success"] = False
                 return result_log
         else:
-            feedback_command = "python3 -m e2xgrader generate_feedback " + assignment_id + " --student " + str(student_id) + " --hidecells --force"
-            result_log['log'] = subprocess.getoutput(feedback_command)
-            if result_log['log'].find("Setting destination file permissions to 644") != -1:
-                result_log['success'] = True
+            feedback_command = (
+                "python3 -m e2xgrader generate_feedback "
+                + assignment_id
+                + " --student "
+                + str(student_id)
+                + " --hidecells --force"
+            )
+            result_log["log"] = subprocess.getoutput(feedback_command)
+            if (
+                result_log["log"].find("Setting destination file permissions to 644")
+                != -1
+            ):
+                result_log["success"] = True
                 return result_log
             else:
-                result_log['success'] = False
+                result_log["success"] = False
                 return result_log
