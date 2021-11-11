@@ -1,52 +1,48 @@
 import unittest
-from nbformat.v4 import new_markdown_cell, new_notebook
-
+from nbformat.v4 import new_markdown_cell, new_notebook, new_code_cell
 from e2xgrader.utils.nbgrader_cells import grade_id
 from e2xgrader.preprocessors import FilterTests
 
-
 class TestFilterTests(unittest.TestCase):
+    check_source = "# This test case is hidden #"
     def setUp(self):
-        self.grade_ids = ["Task", "Task1", "Task12", "Task123", "Task1234", "Task12345"]
+        self.grade_ids = ["Task", "Task1"]
+        self.truths = [True, False]
         self.nb = new_notebook()
 
         for idx in self.grade_ids:
-            cell = new_markdown_cell()
-            cell.metadata = {
-                "nbgrader": {
-                    "grade": False,
-                    "grade_id": idx,
-                    "solution": True,
-                    "locked": False,
-                    "schema_version": 3,
-                    "task": False,
+            for truth in self.truths:
+                cell = new_code_cell()
+                cell.metadata = {
+                    "nbgrader": {
+                     "grade": truth,
+                     "grade_id": str(idx) + str(truth),
+                     "locked": True,
+                     "points": 10,
+                     "schema_version": 3,
+                     "solution": False,
+                     "task": False
+                    }
                 }
-            }
-            self.nb.cells.append(cell)
+                cell.source = [
+                "#THIS IS A TEST CELL!!!\n",
+                "\n",
+                "### BEGIN HIDDEN TESTS\n",
+                "# Test cell.",
+                "### END HIDDEN TESTS"
+                ]
+                self.nb.cells.append(cell)
 
-    def test_no_keyword(self):
-        resources = {}
-        processed_nb, resources = FilterTests().preprocess_cell(self.nb, resources, None)
-        processed_cell_ids = [grade_id(cell) for cell in processed_nb.cells]
-        assert all([idx in processed_cell_ids for idx in self.grade_ids])
+    def hide_cells_true(self):
+        ft = FilterTests()
+        ft.hide_cells = True
+        for cell in self.nb.cells:
+            processed_cell, resources = ft.preprocess_cell(cell, None, None)
+            assert processed_cell.source == self.check_source
 
-    def test_empty_keyword(self):
-        resources = {"keyword": ""}
-        processed_nb, resources = FilterTests().preprocess_cell(self.nb, resources, None)
-        processed_cell_ids = [grade_id(cell) for cell in processed_nb.cells]
-        assert all([idx in processed_cell_ids for idx in self.grade_ids])
-
-    def test_non_empty_keyword(self):
-        resources = {"keyword": "Task12345"}
-        processed_nb, resources = FilterTests().preprocess_cell(self.nb, resources, None)
-        processed_cell_ids = [grade_id(cell) for cell in processed_nb.cells]
-        assert len(processed_cell_ids) == 1
-        assert processed_cell_ids[0] == "Task12345"
-
-    def test_non_empty_keyword_1(self):
-        keyword = "Task123"
-        resources = {"keyword": keyword}
-        processed_nb, resources = FilterTests().preprocess_cell(self.nb, resources, None)
-        processed_cell_ids = [grade_id(cell) for cell in processed_nb.cells]
-        assert len(processed_cell_ids) == 3
-        assert all([keyword in idx for idx in processed_cell_ids])
+    def hide_cells_false(self):
+        ft1 = FilterTests()
+        ft1.hide_cells = False
+        for cell in self.nb.cells:
+            processed_cell, resources = ft1.preprocess_cell(cell, None, None)
+            assert processed_cell.source != self.check_source
