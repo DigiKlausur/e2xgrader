@@ -8,6 +8,9 @@ import json
 import nbformat
 import subprocess
 from multiprocessing import Value
+from traitlets.config import Config
+from nbgrader.utils import temp_attrs, capture_log
+from nbgrader.converters import GenerateFeedback
 
 
 class E2xAPI(NbGraderAPI):
@@ -357,9 +360,8 @@ class E2xAPI(NbGraderAPI):
         with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
-    def generate_feedback_hide(self, assignment_id, student_id=None):
+    def generate_feedback(self, assignment_id, student_id=None, force=True, hidecells = False):
         """Run ``nbgrader generate_feedback`` for a particular assignment and student.
-
         Arguments
         ---------
         assignment_id: string
@@ -367,39 +369,34 @@ class E2xAPI(NbGraderAPI):
         student_id: string
             The name of the student (optional). If not provided, then generate
             feedback from autograded submissions.
+        force: bool
+            Whether to force generating feedback, even if it already exists.
+        Returns
+        -------
+        result: dict
+            A dictionary with the following keys (error and log may or may not be present):
+            - success (bool): whether or not the operation completed successfully
+            - error (string): formatted traceback
+            - log (string): captured log output
         """
-        result_log = {}
-        if student_id is None:
-            feedback_command = (
-                "python3 -m e2xgrader generate_feedback "
-                + assignment_id
-                + " --hidecells --force"
-            )
-            result_log["log"] = subprocess.getoutput(feedback_command)
-            if (
-                result_log["log"].find("Setting destination file permissions to 644")
-                != -1
-            ):
-                result_log["success"] = True
-                return result_log
-            else:
-                result_log["success"] = False
-                return result_log
+        # Because we may be using HTMLExporter.template_file in other
+        # parts of the the UI, we need to make sure that the template
+        # is explicitply 'feedback.tpl` here:
+        c = Config()
+        c.HTMLExporter.template_file = 'feedback.tpl'
+        c.FilterTests.hide_cells = hidecells
+        if student_id is not None:
+            with temp_attrs(self.coursedir,
+                            assignment_id=assignment_id,
+                            student_id=student_id):
+                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
+                app.update_config(c)
+                app.force = force
+                return capture_log(app)
         else:
-            feedback_command = (
-                "python3 -m e2xgrader generate_feedback "
-                + assignment_id
-                + " --student "
-                + str(student_id)
-                + " --hidecells --force"
-            )
-            result_log["log"] = subprocess.getoutput(feedback_command)
-            if (
-                result_log["log"].find("Setting destination file permissions to 644")
-                != -1
-            ):
-                result_log["success"] = True
-                return result_log
-            else:
-                result_log["success"] = False
-                return result_log
+            with temp_attrs(self.coursedir,
+                            assignment_id=assignment_id):
+                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
+                app.update_config(c)
+                app.force = force
+                return capture_log(app)

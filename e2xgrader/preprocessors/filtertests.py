@@ -3,6 +3,7 @@ from nbformat.notebooknode import NotebookNode
 from nbconvert.exporters.exporter import ResourcesDict
 from traitlets import Bool
 from typing import Tuple
+from nbgrader.utils import is_grade, is_solution
 
 
 class FilterTests(NbGraderPreprocessor):
@@ -16,9 +17,8 @@ class FilterTests(NbGraderPreprocessor):
     ) -> Tuple[NotebookNode, ResourcesDict]:
         if self.hide_cells:
             if (
-                cell.cell_type == "code"
-                and cell.metadata.nbgrader.grade == True
-                and cell.metadata.nbgrader.solution == False
+                not is_solution(cell)
+                and is_grade(cell)
             ):
-                cell.source = ""
+                cell.source = "# This test case is hidden #"
         return cell, resources
