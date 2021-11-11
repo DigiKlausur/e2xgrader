@@ -345,7 +345,7 @@ class E2xAPI(NbGraderAPI):
                 + assignment_id
                 + " --student "
                 + student
-                + " --cell-id "
+                + " --SaveAutoGrades.cell_ids="
                 + selected_cells
                 + " --force"
             )
@@ -369,8 +369,7 @@ class E2xAPI(NbGraderAPI):
         assignment_id: string
             The name of the assignment
         student_id: string
-            The name of the student (optional). If not provided, then generate
-            feedback from autograded submissions.
+            The name of the student (optional). If not provided, then generate feedback from autograded submissions.
         force: bool
             Whether to force generating feedback, even if it already exists.
         Returns
