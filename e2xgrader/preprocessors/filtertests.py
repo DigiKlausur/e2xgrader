@@ -16,9 +16,6 @@ class FilterTests(NbGraderPreprocessor):
         self, cell: NotebookNode, resources: ResourcesDict, cell_index: int
     ) -> Tuple[NotebookNode, ResourcesDict]:
         if self.hide_cells:
-            if (
-                not is_solution(cell)
-                and is_grade(cell)
-            ):
+            if not is_solution(cell) and is_grade(cell):
                 cell.source = "# This test case is hidden #"
         return cell, resources

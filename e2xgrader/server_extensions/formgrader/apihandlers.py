@@ -240,7 +240,9 @@ class GenerateAllFeedbackHandlerHide(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def post(self, assignment_id):
-        self.write(json.dumps(self.api.generate_feedback(assignment_id, hidecells=True)))
+        self.write(
+            json.dumps(self.api.generate_feedback(assignment_id, hidecells=True))
+        )
 
 
 class GenerateFeedbackHandlerHide(BaseApiHandler):
@@ -248,7 +250,9 @@ class GenerateFeedbackHandlerHide(BaseApiHandler):
     @check_xsrf
     def post(self, assignment_id, student_id):
         self.write(
-            json.dumps(self.api.generate_feedback(assignment_id, student_id, hidecells=True))
+            json.dumps(
+                self.api.generate_feedback(assignment_id, student_id, hidecells=True)
+            )
         )
 
 

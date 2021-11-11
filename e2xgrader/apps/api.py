@@ -360,7 +360,9 @@ class E2xAPI(NbGraderAPI):
         with open(path + assignment_id + ".txt", "w") as outfile:
             json.dump(result_log, outfile)
 
-    def generate_feedback(self, assignment_id, student_id=None, force=True, hidecells = False):
+    def generate_feedback(
+        self, assignment_id, student_id=None, force=True, hidecells=False
+    ):
         """Run ``nbgrader generate_feedback`` for a particular assignment and student.
         Arguments
         ---------
@@ -383,19 +385,18 @@ class E2xAPI(NbGraderAPI):
         # parts of the the UI, we need to make sure that the template
         # is explicitply 'feedback.tpl` here:
         c = Config()
-        c.HTMLExporter.template_file = 'feedback.tpl'
+        c.HTMLExporter.template_file = "feedback.tpl"
         c.FilterTests.hide_cells = hidecells
         if student_id is not None:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id,
-                            student_id=student_id):
+            with temp_attrs(
+                self.coursedir, assignment_id=assignment_id, student_id=student_id
+            ):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force
                 return capture_log(app)
         else:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id):
+            with temp_attrs(self.coursedir, assignment_id=assignment_id):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force
