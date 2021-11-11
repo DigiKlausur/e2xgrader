@@ -48,6 +48,10 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         """
         # these are the fields by which we will identify the score
         # information
+
+        if len(self.cell_ids) > 0 and grade_id(cell) not in self.cell_ids:
+            return
+
         grade = self.gradebook.find_grade(
             cell.metadata["nbgrader"]["grade_id"],
             self.notebook_id,
@@ -72,9 +76,8 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
         else:
             grade.needs_manual_grade = False
 
-        if len(self.cell_ids) < 1 or grade_id(cell) in self.cell_ids:
-            grade.manual_score = None
-            grade.needs_manual_grade = True
-            grade.manual_score = auto_score
+        grade.manual_score = None
+        grade.needs_manual_grade = True
+        grade.manual_score = auto_score
 
         self.gradebook.db.commit()
