@@ -93,9 +93,9 @@ def js_prerelease(command):
     class DecoratedCommand(command):
         def run(self):
             if which("npm") is not None:
-                process = subprocess.run(['npm', 'install'])
+                process = subprocess.run(["npm", "install"])
                 assert process.returncode == 0, "npm install failed"
-                process = subprocess.run(['npm', 'run', 'build'])
+                process = subprocess.run(["npm", "run", "build"])
                 assert process.returncode == 0, "npm build failed"
             command.run(self)
 
