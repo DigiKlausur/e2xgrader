@@ -96,14 +96,20 @@ class GenerateAllFeedbackHandlerHide(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def post(self, assignment_id):
-        self.write(json.dumps(self.api.generate_feedback(assignment_id, hidecells=True)))
+        self.write(
+            json.dumps(self.api.generate_feedback(assignment_id, hidecells=True))
+        )
 
 
 class GenerateFeedbackHandlerHide(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     def post(self, assignment_id, student_id):
-        self.write(json.dumps(self.api.generate_feedback(assignment_id, student_id, hidecells=True)))
+        self.write(
+            json.dumps(
+                self.api.generate_feedback(assignment_id, student_id, hidecells=True)
+            )
+        )
 
 
 formgrade_handlers = [
@@ -112,8 +118,14 @@ formgrade_handlers = [
         r"/formgrader/api/submitted_tasks/([^/]+)/([^/]+)/([^/]+)",
         SubmittedTaskCollectionHandler,
     ),
-    (r'/formgrader/api/assignment/([^/]+)/generate_feedback_hide', GenerateAllFeedbackHandlerHide),
-    (r'/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback_hide', GenerateFeedbackHandlerHide),
+    (
+        r"/formgrader/api/assignment/([^/]+)/generate_feedback_hide",
+        GenerateAllFeedbackHandlerHide,
+    ),
+    (
+        r"/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback_hide",
+        GenerateFeedbackHandlerHide,
+    ),
 ]
 
 nbassignment_handlers = [

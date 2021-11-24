@@ -4,6 +4,7 @@ from traitlets.config import Config
 from nbgrader.utils import temp_attrs, capture_log
 from nbgrader.converters import GenerateFeedback
 
+
 class E2xAPI(NbGraderAPI):
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook
@@ -159,9 +160,11 @@ class E2xAPI(NbGraderAPI):
 
         return submissions
 
-    def generate_feedback(self, assignment_id, student_id=None, force=True, hidecells = False):
+    def generate_feedback(
+        self, assignment_id, student_id=None, force=True, hidecells=False
+    ):
         """Run ``nbgrader generate_feedback`` for a particular assignment and student.
-        
+
         Arguments
         ---------
         assignment_id: string
@@ -183,19 +186,18 @@ class E2xAPI(NbGraderAPI):
         # parts of the the UI, we need to make sure that the template
         # is explicitply 'feedback.tpl` here:
         c = Config()
-        c.HTMLExporter.template_file = 'feedback.tpl'
+        c.HTMLExporter.template_file = "feedback.tpl"
         c.FilterTests.hide_cells = hidecells
         if student_id is not None:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id,
-                            student_id=student_id):
+            with temp_attrs(
+                self.coursedir, assignment_id=assignment_id, student_id=student_id
+            ):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force
                 return capture_log(app)
         else:
-            with temp_attrs(self.coursedir,
-                            assignment_id=assignment_id):
+            with temp_attrs(self.coursedir, assignment_id=assignment_id):
                 app = GenerateFeedback(coursedir=self.coursedir, parent=self)
                 app.update_config(c)
                 app.force = force
