@@ -13,8 +13,7 @@ class FilterTests(NbGraderPreprocessor):
     ).tag(config=True)
 
     test_stub = Unicode(
-        "# This test case is hidden #",
-        help="The text snippet that will replace tests"
+        "# This test case is hidden #", help="The text snippet that will replace tests"
     ).tag(config=True)
 
     def preprocess_cell(
