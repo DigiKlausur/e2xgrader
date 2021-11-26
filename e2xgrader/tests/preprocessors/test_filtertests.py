@@ -96,4 +96,4 @@ class TestFilterCellsById(unittest.TestCase):
                 assert original_cell.source == processed_cell.source
             else:
                 print(processed_cell.source)
-                assert processed_cell.source == "# This test case is hidden #"
+                assert processed_cell.source == preprocessor.test_stub
