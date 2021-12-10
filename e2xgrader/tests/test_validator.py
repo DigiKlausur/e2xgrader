@@ -13,6 +13,7 @@ class TestValidator(unittest.TestCase):
         self.validator = E2XValidator()
         # There is no need to execute the notebook
         self.validator.preprocessors = []
+        self.error_msg = "You did not provide a response."
 
     def save_notebook(self, nb):
         nb_name = "mynb.ipynb"
@@ -62,7 +63,7 @@ class TestValidator(unittest.TestCase):
 
         assert "failed" in result
         assert len(result["failed"]) == 1
-        assert result["failed"][0]["error"] == "You did not provide a response."
+        assert result["failed"][0]["error"] == self.error_msg
 
     def test_validate_pass_multiplechoice_cell(self):
         multiplechoice_cell = self.create_extra_cell("multiplechoice", "mc_1", 5)
@@ -88,7 +89,7 @@ class TestValidator(unittest.TestCase):
 
         assert "failed" in result
         assert len(result["failed"]) == 1
-        assert result["failed"][0]["error"] == "You did not provide a response."
+        assert result["failed"][0]["error"] == self.error_msg
 
     def test_validate_pass_attachment_cell(self):
         attachment_cell = self.create_extra_cell("attachments", "at_1", 5)
@@ -113,7 +114,7 @@ class TestValidator(unittest.TestCase):
 
         assert "failed" in result
         assert len(result["failed"]) == 1
-        assert result["failed"][0]["error"] == "You did not provide a response."
+        assert result["failed"][0]["error"] == self.error_msg
 
     def test_pass_other_extra_cells(self):
         extra_cell = self.create_extra_cell("mytype", "ec_1", 5)
