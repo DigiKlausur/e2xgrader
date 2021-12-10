@@ -5,7 +5,7 @@ from nbformat.notebooknode import NotebookNode
 from .utils.extra_cells import (
     is_extra_cell,
     is_multiplechoice,
-    is_single_choice,
+    is_singlechoice,
     is_attachment_cell,
     get_choices,
 )
@@ -27,7 +27,7 @@ class E2XValidator(Validator):
                     score = None
                     if (
                         is_multiplechoice(cell)
-                        or is_single_choice(cell)
+                        or is_singlechoice(cell)
                         and len(get_choices(cell)) < 1
                     ):
                         score = 0
