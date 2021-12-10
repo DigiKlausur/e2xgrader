@@ -10,7 +10,9 @@ from notebook.utils import url_path_join as ujoin
 from notebook.base.handlers import IPythonHandler
 from jupyter_core.paths import jupyter_config_path
 
-from nbgrader.server_extensions.validate_assignment.handlers import NbGraderVersionHandler
+from nbgrader.server_extensions.validate_assignment.handlers import (
+    NbGraderVersionHandler,
+)
 
 from nbgrader.apps import NbGrader
 from nbgrader.nbgraderformat import SchemaTooOldError, SchemaTooNewError
@@ -18,14 +20,13 @@ from nbgrader.nbgraderformat import SchemaTooOldError, SchemaTooNewError
 from ...validator import E2XValidator
 
 
-static = os.path.join(os.path.dirname(__file__), 'static')
+static = os.path.join(os.path.dirname(__file__), "static")
 
 
 class ValidateAssignmentHandler(IPythonHandler):
-
     @property
     def notebook_dir(self):
-        return self.settings['notebook_dir']
+        return self.settings["notebook_dir"]
 
     def load_config(self):
         paths = jupyter_config_path()
@@ -53,10 +54,7 @@ class ValidateAssignmentHandler(IPythonHandler):
                 "notebook** and then update the metadata using:\n\nnbgrader update {}\n"
             ).format(fullpath, fullpath)
             self.log.error(msg)
-            retvalue = {
-                "success": False,
-                "value": msg
-            }
+            retvalue = {"success": False, "value": msg}
 
         except SchemaTooNewError:
             self.log.error(traceback.format_exc())
@@ -66,39 +64,30 @@ class ValidateAssignmentHandler(IPythonHandler):
                 "nbgrader to the latest version to be able to use this notebook."
             ).format(fullpath)
             self.log.error(msg)
-            retvalue = {
-                "success": False,
-                "value": msg
-            }
+            retvalue = {"success": False, "value": msg}
 
         except:
             self.log.error(traceback.format_exc())
-            retvalue = {
-                "success": False,
-                "value": traceback.format_exc()
-            }
+            retvalue = {"success": False, "value": traceback.format_exc()}
 
         else:
-            retvalue = {
-                "success": True,
-                "value": result
-            }
+            retvalue = {"success": True, "value": result}
 
         return retvalue
 
     @web.authenticated
     def post(self):
-        output = self.validate_notebook(self.get_argument('path'))
+        output = self.validate_notebook(self.get_argument("path"))
         self.finish(json.dumps(output))
 
 
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # URL to handler mappings
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 default_handlers = [
     (r"/assignments/validate", ValidateAssignmentHandler),
-    (r"/nbgrader_version", NbGraderVersionHandler)
+    (r"/nbgrader_version", NbGraderVersionHandler),
 ]
 
 
@@ -106,9 +95,8 @@ def load_jupyter_server_extension(nbapp):
     """Load the nbserver"""
     nbapp.log.info("Loading the validate_assignment e2xgrader serverextension")
     webapp = nbapp.web_app
-    base_url = webapp.settings['base_url']
-    webapp.settings['notebook_dir'] = nbapp.notebook_dir
-    webapp.add_handlers(".*$", [
-        (ujoin(base_url, pat), handler)
-        for pat, handler in default_handlers
-    ])
+    base_url = webapp.settings["base_url"]
+    webapp.settings["notebook_dir"] = nbapp.notebook_dir
+    webapp.add_handlers(
+        ".*$", [(ujoin(base_url, pat), handler) for pat, handler in default_handlers]
+    )
