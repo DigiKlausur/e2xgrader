@@ -14,6 +14,12 @@ class TestValidator(unittest.TestCase):
         # There is no need to execute the notebook
         self.validator.preprocessors = []
 
+    def save_notebook(self, nb):
+        nb_name = "mynb.ipynb"
+        filepath = os.path.join(self.tmp_dir.name, nb_name)
+        nbformat.write(nb, filepath)
+        return filepath
+
     def create_extra_cell(self, type, grade_id, points):
         cell = new_markdown_cell()
         cell.metadata = {
@@ -33,30 +39,24 @@ class TestValidator(unittest.TestCase):
         return cell
 
     def test_validate_pass_singlechoice_cell(self):
-        nb_name = "mynb.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         singlechoice_cell = self.create_extra_cell("singlechoice", "sc_1", 5)
         singlechoice_cell.metadata["extended_cell"]["choice"] = ["0"]
 
         nb = new_notebook()
         nb.cells.append(singlechoice_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
     def test_validate_fail_singlechoice_cell(self):
-        nb_name = "mynb.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         singlechoice_cell = self.create_extra_cell("singlechoice", "sc_1", 5)
         singlechoice_cell.metadata["extended_cell"]["choice"] = []
 
         nb = new_notebook()
         nb.cells.append(singlechoice_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
@@ -65,30 +65,24 @@ class TestValidator(unittest.TestCase):
         assert result["failed"][0]["error"] == "You did not provide a response."
 
     def test_validate_pass_multiplechoice_cell(self):
-        nb_name = "mynb.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         multiplechoice_cell = self.create_extra_cell("multiplechoice", "mc_1", 5)
         multiplechoice_cell.metadata["extended_cell"]["choice"] = ["0", "1"]
 
         nb = new_notebook()
         nb.cells.append(multiplechoice_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
     def test_validate_fail_multiplechoice_cell(self):
-        nb_name = "mynb.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         multiplechoice_cell = self.create_extra_cell("multiplechoice", "mc_1", 5)
         multiplechoice_cell.metadata["extended_cell"]["choice"] = []
 
         nb = new_notebook()
         nb.cells.append(multiplechoice_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
@@ -97,29 +91,23 @@ class TestValidator(unittest.TestCase):
         assert result["failed"][0]["error"] == "You did not provide a response."
 
     def test_validate_pass_attachment_cell(self):
-        nb_name = "mynb1.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         attachment_cell = self.create_extra_cell("attachments", "at_1", 5)
         attachment_cell["attachments"] = {"test.png": {"image/png": "byte64randomdata"}}
 
         nb = new_notebook()
         nb.cells.append(attachment_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
     def test_validate_fail_attachment_cell(self):
-        nb_name = "mynb1.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         attachment_cell = self.create_extra_cell("attachments", "at_1", 5)
 
         nb = new_notebook()
         nb.cells.append(attachment_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
@@ -128,14 +116,11 @@ class TestValidator(unittest.TestCase):
         assert result["failed"][0]["error"] == "You did not provide a response."
 
     def test_pass_other_extra_cells(self):
-        nb_name = "mynb1.ipynb"
-        filepath = os.path.join(self.tmp_dir.name, nb_name)
-
         extra_cell = self.create_extra_cell("mytype", "ec_1", 5)
 
         nb = new_notebook()
         nb.cells.append(extra_cell)
-        nbformat.write(nb, filepath)
+        filepath = self.save_notebook(nb)
 
         result = self.validator.validate(filepath)
 
