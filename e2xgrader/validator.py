@@ -35,9 +35,7 @@ class E2XValidator(Validator):
                         score = 0
 
                 # it's a markdown cell, so we can't do anything
-                if score is None:
-                    pass
-                elif score < max_score:
+                if score is not None and score < max_score:
                     failed.append(cell)
             elif self.validate_all and cell.cell_type == "code":
                 for output in cell.outputs:
