@@ -10,6 +10,9 @@ from nbformat.v4 import new_notebook, new_markdown_cell
 class TestValidator(unittest.TestCase):
     def setUp(self):
         self.tmp_dir = TemporaryDirectory()
+        self.validator = E2XValidator()
+        # There is no need to execute the notebook
+        self.validator.preprocessors = []
 
     def create_extra_cell(self, type, grade_id, points):
         cell = new_markdown_cell()
@@ -40,7 +43,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(singlechoice_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
@@ -55,7 +58,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(singlechoice_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert "failed" in result
         assert len(result["failed"]) == 1
@@ -72,7 +75,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(multiplechoice_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
@@ -87,7 +90,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(multiplechoice_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert "failed" in result
         assert len(result["failed"]) == 1
@@ -104,7 +107,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(attachment_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
@@ -118,7 +121,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(attachment_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert "failed" in result
         assert len(result["failed"]) == 1
@@ -134,7 +137,7 @@ class TestValidator(unittest.TestCase):
         nb.cells.append(extra_cell)
         nbformat.write(nb, filepath)
 
-        result = E2XValidator().validate(filepath)
+        result = self.validator.validate(filepath)
 
         assert len(result) == 0
 
