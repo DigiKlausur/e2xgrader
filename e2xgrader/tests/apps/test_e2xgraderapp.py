@@ -14,6 +14,7 @@ class TestE2XGraderApp(unittest.TestCase):
             "nbgrader.server_extensions.assignment_list",
             "nbgrader.server_extensions.course_list",
             "e2xgrader.server_extensions.formgrader",
+            "nbgrader.server_extensions.validate_assignment",
             "e2xgrader.server_extensions.assignment_list",
             "e2xgrader.server_extensions.e2xbase",
         ]
@@ -23,11 +24,7 @@ class TestE2XGraderApp(unittest.TestCase):
     def get_serverextensions(self, role):
         serverextensions = {
             "nbgrader.server_extensions.formgrader": [],
-            "nbgrader.server_extensions.validate_assignment": [
-                "teacher",
-                "student",
-                "student_exam",
-            ],
+            "nbgrader.server_extensions.validate_assignment": [],
             "nbgrader.server_extensions.assignment_list": [],
             "nbgrader.server_extensions.course_list": [
                 "teacher",
@@ -35,6 +32,11 @@ class TestE2XGraderApp(unittest.TestCase):
                 "student_exam",
             ],
             "e2xgrader.server_extensions.formgrader": ["teacher"],
+            "e2xgrader.server_extensions.validate_assignment": [
+                "teacher",
+                "student",
+                "student_exam",
+            ],
             "e2xgrader.server_extensions.assignment_list": [
                 "teacher",
                 "student",
