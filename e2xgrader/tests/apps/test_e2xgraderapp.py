@@ -14,7 +14,7 @@ class TestE2XGraderApp(unittest.TestCase):
             "nbgrader.server_extensions.assignment_list",
             "nbgrader.server_extensions.course_list",
             "e2xgrader.server_extensions.formgrader",
-            "nbgrader.server_extensions.validate_assignment",
+            "e2xgrader.server_extensions.validate_assignment",
             "e2xgrader.server_extensions.assignment_list",
             "e2xgrader.server_extensions.e2xbase",
         ]
