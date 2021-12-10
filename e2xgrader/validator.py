@@ -26,8 +26,7 @@ class E2XValidator(Validator):
                     # if it's an extra cell, check if an answer was given
                     score = None
                     if (
-                        (is_multiplechoice(cell)
-                        or is_singlechoice(cell))
+                        (is_multiplechoice(cell) or is_singlechoice(cell))
                         and len(get_choices(cell)) < 1
                     ) or (
                         is_attachment_cell(cell)
