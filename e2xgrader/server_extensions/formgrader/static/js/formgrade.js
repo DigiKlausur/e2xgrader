@@ -9,6 +9,7 @@ function FormGrader (base_url, submission_id) {
 FormGrader.prototype.init = function () {
     this.loadGrades();
     this.loadComments();
+    this.loadAnnotations();
 
     // disable link selection on tabs
     $('a:not(.tabbable)').attr('tabindex', '-1');
@@ -109,6 +110,30 @@ FormGrader.prototype.loadComments = function () {
                 that.comment_uis.push(comment_ui);
             });
             that.comments.loaded = true;
+        }
+    });
+};
+
+FormGrader.prototype.loadAnnotations = function () {
+    var that = this;
+
+    this.annotations = new Annotations();
+    this.annotation_uis = [];
+    this.annotations.loaded = false;
+    this.annotations.fetch({
+        data: {
+            "submission_id": this.submission_id
+        },
+        success: function () {
+            that.annotations.each(function (model) {
+                console.log(model);
+                var annotation_ui = new AnnotationUI({
+                    "model": model,
+                    "el": $("#" + model.get("name") + "-canvas").parents(".nbgrader_cell")
+                });
+                that.annotation_uis.push(annotation_ui);
+            });
+            that.annotations.loaded = true;
         }
     });
 };
