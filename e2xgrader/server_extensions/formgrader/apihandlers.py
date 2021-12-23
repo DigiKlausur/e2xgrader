@@ -1,8 +1,10 @@
 import os
 import json
+import base64
 
 from tornado import web
-from nbgrader.server_extensions.formgrader.base import check_xsrf
+from nbgrader.server_extensions.formgrader.base import check_xsrf, check_notebook_dir
+from nbgrader.api import MissingEntry
 
 from ...models import (
     PresetModel,
@@ -112,6 +114,106 @@ class GenerateFeedbackHandlerHide(BaseApiHandler):
         )
 
 
+class AnnotationCollectionHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        submission_id = self.get_argument("submission_id")
+        try:
+            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
+        except MissingEntry:
+            raise web.HTTPError(404)
+
+        autograded_path = self.api.coursedir.format_path(
+            nbgrader_step=self.api.coursedir.autograded_directory,
+            student_id=notebook.student.id,
+            assignment_id=notebook.assignment.name,
+        )
+        annotation_path = os.path.join(autograded_path, "annotations")
+        solution_cells = [s.to_dict() for s in notebook.notebook.solution_cells]
+
+        for solution_cell in solution_cells:
+            solution_cell["submission_id"] = submission_id
+            # solution_cell['id'] = submission_id
+
+            # Try loading the annotation for that cell
+            try:
+                with open(
+                    os.path.join(annotation_path, f'{solution_cell["name"]}.png'), "rb"
+                ) as f:
+                    solution_cell["annotation"] = str(base64.b64encode(f.read()))[2:-1]
+            except FileNotFoundError:
+                solution_cell["annotation"] = None
+        self.write(json.dumps(solution_cells))
+
+
+class AnnotationHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, submission_id):
+        self.log.info(submission_id)
+        try:
+            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
+        except MissingEntry:
+            raise web.HTTPError(404)
+        autograded_path = self.api.coursedir.format_path(
+            nbgrader_step=self.api.coursedir.autograded_directory,
+            student_id=notebook.student.id,
+            assignment_id=notebook.assignment.name,
+        )
+        annotation_path = os.path.join(autograded_path, "annotations")
+        solution_cells = [
+            s.to_dict() for s in notebook.notebook.solution_cells if s.name == name
+        ]
+        if len(solution_cells) < 1:
+            raise web.HTTPError(404)
+        solution_cell = solution_cells[0]
+        solution_cell["id"] = submission_id
+        try:
+            with open(os.path.join(annotation_path, f"{name}.png"), "rb") as f:
+                solution_cell["annotation"] = str(base64.b64encode(f.read()))[2:-1]
+        except FileNotFoundError:
+            solution_cell["annotation"] = None
+        self.write(json.dumps(solution_cell))
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def put(self, solution_cell_id):
+        self.log.info("Putting the stuff?")
+        data = self.get_json_body()
+        submission_id = data.get("submission_id")
+        name = data.get("name")
+        self.log.info(data.get("annotation")[22:])
+        try:
+            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
+        except MissingEntry:
+            raise web.HTTPError(404)
+        autograded_path = self.api.coursedir.format_path(
+            nbgrader_step=self.api.coursedir.autograded_directory,
+            student_id=notebook.student.id,
+            assignment_id=notebook.assignment.name,
+        )
+        annotation_path = os.path.join(autograded_path, "annotations")
+
+        os.makedirs(annotation_path, exist_ok=True)
+        with open(os.path.join(annotation_path, f"{name}.png"), "wb") as f:
+            f.write(base64.b64decode(data.get("annotation")[22:]))
+        self.write(
+            json.dumps(
+                {
+                    "id": submission_id,
+                    "name": name,
+                    "annotation": data.get("annotation"),
+                    "notebook": notebook.notebook.name,
+                    "assignment": notebook.assignment.name,
+                }
+            )
+        )
+
+
 formgrade_handlers = [
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (
@@ -126,6 +228,8 @@ formgrade_handlers = [
         r"/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback_hide",
         GenerateFeedbackHandlerHide,
     ),
+    (r"/formgrader/api/annotations", AnnotationCollectionHandler),
+    (r"/formgrader/api/annotation/([^/]+)", AnnotationHandler),
 ]
 
 nbassignment_handlers = [
