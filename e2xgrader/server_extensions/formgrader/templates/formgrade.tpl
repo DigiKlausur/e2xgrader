@@ -14,6 +14,7 @@
     </style>
 {% endfor %}
 
+
 <!-- Loading mathjax macro -->
 {{ mathjax( resources.base_url + '/' + resources.mathjax_url + '?config=TeX-AMS-MML_HTMLorMML-full') }}
 
@@ -27,6 +28,30 @@
     width: -webkit-calc(100% - 5.8em);
     width:    -moz-calc(100% - 5.8em);
     width:         calc(100% - 5.8em);
+  }
+
+  .panel-body {
+    position: relative;
+    min-height: 10em;
+  }
+
+  .annotationarea {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(255, 0, 0, 0.05);
+  }
+
+  .btn-edit {
+    background-color: rgba(184, 184, 92, .5);
+    border-color: rgb(92, 92, 47);
+  }
+
+  .btn-edit:hover {
+    background-color: #ee0;
+    border-color: #dd0;
   }
 </style>
 
@@ -88,6 +113,9 @@
   {%- else -%}
   <span class="nbgrader-label">Student's answer</span>
   {%- endif -%}
+  <span class="annotatebuttons">
+    <button type="button" class="btn btn-edit annotate" id="{{ cell.metadata.nbgrader.grade_id }}-edit">Annotate</button>
+  </span>
   <span class="glyphicon glyphicon-ok comment-saved save-icon"></span>
   {%- if cell.metadata.nbgrader.grade or cell.metadata.nbgrader.task  -%}
   {{ score(cell) }}
@@ -96,7 +124,7 @@
   <span class="nbgrader-label"><code>{{ cell.metadata.nbgrader.grade_id }}</code></span>
   {{ score(cell) }}
 {%- endif -%}
-</div>  
+</div>
 {%- endmacro %}
 
 {% macro nbgrader_footer(cell) -%}
@@ -115,6 +143,11 @@
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {%- if cell.metadata.nbgrader.solution -%}
+      <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas'>
+      </canvas>
+      {%- endif -%}
+
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
       </div>
@@ -140,6 +173,10 @@
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {%- if cell.metadata.nbgrader.solution -%}
+      <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas'>
+      </canvas>
+      {%- endif -%}
       <div class="input_area">
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
@@ -148,7 +185,7 @@
   </div>
 
   {%- else -%}
-  
+
   <div class="inner_cell">
     <div class="input_area">
       {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
