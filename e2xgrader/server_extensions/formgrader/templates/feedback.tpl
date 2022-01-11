@@ -110,6 +110,19 @@ span.nbgrader-label {
     margin-left: 1em;
     top: 4px;
 }
+
+.panel-body {
+    position: relative;
+    min-height: 10em;
+}
+
+.annotation {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
 </style>
 
 </head>
@@ -213,6 +226,9 @@ span.nbgrader-label {
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {%- if cell.metadata.nbgrader.solution and cell.metadata.nbgrader.grade_id in resources.annotations -%}
+        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='annotations/{{ cell.metadata.nbgrader.grade_id }}.png'></img>
+      {%- endif -%}
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
       </div>
@@ -238,7 +254,12 @@ span.nbgrader-label {
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {%- if cell.metadata.nbgrader.solution and cell.metadata.nbgrader.grade_id in resources.annotations -%}
+        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='annotations/{{ cell.metadata.nbgrader.grade_id }}.png'></img>
+      {%- endif -%}
+
       <div class="input_area">
+
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
     </div>
