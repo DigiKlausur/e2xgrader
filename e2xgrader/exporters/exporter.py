@@ -1,6 +1,8 @@
 import os
 import os.path
 
+import glob
+
 from traitlets import Unicode
 from nbconvert.exporters.html import HTMLExporter
 from jinja2 import contextfilter
@@ -88,7 +90,17 @@ class E2xExporter(HTMLExporter):
     def _template_file_default(self):
         return "formgrade.tpl"
 
+    def discover_annotations(self, resources):
+        path = resources["metadata"]["path"]
+        resources["annotations"] = []
+
+        for annoation in glob.glob(os.path.join(path, "annotations", "*.png")):
+            resources["annotations"].append(
+                os.path.splitext(os.path.basename(annoation))[0]
+            )
+
     def from_notebook_node(self, nb, resources=None, **kw):
+        self.discover_annotations(resources)
         langinfo = nb.metadata.get("language_info", {})
         lexer = langinfo.get("pygments_lexer", langinfo.get("name", None))
         highlight_code = self.filters.get(
