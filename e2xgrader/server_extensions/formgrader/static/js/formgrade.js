@@ -126,12 +126,13 @@ FormGrader.prototype.loadAnnotations = function () {
         },
         success: function () {
             that.annotations.each(function (model) {
-                console.log(model);
-                var annotation_ui = new AnnotationUI({
-                    "model": model,
-                    "el": $("#" + model.get("name") + "-canvas").parents(".nbgrader_cell")
-                });
-                that.annotation_uis.push(annotation_ui);
+                if (model.get("name").includes(task_id)) {
+                    var annotation_ui = new AnnotationUI({
+                        "model": model,
+                        "el": $("#" + model.get("name") + "-canvas").parents(".nbgrader_cell")
+                    });
+                    that.annotation_uis.push(annotation_ui);
+                }
             });
             that.annotations.loaded = true;
         }
