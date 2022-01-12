@@ -182,11 +182,9 @@ class AnnotationHandler(BaseApiHandler):
     @check_xsrf
     @check_notebook_dir
     def put(self, solution_cell_id):
-        self.log.info("Putting the stuff?")
         data = self.get_json_body()
         submission_id = data.get("submission_id")
         name = data.get("name")
-        self.log.info(data.get("annotation")[22:])
         try:
             notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
         except MissingEntry:
