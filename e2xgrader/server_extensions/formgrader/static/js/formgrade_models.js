@@ -1,4 +1,24 @@
-var GradeUI = Backbone.View.extend({
+let BaseNbgraderUI = Backbone.View.extend({
+
+    animateSaving: function () {
+        this.$glyph.removeClass("glyphicon-ok");
+        this.$glyph.addClass("glyphicon-refresh");
+        this.$glyph.fadeIn(10);
+    },
+
+    animateSaved: function () {
+        this.$glyph.removeClass("glyphicon-refresh");
+        this.$glyph.addClass("glyphicon-ok");
+        var that = this;
+        setTimeout(function () {
+            that.$glyph.fadeOut();
+        }, 1000);
+        $(document).trigger("finished_saving");
+    },
+
+})
+
+var GradeUI = BaseNbgraderUI.extend({
 
     events: {
         "change .score": "save",
@@ -71,24 +91,7 @@ var GradeUI = Backbone.View.extend({
         this.render();
     },
 
-    animateSaving: function () {
-        this.$glyph.removeClass("glyphicon-ok");
-        this.$glyph.addClass("glyphicon-refresh");
-        this.$glyph.fadeIn(10);
-    },
-
-    animateSaved: function () {
-        this.$glyph.removeClass("glyphicon-refresh");
-        this.$glyph.addClass("glyphicon-ok");
-        var that = this;
-        setTimeout(function () {
-            that.$glyph.fadeOut();
-        }, 1000);
-        $(document).trigger("finished_saving");
-    },
-
     animateInvalidValue: function (elem) {
-        var that = this;
         elem.animate({
             "background-color": "#FF8888",
             "border-color": "red"
@@ -124,7 +127,7 @@ var Grades = Backbone.Collection.extend({
     url: base_url + "/api/grades"
 });
 
-var CommentUI = Backbone.View.extend({
+var CommentUI = BaseNbgraderUI.extend({
 
     events: {
         "change .comment": "save",
@@ -153,21 +156,6 @@ var CommentUI = Backbone.View.extend({
         this.model.save({"manual_comment": this.$comment.val()});
     },
 
-    animateSaving: function () {
-        this.$glyph.removeClass("glyphicon-ok");
-        this.$glyph.addClass("glyphicon-refresh");
-        this.$glyph.fadeIn(10);
-    },
-
-    animateSaved: function () {
-        this.$glyph.removeClass("glyphicon-refresh");
-        this.$glyph.addClass("glyphicon-ok");
-        var that = this;
-        setTimeout(function () {
-            that.$glyph.fadeOut();
-        }, 1000);
-        $(document).trigger("finished_saving");
-    },
 });
 
 var Comment = Backbone.Model.extend({
@@ -238,7 +226,7 @@ var AnnotationUI = Backbone.View.extend({
 
     getPosition: function (ev) {
         this.rect = this.$canvas.getBoundingClientRect();
-        return pos = [ev.layerX*this.scaling, ev.layerY*this.scaling];
+        return [ev.layerX*this.scaling, ev.layerY*this.scaling];
     },
 
     onMouseDown: function (ev) {
