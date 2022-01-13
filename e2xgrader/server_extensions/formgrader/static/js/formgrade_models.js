@@ -184,15 +184,35 @@ var AnnotationUI = Backbone.View.extend({
     initialize: function () {
         this.$canvas = this.$el.find(".annotationarea").get(0);
         this.$ctx = this.$canvas.getContext("2d");
-        this.$edit_btn = this.$el.find(".annotate").get(0);
-        $(this.$edit_btn).click(function () {
-            alert('You sneaky dude clicked it!');
-        })
-        console.log(this.model.get('name'));
 
-        this.render();
+        this.initializeControls();
         this.initializePaint();
+        this.render();
+    },
 
+    initializeControls: function () {
+        let that = this;
+
+        this.$color = this.$el.find(".color input").get(0);
+
+        $(this.$el.find(".clear").get(0)).click(function () {
+            if (confirm("Do you want to delete all annotations?")) {
+                that.$ctx.clearRect(0, 0, that.$canvas.width, that.$canvas.height);
+                that.save();
+            }
+        });
+
+        this.$el.find("input[type=radio][name=brush]").change(function () {
+            if (this.value == "pencil") {
+                that.$ctx.globalCompositeOperation = "source-over";
+            } else if (this.value == "eraser") {
+                that.$ctx.globalCompositeOperation = "destination-out";
+            }
+        });
+
+        this.$el.find("input[type=radio][name=line-width]").change(function () {
+            that.$ctx.lineWidth = this.value/2;
+        });
     },
 
     initializePaint: function () {
@@ -209,36 +229,32 @@ var AnnotationUI = Backbone.View.extend({
         this.$canvas.addEventListener('mousedown', this.onMouseDown.bind(this), false);
         this.$canvas.addEventListener('mousemove', this.onMouseMove.bind(this), false);
         this.$canvas.addEventListener('mouseup', this.onMouseUp.bind(this), false);
-        this.$ctx.strokeStyle = "rgba(50, 255, 50, 0.5)";
-        this.$ctx.lineWidth = 5;
+        this.$ctx.lineWidth = 2.5;
         this.$ctx.translate(0.5, 0.5);
+        this.$ctx.imageSmoothingEnabled = false;
+        this.$ctx.lineJoin = "round";
+        this.$ctx.lineCap = "round";
     },
 
     getPosition: function (ev) {
         this.rect = this.$canvas.getBoundingClientRect();
         let pos = [ev.layerX*this.scaling, ev.layerY*this.scaling];
-        console.log(this.rect);
-        console.log(pos);
-        //console.log([ev.clientX - this.rect.left, ev.clientY - this.rect.top]);
         return pos;
-
     },
 
     onMouseDown: function (ev) {
-        console.log(ev);
         this.drawing = true;
         this.position = this.getPosition(ev);
         this.shape = [this.position];
-        //this.$ctx.beginPath();
-        //alert('Mouse is down!');
+        this.$ctx.beginPath();
+        this.$ctx.strokeStyle = this.$color.value;
+        this.$ctx.fillStyle = this.$color.value;
     },
 
     onMouseMove: function (ev) {
         if (!this.drawing) {
             return;
         }
-        let x = ev.clientX;
-        let y = ev.clientY;
         new_position = this.getPosition(ev);
         this.$ctx.moveTo(this.position[0], this.position[1]);
         this.$ctx.lineTo(new_position[0], new_position[1]);
@@ -253,18 +269,10 @@ var AnnotationUI = Backbone.View.extend({
         this.drawing = false;
         new_position = this.getPosition(ev);
         this.$ctx.moveTo(this.position[0], this.position[1]);
-        //this.$ctx.beginPath();
         this.$ctx.lineTo(new_position[0], new_position[1]);
-
-        //this.$ctx.closePath();
         this.$ctx.stroke();
-        console.log(this.position);
         this.position = null;
         this.save();
-        console.log('Mouse is up!');
-        console.log(this.$ctx.strokeStyle);
-
-        //alert('Mouse is up!');
     },
 
     render: function () {
@@ -273,28 +281,15 @@ var AnnotationUI = Backbone.View.extend({
             let that = this;
             img.onload = function () {
                 that.$ctx.drawImage(img, 0, 0, that.$canvas.width, that.$canvas.height);
-                //that.save();
             }
             img.src = 'data:image/png;base64,' + this.model.get('annotation');
-            console.log('Annotation found !');
-        } else {
-            console.log('No annotation found :(');
         }
-
-        this.$ctx.strokeStyle = '#000000';
-        this.$ctx.moveTo(0, 0);
-        this.$ctx.lineTo(20, 20);
-        this.$ctx.stroke();
-
-        //this.$ctx.fillStyle = '#00ff00';
-        //this.$ctx.fillRect(0, 0, this.$canvas.width, this.$canvas.height);
     },
 
     save: function () {
         this.model.save({"annotation": this.$canvas.toDataURL()});
-        //console.log(this.$canvas.toDataURL());
-        console.log('Saving stuff, eh?');
     }
+
 });
 
 var Annotation = Backbone.Model.extend({
