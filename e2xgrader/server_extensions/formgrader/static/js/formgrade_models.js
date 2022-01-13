@@ -238,8 +238,7 @@ var AnnotationUI = Backbone.View.extend({
 
     getPosition: function (ev) {
         this.rect = this.$canvas.getBoundingClientRect();
-        let pos = [ev.layerX*this.scaling, ev.layerY*this.scaling];
-        return pos;
+        return pos = [ev.layerX*this.scaling, ev.layerY*this.scaling];
     },
 
     onMouseDown: function (ev) {
@@ -255,7 +254,7 @@ var AnnotationUI = Backbone.View.extend({
         if (!this.drawing) {
             return;
         }
-        new_position = this.getPosition(ev);
+        let new_position = this.getPosition(ev);
         this.$ctx.moveTo(this.position[0], this.position[1]);
         this.$ctx.lineTo(new_position[0], new_position[1]);
         this.$ctx.stroke();
@@ -267,7 +266,7 @@ var AnnotationUI = Backbone.View.extend({
             return;
         }
         this.drawing = false;
-        new_position = this.getPosition(ev);
+        let new_position = this.getPosition(ev);
         this.$ctx.moveTo(this.position[0], this.position[1]);
         this.$ctx.lineTo(new_position[0], new_position[1]);
         this.$ctx.stroke();
