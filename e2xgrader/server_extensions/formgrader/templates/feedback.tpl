@@ -113,7 +113,7 @@ span.nbgrader-label {
 
 .panel-body {
     position: relative;
-    min-height: 10em;
+    min-height: 17.5em;
 }
 
 .annotation {
