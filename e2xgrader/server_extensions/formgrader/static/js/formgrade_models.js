@@ -9,7 +9,7 @@ let BaseNbgraderUI = Backbone.View.extend({
     animateSaved: function () {
         this.$glyph.removeClass("glyphicon-refresh");
         this.$glyph.addClass("glyphicon-ok");
-        var that = this;
+        let that = this;
         setTimeout(function () {
             that.$glyph.fadeOut();
         }, 1000);
@@ -18,7 +18,7 @@ let BaseNbgraderUI = Backbone.View.extend({
 
 })
 
-var GradeUI = BaseNbgraderUI.extend({
+let GradeUI = BaseNbgraderUI.extend({
 
     events: {
         "change .score": "save",
@@ -58,12 +58,12 @@ var GradeUI = BaseNbgraderUI.extend({
     },
 
     save: function () {
-        var score, extra_credit;
+        let score, extra_credit;
         if (this.$score.val() === "") {
             score = null;
         } else {
-            var val = this.$score.val();
-            var max_score = this.model.get("max_score");
+            let val = this.$score.val();
+            let max_score = this.model.get("max_score");
             if (val > max_score) {
                 this.animateInvalidValue(this.$score);
                 score = max_score;
@@ -78,7 +78,7 @@ var GradeUI = BaseNbgraderUI.extend({
         if (this.$extra_credit.val() == "") {
             extra_credit = null;
         } else {
-            var val = this.$extra_credit.val();
+            let val = this.$extra_credit.val();
             if (val < 0) {
                 this.animateInvalidValue(this.$extra_credit);
                 extra_credit = 0;
@@ -118,16 +118,16 @@ var GradeUI = BaseNbgraderUI.extend({
     }
 });
 
-var Grade = Backbone.Model.extend({
+let Grade = Backbone.Model.extend({
     urlRoot: base_url + "/api/grade"
 });
 
-var Grades = Backbone.Collection.extend({
+let Grades = Backbone.Collection.extend({
     model: Grade,
     url: base_url + "/api/grades"
 });
 
-var CommentUI = BaseNbgraderUI.extend({
+let CommentUI = BaseNbgraderUI.extend({
 
     events: {
         "change .comment": "save",
@@ -141,7 +141,7 @@ var CommentUI = BaseNbgraderUI.extend({
         this.listenTo(this.model, "request", this.animateSaving);
         this.listenTo(this.model, "sync", this.animateSaved);
 
-        var default_msg = "Type any comments here (supports Markdown and MathJax)";
+        let default_msg = "Type any comments here (supports Markdown and MathJax)";
         this.$comment.attr("placeholder", this.model.get("auto_comment") || default_msg);
 
         this.render();
@@ -158,16 +158,16 @@ var CommentUI = BaseNbgraderUI.extend({
 
 });
 
-var Comment = Backbone.Model.extend({
+let Comment = Backbone.Model.extend({
     urlRoot: base_url + "/api/comment"
 });
 
-var Comments = Backbone.Collection.extend({
+let Comments = Backbone.Collection.extend({
     model: Comment,
     url: base_url + "/api/comments"
 });
 
-var AnnotationUI = Backbone.View.extend({
+let AnnotationUI = Backbone.View.extend({
 
     initialize: function () {
         this.$canvas = this.$el.find(".annotationarea").get(0);
@@ -279,11 +279,11 @@ var AnnotationUI = Backbone.View.extend({
 
 });
 
-var Annotation = Backbone.Model.extend({
+let Annotation = Backbone.Model.extend({
     urlRoot: base_url + "/api/annotation"
 });
 
-var Annotations = Backbone.Collection.extend({
+let Annotations = Backbone.Collection.extend({
     model: Annotation,
     url: base_url + "/api/annotations"
 })
