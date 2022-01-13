@@ -135,8 +135,6 @@ class AnnotationCollectionHandler(BaseApiHandler):
 
         for solution_cell in solution_cells:
             solution_cell["submission_id"] = submission_id
-            # solution_cell['id'] = submission_id
-
             # Try loading the annotation for that cell
             try:
                 with open(
