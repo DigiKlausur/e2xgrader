@@ -152,35 +152,6 @@ class AnnotationHandler(BaseApiHandler):
     @web.authenticated
     @check_xsrf
     @check_notebook_dir
-    def get(self, submission_id):
-        self.log.info(submission_id)
-        try:
-            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
-        except MissingEntry:
-            raise web.HTTPError(404)
-        autograded_path = self.api.coursedir.format_path(
-            nbgrader_step=self.api.coursedir.autograded_directory,
-            student_id=notebook.student.id,
-            assignment_id=notebook.assignment.name,
-        )
-        annotation_path = os.path.join(autograded_path, "annotations")
-        solution_cells = [
-            s.to_dict() for s in notebook.notebook.solution_cells if s.name == name
-        ]
-        if len(solution_cells) < 1:
-            raise web.HTTPError(404)
-        solution_cell = solution_cells[0]
-        solution_cell["id"] = submission_id
-        try:
-            with open(os.path.join(annotation_path, f"{name}.png"), "rb") as f:
-                solution_cell["annotation"] = str(base64.b64encode(f.read()))[2:-1]
-        except FileNotFoundError:
-            solution_cell["annotation"] = None
-        self.write(json.dumps(solution_cell))
-
-    @web.authenticated
-    @check_xsrf
-    @check_notebook_dir
     def put(self, solution_cell_id):
         data = self.get_json_body()
         submission_id = data.get("submission_id")
