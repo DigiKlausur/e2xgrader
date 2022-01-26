@@ -217,6 +217,11 @@ let AnnotationUI = Backbone.View.extend({
         this.$canvas.addEventListener('mousedown', this.onMouseDown.bind(this), false);
         this.$canvas.addEventListener('mousemove', this.onMouseMove.bind(this), false);
         this.$canvas.addEventListener('mouseup', this.onMouseUp.bind(this), false);
+        // Add touch support
+        this.$canvas.addEventListener('touchstart', this.onMouseDown.bind(this), false);
+        this.$canvas.addEventListener('touchmove', this.onMouseMove.bind(this), false);
+        this.$canvas.addEventListener('touchend', this.onMouseUp.bind(this), false);
+
         this.$ctx.lineWidth = 2.5;
         this.$ctx.translate(0.5, 0.5);
         this.$ctx.imageSmoothingEnabled = false;
