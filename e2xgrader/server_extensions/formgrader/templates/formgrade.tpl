@@ -14,6 +14,7 @@
     </style>
 {% endfor %}
 
+
 <!-- Loading mathjax macro -->
 {{ mathjax( resources.base_url + '/' + resources.mathjax_url + '?config=TeX-AMS-MML_HTMLorMML-full') }}
 
@@ -28,6 +29,97 @@
     width:    -moz-calc(100% - 5.8em);
     width:         calc(100% - 5.8em);
   }
+
+  .panel-body {
+    position: relative;
+    min-height: 17.5em;
+  }
+
+  .annotationarea {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+  }
+
+  .btn-edit {
+    background-color: rgba(184, 184, 92, .5);
+    border-color: rgb(92, 92, 47);
+  }
+
+  .btn-edit:hover {
+    background-color: #ee0;
+    border-color: #dd0;
+  }
+
+.paint-controls {
+  position: absolute;
+  top: 0;
+  left: -6em;
+  max-width: 6em;
+  border: 1px solid black;
+}
+
+.color input {
+  display: block;
+  width: 100%;
+  height: 2.5em;
+}
+
+.brush button {
+  display: block;
+  width: 2.5em;
+}
+
+.clear {
+  width: 100%;
+  height: 2.5em;
+}
+
+.circle-5 {
+  display: inline-block;
+  background-color: black;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+
+}
+
+.circle-10 {
+  display: inline-block;
+  background-color: black;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  margin-left: 3px;
+}
+
+.circle-15 {
+  display: inline-block;
+  background-color: black;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+.circle-20 {
+  display: inline-block;
+  background-color: black;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.line-width label {
+  width: 100%;
+}
+
+
+
 </style>
 
 </head>
@@ -96,7 +188,7 @@
   <span class="nbgrader-label"><code>{{ cell.metadata.nbgrader.grade_id }}</code></span>
   {{ score(cell) }}
 {%- endif -%}
-</div>  
+</div>
 {%- endmacro %}
 
 {% macro nbgrader_footer(cell) -%}
@@ -107,6 +199,51 @@
 {%- endif -%}
 {%- endmacro %}
 
+{% macro annotation(cell) %}
+  {%- if cell.metadata.nbgrader.solution -%}
+  <div class='paint-controls'>
+    <div class='brush btn-group' data-toggle="buttons">
+      <label class="btn active">
+        <input type="radio" name="brush" value="pencil">
+        <span class="glyphicon glyphicon-pencil"></span>
+      </label>
+      <label class="btn">
+        <input type="radio" name="brush" value="eraser">
+        <span class="glyphicon glyphicon-erase"></span>
+      </label>
+
+    </div>
+    <div class='color'><input type="color" name="color-picker" value="#aaff00"></div>
+
+    <div class='line-width btn-group' data-toggle="buttons">
+      <label class="btn active">
+        <input type="radio" name="line-width" value="5">
+        <span class="circle-5"></span>
+      </label>
+      <label class="btn">
+        <input type="radio" name="line-width" value="10">
+        <span class="circle-10"></span>
+      </label>
+      <label class="btn">
+        <input type="radio" name="line-width" value="15">
+        <span class="circle-15"></span>
+      </label>
+      <label class="btn">
+        <input type="radio" name="line-width" value="20">
+        <span class="circle-20"></span>
+      </label>
+
+    </div>
+    <div class='advanced-controls'>
+      <button class="glyphicon glyphicon-trash clear"></button>
+    </div>
+  </div>
+  <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas'>
+  </canvas>
+  {%- endif -%}
+{% endmacro %}
+
+
 {% block markdowncell scoped %}
 <div class="cell border-box-sizing text_cell rendered">
   {{ self.empty_in_prompt() }}
@@ -115,6 +252,7 @@
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {{ annotation(cell) }}
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
       </div>
@@ -140,6 +278,7 @@
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
+      {{ annotation(cell) }}
       <div class="input_area">
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
@@ -148,7 +287,7 @@
   </div>
 
   {%- else -%}
-  
+
   <div class="inner_cell">
     <div class="input_area">
       {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
