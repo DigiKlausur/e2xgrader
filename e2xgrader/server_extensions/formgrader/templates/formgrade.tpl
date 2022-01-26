@@ -238,7 +238,7 @@
       <button class="glyphicon glyphicon-trash clear"></button>
     </div>
   </div>
-  <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas'>
+  <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas' style="touch-action: none;">
   </canvas>
   {%- endif -%}
 {% endmacro %}
