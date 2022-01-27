@@ -204,6 +204,7 @@ let AnnotationUI = Backbone.View.extend({
     },
 
     initializePaint: function () {
+        let that = this;
         this.drawing = false;
         this.edit_mode = true;
         this.position = null;
@@ -218,9 +219,30 @@ let AnnotationUI = Backbone.View.extend({
         this.$canvas.addEventListener('mousemove', this.onMouseMove.bind(this), false);
         this.$canvas.addEventListener('mouseup', this.onMouseUp.bind(this), false);
         // Add touch support
-        this.$canvas.addEventListener('touchstart', this.onMouseDown.bind(this), false);
-        this.$canvas.addEventListener('touchmove', this.onMouseMove.bind(this), false);
-        this.$canvas.addEventListener('touchend', this.onMouseUp.bind(this), false);
+        this.$canvas.addEventListener('touchstart', function (ev) {
+            let touch = ev.touches[0];
+            let mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            that.$canvas.dispatchEvent(mouseEvent);
+        }, false);
+        this.$canvas.addEventListener('touchmove', function (ev) {
+            let touch = ev.touches[0];
+            let mouseEvent = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            that.$canvas.dispatchEvent(mouseEvent);
+        }, false);
+        this.$canvas.addEventListener('touchend', function (ev) {
+            let touch = ev.touches[0];
+            let mouseEvent = new MouseEvent("mouseup", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            that.$canvas.dispatchEvent(mouseEvent);
+        }, false);
 
         this.$ctx.lineWidth = 2.5;
         this.$ctx.translate(0.5, 0.5);
