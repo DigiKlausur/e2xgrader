@@ -91,6 +91,9 @@ class E2xExporter(HTMLExporter):
         return "formgrade.tpl"
 
     def discover_annotations(self, resources):
+        if "path" not in resources["metadata"]:
+            return
+
         path = resources["metadata"]["path"]
         resources["annotations"] = []
 
