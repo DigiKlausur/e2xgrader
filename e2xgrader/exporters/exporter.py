@@ -91,11 +91,11 @@ class E2xExporter(HTMLExporter):
         return "formgrade.tpl"
 
     def discover_annotations(self, resources):
+        resources["annotations"] = []
         if "metadata" not in resources or "path" not in resources["metadata"]:
             return
 
         path = resources["metadata"]["path"]
-        resources["annotations"] = []
 
         for annoation in glob.glob(os.path.join(path, "annotations", "*.png")):
             resources["annotations"].append(
