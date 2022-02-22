@@ -5,6 +5,7 @@ define([
     'base/js/events',
     'base/js/markdown',
     'notebook/js/textcell',
+    'notebook/js/notebook',
     './extended_cell/extended_cell',
     './extended_cell/choice_cell',
     './extended_cell/attachment_cell',
@@ -16,6 +17,7 @@ define([
     events,
     markdown,
     textcell,
+    notebook,
     extended_cell,
     choice_cell,
     attachment_cell,
@@ -29,8 +31,15 @@ define([
     let old_render = MarkdownCell.prototype.render;
     let old_unrender = MarkdownCell.prototype.unrender;
     let old_toJSON = TextCell.prototype.toJSON;
+    let old_to_markdown = notebook.Notebook.prototype.to_markdown;
     let edit_mode = false;
 
+
+    /**
+    * Create a new unsafe render function for markdown cells
+    * This is needed if we want to embed external content
+    * such as PDFs
+    */
     MarkdownCell.prototype.unsafe_render = function () {
         this.drag_counter = 0;
         this.inner_cell.removeClass('dropzone');
@@ -88,30 +97,63 @@ define([
 
     let render_pdf = MarkdownCell.prototype.unsafe_render;
 
+    /**
+    * Check whether a cell is an extra cell
+    */
+    function is_extra_cell(cell) {
+        return cell.cell_type == 'markdown' && cell.metadata.hasOwnProperty('extended_cell');
+    }
+
+    /**
+    * Get the cell type of a cell
+    *
+    * @return {string} standard cell type or extended cell type
+    */
     function cell_type (cell) {
-        if (cell.metadata.hasOwnProperty('extended_cell')) {
+        if (is_extra_cell(cell)) {
             return cell.metadata.extended_cell.type;
         }
         return cell.cell_type;
     }
 
+    /**
+    * Overwrite the original to_markdown function
+    * If an extra cell is turned from code to markdown
+    * we need to make sure to unrender it fully
+    */
+    function patch_Notebook_to_markdown() {
+        notebook.Notebook.prototype.to_markdown = function () {
+            old_to_markdown.apply(this, arguments);
+            let cell = this.get_cell(arguments[0]);
+            cell.unrender_force();
+            cell.render();
+        };
+    }
+
+    /**
+    * Overwrite the original toJSON function
+    * If we have an attachment cell we want to keep all attachments
+    * independent of whether they are referenced in the cell source
+    * or not.
+    */
     function patch_TextCell_toJSON() {
         TextCell.prototype.toJSON = function () {
-            let type = cell_type(this);
-            if (type == 'attachments') {
+            if (cell_type(this) == 'attachments') {
                 // Do not remove ununsed attachments
                 arguments[0] = false;
                 return old_toJSON.apply(this, arguments);
-            } else {                
+            } else {
                 return old_toJSON.apply(this, arguments);
             }
         }
     }
 
+    /**
+    * Overwrite the original render function of markdown cells
+    */
     function patch_MarkdownCell_render () {
         MarkdownCell.prototype.render_force = old_render;
-        
-        
+
         MarkdownCell.prototype.render = function () {
             let type = cell_type(this);
             if (type == 'singlechoice') {
@@ -136,27 +178,33 @@ define([
         }
     }
 
+    /**
+    * Overwrite the original unrender function of markdown cells
+    * Disables unrendering extra cells
+    */
     function patch_MarkdownCell_unrender () {
         MarkdownCell.prototype.unrender_force = old_unrender;
         MarkdownCell.prototype.unrender = function () {
-            let type = cell_type(this);
-            if (type != 'singlechoice' && type != 'multiplechoice' && type != 'attachments' && type != 'pdf') {
+            if (!is_extra_cell(this)) {
                 old_unrender.apply(this, arguments);
             }
         }
     }
 
+    /**
+    * Iterate over all cells and rerender extra cells
+    */
     function render_extended_cells () {
         let cells = Jupyter.notebook.get_cells();
         for (let i in cells) {
             let cell = cells[i];
-            if (cell.metadata.hasOwnProperty('extended_cell') && cell.rendered) {
+            if (is_extra_cell(cell) && cell.rendered) {
                 cell.unrender_force();
                 cell.render();
             }
         }
     }
-    
+
     function load_css () {
         let link = document.createElement('link');
         link.type = 'text/css';
@@ -174,7 +222,7 @@ define([
                 }
             }
         };
-        
+
         load_css();
         if (Jupyter.notebook.metadata.hasOwnProperty('celltoolbar')) {
             if (Jupyter.notebook.metadata.celltoolbar == 'Create Assignment') {
@@ -184,6 +232,7 @@ define([
         patch_TextCell_toJSON();
         patch_MarkdownCell_render();
         patch_MarkdownCell_unrender();
+        patch_Notebook_to_markdown();
         render_extended_cells();
         events.on('preset_activated.CellToolbar', function (evt, preset) {
             console.log('Preset changed to '+preset.name);
