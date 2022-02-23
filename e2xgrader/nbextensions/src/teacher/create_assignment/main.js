@@ -187,7 +187,7 @@ define([
         }
     };
 
-    
+
 
     /**
      * Add a display class to the cell element, depending on the
@@ -296,6 +296,10 @@ define([
                     model.set_locked(cell, true);
                     model.set_task(cell, false);
                     extramodel.to_pdf(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
                 } else if (val === "manual") {
                     extramodel.remove_metadata(cell);
                     model.set_schema_version(cell);
@@ -475,7 +479,7 @@ define([
         require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
             extramodel = extracell;
             model = nbgrader;
-            
+
             CellToolbar.register_callback('create_assignment.grading_options', create_celltype_select);
             CellToolbar.register_callback('create_assignment.id_input', create_id_input);
             CellToolbar.register_callback('create_assignment.points_input', create_points_input);
@@ -490,7 +494,7 @@ define([
             CellToolbar.register_preset(nbgrader_preset_name, preset, Jupyter.notebook);
             console.log('nbgrader extension for metadata editing loaded.');
         });
-        
+
     };
 
     return {
