@@ -15,16 +15,37 @@ define([
                 this.cell.metadata[this.field] = {};
             }
             this.cell.metadata[this.field]['type'] = type;
+            this.edit_mode = false;
         }
 
-        get_metadata = function () {
+        get_metadata() {
             if (this.cell.metadata.hasOwnProperty(this.field)) {
                 return this.cell.metadata[this.field];
             }
             return {};
         };
 
-        render = function () {
+        get_edit_button() {
+            let that = this;
+            return $('<button>')
+                .attr('type', 'button')
+                .addClass('e2x_unrender')
+                .click(function () {
+                    that.cell.unrender_force();
+                }).append('Edit cell');
+        }
+
+        add_edit_button() {
+            if (!this.edit_mode) {
+                return;
+            }
+            let html = $(this.cell.element).find('.rendered_html');
+            if (html.find('.e2x_unrender').length < 1) {
+                html.append(this.get_edit_button());
+            }
+        }
+
+        render() {
             this.cell.render();
         };
 

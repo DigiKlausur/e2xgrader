@@ -171,7 +171,7 @@ define([
             } else if (type == 'pdf') {
                 let mycell = new pdf_cell.PDFCell(this);
                 mycell.edit_mode = edit_mode;
-                render_pdf.apply(this, arguments);
+                mycell.render();
             } else {
                 old_render.apply(this, arguments);
             }
