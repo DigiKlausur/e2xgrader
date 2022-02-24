@@ -9,7 +9,7 @@ from e2xgrader.utils.nbgrader_cells import (
     is_description,
     get_points,
     new_read_only_cell,
-    grade_id
+    grade_id,
 )
 
 from ..test_utils.test_utils import create_temp_course, add_question_to_task
@@ -82,17 +82,17 @@ class TestNbgraderCells(unittest.TestCase):
         assert get_points(nb.cells[2]) == 10
 
     def test_new_read_only_cell(self):
-        gid = 'cell_01'
+        gid = "cell_01"
         cell = new_read_only_cell(gid)
         assert is_description(cell)
         assert not is_solution_cell(cell)
         assert grade_id(cell) == gid
-        assert cell.cell_type == 'markdown'
+        assert cell.cell_type == "markdown"
 
-        assert new_read_only_cell(gid, 'mysource', 'code').cell_type == 'code'
+        assert new_read_only_cell(gid, "mysource", "code").cell_type == "code"
 
         with self.assertRaises(NameError) as cm:
-            new_read_only_cell(gid, cell_type='some_type')
+            new_read_only_cell(gid, cell_type="some_type")
 
     def tearDown(self):
         self.tmp_dir.cleanup()
