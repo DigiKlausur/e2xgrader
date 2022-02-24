@@ -5,7 +5,7 @@ from nbgrader.preprocessors import SaveAutoGrades as NbgraderSaveAutoGrades
 from nbgrader.utils import determine_grade
 
 from ..utils.extra_cells import is_extra_cell
-from ..graders import BaseGrader, MultipleChoiceGrader, SingleChoiceGrader, CodeGrader
+from ..graders import BaseGrader, MultipleChoiceGrader, SingleChoiceGrader, CodeGrader, FormCellGrader
 
 from traitlets import Dict, Unicode, Instance
 
@@ -19,6 +19,7 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
             "code": CodeGrader(),
             "singlechoice": SingleChoiceGrader(),
             "multiplechoice": MultipleChoiceGrader(),
+            "form": FormCellGrader(),
         },
     ).tag(config=True)
 
