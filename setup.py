@@ -29,7 +29,7 @@ for (dirname, dirnames, filenames) in os.walk(
     for filename in filenames:
         base_static_files.append(os.path.join(root, filename))
 
-name = u"e2xgrader"
+name = "e2xgrader"
 
 setup_args = dict(
     name=name,

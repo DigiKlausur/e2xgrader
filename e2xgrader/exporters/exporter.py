@@ -52,13 +52,16 @@ class E2xExporter(HTMLExporter):
 
         langinfo = nb.metadata.get("language_info", {})
         lexer = langinfo.get("pygments_lexer", langinfo.get("name", None))
-        self.register_filter("highlight_code_with_linenumbers", self.filters.get(
+        self.register_filter(
             "highlight_code_with_linenumbers",
-            Highlight2HTMLwithLineNumbers(pygments_lexer=lexer, parent=self),
-        ))
+            self.filters.get(
+                "highlight_code_with_linenumbers",
+                Highlight2HTMLwithLineNumbers(pygments_lexer=lexer, parent=self),
+            ),
+        )
 
-        self.register_filter("render_extracell", self.filters.get(
+        self.register_filter(
             "render_extracell",
-            RenderExtraCell(parent=self)
-        ))
+            self.filters.get("render_extracell", RenderExtraCell(parent=self)),
+        )
         return super(E2xExporter, self).from_notebook_node(nb, resources, **kw)
