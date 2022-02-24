@@ -23,6 +23,16 @@ def is_multiplechoice(cell):
     return is_extra_cell(cell) and cell.metadata.extended_cell.type == "multiplechoice"
 
 
+def is_form(cell):
+    return is_extra_cell(cell) and cell.metadata.extended_cell.type == "form"
+
+
+def get_form_answers(cell):
+    if is_form(cell):
+        return cell.metadata.extended_cell.choices
+    return dict()
+
+
 def get_choices(cell):
     if is_singlechoice(cell) or is_multiplechoice(cell):
         return [int(i) for i in cell.metadata.extended_cell.choice]
