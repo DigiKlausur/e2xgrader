@@ -23,7 +23,7 @@ define([
                 return this.cell.metadata[this.field];
             }
             return {};
-        };
+        }
 
         get_edit_button() {
             let that = this;
@@ -50,7 +50,7 @@ define([
 
         render() {
             this.cell.render();
-        };
+        }
 
     }
 
