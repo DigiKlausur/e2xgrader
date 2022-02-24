@@ -97,8 +97,6 @@ define([
         return cont;
     }
 
-    let render_pdf = MarkdownCell.prototype.unsafe_render;
-
     /**
     * Check whether a cell is an extra cell
     */
