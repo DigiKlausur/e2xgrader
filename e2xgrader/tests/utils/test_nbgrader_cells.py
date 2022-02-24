@@ -91,7 +91,7 @@ class TestNbgraderCells(unittest.TestCase):
 
         assert new_read_only_cell(gid, "mysource", "code").cell_type == "code"
 
-        with self.assertRaises(NameError) as cm:
+        with self.assertRaises(NameError):
             new_read_only_cell(gid, cell_type="some_type")
 
     def tearDown(self):
