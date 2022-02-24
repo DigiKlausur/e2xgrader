@@ -230,7 +230,7 @@ span.nbgrader-label {
         <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='annotations/{{ cell.metadata.nbgrader.grade_id }}.png'></img>
       {%- endif -%}
       <div class="text_cell_render border-box-sizing rendered_html">
-        {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
+        {{ cell.source  | markdown2html | strip_files_prefix | render_extracell(cell=cell) }}
       </div>
     </div>
     {{ nbgrader_footer(cell) }}
