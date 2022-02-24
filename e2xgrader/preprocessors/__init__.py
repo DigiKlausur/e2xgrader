@@ -12,6 +12,8 @@ from .validateextracells import ValidateExtraCells
 from .extractattachments import ExtractAttachments
 from .filtertests import FilterTests
 
+from .addautogradinginfo import AddAutogradingInfo
+
 __all__ = [
     "FilterCellsById",
     "SaveCells",
@@ -26,4 +28,5 @@ __all__ = [
     "ValidateExtraCells",
     "ExtractAttachments",
     "FilterTests",
+    "AddAutogradingInfo",
 ]
