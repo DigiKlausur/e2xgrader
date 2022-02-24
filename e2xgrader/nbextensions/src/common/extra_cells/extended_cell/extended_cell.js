@@ -27,12 +27,15 @@ define([
 
         get_edit_button() {
             let that = this;
-            return $('<button>')
+            let edit_div = $('<div/>');
+            edit_div.append($('<hr/>'));
+            edit_div.append($('<button/>')
                 .attr('type', 'button')
                 .addClass('e2x_unrender')
                 .click(function () {
                     that.cell.unrender_force();
-                }).append('Edit cell');
+                }).append('Edit cell'));
+            return edit_div;
         }
 
         add_edit_button() {

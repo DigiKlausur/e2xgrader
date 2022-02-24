@@ -245,6 +245,7 @@ define([
                 options_list.push(["Multiple Choice", "multiplechoice"]);
                 options_list.push(["Single Choice", "singlechoice"]);
                 options_list.push(["Upload answer", "attachments"]);
+                options_list.push(["HTML Form answer", "form"]);
                 options_list.push(["Read-only HTML", "pdf"]);
             }
             if (cell.cell_type == "code") {
@@ -285,6 +286,17 @@ define([
                     model.set_locked(cell, false);
                     model.set_task(cell, false);
                     extramodel.to_attachment(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
+                } else if (val === "form") {
+                    model.set_schema_version(cell);
+                    model.set_solution(cell, true);
+                    model.set_grade(cell, true);
+                    model.set_locked(cell, false);
+                    model.set_task(cell, false);
+                    extramodel.to_form(cell);
                     if (cell.rendered) {
                         cell.unrender_force();
                         cell.render();
@@ -352,6 +364,8 @@ define([
                     return "singlechoice";
                 } else if (extramodel.is_attachment(cell)) {
                     return "attachments";
+                } else if (extramodel.is_form(cell)) {
+                    return "form";
                 } else if (extramodel.is_pdf(cell)) {
                     return "pdf";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
