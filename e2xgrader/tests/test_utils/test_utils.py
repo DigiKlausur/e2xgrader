@@ -1,7 +1,11 @@
 import nbformat
+from nbformat import NotebookNode
+from nbformat.v4 import new_markdown_cell
 from tempfile import TemporaryDirectory
+from typing import List
 from nbgrader.coursedir import CourseDirectory
 from nbgrader.utils import is_grade
+from textwrap import dedent
 
 from e2xgrader.models import TemplateModel, PresetModel
 
@@ -60,3 +64,74 @@ def add_question_to_task(coursedir, path, question_type, grade_id=None, points=0
     nb.cells.extend(cells)
     nbformat.write(nb, path)
     return path
+
+
+def create_multiplechoice_cell(
+    grade_id: str,
+    student_choices: List[int],
+    instructor_choices: List[int],
+    num_of_choices: int,
+    points: int = 5,
+) -> NotebookNode:
+    cell = new_markdown_cell()
+
+    cell.metadata = {
+        "nbgrader": {
+            "grade": True,
+            "grade_id": grade_id,
+            "locked": False,
+            "points": points,
+            "schema_version": 3,
+            "solution": True,
+            "task": False,
+        },
+        "extended_cell": {
+            "type": "multiplechoice",
+            "num_of_choices": num_of_choices,
+            "choice": student_choices,
+            "source": {"choice": instructor_choices},
+        },
+    }
+
+    cell.source = dedent(
+        """
+        - correct answer
+        - wrong answer
+        - correct answer
+        """
+    )
+    return cell
+
+
+def create_singlechoice_cell(
+    grade_id: str,
+    student_choices: List[int],
+    instructor_choices: List[int],
+    points: int = 5,
+) -> NotebookNode:
+    cell = new_markdown_cell()
+
+    cell.metadata = {
+        "nbgrader": {
+            "grade": True,
+            "grade_id": grade_id,
+            "locked": False,
+            "points": points,
+            "schema_version": 3,
+            "solution": True,
+            "task": False,
+        },
+        "extended_cell": {
+            "type": "singlechoice",
+            "choice": student_choices,
+            "source": {"choice": instructor_choices},
+        },
+    }
+
+    cell.source = dedent(
+        """
+        - correct answer
+        - wrong answer
+        """
+    )
+    return cell

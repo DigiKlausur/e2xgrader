@@ -9,7 +9,8 @@ define([
     './extended_cell/extended_cell',
     './extended_cell/choice_cell',
     './extended_cell/attachment_cell',
-    './extended_cell/pdf_cell'
+    './extended_cell/pdf_cell',
+    './extended_cell/form_cell',
 ], function (
     $,
     require,
@@ -22,6 +23,7 @@ define([
     choice_cell,
     attachment_cell,
     pdf_cell,
+    form_cell,
 ) {
 
     'use strict';
@@ -94,8 +96,6 @@ define([
         }
         return cont;
     }
-
-    let render_pdf = MarkdownCell.prototype.unsafe_render;
 
     /**
     * Check whether a cell is an extra cell
@@ -171,7 +171,11 @@ define([
             } else if (type == 'pdf') {
                 let mycell = new pdf_cell.PDFCell(this);
                 mycell.edit_mode = edit_mode;
-                render_pdf.apply(this, arguments);
+                mycell.render();
+            } else if (type == 'form') {
+                let mycell = new form_cell.FormCell(this);
+                mycell.edit_mode = edit_mode;
+                mycell.render();
             } else {
                 old_render.apply(this, arguments);
             }
@@ -246,7 +250,7 @@ define([
         events.on('global_hide.CellToolbar', function (evt, instance) {
             edit_mode = false;
             render_extended_cells();
-        })
+        });
     }
 
     let load_ipython_extension = function () {

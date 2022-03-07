@@ -17,25 +17,14 @@ define([
         constructor(cell, type) {
             super(cell, type);
             this.choice_field = 'choice';
-            this.edit_mode = false;
         }
 
-        get_choices = function () {
+        get_choices() {
             let metadata = this.get_metadata();
             if (metadata.hasOwnProperty(this.choice_field)) {
                 return metadata[this.choice_field];
             }
             return [];
-        }
-
-        get_edit_button = function () {
-            let that = this;
-            return $('<button>')
-                .attr('type', 'button')
-                .addClass('hbrs_unrender')
-                .click(function () {
-                    that.cell.unrender_force();
-                }).append('Edit cell');
         }
 
     }
@@ -47,12 +36,12 @@ define([
             super(cell, 'singlechoice');
         }
 
-        set_choice = function (value) {
+        set_choice(value) {
             let metadata = this.get_metadata();
             metadata[this.choice_field] = [value];
         }
 
-        create_radio_button = function (name, value, selected, onChange) {
+        create_radio_button(name, value, selected, onChange) {
             let input = $('<input>')
                                 .attr('type', 'radio')
                                 .attr('name', name)
@@ -64,7 +53,7 @@ define([
             return input;
         }
 
-        render = function () {
+        render() {
             this.cell.render_force();
             let html = $(this.cell.element).find('.rendered_html');
             let lists = html.find('ul');
@@ -91,9 +80,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }
@@ -106,7 +93,7 @@ define([
             this.choice_count_field = 'num_of_choices';
         }
 
-        get_number_of_choices = function () {
+        get_number_of_choices() {
             let metadata = this.get_metadata();
             if (metadata.hasOwnProperty(this.choice_count_field)) {
                 return metadata[this.choice_count_field];
@@ -114,12 +101,12 @@ define([
             return [];
         }
 
-        set_number_of_choices = function (value) {
+        set_number_of_choices(value) {
             let metadata = this.get_metadata();
             metadata[this.choice_count_field] = value;
         }
 
-        add_choice = function (value) {
+        add_choice(value) {
             let metadata = this.get_metadata();
             let choices = this.get_choices();
             let idx = choices.indexOf(value);
@@ -130,7 +117,7 @@ define([
             metadata[this.choice_field] = choices;
         }
 
-        remove_choice = function (value) {
+        remove_choice(value) {
             let metadata = this.get_metadata();
             let choices = this.get_choices();
             let idx = choices.indexOf(value);
@@ -140,7 +127,7 @@ define([
             metadata[this.choice_field] = choices;
         }
 
-        create_checkbox = function (name, value, selected, points) {
+        create_checkbox(name, value, selected, points) {
             let that = this;
             let input = $('<input>')
                 .attr('type', 'checkbox')
@@ -159,7 +146,7 @@ define([
             return input;
         }
 
-        render = function () {
+        render() {
             this.cell.render_force();
             let html = $(this.cell.element).find('.rendered_html');
             let lists = html.find('ul');
@@ -188,9 +175,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            if (this.edit_mode) {
-                html.append(this.get_edit_button());        
-            }
+            this.add_edit_button();
         }
 
     }
