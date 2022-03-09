@@ -5,7 +5,7 @@ from nbgrader.preprocessors import SaveCells as NbgraderSaveCells
 from nbgrader.api import MissingEntry
 from nbgrader import utils
 
-from ..utils.extra_cells import is_singlechoice, is_multiplechoice
+from ..utils.extra_cells import is_singlechoice, is_multiplechoice, is_form
 
 
 class SaveCells(NbgraderSaveCells):
@@ -24,7 +24,7 @@ class SaveCells(NbgraderSaveCells):
 
         source = cell.source
 
-        if is_singlechoice(cell) or is_multiplechoice(cell):
+        if is_singlechoice(cell) or is_multiplechoice(cell) or is_form(cell):
             source = json.dumps(cell.metadata.extended_cell)
 
         source_cell.update(
