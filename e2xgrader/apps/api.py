@@ -1,6 +1,6 @@
 import os
 from nbgrader.apps.api import NbGraderAPI
-from nbgrader.api import BaseCell, Grade, GradeCell
+from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
 from nbgrader.utils import as_timezone, to_numeric_tz
 
 
