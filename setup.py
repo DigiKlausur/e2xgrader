@@ -68,6 +68,7 @@ setup_args = dict(
         "beautifulsoup4",
         "pandas",
         "nbgrader",
+        "jinja2==3.0.3",
     ],
     cmdclass={
         "build_py": js_prerelease(build_py),
