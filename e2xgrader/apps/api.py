@@ -1,8 +1,7 @@
+import os
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.api import BaseCell, Grade, GradeCell
-from traitlets.config import Config
-from nbgrader.utils import temp_attrs, capture_log
-from nbgrader.converters import GenerateFeedback
+from nbgrader.utils import as_timezone, to_numeric_tz
 
 
 class E2xAPI(NbGraderAPI):
@@ -160,45 +159,114 @@ class E2xAPI(NbGraderAPI):
 
         return submissions
 
-    def generate_feedback(
-        self, assignment_id, student_id=None, force=True, hidecells=False
-    ):
-        """Run ``nbgrader generate_feedback`` for a particular assignment and student.
-
+    def get_assignment(self, assignment_id, released=None):
+        """Get information about an assignment given its name.
         Arguments
         ---------
         assignment_id: string
             The name of the assignment
-        student_id: string
-            The name of the student (optional). If not provided, then generate
-            feedback from autograded submissions.
-        force: bool
-            Whether to force generating feedback, even if it already exists.
+        released: list
+            (Optional) A set of names of released assignments, obtained via
+            self.get_released_assignments().
         Returns
         -------
-        result: dict
-            A dictionary with the following keys (error and log may or may not be present):
-            - success (bool): whether or not the operation completed successfully
-            - error (string): formatted traceback
-            - log (string): captured log output
+        assignment: dict
+            A dictionary containing information about the assignment
         """
-        # Because we may be using HTMLExporter.template_file in other
-        # parts of the the UI, we need to make sure that the template
-        # is explicitply 'feedback.tpl` here:
-        c = Config()
-        c.HTMLExporter.template_file = "feedback.tpl"
-        c.FilterTests.hide_cells = hidecells
-        if student_id is not None:
-            with temp_attrs(
-                self.coursedir, assignment_id=assignment_id, student_id=student_id
-            ):
-                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
-                app.update_config(c)
-                app.force = force
-                return capture_log(app)
+        # get the set of released assignments if not given
+        if not released:
+            released = self.get_released_assignments()
+
+        # check whether there is a source version of the assignment
+        sourcedir = os.path.abspath(
+            self.coursedir.format_path(
+                self.coursedir.source_directory,
+                student_id=".",
+                assignment_id=assignment_id,
+            )
+        )
+        if not os.path.isdir(sourcedir):
+            return
+
+        # see if there is information about the assignment in the database
+        try:
+            with self.gradebook as gb:
+                db_assignment = gb.find_assignment(assignment_id)
+                assignment = db_assignment.to_dict()
+                if db_assignment.duedate:
+                    ts = as_timezone(db_assignment.duedate, self.timezone)
+                    assignment["display_duedate"] = ts.strftime(self.timestamp_format)
+                    assignment["duedate_notimezone"] = ts.replace(
+                        tzinfo=None
+                    ).isoformat()
+                else:
+                    assignment["display_duedate"] = None
+                    assignment["duedate_notimezone"] = None
+                assignment["duedate_timezone"] = to_numeric_tz(self.timezone)
+
+                assignment["average_code_score"] = gb.average_assignment_code_score(
+                    assignment_id
+                )
+                assignment[
+                    "average_written_score"
+                ] = gb.average_assignment_written_score(assignment_id)
+                assignment["average_task_score"] = gb.average_assignment_task_score(
+                    assignment_id
+                )
+                assignment["average_score"] = (
+                    assignment["average_code_score"]
+                    + assignment["average_written_score"]
+                    + assignment["average_task_score"]
+                )
+
+        except MissingEntry:
+            assignment = {
+                "id": None,
+                "name": assignment_id,
+                "duedate": None,
+                "display_duedate": None,
+                "duedate_notimezone": None,
+                "duedate_timezone": to_numeric_tz(self.timezone),
+                "average_score": 0,
+                "average_code_score": 0,
+                "average_written_score": 0,
+                "average_task_score": 0,
+                "max_score": 0,
+                "max_code_score": 0,
+                "max_written_score": 0,
+                "max_task_score": 0,
+            }
+
+        # get released status
+        if not self.exchange_is_functional:
+            assignment["releaseable"] = False
+            assignment["status"] = "draft"
         else:
-            with temp_attrs(self.coursedir, assignment_id=assignment_id):
-                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
-                app.update_config(c)
-                app.force = force
-                return capture_log(app)
+            assignment["releaseable"] = True
+            if assignment_id in released:
+                assignment["status"] = "released"
+            else:
+                assignment["status"] = "draft"
+
+        # get source directory
+        assignment["source_path"] = os.path.relpath(sourcedir, self.coursedir.root)
+
+        # get release directory
+        releasedir = os.path.abspath(
+            self.coursedir.format_path(
+                self.coursedir.release_directory,
+                student_id=".",
+                assignment_id=assignment_id,
+            )
+        )
+        if os.path.exists(releasedir):
+            assignment["release_path"] = os.path.relpath(
+                releasedir, self.coursedir.root
+            )
+        else:
+            assignment["release_path"] = None
+
+        # number of submissions
+        assignment["num_submissions"] = len(self.get_submitted_students(assignment_id))
+
+        return assignment
