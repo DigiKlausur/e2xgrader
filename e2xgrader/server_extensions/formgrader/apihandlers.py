@@ -181,7 +181,50 @@ class AnnotationHandler(BaseApiHandler):
         )
 
 
+class AssignmentCollectionHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        assignments = self.api.get_assignments()
+        self.write(json.dumps(assignments))
+
+
+class AssignmentHandler(BaseApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, assignment_id):
+        assignment = self.api.get_assignment(assignment_id)
+        if assignment is None:
+            raise web.HTTPError(404)
+        self.write(json.dumps(assignment))
+
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def put(self, assignment_id):
+        data = self.get_json_body()
+        duedate = data.get("duedate_notimezone", None)
+        timezone = data.get("duedate_timezone", None)
+        if duedate and timezone:
+            duedate = duedate + " " + timezone
+        assignment = {"duedate": duedate}
+        assignment_id = assignment_id.strip()
+        self.gradebook.update_or_create_assignment(assignment_id, **assignment)
+        sourcedir = os.path.abspath(
+            self.coursedir.format_path(
+                self.coursedir.source_directory, ".", assignment_id
+            )
+        )
+        if not os.path.isdir(sourcedir):
+            os.makedirs(sourcedir)
+        self.write(json.dumps(self.api.get_assignment(assignment_id)))
+
+
 formgrade_handlers = [
+    (r"/formgrader/api/assignments", AssignmentCollectionHandler),
+    (r"/formgrader/api/assignment/([^/]+)", AssignmentHandler),
     (r"/formgrader/api/solution_cells/([^/]+)/([^/]+)", SolutionCellCollectionHandler),
     (
         r"/formgrader/api/submitted_tasks/([^/]+)/([^/]+)/([^/]+)",
