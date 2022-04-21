@@ -92,3 +92,19 @@
 .attachment-controls > button > i {
   padding-right: 1em;
 }
+
+.diagram-img {
+  border:  1px solid grey;
+  padding: .5em;
+  max-height: 480px;
+  min-height: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn-diagram {
+  line-height: 2em;
+  font-size: 1.5em;
+
+  margin: .5em;
+  margin-top: 1em;
+}
