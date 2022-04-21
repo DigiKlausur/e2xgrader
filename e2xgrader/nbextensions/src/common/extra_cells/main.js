@@ -9,7 +9,8 @@ define([
     './extended_cell/extended_cell',
     './extended_cell/choice_cell',
     './extended_cell/attachment_cell',
-    './extended_cell/pdf_cell'
+    './extended_cell/pdf_cell',
+    './extended_cell/diagram_cell'
 ], function (
     $,
     require,
@@ -22,6 +23,7 @@ define([
     choice_cell,
     attachment_cell,
     pdf_cell,
+    diagram_cell,
 ) {
 
     'use strict';
@@ -172,6 +174,10 @@ define([
                 let mycell = new pdf_cell.PDFCell(this);
                 mycell.edit_mode = edit_mode;
                 render_pdf.apply(this, arguments);
+            } else if (type == 'diagram') {
+                let mycell = new diagram_cell.DiagramCell(this);
+                mycell.edit_mode = edit_mode;
+                mycell.render();
             } else {
                 old_render.apply(this, arguments);
             }

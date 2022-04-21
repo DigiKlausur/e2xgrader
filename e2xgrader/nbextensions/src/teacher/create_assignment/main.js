@@ -244,6 +244,7 @@ define([
             if (cell.cell_type == "markdown") {
                 options_list.push(["Multiple Choice", "multiplechoice"]);
                 options_list.push(["Single Choice", "singlechoice"]);
+                options_list.push(["Diagram Cell", "diagram"]);
                 options_list.push(["Upload answer", "attachments"]);
                 options_list.push(["Read-only HTML", "pdf"]);
             }
@@ -274,6 +275,17 @@ define([
                     model.set_locked(cell, false);
                     model.set_task(cell, false);
                     extramodel.to_singlechoice(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
+                } else if (val === 'diagram') {
+                    model.set_schema_version(cell);
+                    model.set_solution(cell, true);
+                    model.set_grade(cell, true);
+                    model.set_locked(cell, false);
+                    model.set_task(cell, false);
+                    extramodel.to_diagram(cell);
                     if (cell.rendered) {
                         cell.unrender_force();
                         cell.render();
@@ -348,6 +360,8 @@ define([
                     return "singlechoice";
                 } else if (extramodel.is_attachment(cell)) {
                     return "attachments";
+                } else if (extramodel.is_diagram(cell)) {
+                    return "diagram";
                 } else if (extramodel.is_pdf(cell)) {
                     return "pdf";
                 } else if (model.is_solution(cell) && model.is_grade(cell)) {
