@@ -60,7 +60,6 @@ setup_args = dict(
         "notebook>=6.1.6",
         "nbconvert==5.6.1",
         "nbformat",
-        "traitlets",
         "jupyter_core",
         "jupyter_client",
         "tornado",
