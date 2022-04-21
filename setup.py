@@ -67,7 +67,7 @@ setup_args = dict(
         "requests",
         "beautifulsoup4",
         "pandas",
-        "nbgrader",
+        "nbgrader==0.7.0.dev0",
         "jinja2==3.0.3",
     ],
     cmdclass={
