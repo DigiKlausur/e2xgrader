@@ -200,7 +200,7 @@
 {%- endmacro %}
 
 {% macro annotation(cell) %}
-  {%- if cell.metadata.nbgrader.solution -%}
+  {%- if not ('extended_cell' in cell.metadata and cell.metadata.extended_cell.type in ['diagram', 'attachments']) and cell.metadata.nbgrader.solution -%}
   <div class='paint-controls'>
     <div class='brush btn-group' data-toggle="buttons">
       <label class="btn active">
