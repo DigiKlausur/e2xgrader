@@ -27,7 +27,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install custom nbgrader
       run: |
-        pip install --no-cache-dir git+https://github.com/DigiKlausur/nbgrader.git@clean_up
+        pip install --no-cache-dir git+https://github.com/jupyter/nbgrader.git@master
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
