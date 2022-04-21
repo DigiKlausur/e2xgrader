@@ -1,11 +1,13 @@
 define([
     'jquery',
     './extended_cell',
-    './attachment_view'
+    './attachment_view',
+    './attachment'
 ], function (
     $,
     extended_cell,
-    attachment_view
+    attachment_view,
+    attachment_model
 ) {
 
     'use strict';
@@ -16,7 +18,7 @@ define([
 
         constructor(cell) {            
             super(cell, 'attachments');
-            this.model = new attachment_view.AttachmentModel(cell);
+            this.model = new attachment_model.AttachmentCellModel(cell);
             this.view = new attachment_view.AttachmentGallery(cell, this.model);
             this.edit_mode = false;
         }
