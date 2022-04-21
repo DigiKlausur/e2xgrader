@@ -23,6 +23,10 @@ def is_multiplechoice(cell):
     return is_extra_cell(cell) and cell.metadata.extended_cell.type == "multiplechoice"
 
 
+def is_diagram(cell):
+    return is_extra_cell(cell) and cell.metadata.extended_cell.type == "diagram"
+
+
 def get_choices(cell):
     if is_singlechoice(cell) or is_multiplechoice(cell):
         return [int(i) for i in cell.metadata.extended_cell.choice]
