@@ -5,7 +5,7 @@
 var url_prefix = "{{ url_prefix }}";
 </script>
 
-<script src="{{ base_url }}/formgrader/static/js/manage_assignments.js"></script>
+<script src="{{ base_url }}/e2xgrader/static/js/manage_assignments.js"></script>
 {%- endblock -%}
 
 {%- block title -%}

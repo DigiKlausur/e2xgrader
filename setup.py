@@ -29,7 +29,7 @@ for (dirname, dirnames, filenames) in os.walk(
     for filename in filenames:
         base_static_files.append(os.path.join(root, filename))
 
-name = u"e2xgrader"
+name = "e2xgrader"
 
 setup_args = dict(
     name=name,
@@ -60,14 +60,13 @@ setup_args = dict(
         "notebook>=6.1.6",
         "nbconvert==5.6.1",
         "nbformat",
-        "traitlets",
         "jupyter_core",
         "jupyter_client",
         "tornado",
         "requests",
         "beautifulsoup4",
         "pandas",
-        "nbgrader",
+        "nbgrader==0.7.0.dev0",
     ],
     cmdclass={
         "build_py": js_prerelease(build_py),

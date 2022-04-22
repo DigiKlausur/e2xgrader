@@ -1,5 +1,7 @@
+import os
 from nbgrader.apps.api import NbGraderAPI
-from nbgrader.api import BaseCell, Grade, GradeCell
+from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
+from nbgrader.utils import as_timezone, to_numeric_tz
 
 
 class E2xAPI(NbGraderAPI):
@@ -156,3 +158,115 @@ class E2xAPI(NbGraderAPI):
             submission["index"] = idx
 
         return submissions
+
+    def get_assignment(self, assignment_id, released=None):
+        """Get information about an assignment given its name.
+        Arguments
+        ---------
+        assignment_id: string
+            The name of the assignment
+        released: list
+            (Optional) A set of names of released assignments, obtained via
+            self.get_released_assignments().
+        Returns
+        -------
+        assignment: dict
+            A dictionary containing information about the assignment
+        """
+        # get the set of released assignments if not given
+        if not released:
+            released = self.get_released_assignments()
+
+        # check whether there is a source version of the assignment
+        sourcedir = os.path.abspath(
+            self.coursedir.format_path(
+                self.coursedir.source_directory,
+                student_id=".",
+                assignment_id=assignment_id,
+            )
+        )
+        if not os.path.isdir(sourcedir):
+            return
+
+        # see if there is information about the assignment in the database
+        try:
+            with self.gradebook as gb:
+                db_assignment = gb.find_assignment(assignment_id)
+                assignment = db_assignment.to_dict()
+                if db_assignment.duedate:
+                    ts = as_timezone(db_assignment.duedate, self.timezone)
+                    assignment["display_duedate"] = ts.strftime(self.timestamp_format)
+                    assignment["duedate_notimezone"] = ts.replace(
+                        tzinfo=None
+                    ).isoformat()
+                else:
+                    assignment["display_duedate"] = None
+                    assignment["duedate_notimezone"] = None
+                assignment["duedate_timezone"] = to_numeric_tz(self.timezone)
+
+                assignment["average_code_score"] = gb.average_assignment_code_score(
+                    assignment_id
+                )
+                assignment[
+                    "average_written_score"
+                ] = gb.average_assignment_written_score(assignment_id)
+                assignment["average_task_score"] = gb.average_assignment_task_score(
+                    assignment_id
+                )
+                assignment["average_score"] = (
+                    assignment["average_code_score"]
+                    + assignment["average_written_score"]
+                    + assignment["average_task_score"]
+                )
+
+        except MissingEntry:
+            assignment = {
+                "id": None,
+                "name": assignment_id,
+                "duedate": None,
+                "display_duedate": None,
+                "duedate_notimezone": None,
+                "duedate_timezone": to_numeric_tz(self.timezone),
+                "average_score": 0,
+                "average_code_score": 0,
+                "average_written_score": 0,
+                "average_task_score": 0,
+                "max_score": 0,
+                "max_code_score": 0,
+                "max_written_score": 0,
+                "max_task_score": 0,
+            }
+
+        # get released status
+        if not self.exchange_is_functional:
+            assignment["releaseable"] = False
+            assignment["status"] = "draft"
+        else:
+            assignment["releaseable"] = True
+            if assignment_id in released:
+                assignment["status"] = "released"
+            else:
+                assignment["status"] = "draft"
+
+        # get source directory
+        assignment["source_path"] = os.path.relpath(sourcedir, self.coursedir.root)
+
+        # get release directory
+        releasedir = os.path.abspath(
+            self.coursedir.format_path(
+                self.coursedir.release_directory,
+                student_id=".",
+                assignment_id=assignment_id,
+            )
+        )
+        if os.path.exists(releasedir):
+            assignment["release_path"] = os.path.relpath(
+                releasedir, self.coursedir.root
+            )
+        else:
+            assignment["release_path"] = None
+
+        # number of submissions
+        assignment["num_submissions"] = len(self.get_submitted_students(assignment_id))
+
+        return assignment

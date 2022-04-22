@@ -1,6 +1,7 @@
 import os
 import glob
 from collections import defaultdict
+from traitlets import Bool
 
 from nbgrader.exchange.default.collect import ExchangeCollect, groupby
 from .exchange import E2xExchange
@@ -10,6 +11,21 @@ from nbgrader.api import Gradebook, MissingEntry
 
 
 class E2xExchangeCollect(E2xExchange, ExchangeCollect):
+
+    update = Bool(
+        False, help="Update existing submissions with ones that have newer timestamps."
+    ).tag(config=True)
+
+    before_duedate = Bool(
+        False,
+        help="Collect the last submission before due date or the last submission if no submission before due date.",
+    ).tag(config=True)
+
+    check_owner = Bool(
+        default_value=True,
+        help="Whether to cross-check the student_id with the UNIX-owner of the submitted directory.",
+    ).tag(config=True)
+
     def init_submissions(self):
         if self.personalized_inbound:
             self.log.info("Collecting from restricted submit dirs")
@@ -77,6 +93,9 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                 self._sort_by_timestamp(v)[0] for v in usergroups.values()
             ]
         else:
+            self.log.info(
+                "Duedate is enabled. Collecting assignments submitted before duedate..."
+            )
             self.src_records = []
             for v in usergroups.values():
                 records = self._sort_by_timestamp(v)

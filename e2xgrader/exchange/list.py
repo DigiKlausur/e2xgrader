@@ -234,10 +234,11 @@ class E2xExchangeList(E2xExchange, ExchangeList):
 
             if info["status"] == "submitted":
                 if info["notebooks"]:
-                    has_local_feedback = all(
+                    # List feedback if there exists for one of the notebooks files in path
+                    has_local_feedback = any(
                         [nb["has_local_feedback"] for nb in info["notebooks"]]
                     )
-                    has_exchange_feedback = all(
+                    has_exchange_feedback = any(
                         [nb["has_exchange_feedback"] for nb in info["notebooks"]]
                     )
                     feedback_updated = any(

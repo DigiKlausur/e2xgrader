@@ -10,6 +10,7 @@ from .scramble import Scramble
 from .unscramble import Unscramble
 from .validateextracells import ValidateExtraCells
 from .extractattachments import ExtractAttachments
+from .filtertests import FilterTests
 
 __all__ = [
     "FilterCellsById",
@@ -24,4 +25,5 @@ __all__ = [
     "Unscramble",
     "ValidateExtraCells",
     "ExtractAttachments",
+    "FilterTests",
 ]
