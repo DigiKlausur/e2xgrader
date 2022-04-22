@@ -170,8 +170,33 @@ let Comments = Backbone.Collection.extend({
 let AnnotationUI = Backbone.View.extend({
 
     initialize: function () {
+        this.$switch = this.$el.find('input[name="annotate"]');
+        this.$switch.prop('checked', 'checked');
+        
         this.$canvas = this.$el.find(".annotationarea").get(0);
         this.$ctx = this.$canvas.getContext("2d");
+
+        this.$controls = this.$el.find(".paint-controls");
+
+        
+
+        let that = this;
+
+        this.pencil_cursor = e2x_base_url + '/static/css/pencil-solid.svg';
+        this.eraser_cursor = e2x_base_url + '/static/css/eraser-solid.svg';
+        //console.log('url(' + pencil_cursor + '), default');
+        $(this.$canvas).css('cursor', 'url(' + this.pencil_cursor + ') 0 16, none');
+
+        this.$switch.change(() => {
+            if (that.$switch.prop('checked')) {
+                that.$canvas.style.pointerEvents = "auto";
+                that.$controls.show();
+            } else {
+                that.$canvas.style.pointerEvents = "none";
+                that.$controls.hide();
+                
+            }
+        });
 
         this.initializeControls();
         this.initializePaint();
@@ -193,8 +218,10 @@ let AnnotationUI = Backbone.View.extend({
         this.$el.find("input[type=radio][name=brush]").change(function () {
             if (this.value == "pencil") {
                 that.$ctx.globalCompositeOperation = "source-over";
+                $(that.$canvas).css('cursor', 'url(' + that.pencil_cursor + ') 0 16, none');
             } else if (this.value == "eraser") {
                 that.$ctx.globalCompositeOperation = "destination-out";
+                $(that.$canvas).css('cursor', 'url(' + that.eraser_cursor + ') 0 32, none');
             }
         });
 

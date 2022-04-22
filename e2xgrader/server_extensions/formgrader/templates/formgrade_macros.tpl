@@ -14,6 +14,7 @@ var submission_id = "{{ resources.submission_id }}";
 var notebook_id = "{{ resources.notebook_id }}";
 var assignment_id = "{{ resources.assignment_id }}";
 var base_url = "{{ resources.base_url }}/formgrader";
+var e2x_base_url = "{{ resources.base_url }}/e2xgrader";
 var task_id = "{{ resources.keyword }}";
 </script>
 
