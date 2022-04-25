@@ -22,6 +22,9 @@ define(['jquery'], function($) {
 
 		this.handleMessageEvent = function(evt)
 		{
+			if (evt.origin !== 'https://embed.diagrams.net') {
+				console.log('Message should come from https://embed.diagrams.net but came from ' + evt.origin);
+			}
 			if (self.frame != null && evt.source == self.frame.contentWindow &&
 				evt.data.length > 0)
 			{
@@ -40,7 +43,7 @@ define(['jquery'], function($) {
 				}
 			}
 		};
-	};
+	}
 
 	/**
 	 * Static method to edit the diagram in the given img or object.
@@ -124,8 +127,16 @@ define(['jquery'], function($) {
 	{
 		var name = elem.nodeName.toLowerCase();
 
-		return elem.getAttribute((name == 'svg') ? 'content' :
-			((name == 'img') ? 'src' : 'data'));
+		let attribute = '';
+		if (name == 'svg') {
+			attribute = 'content';
+		} else if (name == 'img') {
+			attribute = 'src';
+		} else {
+			attribute = 'data';
+		}
+
+		return elem.getAttribute(attribute);
 	};
 
 	/**
@@ -237,8 +248,6 @@ define(['jquery'], function($) {
 	{
 		if (this.frame != null)
 		{
-			console.log('POST MESSAGE');
-			console.log(msg);
 			this.frame.contentWindow.postMessage(JSON.stringify(msg), '*');
 		}
 	};
@@ -339,51 +348,48 @@ define(['jquery'], function($) {
 		}
 		else if (msg.event == 'export')
 		{
-			console.log('EXPORT');
-			console.log(msg.data);
 			
 			this.cell.model.setAttachment('diagram.png', msg.data);
-	    this.setElementData(this.startElement, msg.data);
+	    	this.setElementData(this.startElement, msg.data);
 			this.stopEditing();
-	    this.xml = null;
+	    	this.xml = null;
 		}
 		else if (msg.event == 'save')
 		{
-	    this.save(msg.xml, false, this.startElement);
-	    this.xml = msg.xml;
+	    	this.save(msg.xml, false, this.startElement);
+	    	this.xml = msg.xml;
 
 			if (msg.exit)
 			{
 				msg.event = 'exit';
 			}
-	    else
-	    {
-	      this.setStatus('allChangesSaved', false);
-	    }
+		    else
+		    {
+		      this.setStatus('allChangesSaved', false);
+		    }
 		}
 
 		if (msg.event == 'exit')
 		{
 			if (this.format != 'xml')
 			{
-	      if (this.xml != null)
-	      {
-				  this.postMessage({action: 'export', format: this.format,
-	          xml: this.xml, spinKey: 'export'});
-	      }
-	      else
-	      {
-	      	this.stopEditing(msg);
-	      }
+				if (this.xml != null)
+				{
+					  this.postMessage({action: 'export', format: this.format,
+				  xml: this.xml, spinKey: 'export'});
+				}
+				else
+				{
+					this.stopEditing(msg);
+				}
 			}
 			else
 			{
-	      if (msg.modified == null || msg.modified)
-	      {
-				  this.save(msg.xml, false, this.startElement);
-	      }
-
-	      this.stopEditing(msg);
+				if (msg.modified == null || msg.modified)
+				{
+					  this.save(msg.xml, false, this.startElement);
+				}
+				this.stopEditing(msg);
 			}
 		}
 	};
@@ -414,13 +420,7 @@ define(['jquery'], function($) {
 	 */
 	DiagramEditor.prototype.save = function(data, draft, elt)
 	{
-		console.log(this.cell);
-		console.log(data);
 		this.done(data, draft, elt);
-		//console.log(data);
-		//console.log(draft);
-		
-		//console.log(elt.src);
 	};
 
 	/**
@@ -429,8 +429,6 @@ define(['jquery'], function($) {
 	DiagramEditor.prototype.done = function()
 	{
 		// hook for subclassers
-
-		console.log('DONE!!!');
 	};
 
 	/**
