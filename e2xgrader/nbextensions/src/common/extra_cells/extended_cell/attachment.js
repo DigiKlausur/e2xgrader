@@ -22,9 +22,9 @@ define([], function() {
             super();
             this.ids = {};
             this.cell = cell;
-            this.typePattern = new RegExp("data:([^;]*)");
-            this.imagePattern = new RegExp("!\\[[^\(]+\\]\\(attachment:[^)]+\\)", "g");
-            this.infoPattern = new RegExp("\n### You uploaded \\d+ attachments.\n\n", "g");
+            this.typePattern = /data:([^;]*)/;
+            this.imagePattern = /!\[[^\(]+\]\(attachment:[^)]+\)/g;
+            this.infoPattern = /\n### You uploaded \d+ attachments.\n\n/g;
             this.attachments = {};            
             this.load();
         }
