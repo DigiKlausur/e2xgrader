@@ -184,7 +184,7 @@ let AnnotationUI = Backbone.View.extend({
 
         this.pencil_cursor = e2x_base_url + '/static/css/pencil-solid.svg';
         this.eraser_cursor = e2x_base_url + '/static/css/eraser-solid.svg';
-        //console.log('url(' + pencil_cursor + '), default');
+        
         $(this.$canvas).css('cursor', 'url(' + this.pencil_cursor + ') 0 16, none');
 
         this.$switch.change(() => {
