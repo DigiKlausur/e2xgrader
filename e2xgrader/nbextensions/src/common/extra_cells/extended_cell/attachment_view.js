@@ -167,11 +167,11 @@ define([
         getControls() {
             let controls = $('<div/>').addClass('attachment-controls');
             
-            controls.append($('<button/>')
+            controls.append($('<button/>').addClass('btn-e2x')
                 .append($('<i/>').addClass('fa fa-camera'))
                 .append('Webcam')
                 .click(() => new Webcam(this.model).open()));
-            let input_button = $('<button/>')
+            let input_button = $('<button/>').addClass('btn-e2x')
                 .addClass('upload-btn')
                 .append($('<i/>').addClass('fa fa-upload'))
                 .append('Upload')

@@ -27,7 +27,7 @@ define([
             let that = this;
             return $('<button>')
                 .attr('type', 'button')
-                .addClass('edit_attachments')
+                .addClass('edit_attachments btn-e2x')
                 .click(function () {
                     that.view.open();
                 }).append('Add Files / Images');
