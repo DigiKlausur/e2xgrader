@@ -51,18 +51,13 @@ define([
             let html = $(this.cell.element).find('.rendered_html');            
             
 
-            let diagram = that.model.getAttachment('diagram.png');
+            
             let img = html.find('img');
             img.addClass('diagram-img');
 
             // Remove old button if there is any
             $(html).find('.btn-diagram').remove();
             let button = $('<button/>').append('Edit Diagram').addClass('btn-diagram');
-
-            /*button.click(function() {
-                DiagramEditor.editElement(that, img[0]);
-            });*/
-
             button.click(() => DiagramEditor.editElement(that, img[0]));
             
             html.append(img);
