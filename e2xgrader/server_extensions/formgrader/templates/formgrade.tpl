@@ -55,9 +55,9 @@
   }
 
 .paint-controls {
-  position: absolute;
-  top: 0;
-  left: -6em;
+  position: sticky;
+  top: 60px;
+  /*left: -6em;*/
   max-width: 6em;
   border: 1px solid black;
 }
@@ -239,7 +239,10 @@
   background: #4fb845;
 }
 
-
+div.prompt {
+  min-width: 6.8em;
+  color:  black;
+}
 
 </style>
 
@@ -305,7 +308,7 @@
   {%- if cell.metadata.nbgrader.grade or cell.metadata.nbgrader.task  -%}
   {{ score(cell) }}
   {%- endif -%}
-  <span style="margin-left: 2em;">Annotate</span>
+  <span style="margin-left: 2em;">Annotation Mode</span>
   <label class="switch">
     <input type="checkbox" class="switch-input" name="annotate">
     <span class="switch-label" data-on="On" data-off="Off"></span>
@@ -328,6 +331,11 @@
 </div>
 {%- endif -%}
 {%- endmacro %}
+
+{%- macro annotation_canvas(cell) -%}
+<canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas' style="touch-action: none;">
+</canvas>
+{%- endmacro -%}
 
 {% macro annotation(cell) %}
   {%- if cell.metadata.nbgrader.solution -%}
@@ -368,21 +376,27 @@
       <button class="glyphicon glyphicon-trash clear"></button>
     </div>
   </div>
-  <canvas class='annotationarea' id='{{ cell.metadata.nbgrader.grade_id }}-canvas' style="touch-action: none;">
-  </canvas>
+  
   {%- endif -%}
 {% endmacro %}
 
 
 {% block markdowncell scoped %}
 <div class="cell border-box-sizing text_cell rendered">
+  {%- if 'nbgrader' in cell.metadata and cell.metadata.nbgrader.solution -%}
+    <div class="prompt input_prompt">
+      {{ annotation(cell) }}
+    </div>
+  {%- else -%}
   {{ self.empty_in_prompt() }}
+  {%- endif -%}
 
   {%- if 'nbgrader' in cell.metadata and (cell.metadata.nbgrader.solution or cell.metadata.nbgrader.grade or cell.metadata.nbgrader.task ) -%}
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
-      {{ annotation(cell) }}
+      {{ annotation_canvas(cell) }}
+      
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
       </div>
@@ -408,7 +422,7 @@
   <div class="panel panel-primary nbgrader_cell">
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
-      {{ annotation(cell) }}
+      {{ annotation_canvas(cell) }}
       <div class="input_area">
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
@@ -426,3 +440,8 @@
   {%- endif -%}
 
 {% endblock input %}
+{% block in_prompt -%}
+<div class="prompt input_prompt">
+  {{ annotation(cell) }}
+</div>
+{%- endblock in_prompt %}
