@@ -127,7 +127,7 @@ define([
             metadata[this.choice_field] = choices;
         }
 
-        create_checkbox(name, value, selected, points) {
+        create_checkbox(name, value, selected) {
             let that = this;
             let input = $('<input>')
                 .attr('type', 'checkbox')

@@ -1,8 +1,6 @@
 define([
-    'base/js/namespace',
     'jquery'
 ], function(
-    Jupyter,
     $
 ) {
 

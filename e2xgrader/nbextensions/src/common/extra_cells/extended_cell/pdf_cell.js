@@ -1,8 +1,6 @@
 define([
-    'jquery',
     './extended_cell',
 ], function(
-    $,
     extended_cell,
 ) {
 
