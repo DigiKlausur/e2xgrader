@@ -5,7 +5,7 @@ define([
     'base/js/dialog',
     'notebook/js/celltoolbar',
     'base/js/events',
-], function (require, $, Jupyter, dialog, toolbar, events) {
+], function(require, $, Jupyter, dialog, toolbar, events) {
 
     "use strict";
 
@@ -21,14 +21,14 @@ define([
 
     // trigger an event when the toolbar is being rebuilt
     CellToolbar.prototype._rebuild = CellToolbar.prototype.rebuild;
-    CellToolbar.prototype.rebuild = function () {
+    CellToolbar.prototype.rebuild = function() {
         events.trigger('toolbar_rebuild.CellToolbar', this.cell);
         this._rebuild();
     };
 
     // trigger an event when the toolbar is being (globally) hidden
     CellToolbar._global_hide = CellToolbar.global_hide;
-    CellToolbar.global_hide = function () {
+    CellToolbar.global_hide = function() {
         $("#nbgrader-total-points-group").hide();
 
         CellToolbar._global_hide();
@@ -49,9 +49,9 @@ define([
                 elem.addClass("btn-group");
                 elem.append($("<span />").text("Total points:"));
                 elem.append($("<input />")
-                            .attr("disabled", "disabled")
-                            .attr("type", "number")
-                            .attr("id", "nbgrader-total-points"));
+                    .attr("disabled", "disabled")
+                    .attr("type", "number")
+                    .attr("id", "nbgrader-total-points"));
                 $("#maintoolbar-container").append(elem);
             }
             elem.show();
@@ -62,7 +62,7 @@ define([
     });
 
     // remove nbgrader class when the cell is either hidden or rebuilt
-    events.on("global_hide.CellToolbar toolbar_rebuild.CellToolbar", function (evt, cell) {
+    events.on("global_hide.CellToolbar toolbar_rebuild.CellToolbar", function(evt, cell) {
         if (cell.element && cell.element.hasClass(nbgrader_cls)) {
             cell.element.removeClass(nbgrader_cls);
         }
@@ -72,12 +72,12 @@ define([
     });
 
     // update total points when a cell is deleted
-    events.on("delete.Cell", function (evt, info) {
+    events.on("delete.Cell", function(evt, info) {
         update_total();
     });
 
     // validate cell ids on save
-    events.on("before_save.Notebook", function (evt) {
+    events.on("before_save.Notebook", function(evt) {
         validate_ids();
     });
 
@@ -113,7 +113,7 @@ define([
             buttons: {
                 OK: {
                     class: "btn-primary",
-                    click: function () {
+                    click: function() {
                         warning = undefined;
                     }
                 }
@@ -153,7 +153,7 @@ define([
             buttons: {
                 OK: {
                     class: "btn-primary",
-                    click: function () {
+                    click: function() {
                         warning = undefined;
                     }
                 }
@@ -187,13 +187,13 @@ define([
         }
     };
 
-    
+
 
     /**
      * Add a display class to the cell element, depending on the
      * nbgrader cell type.
      */
-    var display_cell = function (cell) {
+    var display_cell = function(cell) {
         if (model.is_graded(cell) || model.is_solution(cell)) {
             if (cell.element && !cell.element.hasClass(nbgrader_highlight_cls)) {
                 cell.element.addClass(nbgrader_highlight_cls);
@@ -205,23 +205,23 @@ define([
             }
         }
 
-        if (model.is_task(cell) ){
-          if (cell.element && !cell.element.hasClass("nbgrader_task")) {
+        if (model.is_task(cell)) {
+            if (cell.element && !cell.element.hasClass("nbgrader_task")) {
                 cell.element.addClass("nbgrader_task");
-          }
+            }
         } else {
-          if (cell.element && cell.element.hasClass("nbgrader_task")) {
+            if (cell.element && cell.element.hasClass("nbgrader_task")) {
                 cell.element.removeClass("nbgrader_task");
-          }
+            }
         }
     };
 
-    var create_celltype_select = function (div, cell, celltoolbar) {
+    var create_celltype_select = function(div, cell, celltoolbar) {
         // hack -- the DOM element for the celltoolbar is created before the
         // cell type is actually set, so we need to wait until the cell type
         // has been set before we can actually create the select menu
         if (cell.cell_type === null) {
-            setTimeout(function () {
+            setTimeout(function() {
                 create_celltype_select(div, cell, celltoolbar);
             }, 100);
 
@@ -253,7 +253,7 @@ define([
                 options_list.push(["Autograder tests", "tests"]);
             }
             options_list.push(["Read-only", "readonly"]);
-            var setter = function (cell, val) {
+            var setter = function(cell, val) {
                 if (val === "") {
                     model.remove_metadata(cell);
                     extramodel.remove_metadata(cell);
@@ -326,8 +326,8 @@ define([
                     model.set_grade(cell, false);
                     model.set_locked(cell, true);
                     model.set_task(cell, true);
-                    if (cell.get_text() === ''){
-                      cell.set_text('Describe the task here!')
+                    if (cell.get_text() === '') {
+                        cell.set_text('Describe the task here!')
                     }
                 } else if (val === "solution") {
                     extramodel.remove_metadata(cell);
@@ -355,7 +355,7 @@ define([
                 }
             };
 
-            var getter = function (cell) {
+            var getter = function(cell) {
                 if (model.is_task(cell)) {
                     return "task";
                 } else if (extramodel.is_multiplechoice(cell)) {
@@ -389,7 +389,7 @@ define([
                 select.append(opt);
             }
             select.val(getter(cell));
-            select.change(function () {
+            select.change(function() {
                 setter(cell, select.val());
                 celltoolbar.rebuild();
                 update_total();
@@ -403,7 +403,7 @@ define([
     /**
      * Create the input text box for the problem or test id.
      */
-    var create_id_input = function (div, cell, celltoolbar) {
+    var create_id_input = function(div, cell, celltoolbar) {
         if (!model.is_grade(cell) && !model.is_solution(cell) && !model.is_locked(cell)) {
             return;
         }
@@ -419,7 +419,7 @@ define([
         model.set_grade_id(cell, model.get_grade_id(cell));
         text.addClass('nbgrader-id-input');
         text.attr("value", model.get_grade_id(cell));
-        text.change(function () {
+        text.change(function() {
             model.set_grade_id(cell, text.val());
         });
 
@@ -433,7 +433,7 @@ define([
      * Create the input text box for the number of points the problem
      * is worth.
      */
-    var create_points_input = function (div, cell, celltoolbar) {
+    var create_points_input = function(div, cell, celltoolbar) {
         if (!model.is_graded(cell) || model.is_invalid(cell)) {
             return;
         }
@@ -448,7 +448,7 @@ define([
         model.set_points(cell, model.get_points(cell));
         update_total();
 
-        text.change(function () {
+        text.change(function() {
             model.set_points(cell, text.val());
             text.val(model.get_points(cell));
             update_total();
@@ -460,7 +460,7 @@ define([
         Jupyter.keyboard_manager.register_events(text);
     };
 
-    var create_lock_cell_button = function (div, cell, celltoolbar) {
+    var create_lock_cell_button = function(div, cell, celltoolbar) {
         var lock = $("<a />").addClass("lock-button");
         if (model.is_locked(cell)) {
             lock.append($("<li />").addClass("fa fa-lock"));
@@ -476,7 +476,7 @@ define([
     /**
      * Load custom css for the nbgrader toolbar.
      */
-    var load_css = function () {
+    var load_css = function() {
         var link = document.createElement('link');
         link.type = 'text/css';
         link.rel = 'stylesheet';
@@ -487,13 +487,13 @@ define([
     /**
      * Load the nbgrader toolbar extension.
      */
-    var load_extension = function () {
+    var load_extension = function() {
         load_css();
         let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
         require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
             extramodel = extracell;
             model = nbgrader;
-            
+
             CellToolbar.register_callback('create_assignment.grading_options', create_celltype_select);
             CellToolbar.register_callback('create_assignment.id_input', create_id_input);
             CellToolbar.register_callback('create_assignment.points_input', create_points_input);
@@ -508,7 +508,7 @@ define([
             CellToolbar.register_preset(nbgrader_preset_name, preset, Jupyter.notebook);
             console.log('nbgrader extension for metadata editing loaded.');
         });
-        
+
     };
 
     return {
