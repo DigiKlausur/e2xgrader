@@ -347,8 +347,7 @@ define(['jquery'], function($) {
             this.save(msg.xml, true, this.startElement);
         }
         else if (msg.event == 'export')
-        {
-            
+        {            
             this.cell.model.setAttachment('diagram.png', msg.data);
             this.setElementData(this.startElement, msg.data);
             this.stopEditing();
@@ -371,27 +370,32 @@ define(['jquery'], function($) {
 
         if (msg.event == 'exit')
         {
-            if (this.format != 'xml')
-            {
-                if (this.xml != null)
-                {
-                      this.postMessage({action: 'export', format: this.format,
-                  xml: this.xml, spinKey: 'export'});
-                }
-                else
-                {
-                    this.stopEditing(msg);
-                }
-            }
-            else
-            {
-                if (msg.modified == null || msg.modified)
-                {
-                      this.save(msg.xml, false, this.startElement);
-                }
+            this.handleExitMessage(msg);
+        }
+    };
+
+    /**
+     * Handles the exit message.
+     */
+    DiagramEditor.prototype.handleExitMessage = function(msg) {
+        if (this.format != 'xml') {
+            if (this.xml != null) {
+                this.postMessage({
+                    action: 'export',
+                    format: this.format,
+                    xml: this.xml,
+                    spinKey: 'export'
+                });
+            } else {
                 this.stopEditing(msg);
             }
+        } else {
+            if (msg.modified == null || msg.modified) {
+                this.save(msg.xml, false, this.startElement);
+            }
+            this.stopEditing(msg);
         }
+
     };
 
     /**
