@@ -55,7 +55,7 @@ define([
 
             // Remove old button if there is any
             $(html).find('.btn-diagram').remove();
-            let button = $('<button/>').append('Edit Diagram').addClass('btn-e2x');
+            let button = $('<button/>').append('Edit Diagram').addClass('btn-e2x btn-diagram');
             button.click(() => DiagramEditor.editElement(that, img[0]));
 
             html.append(img);
