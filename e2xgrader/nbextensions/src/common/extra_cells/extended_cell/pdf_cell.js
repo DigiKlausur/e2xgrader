@@ -1,7 +1,7 @@
 define([
     'jquery',
     './extended_cell',
-], function (
+], function(
     $,
     extended_cell,
 ) {
@@ -12,19 +12,13 @@ define([
 
     class PDFCell extends ExtendedCell {
 
-        constructor(cell) {            
+        constructor(cell) {
             super(cell, 'pdf');
-            this.edit_mode = false;
         }
 
-        get_edit_button = function () {
-            let that = this;
-            return $('<button>')
-                .attr('type', 'button')
-                .addClass('hbrs_unrender')
-                .click(function () {
-                    that.cell.unrender_force();
-                }).append('Edit cell');
+        render() {
+            this.cell.unsafe_render();
+            this.add_edit_button();
         }
 
     }
