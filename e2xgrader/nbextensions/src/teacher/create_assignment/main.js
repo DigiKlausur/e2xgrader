@@ -308,6 +308,10 @@ define([
                     model.set_locked(cell, true);
                     model.set_task(cell, false);
                     extramodel.to_pdf(cell);
+                    if (cell.rendered) {
+                        cell.unrender_force();
+                        cell.render();
+                    }
                 } else if (val === "manual") {
                     extramodel.remove_metadata(cell);
                     model.set_schema_version(cell);
