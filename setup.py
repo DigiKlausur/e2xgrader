@@ -61,7 +61,7 @@ setup_args = dict(
         "nbconvert==5.6.1",
         "nbformat",
         "jupyter_core",
-        "jupyter_client",
+        "jupyter_client==6.1.12",
         "tornado",
         "requests",
         "beautifulsoup4",

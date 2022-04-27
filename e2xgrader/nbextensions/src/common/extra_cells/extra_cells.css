@@ -92,3 +92,58 @@
 .attachment-controls > button > i {
   padding-right: 1em;
 }
+
+.diagram-img {
+  border:  1px solid grey;
+  padding: .5em;
+  max-height: 480px;
+  min-height: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn-e2x {
+  appearance: none;
+  backface-visibility: hidden;
+  margin-right: .25em;
+  background-color: #2f80ed;
+  border-radius: 5px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: normal;
+  outline: none;
+  overflow: hidden;
+  padding: 7px 15px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.btn-e2x:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+}
+
+.btn-e2x:hover:after {
+  opacity: .5;
+}
+
+.btn-e2x:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+}
+
+.btn-e2x:active:after {
+  opacity: 1;
+}

@@ -32,6 +32,16 @@ define([
         };
     };
 
+    let is_diagram = function (cell) {
+        return cell_type(cell) === 'diagram';
+    };
+
+    let to_diagram = function (cell) {
+        cell.metadata[field] = {
+            'type': 'diagram'
+        };
+    };
+
     let is_attachment = function (cell) {
         return cell_type(cell) === 'attachments';
     };
@@ -70,6 +80,8 @@ define([
         to_singlechoice: to_singlechoice,
         is_multiplechoice: is_multiplechoice,
         to_multiplechoice: to_multiplechoice,
+        is_diagram: is_diagram,
+        to_diagram: to_diagram,
         is_attachment: is_attachment,
         to_attachment: to_attachment,
         is_pdf: is_pdf,

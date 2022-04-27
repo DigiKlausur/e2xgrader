@@ -129,7 +129,7 @@ FormGrader.prototype.loadAnnotations = function () {
                 if (model.get("name").includes(task_id)) {
                     var annotation_ui = new AnnotationUI({
                         "model": model,
-                        "el": $("#" + model.get("name") + "-canvas").parents(".nbgrader_cell")
+                        "el": $("#" + model.get("name") + "-canvas").parents(".cell")
                     });
                     that.annotation_uis.push(annotation_ui);
                 }
