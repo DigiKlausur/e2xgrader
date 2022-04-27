@@ -147,3 +147,8 @@
 .btn-e2x:active:after {
   opacity: 1;
 }
+
+/* Make sure iframe is always on top */
+iframe {
+  z-index: 5000;
+}
