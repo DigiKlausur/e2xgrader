@@ -247,6 +247,7 @@ let AnnotationUI = Backbone.View.extend({
         this.$canvas.addEventListener('mouseup', this.onMouseUp.bind(this), false);
         // Add touch support
         this.$canvas.addEventListener('touchstart', function (ev) {
+            ev.preventDefault();
             let touch = ev.changedTouches[0];
             let mouseEvent = new MouseEvent("mousedown", {
                 clientX: touch.clientX,
@@ -255,6 +256,7 @@ let AnnotationUI = Backbone.View.extend({
             that.$canvas.dispatchEvent(mouseEvent);
         }, false);
         this.$canvas.addEventListener('touchmove', function (ev) {
+            ev.preventDefault();
             let touch = ev.changedTouches[0];
             let mouseEvent = new MouseEvent("mousemove", {
                 clientX: touch.clientX,
@@ -263,6 +265,7 @@ let AnnotationUI = Backbone.View.extend({
             that.$canvas.dispatchEvent(mouseEvent);
         }, false);
         this.$canvas.addEventListener('touchend', function (ev) {
+            ev.preventDefault();
             let touch = ev.changedTouches[0];
             let mouseEvent = new MouseEvent("mouseup", {
                 clientX: touch.clientX,
