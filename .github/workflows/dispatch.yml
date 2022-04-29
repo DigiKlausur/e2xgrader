@@ -15,7 +15,7 @@ jobs:
     - name: Get current branch
       id: get-branch
       run: |
-        echo "##[set-output name=branch;]$(echo ${github.event.workflow_run.head_branch})"
+        echo "##[set-output name=branch;]$(echo ${{github.event.workflow_run.head_branch}})"
 
     - name: Trigger docker-stacks
       run: |
