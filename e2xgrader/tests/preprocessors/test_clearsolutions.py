@@ -45,3 +45,45 @@ class TestClearSolutions(unittest.TestCase):
             cell, {"language": "python"}, 0
         )
         assert processed_cell.source == "MY SOURCE"
+
+    def test_diagram_cell_no_remove(self):
+        cell = new_markdown_cell()
+
+        cell.metadata = {
+            "extended_cell": {"type": "diagram", "options": {"replace_diagram": False}},
+            "nbgrader": {
+                "grade": True,
+                "grade_id": "text_solution",
+                "solution": True,
+                "locked": False,
+                "schema_version": 3,
+                "task": False,
+            },
+        }
+
+        cell["attachments"] = {"diagram.png": {}}
+        processed_cell, resources = ClearSolutions().preprocess_cell(
+            cell, {"language": "python"}, 0
+        )
+        assert "diagram.png" in cell.attachments
+
+    def test_diagram_cell_remove(self):
+        cell = new_markdown_cell()
+
+        cell.metadata = {
+            "extended_cell": {"type": "diagram", "options": {"replace_diagram": True}},
+            "nbgrader": {
+                "grade": True,
+                "grade_id": "text_solution",
+                "solution": True,
+                "locked": False,
+                "schema_version": 3,
+                "task": False,
+            },
+        }
+
+        cell["attachments"] = {"diagram.png": {}}
+        processed_cell, resources = ClearSolutions().preprocess_cell(
+            cell, {"language": "python"}, 0
+        )
+        assert "diagram.png" not in cell.attachments
