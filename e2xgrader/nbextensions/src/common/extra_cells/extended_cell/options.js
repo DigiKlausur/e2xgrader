@@ -12,12 +12,13 @@ define([], function() {
 			let current_options = this.cell.metadata['extended_cell']['options'] || {};
 			// Remove all options that are not in the cell options
 			let to_remove = [];
-			for (const [key, value] of Object.entries(current_options)) {
+			Object.keys(current_options).forEach(key => {
 				if (!this.options.hasOwnProperty(key)) {
 					to_remove.push(key);
 				}
-			}
-			to_remove.forEach((item, index) => delete current_options[item]);
+			});
+
+			to_remove.map((key) => delete current_options[key]);
 			this.cell.metadata['extended_cell']['options'] = current_options;
 		}
 
