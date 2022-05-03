@@ -2,10 +2,9 @@ define([
     'require',
     'jquery',
     'base/js/namespace',
-    'base/js/utils',
     './submit/submit',
     './remap_keys/remap_keybindings',
-], function (require, $, Jupyter, utils, submit_tools, remap_keys) {
+], function (require, $, Jupyter, submit_tools, remap_keys) {
 
     'use strict';
 
