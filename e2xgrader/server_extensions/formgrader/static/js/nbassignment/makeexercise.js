@@ -104,6 +104,7 @@ class TemplateSelect extends FormTab {
                     },
                     error: function(xhr) {
                         console.log('Failed to fetch variables from template');
+                        console.log(xhr);
                     }
                 });
             } else {
