@@ -107,7 +107,7 @@ define([
     function initialize() {
         load_css();
         let static_path = Jupyter.notebook.base_url + 'e2xbase/static/js/models/';
-        require([static_path + 'extracell.js', static_path + 'nbgrader.js'], function(extracell, nbgrader) {
+        require([static_path + 'nbgrader.js'], function(nbgrader) {
             
             model = nbgrader;
 
