@@ -18,7 +18,7 @@ define([], function() {
 				}
 			});
 
-			to_remove.map((key) => delete current_options[key]);
+			to_remove.forEach((key) => delete current_options[key]);
 			this.cell.metadata['extended_cell']['options'] = current_options;
 		}
 
