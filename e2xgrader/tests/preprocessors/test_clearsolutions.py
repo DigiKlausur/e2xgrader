@@ -29,7 +29,7 @@ class TestClearSolutions(unittest.TestCase):
         cell = new_markdown_cell()
 
         cell.metadata = {
-            "extended_cell": {},
+            "extended_cell": {"type": "singlechoice"},
             "nbgrader": {
                 "grade": False,
                 "grade_id": "text_solution",
