@@ -28,35 +28,9 @@ class ExportGradesHandler(BaseHandler):
         self.write(html)
 
 
-class ExportAssignmentGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeAssignmentExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportNotebookGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeNotebookExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportTaskGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeTaskExporter(self.gradebook)
+class ExportBaseHandler(BaseHandler):
+    def initialize(self, exporter_cls):
+        self.__exporter = exporter_cls(self.gradebook)
 
     @web.authenticated
     @check_xsrf
@@ -386,9 +360,21 @@ _navigation_regex = r"(?P<action>next_incorrect|prev_incorrect|next|prev)"
 
 formgrade_handlers = [
     (r"/formgrader/export_grades/?", ExportGradesHandler),
-    (r"/formgrader/export_grades/assignments/?", ExportAssignmentGradesHandler),
-    (r"/formgrader/export_grades/notebooks/?", ExportNotebookGradesHandler),
-    (r"/formgrader/export_grades/tasks/?", ExportTaskGradesHandler),
+    (
+        r"/formgrader/export_grades/assignments/?",
+        ExportBaseHandler,
+        dict(exporter_cls=GradeAssignmentExporter),
+    ),
+    (
+        r"/formgrader/export_grades/notebooks/?",
+        ExportBaseHandler,
+        dict(exporter_cls=GradeNotebookExporter),
+    ),
+    (
+        r"/formgrader/export_grades/tasks/?",
+        ExportBaseHandler,
+        dict(exporter_cls=GradeTaskExporter),
+    ),
     (r"/formgrader/gradebook/?", GradebookAssignmentsHandler),
     (r"/formgrader/gradebook/([^/]+)/?", GradebookNotebooksHandler),
     (r"/formgrader/gradebook/tasks/([^/]+)/([^/]+)/?", GradebookTasksHandler),
