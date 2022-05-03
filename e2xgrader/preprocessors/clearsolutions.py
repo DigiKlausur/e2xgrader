@@ -15,7 +15,7 @@ class ClearSolutions(NbgraderClearSolutions):
             if is_diagram(cell):
                 # Check whether we want to remove the diagram
                 options = get_options(cell)
-                if "replace_diagram" in options and options["replace_diagram"]["value"]:
+                if options.get("replace_diagram", True):
                     del cell.attachments["diagram.png"]
 
             return cell, resources
