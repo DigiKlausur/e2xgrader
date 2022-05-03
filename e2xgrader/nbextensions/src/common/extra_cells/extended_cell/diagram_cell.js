@@ -18,10 +18,19 @@ define([
     class DiagramCell extends ExtendedCell {
 
         constructor(cell) {
-            super(cell, 'diagram');
+            super(cell, 'diagram', {
+                'replace_diagram': {
+                    'type': 'checkbox',
+                    'text': 'Replace this diagram with an empty diagram in the student version',
+                    'value': true,
+                }
+            });
             this.model = new attachment.DiagramCellModel(cell);
+
             this.initialize();
         }
+
+        
 
         initialize() {
             // Check if we already have an attachment, if not create it
@@ -60,7 +69,7 @@ define([
 
             html.append(img);
             html.append(button);
-            this.add_edit_button();
+            this.render_grader_settings();
         }
 
     }
