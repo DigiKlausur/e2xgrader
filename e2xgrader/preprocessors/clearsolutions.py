@@ -4,7 +4,7 @@ from typing import Tuple
 
 from nbgrader.preprocessors import ClearSolutions as NbgraderClearSolutions
 
-from ..utils.extra_cells import is_extra_cell
+from ..utils.extra_cells import is_extra_cell, is_diagram, get_options
 
 
 class ClearSolutions(NbgraderClearSolutions):
@@ -12,6 +12,12 @@ class ClearSolutions(NbgraderClearSolutions):
         self, cell: NotebookNode, resources: ResourcesDict, cell_index: int
     ) -> Tuple[NotebookNode, ResourcesDict]:
         if is_extra_cell(cell):
+            if is_diagram(cell):
+                # Check whether we want to remove the diagram
+                options = get_options(cell)
+                if "replace_diagram" in options and options["replace_diagram"]["value"]:
+                    del cell.attachments["diagram.png"]
+
             return cell, resources
         else:
             return super().preprocess_cell(cell, resources, cell_index)
