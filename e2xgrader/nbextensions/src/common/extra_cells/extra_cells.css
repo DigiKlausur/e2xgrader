@@ -152,3 +152,10 @@
 iframe {
   z-index: 5000;
 }
+
+.e2x_unrender {
+  margin-top: 1em;
+}
+.e2x_grader_options span {
+  margin-left: .5em;
+}

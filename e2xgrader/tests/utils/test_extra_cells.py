@@ -12,6 +12,7 @@ from e2xgrader.utils.extra_cells import (
     get_num_of_choices,
     clear_choices,
     has_solution,
+    get_options,
 )
 from ..test_utils.test_utils import create_temp_course
 
@@ -80,6 +81,12 @@ class TestExtraCells(unittest.TestCase):
     def test_attachment_cell(self):
         cells = self.model.get_question_preset(self.attachment)
         assert is_attachment_cell(cells[1])
+
+    def test_get_options(self):
+        cells = self.model.get_question_preset(self.diagram)
+        assert len(get_options(cells[1])) == 0
+        cells[1].metadata.extended_cell["options"] = {"key": "value"}
+        assert get_options(cells[1])["key"] == "value"
 
     def tearDown(self):
         self.tmp_dir.cleanup()

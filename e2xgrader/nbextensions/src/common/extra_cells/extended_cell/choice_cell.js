@@ -80,7 +80,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            this.add_edit_button();
+            this.render_grader_settings();
         }
 
     }
@@ -175,7 +175,7 @@ define([
                 }
                 $(list).replaceWith(form);
             }
-            this.add_edit_button();
+            this.render_grader_settings();
         }
 
     }

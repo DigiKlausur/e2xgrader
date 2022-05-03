@@ -1,21 +1,25 @@
 define([
-    'jquery'
+    'jquery',
+    './options'
 ], function(
-    $
+    $,
+    option_dict,
 ) {
 
     'use strict';
 
     class ExtendedCell {
 
-        constructor(cell, type) {
+        constructor(cell, type, options = {}) {
             this.field = 'extended_cell';
             this.type = type;
             this.cell = cell;
+            
             if (!this.cell.metadata.hasOwnProperty(this.field)) {
                 this.cell.metadata[this.field] = {};
             }
             this.cell.metadata[this.field]['type'] = type;
+            this.option_dict = new option_dict.OptionDict(cell, options);
             this.edit_mode = false;
         }
 
@@ -26,32 +30,31 @@ define([
             return {};
         }
 
-        render() {
-            this.cell.render();
-        }
-
-        get_edit_button() {
+        render_grader_settings() {
+            if (!this.edit_mode) {
+                return;
+            }
             let that = this;
-            let edit_div = $('<div/>');
-            edit_div.append($('<hr/>'));
-            edit_div.append($('<button/>')
+            let html = $(this.cell.element).find('.rendered_html');
+            // Remove old div
+            html.find('.e2x_grader_options').remove();
+            let container = $('<div/>').addClass('e2x_grader_options');
+
+            container.append($('<hr/>'));
+
+            container.append(this.option_dict.render());
+            container.append($('<button/>')
                 .attr('type', 'button')
                 .addClass('e2x_unrender')
                 .click(function() {
                     that.cell.unrender_force();
                 }).append('Edit cell'));
-            return edit_div;
+            html.append(container);
         }
 
-        add_edit_button() {
-            if (!this.edit_mode) {
-                return;
-            }
-            let html = $(this.cell.element).find('.rendered_html');
-            if (html.find('.e2x_unrender').length < 1) {
-                html.append(this.get_edit_button());
-            }
-        }
+        render() {
+            this.cell.render();
+        }       
 
     }
 
