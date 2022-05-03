@@ -32,8 +32,6 @@ class ExerciseName extends FormTab {
         this.exercises.each(function (exercise) {
             that.exercise_names.push(exercise.get('name'));
         });
-
-        console.log(this.exercise_names);
     }
 
     validate() {
@@ -105,8 +103,7 @@ class TemplateSelect extends FormTab {
                         that.populateTable(options);
                     },
                     error: function(xhr) {
-                        console.log('Oh no!')
-                        console.log(xhr)
+                        console.log('Failed to fetch variables from template');
                     }
                 });
             } else {
@@ -194,11 +191,9 @@ class TaskSelect extends FormTab {
             });
         });
 
-        this.$remove.click(function () {
-            $('#selected-tasks option:selected').each(function(idx, el) {$(this).remove()});
-        })
-
-
+        this.$remove.click(() => {
+            $('#selected-tasks option:selected').remove();
+        });
     }
 
     handleLoadPools() {
@@ -245,7 +240,7 @@ class TaskSelect extends FormTab {
 
     getFormData() {
         let tasks = [];
-        $('#selected-tasks option').each(function(idx, el) {
+        $('#selected-tasks option').each(function() {
             tasks.push({
                 task: $(this).val(),
                 pool: $(this).attr('data-pool')
@@ -286,7 +281,7 @@ class ExerciseOptions extends FormTab {
                 }
             },
             error: function(xhr) {
-                console.log('Oh no!')
+                console.log('Failed to fetch kernelspecs');
                 console.log(xhr)
             }
         });
@@ -351,7 +346,6 @@ class TabView {
                 window.location.href = notebook_url + 'source/' + assignment + '/' + data['exercise'] + '.ipynb';
             },
             error: function(xhr) {
-                console.log('OH NO!');
                 console.log(xhr);
                 alert('There was an error generating the exercise.');
             }
