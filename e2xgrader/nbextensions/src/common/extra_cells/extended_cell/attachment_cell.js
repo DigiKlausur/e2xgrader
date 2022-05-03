@@ -38,7 +38,7 @@ define([
             if (html.find('.edit_attachments').length < 1) {
                 html.append(this.get_attachment_button());
             }
-            this.add_edit_button();
+            this.render_grader_settings();
         }
 
     }

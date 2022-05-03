@@ -16,7 +16,7 @@ define([
 
         render() {
             this.cell.unsafe_render();
-            this.add_edit_button();
+            this.render_grader_settings();
         }
 
     }
