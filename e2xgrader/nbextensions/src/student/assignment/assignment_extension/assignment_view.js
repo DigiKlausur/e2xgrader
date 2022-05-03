@@ -14,7 +14,7 @@ define([
     let highlight = 'highlight';
     let minimized = 'minimized';
 
-    events.on("global_hide.CellToolbar toolbar_rebuild.CellToolbar", function (evt, cell) {
+    events.on("global_hide.CellToolbar toolbar_rebuild.CellToolbar", function (_evt, cell) {
         if (cell.celltoolbar === null) {
             return;
         }
