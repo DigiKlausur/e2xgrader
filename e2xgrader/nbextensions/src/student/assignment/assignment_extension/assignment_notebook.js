@@ -5,8 +5,7 @@ define([
     'notebook/js/notebook',
     'notebook/js/cell',
     'notebook/js/textcell',
-    'base/js/events',
-], function ($, Jupyter, dialog, notebook, basecell, textcell, events) {
+], function ($, Jupyter, dialog, notebook, basecell, textcell) {
 
     "use strict";
 
