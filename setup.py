@@ -58,15 +58,14 @@ setup_args = dict(
     install_requires=[
         "jupyter",
         "notebook>=6.1.6",
-        "nbconvert==5.6.1",
         "nbformat",
         "jupyter_core",
-        "jupyter_client==6.1.12",
+        "jupyter_client",
         "tornado",
         "requests",
         "beautifulsoup4",
         "pandas",
-        "nbgrader==0.7.0.dev0",
+        "nbgrader==0.7.1.dev0",
     ],
     cmdclass={
         "build_py": js_prerelease(build_py),
