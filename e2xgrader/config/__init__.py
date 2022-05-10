@@ -1,4 +1,23 @@
 from ..exporters import E2xExporter
+from ..server_extensions.formgrader.handlers import (
+    template_path as e2x_template_path,
+)
+from nbgrader.server_extensions.formgrader.handlers import (
+    template_path as nbgrader_template_path,
+)
+
+
+def configure_feedback(config):
+    config.GenerateFeedback.preprocessors = [
+        "nbgrader.preprocessors.GetGrades",
+        "e2xgrader.preprocessors.FilterTests",
+        "nbconvert.preprocessors.CSSHTMLHeaderPreprocessor",
+    ]
+    config.GenerateFeedback.exporter_class = E2xExporter
+    config.HTMLExporter.extra_template_basedirs = [
+        e2x_template_path,
+        nbgrader_template_path,
+    ]
 
 
 def configure_base(config):
@@ -33,12 +52,7 @@ def configure_base(config):
         "nbgrader.preprocessors.ComputeChecksums",
         "nbgrader.preprocessors.CheckCellMetadata",
     ]
-    config.GenerateFeedback.preprocessors = [
-        "nbgrader.preprocessors.GetGrades",
-        "e2xgrader.preprocessors.FilterTests",
-        "nbconvert.preprocessors.CSSHTMLHeaderPreprocessor",
-    ]
-    config.GenerateFeedback.exporter_class = E2xExporter
+    configure_feedback(config)
 
 
 def configure_exchange(config):
