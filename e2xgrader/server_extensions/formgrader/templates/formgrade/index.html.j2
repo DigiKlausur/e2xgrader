@@ -1,6 +1,5 @@
-{%- extends 'basic.tpl' -%}
-{% from 'formgrade_macros.tpl' import nav, header %}
-{% from 'mathjax.tpl' import mathjax %}
+{%- extends 'nbconvert/templates/classic/index.html.j2' -%}
+{% from 'formgrade_macros.html.j2' import nav, header %}
 
 {%- block header -%}
 <!DOCTYPE html>
@@ -16,7 +15,7 @@
 
 
 <!-- Loading mathjax macro -->
-{{ mathjax( resources.base_url + '/' + resources.mathjax_url + '?config=TeX-AMS-MML_HTMLorMML-full') }}
+{{ mathjax( resources.mathjax_url + '/' + resources.mathjax_url + '?config=TeX-AMS-MML_HTMLorMML-full') }}
 
 <link rel="stylesheet" href="{{ resources.base_url }}/formgrader/static/css/formgrade.css" />
 <style type="text/css">
@@ -55,11 +54,12 @@
   }
 
 .paint-controls {
-  position: sticky;
-  top: 60px;
-  /*left: -6em;*/
+  position: absolute;
+  top: 0px;
+  right: -6em;
   max-width: 6em;
   border: 1px solid black;
+  background: white;
 }
 
 .color input {
@@ -383,13 +383,7 @@ div.prompt {
 
 {% block markdowncell scoped %}
 <div class="cell border-box-sizing text_cell rendered">
-  {%- if 'nbgrader' in cell.metadata and cell.metadata.nbgrader.solution -%}
-    <div class="prompt input_prompt">
-      {{ annotation(cell) }}
-    </div>
-  {%- else -%}
   {{ self.empty_in_prompt() }}
-  {%- endif -%}
 
   {%- if 'nbgrader' in cell.metadata and (cell.metadata.nbgrader.solution or cell.metadata.nbgrader.grade or cell.metadata.nbgrader.task ) -%}
   <div class="panel panel-primary nbgrader_cell">
@@ -400,9 +394,12 @@ div.prompt {
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
       </div>
+      {{ annotation(cell) }}
+      
     </div>
     {{ nbgrader_footer(cell) }}
   </div>
+  
 
   {%- else -%}
 
@@ -426,6 +423,7 @@ div.prompt {
       <div class="input_area">
         {{ cell.source | highlight_code_with_linenumbers(metadata=cell.metadata) }}
       </div>
+      {{ annotation(cell) }}
     </div>
     {{ nbgrader_footer(cell) }}
   </div>
@@ -440,8 +438,3 @@ div.prompt {
   {%- endif -%}
 
 {% endblock input %}
-{% block in_prompt -%}
-<div class="prompt input_prompt">
-  {{ annotation(cell) }}
-</div>
-{%- endblock in_prompt %}

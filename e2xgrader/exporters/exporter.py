@@ -4,8 +4,8 @@ import os.path
 import glob
 
 from traitlets import Unicode
-from nbconvert.exporters.html import HTMLExporter
-from jinja2 import contextfilter
+from nbconvert.exporters import HTMLExporter
+from jinja2.filters import pass_context
 from bs4 import BeautifulSoup
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 
@@ -25,23 +25,21 @@ class E2xExporter(HTMLExporter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if kwargs and "config" in kwargs and "HTMLExporter" in kwargs["config"]:
-            self.template_file = kwargs["config"].HTMLExporter.template_file
-        self.template_path.extend(
-            [
-                os.path.abspath(
-                    os.path.join(
-                        os.path.dirname(__file__),
-                        "..",
-                        "server_extensions",
-                        "formgrader",
-                        "templates",
-                    )
+            self.template_name = kwargs["config"].HTMLExporter.template_name
+        self.extra_template_basedirs = [
+            os.path.abspath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "server_extensions",
+                    "formgrader",
+                    "templates",
                 )
-            ]
-            + [nbgrader_handlers.template_path]
-        )
+            ),
+            nbgrader_handlers.template_path,
+        ]
 
-    @contextfilter
+    @pass_context
     def to_choicecell(self, context, source):
         cell = context.get("cell", {})
         soup = BeautifulSoup(source, "html.parser")
@@ -86,9 +84,6 @@ class E2xExporter(HTMLExporter):
         for pair in super(E2xExporter, self).default_filters():
             yield pair
         yield ("to_choicecell", self.to_choicecell)
-
-    def _template_file_default(self):
-        return "formgrade.tpl"
 
     def discover_annotations(self, resources):
         if resources is None:
