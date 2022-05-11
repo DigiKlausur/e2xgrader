@@ -24,12 +24,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
 
     def build_extra_config(self):
         extra_config = super(NbgraderFormgradeExtension, self).build_extra_config()
-
-        # This seems to overwrite everything all the time
-        # If it is formgrade the feedback will use formgrade and vice versa
-        # How to get rid of it????
         extra_config.HTMLExporter.template_name = "formgrade"
-
         extra_config.HTMLExporter.extra_template_basedirs = [
             handlers.template_path,
             nbgrader_handlers.template_path,
