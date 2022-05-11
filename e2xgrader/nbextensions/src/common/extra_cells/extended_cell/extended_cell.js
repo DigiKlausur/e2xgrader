@@ -48,6 +48,7 @@ define([
                 .addClass('e2x_unrender')
                 .click(function() {
                     that.cell.unrender_force();
+                    that.cell.keyboard_manager.enable();
                 }).append('Edit cell'));
             html.append(container);
         }
