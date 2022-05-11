@@ -17,6 +17,7 @@ define([
         render() {
             this.cell.unsafe_render();
             this.render_grader_settings();
+            this.cell.keyboard_manager.disable();
         }
 
     }
