@@ -65,7 +65,7 @@ setup_args = dict(
         "requests",
         "beautifulsoup4",
         "pandas",
-        "nbgrader @ git+https://github.com/tmetzl/nbgrader@patch-1",
+        "nbgrader @ git+https://github.com/jupyter/nbgrader@0.7.x",
     ],
     cmdclass={
         "build_py": js_prerelease(build_py),
