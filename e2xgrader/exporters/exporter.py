@@ -39,6 +39,18 @@ class E2xExporter(HTMLExporter):
             nbgrader_handlers.template_path,
         ]
 
+    @property
+    def template_paths(self):
+        return super()._template_paths() + [
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "server_extensions",
+                "formgrader",
+                "templates",
+            )
+        ]
+
     @pass_context
     def to_choicecell(self, context, source):
         cell = context.get("cell", {})
