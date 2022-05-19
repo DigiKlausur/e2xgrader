@@ -110,7 +110,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         )
 
         if os.path.isfile(student_notebook_file):
-            nb = nbformat.read(student_notebook_file, as_version=4)
+            nb = nbformat.read(student_notebook_file, as_version=nbformat.NO_CONVERT)
             nb = append_timestamp(nb, self.timestamp)
             nbformat.write(nb, student_notebook_file)
             hashcode = truncate_hashcode(
