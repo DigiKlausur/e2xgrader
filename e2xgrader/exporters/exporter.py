@@ -113,8 +113,13 @@ class E2xExporter(HTMLExporter):
                 os.path.splitext(os.path.basename(annoation))[0]
             )
 
+    def from_filename(self, *args, **kwargs):
+        self.exclude_input = False
+        return super().from_filename(*args, **kwargs)
+
     def from_notebook_node(self, nb, resources=None, **kw):
         self.discover_annotations(resources)
+        self.exclude_input = False
         langinfo = nb.metadata.get("language_info", {})
         lexer = langinfo.get("pygments_lexer", langinfo.get("name", None))
         highlight_code = self.filters.get(
