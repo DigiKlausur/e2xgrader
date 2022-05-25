@@ -15,7 +15,7 @@ from .filters import Highlight2HTMLwithLineNumbers
 
 class E2xExporter(HTMLExporter):
     """
-    My custom exporter
+    Custom E2x notebook exporter
     """
 
     extra_cell_field = Unicode(
@@ -38,6 +38,8 @@ class E2xExporter(HTMLExporter):
             ),
             nbgrader_handlers.template_path,
         ]
+        # The notebook seems to sometimes set exclude_input to true
+        self.exclude_input = False
 
     @property
     def template_paths(self):
