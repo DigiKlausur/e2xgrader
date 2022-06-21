@@ -25,7 +25,7 @@
 
 {% block help %}
 <h3>Tasks</h3>
-<p>Dummy help.</p>
+<p>A task is a single Jupyter notebook consisting of a task with questions (i.e. Task 1.1, Task 1.2, Task1.3).</p>
 {% endblock help %}
 
 {% block table_head %}
