@@ -6,6 +6,7 @@ define([
     'base/js/markdown',
     'notebook/js/textcell',
     'notebook/js/notebook',
+    'notebook/js/celltoolbar',
     './extended_cell/extended_cell',
     './extended_cell/choice_cell',
     './extended_cell/attachment_cell',
@@ -19,6 +20,7 @@ define([
     markdown,
     textcell,
     notebook,
+    celltoolbar,
     extended_cell,
     choice_cell,
     attachment_cell,
@@ -248,11 +250,15 @@ define([
         events.on('global_hide.CellToolbar', function(evt, instance) {
             edit_mode = false;
             render_extended_cells();
-        })
+        });
+        celltoolbar.CellToolbar.activate_preset('Create Assignment');
     }
 
     function load_ipython_extension() {
-        return Jupyter.notebook.config.loaded.then(initialize);
+        events.on('notebook_loaded.Notebook', initialize);
+        if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
+            initialize();
+        }
     }
 
     return {
