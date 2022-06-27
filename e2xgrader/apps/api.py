@@ -43,6 +43,12 @@ class E2xAPI(NbGraderAPI):
                 app.update_config(c)
                 app.force = force
                 return capture_log(app)
+        else:
+            with temp_attrs(self.coursedir, assignment_id=assignment_id):
+                app = GenerateFeedback(coursedir=self.coursedir, parent=self)
+                app.update_config(c)
+                app.force = force
+                return capture_log(app)
 
     def get_solution_cell_ids(self, assignment_id, notebook_id):
         """Get information about the solution cells of a notebook
