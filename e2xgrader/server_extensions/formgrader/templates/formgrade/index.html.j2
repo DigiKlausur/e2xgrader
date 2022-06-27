@@ -320,6 +320,7 @@ div.prompt {
 {%- elif cell.metadata.nbgrader.grade -%}
   <span class="nbgrader-label"><code>{{ cell.metadata.nbgrader.grade_id }}</code></span>
   {{ score(cell) }}
+  <button class="collapsible" style="color: black;">Hide Test Code</button>
 {%- endif -%}
 </div>
 {%- endmacro %}

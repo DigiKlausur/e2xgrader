@@ -10,6 +10,7 @@ FormGrader.prototype.init = function () {
     this.loadGrades();
     this.loadComments();
     this.loadAnnotations();
+    this.collapsibleCells();
 
     // disable link selection on tabs
     $('a:not(.tabbable)').attr('tabindex', '-1');
@@ -66,6 +67,28 @@ FormGrader.prototype.init = function () {
     });
 
     this.loaded = true;
+};
+
+FormGrader.prototype.collapsibleCells = function () {
+  console.log('hello');
+  $('.collapsible').each(function(idx, elem) {
+    let button = $(elem);
+    console.log(button);
+    let body = button.parent().parent().find('.panel-body');
+
+    button.click(function () {
+        $(body).toggle();
+        if ($(body).is(":hidden")) {
+            button.text("Show Test Code");
+        } else {
+            button.text("Hide Test Code");
+
+        }
+
+    });
+    
+    console.log(body);
+  });
 };
 
 FormGrader.prototype.loadGrades = function () {
