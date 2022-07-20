@@ -8,9 +8,9 @@ define(function (require) {
     $("#tabs").append(
       $("<li>").append(
         $("<a>")
-          .attr("href", base_url + "taskcreator")
+          .attr("href", base_url + "grader")
           .attr("target", "_blank")
-          .text("Manage Exercises")
+          .text("Grade Assignments")
       )
     );
   }
