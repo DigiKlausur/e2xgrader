@@ -43,10 +43,14 @@ e2xgrader = "e2xgrader.apps.e2xgraderapp:main"
 [tool.hatch.version]
 path = "e2xgrader/__version__.py"
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "e2xgrader/server_extensions/formgrader/static",
-    "e2xgrader/server_extensions/formgrader/templates",
-    "e2xgrader/server_extensions/formgrader/presets",
-    "e2xgrader/server_extensions/e2xbase/static",
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder"]
+build-function = "hatch_jupyter_builder.npm_builder"
+
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+build_cmd = "build"
+
+[tool.hatch.build.targets.wheel]
+artifacts = [
+    "e2xgrader/nbextensions/lib"
 ]
