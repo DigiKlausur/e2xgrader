@@ -1,15 +1,17 @@
 import os
-from traitlets.config import Config
-from nbgrader.apps.api import NbGraderAPI
+
 from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
-from nbgrader.utils import as_timezone, to_numeric_tz, temp_attrs, capture_log
+from nbgrader.apps.api import NbGraderAPI
 from nbgrader.converters import GenerateFeedback
+from nbgrader.utils import as_timezone, capture_log, temp_attrs, to_numeric_tz
+from traitlets.config import Config
+
 from ..exporters import E2xExporter
 
 
 class E2xAPI(NbGraderAPI):
     def generate_feedback(
-        self, assignment_id, student_id=None, force=True, hidecells=False
+        self, assignment_id, student_id=None, force=True, hide_cells=False
     ):
         """Run ``nbgrader generate_feedback`` for a particular assignment and student.
         Arguments
@@ -34,7 +36,7 @@ class E2xAPI(NbGraderAPI):
         # is explicitply 'feedback.tpl` here:
         c = Config()
         c.HTMLExporter.template_name = "feedback"
-        c.FilterTests.hide_cells = hidecells
+        c.FilterTests.hide_cells = hide_cells
         if student_id is not None:
             with temp_attrs(
                 self.coursedir, assignment_id=assignment_id, student_id=student_id
