@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "e2xgrader"
+description = "An addon for nbgrader"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+authors = [
+  { name = "Tim Metzler", email = "tim.metzler@h-brs.de" },
+]
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+dependencies = [
+    "nbgrader==0.7.1",
+    "beautifulsoup4",
+    "pandas"
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://e2x.inf.h-brs.de"
+Issues = "https://github.com/Digiklausur/e2xgrader/issues"
+Source = "https://github.com/Digiklausur/e2xgrader"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "hatchling"
+]
+
+[project.scripts]
+e2xgrader = "e2xgrader.apps.e2xgraderapp:main"
+
+[tool.hatch.version]
+path = "e2xgrader/__version__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "e2xgrader/server_extensions/formgrader/static",
+    "e2xgrader/server_extensions/formgrader/templates",
+    "e2xgrader/server_extensions/formgrader/presets",
+    "e2xgrader/server_extensions/e2xbase/static",
+]
