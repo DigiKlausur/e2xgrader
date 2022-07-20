@@ -1,15 +1,16 @@
-from argparse import ArgumentParser
 import sys
+from argparse import ArgumentParser
 from textwrap import dedent
-from notebook.serverextensions import ToggleServerExtensionApp
+
 from notebook.nbextensions import (
-    uninstall_nbextension_python,
-    install_nbextension_python,
-    enable_nbextension_python,
     disable_nbextension,
-    enable_nbextension,
     disable_nbextension_python,
+    enable_nbextension,
+    enable_nbextension_python,
+    install_nbextension_python,
+    uninstall_nbextension_python,
 )
+from notebook.serverextensions import ToggleServerExtensionApp
 
 
 class ExtensionManager:
@@ -88,6 +89,9 @@ class ExtensionManager:
             require="taskcreator/main", section="tree", sys_prefix=sys_prefix, user=user
         )
         enable_nbextension(
+            require="grader/main", section="tree", sys_prefix=sys_prefix, user=user
+        )
+        enable_nbextension(
             require="templatebar/main",
             section="notebook",
             sys_prefix=sys_prefix,
@@ -108,6 +112,7 @@ class ExtensionManager:
         self.disable_serverextension("nbgrader.server_extensions.assignment_list")
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
         self.disable_serverextension("e2xgrader.server_extensions.formgrader")
+        self.disable_serverextension("e2xgrader.server_extensions.grader")
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
