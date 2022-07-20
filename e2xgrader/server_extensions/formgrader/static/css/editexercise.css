@@ -10,7 +10,7 @@
   display: block;
   width: 6em;
   margin: auto;
-  margin-top: .5em;  
+  margin-top: 0.5em;
 }
 
 .side-col {
@@ -28,10 +28,10 @@
 }
 
 #template-options {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
-select[name=pool] {
+select[name="pool"] {
   margin-left: 1em;
 }
 
@@ -46,7 +46,7 @@ select[name=pool] {
 .btn-controls {
   display: block;
   width: 6em;
-  margin: .1em;
+  margin: 0.1em;
 }
 
 .btn-primary a {
