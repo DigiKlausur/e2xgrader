@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel e2xgrader/nbextensions/src -d e2xgrader/nbextensions/lib --copy-files"
+    "build": "babel e2xgrader/nbextensions/src -d e2xgrader/nbextensions/lib --copy-files",
+    "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+    "prettier:files": "prettier --write"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,8 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "prettier": "^2.7.1"
   },
   "bugs": {
     "url": "https://github.com/DigiKlausur/e2xgrader/issues"
