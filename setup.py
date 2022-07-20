@@ -2,9 +2,11 @@
 
 import os
 from os.path import join as pjoin
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 from setuptools.command.build_py import build_py
-from setupbase import js_prerelease, discover_nbextensions
+
+from setupbase import discover_nbextensions, js_prerelease
 
 formgrader_path = "e2xgrader/server_extensions/formgrader"
 static_files = []
@@ -60,6 +62,7 @@ setup_args = dict(
         "beautifulsoup4",
         "pandas",
     ],
+    extras_require={"dev": ["pre-commit"]},
     cmdclass={
         "build_py": js_prerelease(build_py),
     },
