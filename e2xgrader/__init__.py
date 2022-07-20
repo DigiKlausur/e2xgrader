@@ -27,6 +27,12 @@ def _jupyter_nbextension_paths():
             require="taskcreator/main",
         ),
         dict(
+            section="tree",
+            src=pjoin(base_path, "teacher", "grader"),
+            dest="grader",
+            require="grader/main",
+        ),
+        dict(
             section="notebook",
             src=pjoin(base_path, "teacher", "create_assignment"),
             dest="create_assignment",
@@ -72,6 +78,7 @@ def _jupyter_server_extension_paths():
         dict(module="e2xgrader.server_extensions.formgrader"),
         dict(module="e2xgrader.server_extensions.assignment_list"),
         dict(module="e2xgrader.server_extensions.e2xbase"),
+        dict(module="e2xgrader.server_extensions.grader"),
     ]
 
     return paths
