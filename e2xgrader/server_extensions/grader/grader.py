@@ -7,6 +7,7 @@ from nbgrader.apps import NbGrader
 from traitlets import Any, List, TraitError, validate
 from traitlets.config import Application
 
+from .apps.authoring import AuthoringApp
 from .apps.e2xgraderapi import E2xGraderApi
 from .apps.formgrader import FormgradeApp
 from .apps.nbgraderapi import NbGraderApi
@@ -16,7 +17,7 @@ class E2xGrader(Application):
 
     apps = List(
         trait=Any(),
-        default_value=[E2xGraderApi, NbGraderApi, FormgradeApp],
+        default_value=[E2xGraderApi, NbGraderApi, FormgradeApp, AuthoringApp],
     ).tag(config=True)
 
     def __init__(self, **kwargs):
