@@ -1,10 +1,12 @@
-from ..exporters import E2xExporter
-from ..server_extensions.formgrader.handlers import (
-    template_path as e2x_template_path,
-)
 from nbgrader.server_extensions.formgrader.handlers import (
     template_path as nbgrader_template_path,
 )
+
+from e2xgrader.server_extensions.grader.apps.formgrader.handlers import (
+    template_path as e2x_template_path,
+)
+
+from ..exporters import E2xExporter
 
 
 def configure_feedback(config):
