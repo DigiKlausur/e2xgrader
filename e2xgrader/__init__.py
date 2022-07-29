@@ -8,10 +8,7 @@ from os.path import join as pjoin
 
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
-    if os.path.exists(pjoin(root, "nbextensions", "lib")):
-        base_path = pjoin(root, "nbextensions", "lib")
-    else:
-        base_path = pjoin(root, "nbextensions", "src")
+    base_path = pjoin(root, "nbextensions")
 
     paths = [
         dict(
