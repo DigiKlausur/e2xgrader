@@ -118,7 +118,7 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                     self.log.info(f"Source: {src_assignment}")
                     self.log.info(f"Destination: {released_user_assignment}")
                     self.do_copy(src_assignment, released_user_assignment)
-                    self.set_released_assignment_perm(released_assignment_root)
+                    self.set_released_assignment_perm(released_user_assignment)
                 else:
                     self.log.info(f"Src assignment not found: {src_assignment}")
         else:
