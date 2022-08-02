@@ -1,6 +1,7 @@
 import os
-from tornado import web
+
 from notebook.utils import url_path_join as ujoin
+from tornado import web
 from traitlets.config import LoggingConfigurable
 
 

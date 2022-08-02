@@ -1,23 +1,20 @@
 """Tornado handlers for nbgrader assignment list web service."""
 
-import os
-import json
 import contextlib
+import json
+import os
 import traceback
 
-from tornado import web
-
-from notebook.utils import url_path_join as ujoin
-
-from nbgrader.exchange import ExchangeFactory
-from nbgrader.coursedir import CourseDirectory
 from nbgrader.auth import Authenticator
-
+from nbgrader.coursedir import CourseDirectory
+from nbgrader.exchange import ExchangeFactory
 from nbgrader.server_extensions.assignment_list.handlers import (
     AssignmentList,
-    default_handlers,
     BaseAssignmentHandler,
+    default_handlers,
 )
+from notebook.utils import url_path_join as ujoin
+from tornado import web
 
 static = os.path.join(os.path.dirname(__file__), "static")
 
