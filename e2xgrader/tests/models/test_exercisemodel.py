@@ -4,9 +4,9 @@ from e2xgrader.converters import GenerateExercise
 from e2xgrader.models import ExerciseModel, TaskModel
 
 from ..test_utils.test_utils import (
-    create_temp_course,
     add_question_to_task,
     add_template_with_header,
+    create_temp_course,
 )
 
 

@@ -1,10 +1,12 @@
 import os
-import nbformat
 import shutil
 from textwrap import dedent
-from .basemodel import BaseModel
-from ..utils.nbgrader_cells import get_valid_name
+
+import nbformat
 from traitlets import Unicode
+
+from ..utils.nbgrader_cells import get_valid_name
+from .basemodel import BaseModel
 
 
 class TaskModel(BaseModel):

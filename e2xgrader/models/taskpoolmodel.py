@@ -1,7 +1,9 @@
 import os
 import shutil
-from .basemodel import BaseModel
+
 from traitlets import Unicode
+
+from .basemodel import BaseModel
 
 
 class TaskPoolModel(BaseModel):

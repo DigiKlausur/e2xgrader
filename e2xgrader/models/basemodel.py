@@ -1,6 +1,7 @@
-from traitlets.config import LoggingConfigurable
-from traitlets import Unicode
 import re
+
+from traitlets import Unicode
+from traitlets.config import LoggingConfigurable
 
 
 class BaseModel(LoggingConfigurable):

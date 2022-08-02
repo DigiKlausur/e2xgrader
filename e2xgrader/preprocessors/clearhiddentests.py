@@ -1,10 +1,10 @@
-from nbformat.notebooknode import NotebookNode
-from nbconvert.exporters.exporter import ResourcesDict
 from typing import Tuple
 
+from nbconvert.exporters.exporter import ResourcesDict
+from nbformat.notebooknode import NotebookNode
 from nbgrader.preprocessors import ClearHiddenTests as NbgraderClearHiddenTests
 
-from ..utils.extra_cells import is_singlechoice, is_multiplechoice, clear_choices
+from ..utils.extra_cells import clear_choices, is_multiplechoice, is_singlechoice
 
 
 class ClearHiddenTests(NbgraderClearHiddenTests):

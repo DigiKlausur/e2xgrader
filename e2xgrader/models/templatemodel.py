@@ -1,9 +1,11 @@
 import os
-import nbformat
 import shutil
-from .basemodel import BaseModel
+
+import nbformat
 from traitlets import Unicode
+
 from ..utils.nbgrader_cells import new_read_only_cell
+from .basemodel import BaseModel
 
 
 class TemplateModel(BaseModel):

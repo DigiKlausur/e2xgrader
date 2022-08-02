@@ -1,8 +1,9 @@
-from traitlets.config import LoggingConfigurable
-from nbformat.notebooknode import NotebookNode
 from logging import Logger
 from typing import Optional, Tuple
-from nbgrader.utils import is_solution, compute_checksum
+
+from nbformat.notebooknode import NotebookNode
+from nbgrader.utils import compute_checksum, is_solution
+from traitlets.config import LoggingConfigurable
 
 
 class BaseGrader(LoggingConfigurable):

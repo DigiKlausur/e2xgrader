@@ -1,6 +1,6 @@
 import unittest
-
 from tempfile import TemporaryDirectory
+
 from nbgrader.coursedir import CourseDirectory
 
 

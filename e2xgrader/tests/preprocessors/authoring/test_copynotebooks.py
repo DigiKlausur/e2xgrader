@@ -1,10 +1,10 @@
 import os
-
 from os.path import join as pjoin
 
-from .base import BaseTest
-from e2xgrader.preprocessors.authoring import CopyNotebooks
 from e2xgrader.models import TaskModel, TemplateModel
+from e2xgrader.preprocessors.authoring import CopyNotebooks
+
+from .base import BaseTest
 
 
 class TestCopyNotebooks(BaseTest):

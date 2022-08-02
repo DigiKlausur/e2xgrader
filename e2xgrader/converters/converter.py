@@ -1,5 +1,5 @@
-from traitlets.config import LoggingConfigurable, Config
 from traitlets import List
+from traitlets.config import Config, LoggingConfigurable
 from traitlets.utils.importstring import import_item
 
 

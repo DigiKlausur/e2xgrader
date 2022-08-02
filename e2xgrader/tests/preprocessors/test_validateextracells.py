@@ -1,11 +1,12 @@
 import unittest
-from nbformat.v4 import new_notebook, new_markdown_cell
 
-from ..test_utils.test_utils import create_temp_course
-
+from nbformat.v4 import new_markdown_cell, new_notebook
 from nbgrader.nbgraderformat import ValidationError
+
 from e2xgrader.models import PresetModel
 from e2xgrader.preprocessors import ValidateExtraCells
+
+from ..test_utils.test_utils import create_temp_course
 
 
 class TestClearSolutions(unittest.TestCase):

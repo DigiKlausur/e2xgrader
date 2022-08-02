@@ -1,6 +1,8 @@
-from traitlets import Unicode
 import os
+
 import nbformat
+from traitlets import Unicode
+
 from .basemodel import BaseModel
 
 

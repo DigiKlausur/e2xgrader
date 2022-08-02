@@ -1,8 +1,10 @@
+import filecmp
+import glob
 import os
 import shutil
-import glob
-import filecmp
+
 import nbformat
+
 from .preprocessor import Preprocessor
 
 

@@ -1,9 +1,10 @@
-import nbformat
 import unittest
-
 from os.path import join as pjoin
 
+import nbformat
+
 from e2xgrader.models import PresetModel
+
 from ..test_utils.test_utils import create_temp_course
 
 

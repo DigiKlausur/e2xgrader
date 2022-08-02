@@ -1,6 +1,6 @@
-from traitlets.config import LoggingConfigurable
-from nbgrader.api import MissingEntry
 import pandas as pd
+from nbgrader.api import MissingEntry
+from traitlets.config import LoggingConfigurable
 
 
 class GradeTaskExporter(LoggingConfigurable):

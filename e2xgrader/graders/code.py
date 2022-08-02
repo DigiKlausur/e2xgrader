@@ -1,8 +1,10 @@
-from .base import BaseGrader
-from nbformat.notebooknode import NotebookNode
 from logging import Logger
 from typing import Optional, Tuple
-from nbgrader.utils import is_solution, get_partial_grade
+
+from nbformat.notebooknode import NotebookNode
+from nbgrader.utils import get_partial_grade, is_solution
+
+from .base import BaseGrader
 
 
 class CodeGrader(BaseGrader):

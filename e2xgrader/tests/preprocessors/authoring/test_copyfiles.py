@@ -1,11 +1,11 @@
 import os
 import random as rd
-
 from os.path import join as pjoin
 
-from .base import BaseTest
-from e2xgrader.preprocessors.authoring import CopyFiles, CopyNotebooks
 from e2xgrader.models import TaskModel, TemplateModel
+from e2xgrader.preprocessors.authoring import CopyFiles, CopyNotebooks
+
+from .base import BaseTest
 
 
 class TestCopyFiles(BaseTest):

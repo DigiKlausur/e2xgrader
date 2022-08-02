@@ -1,15 +1,17 @@
 import tempfile
+
 from traitlets import List
-from .converter import Converter
+
 from ..preprocessors.authoring import (
-    RemoveExercise,
+    AddTaskHeader,
+    CopyFiles,
     CopyNotebooks,
     FillTemplate,
-    CopyFiles,
     GenerateTaskIDs,
-    AddTaskHeader,
     MakeExercise,
+    RemoveExercise,
 )
+from .converter import Converter
 
 
 class GenerateExercise(Converter):

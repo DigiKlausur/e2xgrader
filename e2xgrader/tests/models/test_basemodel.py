@@ -2,6 +2,7 @@ import os
 import unittest
 
 from e2xgrader.models import BaseModel
+
 from ..test_utils.test_utils import create_temp_course
 
 

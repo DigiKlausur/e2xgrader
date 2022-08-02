@@ -1,8 +1,10 @@
 import os
-import nbformat
 from textwrap import dedent
+
+import nbformat
+
+from ...utils.nbgrader_cells import get_points, get_task_info
 from .preprocessor import Preprocessor
-from ...utils.nbgrader_cells import get_task_info, get_points
 
 
 class AddTaskHeader(Preprocessor):

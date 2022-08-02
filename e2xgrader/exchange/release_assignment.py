@@ -1,16 +1,16 @@
 import os
 import shutil
 from stat import (
-    S_IRUSR,
-    S_IWUSR,
-    S_IXUSR,
     S_IRGRP,
-    S_IWGRP,
-    S_IXGRP,
     S_IROTH,
-    S_IWOTH,
-    S_IXOTH,
+    S_IRUSR,
     S_ISGID,
+    S_IWGRP,
+    S_IWOTH,
+    S_IWUSR,
+    S_IXGRP,
+    S_IXOTH,
+    S_IXUSR,
 )
 
 from nbgrader.exchange.default import ExchangeReleaseAssignment

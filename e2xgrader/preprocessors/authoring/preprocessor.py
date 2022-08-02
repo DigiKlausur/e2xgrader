@@ -1,5 +1,5 @@
-from traitlets.config import LoggingConfigurable
 from traitlets import Unicode
+from traitlets.config import LoggingConfigurable
 
 
 class Preprocessor(LoggingConfigurable):

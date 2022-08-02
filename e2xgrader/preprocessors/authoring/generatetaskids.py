@@ -1,14 +1,16 @@
-import nbformat
 import glob
 import os
-from .preprocessor import Preprocessor
+
+import nbformat
+
 from ...utils.nbgrader_cells import (
-    is_grade,
-    is_solution,
-    is_description,
     get_task_info,
     get_valid_name,
+    is_description,
+    is_grade,
+    is_solution,
 )
+from .preprocessor import Preprocessor
 
 
 class GenerateTaskIDs(Preprocessor):

@@ -1,7 +1,8 @@
 import unittest
-from nbformat.v4 import new_markdown_cell
-from nbformat.notebooknode import NotebookNode
 from typing import List
+
+from nbformat.notebooknode import NotebookNode
+from nbformat.v4 import new_markdown_cell
 
 from e2xgrader.graders import SingleChoiceGrader
 

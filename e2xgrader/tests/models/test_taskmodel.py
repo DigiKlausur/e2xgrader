@@ -1,10 +1,10 @@
 import os
 import unittest
-
 from os.path import join as pjoin
 
 from e2xgrader.models import TaskModel
-from ..test_utils.test_utils import create_temp_course, add_question_to_task
+
+from ..test_utils.test_utils import add_question_to_task, create_temp_course
 
 
 class TestTaskModel(unittest.TestCase):

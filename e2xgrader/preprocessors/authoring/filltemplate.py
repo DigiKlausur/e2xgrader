@@ -1,6 +1,8 @@
-import re
 import os
+import re
+
 import nbformat
+
 from .preprocessor import Preprocessor
 
 
