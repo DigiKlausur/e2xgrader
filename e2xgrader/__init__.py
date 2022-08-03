@@ -2,6 +2,7 @@
 A system for creating assignments.
 """
 
+import glob
 import os
 from os.path import join as pjoin
 
@@ -9,63 +10,22 @@ from os.path import join as pjoin
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
     base_path = pjoin(root, "nbextensions")
+    notebook_path = pjoin(base_path, "notebook")
+    tree_path = pjoin(base_path, "tree")
 
-    paths = [
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "common", "extra_cells"),
-            dest="extra_cells",
-            require="extra_cells/main",
-        ),
-        dict(
-            section="tree",
-            src=pjoin(base_path, "teacher", "taskcreator"),
-            dest="taskcreator",
-            require="taskcreator/main",
-        ),
-        dict(
-            section="tree",
-            src=pjoin(base_path, "teacher", "grader"),
-            dest="grader",
-            require="grader/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "create_assignment"),
-            dest="create_assignment",
-            require="create_assignment/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "taskeditor"),
-            dest="taskeditor",
-            require="taskeditor/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "templatebar"),
-            dest="templatebar",
-            require="templatebar/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "student", "assignment", "assignment_extension"),
-            dest="assignment_extension",
-            require="assignment_extension/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "student", "exam", "exam_view"),
-            dest="exam_view",
-            require="exam_view/main",
-        ),
-        dict(
-            section="tree",
-            src=pjoin(base_path, "student", "exam", "restricted_tree"),
-            dest="restricted_tree",
-            require="restricted_tree/main",
-        ),
-    ]
+    paths = []
+
+    for section in ["notebook", "tree"]:
+        for notebook_extension in glob.glob(pjoin(base_path, section, "*")):
+            name = f"{os.path.split(notebook_extension)[-1]}_{section}"
+            paths.append(
+                dict(
+                    section=section,
+                    src=notebook_extension,
+                    dest=name,
+                    require=pjoin(name, "main"),
+                )
+            )
 
     return paths
 
@@ -73,7 +33,6 @@ def _jupyter_nbextension_paths():
 def _jupyter_server_extension_paths():
     paths = [
         dict(module="e2xgrader.server_extensions.assignment_list"),
-        dict(module="e2xgrader.server_extensions.e2xbase"),
         dict(module="e2xgrader.server_extensions.grader"),
     ]
 
