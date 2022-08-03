@@ -1,0 +1,19 @@
+{
+  "name": "@e2xgrader/restricted-exam-notebook",
+  "version": "0.1.0.dev0",
+  "main": "lib/index.js",
+  "description": "utility functions for e2xgrader",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TM",
+  "license": "MIT",
+  "dependencies": {
+    "@e2xgrader/utils": "*"
+  },
+  "devDependencies": {
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
