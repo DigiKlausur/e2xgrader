@@ -6,7 +6,7 @@ export const nbgrader_schema_version = 3;
  * @param  {int} length of the string
  * @return {string} random string
  */
-function randomString(length) {
+export function randomString(length) {
   let result = "";
   let chars = "abcdef0123456789";
   let i;
