@@ -7,7 +7,7 @@ module.exports = {
     libraryTarget: "commonjs-module",
   },
   optimization: {
-    minimize: false,
+    minimize: true,
   },
   externals: {},
 };
