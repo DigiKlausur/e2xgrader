@@ -20,6 +20,14 @@ class PresetModel(BaseModel):
         )
     ).tag(config=True)
 
+    extra_task_preset_path = Unicode(default_value=None, allow_none=True).tag(
+        config=True
+    )
+
+    extra_template_preset_path = Unicode(default_value=None, allow_none=True).tag(
+        config=True
+    )
+
     def list_presets(self, preset_path):
         presets = []
         for item in os.listdir(preset_path):
@@ -38,13 +46,25 @@ class PresetModel(BaseModel):
             return nb.cells
 
     def list_question_presets(self):
-        return self.list_presets(self.task_preset_path)
+        presets = self.list_presets(self.task_preset_path)
+        if self.extra_task_preset_path is not None:
+            presets.extend(self.list_presets(self.extra_task_preset_path))
+        return presets
 
     def get_question_preset(self, preset_name):
-        return self.get_preset(self.task_preset_path, preset_name)
+        if preset_name in self.list_presets(self.task_preset_path):
+            return self.get_preset(self.task_preset_path, preset_name)
+        elif self.extra_task_preset_path is not None:
+            return self.get_preset(self.extra_task_preset_path, preset_name)
 
     def list_template_presets(self):
-        return self.list_presets(self.template_preset_path)
+        presets = self.list_presets(self.template_preset_path)
+        if self.extra_template_preset_path is not None:
+            presets.extend(self.list_presets(self.extra_task_preset_path))
+        return presets
 
     def get_template_preset(self, preset_name):
-        return self.get_preset(self.template_preset_path, preset_name)
+        if preset_name in self.list_presets(self.template_preset_path):
+            return self.get_preset(self.template_preset_path, preset_name)
+        elif self.extra_template_preset_path is not None:
+            return self.get_preset(self.extra_template_preset_path, preset_name)
