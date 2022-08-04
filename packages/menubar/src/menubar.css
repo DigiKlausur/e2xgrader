@@ -84,6 +84,7 @@
 .e2x-dropdown-item {
   line-height: 2em;
   padding: 0 0.5em 0 0.5em;
+  white-space: nowrap;
 }
 
 #save-notbook i {
