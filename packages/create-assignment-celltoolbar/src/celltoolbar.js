@@ -64,7 +64,7 @@ export class CreateAssignmentToolbar {
       that.clear_cell_types();
 
       let elem = $("#nbgrader-total-points-group");
-      if (preset.name === that.nbgrader_preset_name) {
+      if (preset.name === that.preset_name) {
         if (elem.length == 0) {
           elem = $("<div />").attr("id", "nbgrader-total-points-group");
           elem.addClass("btn-group");
