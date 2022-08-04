@@ -2,8 +2,8 @@
 
 node_modules
 
-# Build nbextensions
-e2xgrader/nbextensions
+# Build static files
+e2xgrader/static
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
