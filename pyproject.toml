@@ -52,5 +52,5 @@ build_cmd = "build"
 
 [tool.hatch.build.targets.wheel]
 artifacts = [
-    "e2xgrader/nbextensions/"
+    "e2xgrader/static/"
 ]

@@ -5,7 +5,7 @@ module.exports = {
     "teacher/main": "./src/teacher-extension.js",
   },
   output: {
-    path: path.resolve(__dirname, "../../e2xgrader/nbextensions/tree"),
+    path: path.resolve(__dirname, "../../e2xgrader/static/nbextensions/tree"),
     filename: "[name].js",
     libraryTarget: "amd",
   },
