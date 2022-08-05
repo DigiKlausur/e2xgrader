@@ -156,6 +156,6 @@ default_handlers = [
         dict(model_cls=ExerciseModel),
     ),
     (urljoin(api_url, "templates", "variables"), TemplateVariableHandler),
-    (urljoin(api_url, "templates", "kernelspec"), KernelSpecHandler),
-    (urljoin(api_url, "templates", "generate_exercise"), GenerateExerciseHandler),
+    (urljoin(api_url, "kernelspec"), KernelSpecHandler),
+    (urljoin(api_url, "generate_exercise"), GenerateExerciseHandler),
 ]
