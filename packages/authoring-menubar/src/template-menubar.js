@@ -53,7 +53,7 @@ export class TemplateMenubar extends Menubar {
       super.activate();
       $("<div/>")
         .attr("id", "e2x-header")
-        .append($("<span/>").text("Task"))
+        .append($("<span/>").text("Template"))
         .insertAfter($("#ipython_notebook"));
     });
   }
