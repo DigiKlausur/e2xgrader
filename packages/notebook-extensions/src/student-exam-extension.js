@@ -17,8 +17,9 @@ function initialize() {
 }
 
 export function load_ipython_extension() {
-  events.on("notebook_loaded.Notebook", initialize());
   if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
     initialize();
+  } else {
+    events.on("notebook_loaded.Notebook", initialize);
   }
 }
