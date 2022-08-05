@@ -13,6 +13,7 @@ from .handlers import default_handlers
 class AuthoringApp(NbGrader, BaseApp):
 
     template_path = os.path.join(os.path.dirname(__file__), "templates")
+    static_path = os.path.join(os.path.dirname(__file__), "static")
 
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
@@ -23,3 +24,11 @@ class AuthoringApp(NbGrader, BaseApp):
         self.add_template_path(self.template_path)
         self.add_handlers(default_api_handlers)
         self.add_handlers(default_handlers)
+        static_handlers = [
+            (
+                r"/e2x/authoring/static/(.*)",
+                web.StaticFileHandler,
+                {"path": self.static_path},
+            ),
+        ]
+        self.add_handlers(static_handlers)

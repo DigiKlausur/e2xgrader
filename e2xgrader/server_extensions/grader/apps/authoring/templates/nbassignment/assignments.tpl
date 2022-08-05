@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<script src='{{ base_url }}/e2xgrader/static/js/nbassignment/assignments.js'></script>
+<script src='{{ base_url }}/e2x/authoring/static/js/assignments.js'></script>
 {% endblock head %}
 
 {% block sidebar %}

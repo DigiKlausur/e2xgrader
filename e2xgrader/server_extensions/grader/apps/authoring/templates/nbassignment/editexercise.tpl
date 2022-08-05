@@ -2,8 +2,8 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/editexercise.css" type="text/css">
-<script src="{{ base_url }}/e2xgrader/static/js/nbassignment/makeexercise.js"></script>
+<link rel="stylesheet" href="{{ base_url }}/e2x/authoring/static/css/editexercise.css" type="text/css">
+<script src="{{ base_url }}/e2x/authoring/static/js/makeexercise.js"></script>
 {% endblock head %}
 
 {% block sidebar %}

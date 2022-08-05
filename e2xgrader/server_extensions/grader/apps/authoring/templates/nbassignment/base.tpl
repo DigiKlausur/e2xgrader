@@ -19,12 +19,12 @@
     <script src="{{ base_url }}/formgrader/static/js/backbone_xsrf.js"></script>
     <script src="{{ base_url }}/formgrader/static/js/utils.js"></script>
 
-    <script src='{{ base_url }}/e2xgrader/static/js/nbassignment/base.js'></script>
+    <script src='{{ base_url }}/e2x/authoring/static/js/base.js'></script>
     
     <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{{ base_url }}/formgrader/static/components/datatables.net-bs/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/taskcreator.css" type="text/css">
-    <link rel="stylesheet" href="{{ base_url }}/e2xgrader/static/css/sidebar.css" type="text/css">
+    <link rel="stylesheet" href="{{ base_url }}/e2x/authoring/static/css/taskcreator.css" type="text/css">
+    <link rel="stylesheet" href="{{ base_url }}/e2x/authoring/static/css/sidebar.css" type="text/css">
     <link rel="stylesheet" href="{{ base_url }}/formgrader/static/css/nbgrader.css">
     {%- endblock -%}    
 

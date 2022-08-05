@@ -2,7 +2,7 @@
 
 {% block head %}
 {{ super() }}
-<script src='{{ base_url }}/e2xgrader/static/js/nbassignment/taskpools.js'></script>
+<script src='{{ base_url }}/e2x/authoring/static/js/taskpools.js'></script>
 {% endblock head %}
 
 {% block sidebar %}
