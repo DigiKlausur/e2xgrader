@@ -16,7 +16,7 @@
 <h1>Assignments</h1>
 {% endblock headline %}
 {% block breadcrumbs %}
-<li><a href="{{ base_url }}/taskcreator/assignments">Assignments</a></li>
+<li><a href="{{ base_url }}/e2x/authoring/app/assignments">Assignments</a></li>
 {% endblock breadcrumbs %}
 
 {% block help %}

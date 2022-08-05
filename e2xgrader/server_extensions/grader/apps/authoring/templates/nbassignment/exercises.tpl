@@ -19,7 +19,7 @@
 <h1>Assignments</h1>
 {% endblock headline %}
 {% block breadcrumbs %}
-<li><a href="{{ base_url }}/taskcreator/assignments">Assignments</a></li>
+<li><a href="{{ base_url }}/e2x/authoring/app/assignments">Assignments</a></li>
 <li> > {{ assignment }} </li>
 {% endblock breadcrumbs %}
 
@@ -36,5 +36,5 @@
 <tr><td>Loading...</td><td></td></tr>
 {% endblock table_body %}
 {% block add_new %}
-<button class="btn btn-primary"><a href="{{ base_url }}/taskcreator/assignments/{{ assignment }}/new">Add Exercise</a></button>
+<button class="btn btn-primary"><a href="{{ base_url }}/e2x/authoring/app/assignments/{{ assignment }}/new">Add Exercise</a></button>
 {% endblock add_new %}

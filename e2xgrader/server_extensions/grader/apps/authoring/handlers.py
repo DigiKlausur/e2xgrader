@@ -9,6 +9,9 @@ from nbgrader.server_extensions.formgrader.base import (
 from tornado import web
 
 from e2xgrader.models import ExerciseModel, TaskPoolModel, TemplateModel
+from e2xgrader.utils import urljoin
+
+app_url = urljoin("e2x", "authoring", "app")
 
 
 class TaskcreatorHandler(BaseHandler):
@@ -16,7 +19,7 @@ class TaskcreatorHandler(BaseHandler):
     @check_xsrf
     @check_notebook_dir
     def get(self):
-        self.redirect(f"{self.base_url}/taskcreator/assignments")
+        self.redirect(urljoin(app_url, "assignments"))
 
 
 class ManageAssignmentsHandler(BaseHandler):
@@ -113,14 +116,23 @@ class EditExercisesHandler(BaseHandler):
 
 
 default_handlers = [
-    (r"/taskcreator/?", TaskcreatorHandler),
-    (r"/taskcreator/assignments/?", ManageAssignmentsHandler),
-    (r"/taskcreator/assignments/(?P<assignment>[^/]+)/?", ManageExercisesHandler),
-    (r"/taskcreator/pools/?", ManagePoolsHandler),
-    (r"/taskcreator/pools/(?P<pool>[^/]+)/?", ManageTasksHandler),
-    (r"/taskcreator/templates/?", ManageTemplatesHandler),
+    (urljoin(app_url, "?"), TaskcreatorHandler),
+    (urljoin(app_url, "assignments", "?"), ManageAssignmentsHandler),
     (
-        r"/taskcreator/assignments/(?P<assignment>[^/]+)/(?P<exercise>[^/]+)/?",
+        urljoin(app_url, "assignments", r"(?P<assignment>[^/]+)", "?"),
+        ManageExercisesHandler,
+    ),
+    (urljoin(app_url, "pools", "?"), ManagePoolsHandler),
+    (urljoin(app_url, "pools", r"(?P<pool>[^/]+)", "?"), ManageTasksHandler),
+    (urljoin(app_url, "templates", "?"), ManageTemplatesHandler),
+    (
+        urljoin(
+            app_url,
+            "assignments",
+            r"(?P<assignment>[^/]+)",
+            r"(?P<exercise>[^/]+)",
+            "?",
+        ),
         EditExercisesHandler,
     ),
 ]

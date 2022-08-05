@@ -18,7 +18,7 @@ let PoolUI = BaseUI.extend({
 
     this.$pool_name.append(
       $("<a/>")
-        .attr("href", base_url + "/taskcreator/pools/" + name)
+        .attr("href", base_url + "/e2x/authoring/app/pools/" + name)
         .text(name)
     );
     this.$number_of_tasks.text(this.model.get("tasks"));

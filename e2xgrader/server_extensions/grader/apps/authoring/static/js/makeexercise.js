@@ -103,7 +103,7 @@ class TemplateSelect extends FormTab {
       let choice = $(this).val();
       if (choice !== "") {
         $.ajax({
-          url: base_url + "/taskcreator/api/templates/variables",
+          url: base_url + "/e2x/authoring/api/templates/variables",
           type: "get",
           data: {
             template: choice,
@@ -293,7 +293,7 @@ class ExerciseOptions extends FormTab {
   createKernelSelect() {
     let that = this;
     $.ajax({
-      url: base_url + "/taskcreator/api/kernelspec",
+      url: base_url + "/e2x/authoring/api/kernelspec",
       type: "get",
       success: function (response) {
         let kernelspecs = $.parseJSON(response);
@@ -368,7 +368,7 @@ class TabView {
     };
     this.tabs.forEach((tab) => Object.assign(data, tab.getFormData()));
     $.ajax({
-      url: base_url + "/taskcreator/api/generate_exercise",
+      url: base_url + "/e2x/authoring/api/generate_exercise",
       type: "get",
       dataType: "json",
       data: {

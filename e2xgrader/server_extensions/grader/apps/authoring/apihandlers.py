@@ -14,7 +14,7 @@ from e2xgrader.models import (
     TaskPoolModel,
     TemplateModel,
 )
-from e2xgrader.utils import NotebookVariableExtractor
+from e2xgrader.utils import NotebookVariableExtractor, urljoin
 
 from ..e2xgraderapi.base import E2xApiHandler
 
@@ -111,50 +111,51 @@ class GenerateExerciseHandler(E2xApiHandler):
         self.write({"status": True})
 
 
+api_url = urljoin("e2x", "authoring", "api")
 default_handlers = [
-    (r"/taskcreator/api/presets", PresetHandler),
+    (urljoin(api_url, "presets"), PresetHandler),
     (
-        r"/taskcreator/api/assignments/?",
+        urljoin(api_url, "assignments", "?"),
         BaseApiListHandler,
         dict(model_cls=AssignmentModel),
     ),
     (
-        r"/taskcreator/api/template/(?P<name>[^/]+)/?",
+        urljoin(api_url, "template", r"(?P<name>[^/]+)", "?"),
         BaseApiManageHandler,
         dict(model_cls=TemplateModel),
     ),
     (
-        r"/taskcreator/api/templates/?",
+        urljoin(api_url, "templates", "?"),
         BaseApiListHandler,
         dict(model_cls=TemplateModel),
     ),
     (
-        r"/taskcreator/api/pool/(?P<name>[^/]+)/?",
+        urljoin(api_url, "pool", r"(?P<name>[^/]+)", "?"),
         BaseApiManageHandler,
         dict(model_cls=TaskPoolModel),
     ),
-    (r"/taskcreator/api/pools/?", BaseApiListHandler, dict(model_cls=TaskPoolModel)),
+    (urljoin(api_url, "pools", "?"), BaseApiListHandler, dict(model_cls=TaskPoolModel)),
     (
-        r"/taskcreator/api/pools/(?P<pool>[^/]+)/?",
+        urljoin(api_url, "pools", r"(?P<pool>[^/]+)", "?"),
         BaseApiListHandler,
         dict(model_cls=TaskModel),
     ),
     (
-        r"/taskcreator/api/task/(?P<pool>[^/]+)/(?P<name>[^/]+)/?",
+        urljoin(api_url, "task", r"(?P<pool>[^/]+)", r"(?P<name>[^/]+)", "?"),
         BaseApiManageHandler,
         dict(model_cls=TaskModel),
     ),
     (
-        r"/taskcreator/api/exercise/(?P<assignment>[^/]+)/(?P<name>[^/]+)/?",
+        urljoin(api_url, "exercise", r"(?P<assignment>[^/]+)", r"(?P<name>[^/]+)", "?"),
         BaseApiManageHandler,
         dict(model_cls=ExerciseModel),
     ),
     (
-        r"/taskcreator/api/assignments/(?P<assignment>[^/]+)/?",
+        urljoin(api_url, "assignments", r"(?P<assignment>[^/]+)", "?"),
         BaseApiListHandler,
         dict(model_cls=ExerciseModel),
     ),
-    (r"/taskcreator/api/templates/variables", TemplateVariableHandler),
-    (r"/taskcreator/api/kernelspec", KernelSpecHandler),
-    (r"/taskcreator/api/generate_exercise", GenerateExerciseHandler),
+    (urljoin(api_url, "templates", "variables"), TemplateVariableHandler),
+    (urljoin(api_url, "templates", "kernelspec"), KernelSpecHandler),
+    (urljoin(api_url, "templates", "generate_exercise"), GenerateExerciseHandler),
 ]

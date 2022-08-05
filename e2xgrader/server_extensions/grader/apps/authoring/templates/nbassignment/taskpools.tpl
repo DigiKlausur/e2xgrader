@@ -16,7 +16,7 @@
 <h1>Task Pools</h1>
 {% endblock headline %}
 {% block breadcrumbs %}
-<li><a href="{{ base_url }}/taskcreator/pools">Task Pools</a></li>
+<li><a href="{{ base_url }}/e2x/authoring/app/pools">Task Pools</a></li>
 {% endblock breadcrumbs %}
 
 {% block help %}

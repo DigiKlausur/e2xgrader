@@ -4,7 +4,7 @@ import { pathJoin } from "./base";
 export class AuthoringAPI extends BaseAPI {
   constructor(base_url) {
     super();
-    this.base_url = pathJoin([base_url, "taskcreator", "api"]);
+    this.base_url = pathJoin([base_url, "e2x", "authoring", "api"]);
   }
 
   get_presets(params) {

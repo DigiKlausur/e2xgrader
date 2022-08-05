@@ -17,7 +17,7 @@
 <h1>Templates</h1>
 {% endblock headline %}
 {% block breadcrumbs %}
-<li><a href="{{ base_url }}/taskcreator/templates">Templates</a></li>
+<li><a href="{{ base_url }}/e2x/authoring/app/templates">Templates</a></li>
 {% endblock breadcrumbs %}
 
 {% block help %}

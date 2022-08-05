@@ -22,7 +22,7 @@ $(document).ready(function () {
             alert('You need to give a name!!!');
 
         } else {
-            window.open("{{ base_url }}/taskcreator/new_question/" + $('#qid').val());
+            window.open("{{ base_url }}/e2x/authoring/app/new_question/" + $('#qid').val());
         }
     })
     var submit = $('<tr/>').append($('<td/>').attr('colspan', 2).append(link));

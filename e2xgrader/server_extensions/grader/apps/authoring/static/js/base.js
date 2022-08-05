@@ -1,61 +1,63 @@
 let Assignment = Backbone.Model.extend({
   idAttribute: "name",
-  urlRoot: base_url + "/taskcreator/api/assignment",
+  urlRoot: base_url + "/e2x/authoring/api/assignment",
 });
 
 let Assignments = Backbone.Collection.extend({
   model: Assignment,
-  url: base_url + "/taskcreator/api/assignments",
+  url: base_url + "/e2x/authoring/api/assignments",
 });
 
 let Exercise = Backbone.Model.extend({
   idAttribute: "name",
   initialize: function (options) {
-    this.urlRoot = base_url + "/taskcreator/api/exercise/" + options.assignment;
+    this.urlRoot =
+      base_url + "/e2x/authoring/api/exercise/" + options.assignment;
   },
 });
 
 let Exercises = Backbone.Collection.extend({
   model: Exercise,
   initialize: function (options) {
-    this.url = base_url + "/taskcreator/api/assignments/" + options.assignment;
+    this.url =
+      base_url + "/e2x/authoring/api/assignments/" + options.assignment;
   },
 });
 
 let Pool = Backbone.Model.extend({
   idAttribute: "name",
-  urlRoot: base_url + "/taskcreator/api/pool",
+  urlRoot: base_url + "/e2x/authoring/api/pool",
 });
 
 let Pools = Backbone.Collection.extend({
   model: Pool,
-  url: base_url + "/taskcreator/api/pools/",
+  url: base_url + "/e2x/authoring/api/pools/",
   comparator: "name",
 });
 
 let Task = Backbone.Model.extend({
   idAttribute: "name",
   initialize: function (options) {
-    this.urlRoot = base_url + "/taskcreator/api/task/" + options.pool;
+    this.urlRoot = base_url + "/e2x/authoring/api/task/" + options.pool;
   },
 });
 
 let Tasks = Backbone.Collection.extend({
   model: Task,
   initialize: function (options) {
-    this.url = base_url + "/taskcreator/api/pools/" + options.pool;
+    this.url = base_url + "/e2x/authoring/api/pools/" + options.pool;
   },
   comparator: "name",
 });
 
 let Template = Backbone.Model.extend({
   idAttribute: "name",
-  urlRoot: base_url + "/taskcreator/api/template",
+  urlRoot: base_url + "/e2x/authoring/api/template",
 });
 
 let Templates = Backbone.Collection.extend({
   model: Template,
-  url: base_url + "/taskcreator/api/templates/",
+  url: base_url + "/e2x/authoring/api/templates/",
 });
 
 let BaseUI = Backbone.View.extend({

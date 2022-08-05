@@ -13,7 +13,7 @@ let AssignmentUI = Backbone.View.extend({
     let name = this.model.get("name");
     this.$assignment_name.append(
       $("<a/>")
-        .attr("href", base_url + "/taskcreator/assignments/" + name)
+        .attr("href", base_url + "/e2x/authoring/app/assignments/" + name)
         .text(name)
     );
     this.$number_of_exercises.text(this.model.get("exercises"));

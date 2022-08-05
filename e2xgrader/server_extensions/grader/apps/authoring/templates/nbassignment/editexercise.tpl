@@ -19,8 +19,8 @@
 <h1>Edit Exercise - {{ exercise }}</h1>
 <div class='breadcrumbs'>
 <ul>
-    <li><a href="{{ base_url }}/taskcreator/assignments">Assignments</a></li>
-    <li> > <a href="{{ base_url }}/taskcreator/assignments/{{ assignment }}">{{ assignment }}</a></li>
+    <li><a href="{{ base_url }}/e2x/authoring/app/assignments">Assignments</a></li>
+    <li> > <a href="{{ base_url }}/e2x/authoring/app/assignments/{{ assignment }}">{{ assignment }}</a></li>
     <li> > {{ exercise }}</li>
 </ul>
 </div>
