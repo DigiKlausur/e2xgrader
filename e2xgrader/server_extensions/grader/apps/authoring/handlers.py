@@ -28,7 +28,7 @@ class ManageAssignmentsHandler(BaseHandler):
     @check_notebook_dir
     def get(self):
         html = self.render(
-            os.path.join("nbassignment", "assignments.tpl"),
+            os.path.join("authoring", "assignments.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             windows=(sys.prefix == "win32"),
@@ -42,7 +42,7 @@ class ManageExercisesHandler(BaseHandler):
     @check_notebook_dir
     def get(self, assignment):
         html = self.render(
-            os.path.join("nbassignment", "exercises.tpl"),
+            os.path.join("authoring", "exercises.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             assignment=assignment,
@@ -57,7 +57,7 @@ class ManagePoolsHandler(BaseHandler):
     @check_notebook_dir
     def get(self):
         html = self.render(
-            os.path.join("nbassignment", "taskpools.tpl"),
+            os.path.join("authoring", "taskpools.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             windows=(sys.prefix == "win32"),
@@ -71,7 +71,7 @@ class ManageTasksHandler(BaseHandler):
     @check_notebook_dir
     def get(self, pool):
         html = self.render(
-            os.path.join("nbassignment", "tasks.tpl"),
+            os.path.join("authoring", "tasks.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             pool=pool,
@@ -86,7 +86,7 @@ class ManageTemplatesHandler(BaseHandler):
     @check_notebook_dir
     def get(self):
         html = self.render(
-            os.path.join("nbassignment", "templates.tpl"),
+            os.path.join("authoring", "templates.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             windows=(sys.prefix == "win32"),
@@ -103,7 +103,7 @@ class EditExercisesHandler(BaseHandler):
     @check_notebook_dir
     def get(self, assignment, exercise):
         html = self.render(
-            os.path.join("nbassignment", "editexercise.tpl"),
+            os.path.join("authoring", "editexercise.tpl"),
             url_prefix=self.url_prefix,
             base_url=self.base_url,
             exercise=exercise,

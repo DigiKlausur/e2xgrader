@@ -1,4 +1,4 @@
-{%- extends 'nbassignment/base.tpl' -%}
+{%- extends 'authoring/base.tpl' -%}
 
 {% block head %}
 {{ super() }}

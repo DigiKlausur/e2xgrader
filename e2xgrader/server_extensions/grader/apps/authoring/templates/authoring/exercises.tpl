@@ -1,8 +1,11 @@
-{%- extends 'nbassignment/tablebase.tpl' -%}
+{%- extends 'authoring/tablebase.tpl' -%}
 
 {% block head %}
+<script type="text/javascript">
+    let assignment = '{{ assignment }}';
+</script>
 {{ super() }}
-<script src='{{ base_url }}/e2x/authoring/static/js/assignments.js'></script>
+<script src='{{ base_url }}/e2x/authoring/static/js/exercises.js'></script>
 {% endblock head %}
 
 {% block sidebar %}
@@ -17,17 +20,21 @@
 {% endblock headline %}
 {% block breadcrumbs %}
 <li><a href="{{ base_url }}/e2x/authoring/app/assignments">Assignments</a></li>
+<li> > {{ assignment }} </li>
 {% endblock breadcrumbs %}
 
 {% block help %}
-<h3>Choose your assignment</h3>
-<p>Here you can choose which assignment you want to create an exercise for. An exercise is a single Jupyter Notebook consisting of tasks. Assignments have to be created via <a href="{{ base_url }}/formgrader/" target="_blank">nbgrader</a>.</p>
+<h3>Choose your exercise</h3>
+<p>Here you can choose or create an exercise. An exercise is a single Jupyter Notebook consisting of tasks..</p>
 {% endblock help %}
 
 {% block table_head %}
 <th>Name</th>
-<th>Number of Exercises</th>
+<th>Remove</th>
 {% endblock table_head %}
 {% block table_body %}
 <tr><td>Loading...</td><td></td></tr>
 {% endblock table_body %}
+{% block add_new %}
+<button class="btn btn-primary"><a href="{{ base_url }}/e2x/authoring/app/assignments/{{ assignment }}/new">Add Exercise</a></button>
+{% endblock add_new %}
