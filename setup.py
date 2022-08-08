@@ -56,7 +56,7 @@ setup_args = dict(
     },
     entry_points={"console_scripts": ["e2xgrader=e2xgrader.apps.e2xgraderapp:main"]},
     install_requires=[
-        "nbgrader @ git+https://github.com/jupyter/nbgrader@0.7.x",
+        "nbgrader==0.7.1",
         "beautifulsoup4",
         "pandas",
     ],
