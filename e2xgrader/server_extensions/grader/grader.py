@@ -45,7 +45,6 @@ class E2xGrader(Application):
             app(parent=self.parent).load_app()
 
     def initialize_jinja_environment(self):
-        root_path = os.path.dirname(__file__)
         self.parent.web_app.settings["e2xgrader"] = {
             "jinja_env": Environment(loader=FileSystemLoader([]))
         }
@@ -59,4 +58,4 @@ class E2xGrader(Application):
 def load_jupyter_server_extension(nbapp):
     """Load the e2xgrader serverextension"""
     nbapp.log.info("Loading the e2xgrader serverextension")
-    e2xgrader = E2xGrader(parent=nbapp)
+    E2xGrader(parent=nbapp)
