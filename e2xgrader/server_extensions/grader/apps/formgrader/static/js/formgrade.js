@@ -72,7 +72,6 @@ FormGrader.prototype.collapsibleCells = function () {
   console.log("hello");
   $(".collapsible").each(function (idx, elem) {
     let button = $(elem);
-    console.log(button);
     let body = button.parent().parent().find(".panel-body");
 
     button.click(function () {
@@ -83,8 +82,6 @@ FormGrader.prototype.collapsibleCells = function () {
         button.text("Hide Test Code");
       }
     });
-
-    console.log(body);
   });
 };
 
