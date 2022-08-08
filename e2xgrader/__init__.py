@@ -10,8 +10,6 @@ from os.path import join as pjoin
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
     base_path = pjoin(root, "static", "nbextensions")
-    notebook_path = pjoin(base_path, "notebook")
-    tree_path = pjoin(base_path, "tree")
 
     paths = []
 
