@@ -24,8 +24,8 @@ class FormgradeExtension(NbgraderFormgradeExtension):
 
     def build_extra_config(self):
         extra_config = super(NbgraderFormgradeExtension, self).build_extra_config()
-        extra_config.E2xExporter.template_file = "formgrade"
-        extra_config.E2xExporter.template_path = [
+        extra_config.HTMLExporter.template_name = "formgrade"
+        extra_config.HTMLExporter.extra_template_basedirs = [
             handlers.template_path,
             nbgrader_handlers.template_path,
         ]
@@ -55,7 +55,7 @@ class FormgradeExtension(NbgraderFormgradeExtension):
         else:
             nbgrader_bad_setup = False
 
-        exporter = E2xExporter()
+        exporter = E2xExporter(config=self.config)
         exporter.register_preprocessor(FilterCellsById)
 
         # Configure the formgrader settings

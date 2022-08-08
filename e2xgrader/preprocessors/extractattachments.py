@@ -3,7 +3,7 @@ import sys
 from binascii import a2b_base64
 from traitlets import Unicode, Set
 from nbgrader.preprocessors import NbGraderPreprocessor
-from ..utils.extra_cells import is_attachment_cell
+from ..utils.extra_cells import is_attachment_cell, is_diagram
 
 
 class ExtractAttachments(NbGraderPreprocessor):
@@ -41,8 +41,12 @@ class ExtractAttachments(NbGraderPreprocessor):
             Index of the cell being processed (see base.py)
         """
 
-        if not is_attachment_cell(cell):
+        if not (is_attachment_cell(cell) or is_diagram(cell)):
             return cell, resources
+
+        if is_diagram(cell):
+            # Remove the attachment line from source
+            cell.source = cell.source.replace("![diagram](attachment:diagram.png)", "")
 
         # Get files directory if it has been specified
         output_files_dir = resources.get("output_files_dir", None)
@@ -86,8 +90,12 @@ class ExtractAttachments(NbGraderPreprocessor):
                 with open(filename, "wb") as f:
                     f.write(data)
 
-                cell.source += f'\n<a href="{link}">{name}</a>\n'
-                to_delete.append(name)
+                if "image" in mime:
+                    cell.source += f'\n<a href="{link}"><img src="{link}"></a>\n'
+                else:
+                    cell.source += f'\n<a href="{link}">{name}</a>\n'
+                if not is_diagram(cell):
+                    to_delete.append(name)
 
                 # now we need to change the cell source so that it links to the
                 # filename instead of `attachment:`

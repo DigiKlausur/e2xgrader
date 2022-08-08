@@ -10,6 +10,7 @@ FormGrader.prototype.init = function () {
     this.loadGrades();
     this.loadComments();
     this.loadAnnotations();
+    this.collapsibleCells();
 
     // disable link selection on tabs
     $('a:not(.tabbable)').attr('tabindex', '-1');
@@ -66,6 +67,28 @@ FormGrader.prototype.init = function () {
     });
 
     this.loaded = true;
+};
+
+FormGrader.prototype.collapsibleCells = function () {
+  console.log('hello');
+  $('.collapsible').each(function(idx, elem) {
+    let button = $(elem);
+    console.log(button);
+    let body = button.parent().parent().find('.panel-body');
+
+    button.click(function () {
+        $(body).toggle();
+        if ($(body).is(":hidden")) {
+            button.text("Show Test Code");
+        } else {
+            button.text("Hide Test Code");
+
+        }
+
+    });
+    
+    console.log(body);
+  });
 };
 
 FormGrader.prototype.loadGrades = function () {
@@ -129,7 +152,7 @@ FormGrader.prototype.loadAnnotations = function () {
                 if (model.get("name").includes(task_id)) {
                     var annotation_ui = new AnnotationUI({
                         "model": model,
-                        "el": $("#" + model.get("name") + "-canvas").parents(".nbgrader_cell")
+                        "el": $("#" + model.get("name") + "-canvas").parents(".cell")
                     });
                     that.annotation_uis.push(annotation_ui);
                 }

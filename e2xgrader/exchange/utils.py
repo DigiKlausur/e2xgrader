@@ -87,7 +87,7 @@ def generate_student_info(filename, username, hashcode, timestamp):
 
 def generate_html(nb, dest):
     exporter = E2xExporter()
-    exporter.template_file = "form.tpl"
+    exporter.template_name = "form"
     html, _ = exporter.from_notebook_node(nb)
 
     with open(dest, "w") as f:

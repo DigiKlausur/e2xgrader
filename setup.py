@@ -56,17 +56,9 @@ setup_args = dict(
     },
     entry_points={"console_scripts": ["e2xgrader=e2xgrader.apps.e2xgraderapp:main"]},
     install_requires=[
-        "jupyter",
-        "notebook>=6.1.6",
-        "nbconvert==5.6.1",
-        "nbformat",
-        "jupyter_core",
-        "jupyter_client",
-        "tornado",
-        "requests",
+        "nbgrader==0.7.1",
         "beautifulsoup4",
         "pandas",
-        "nbgrader==0.7.0.dev0",
     ],
     cmdclass={
         "build_py": js_prerelease(build_py),
