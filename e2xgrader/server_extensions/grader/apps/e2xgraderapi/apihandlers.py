@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 
@@ -5,8 +6,14 @@ from nbgrader.server_extensions.formgrader.apihandlers import (
     AssignmentCollectionHandler,
     AssignmentHandler,
 )
-from nbgrader.server_extensions.formgrader.base import check_xsrf
+from nbgrader.server_extensions.formgrader.base import check_notebook_dir, check_xsrf
 from tornado import web
+
+from e2xgrader.exporters import (
+    GradeAssignmentExporter,
+    GradeNotebookExporter,
+    GradeTaskExporter,
+)
 
 from .base import E2xApiHandler
 
@@ -76,6 +83,73 @@ class GraderHandler(E2xApiHandler):
         self.write(json.dumps(grader_settings))
 
 
+class ExportAssignmentGradesHandler(E2xApiHandler):
+    def initialize(self):
+        self.__exporter = GradeAssignmentExporter(self.gradebook)
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
+        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
+        self.write(self.__exporter.make_table().to_csv(index=False))
+        self.finish()
+
+
+class ExportNotebookGradesHandler(E2xApiHandler):
+    def initialize(self):
+        self.__exporter = GradeNotebookExporter(self.gradebook)
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
+        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
+        self.write(self.__exporter.make_table().to_csv(index=False))
+        self.finish()
+
+
+class ExportTaskGradesHandler(E2xApiHandler):
+    def initialize(self):
+        self.__exporter = GradeTaskExporter(self.gradebook)
+
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
+        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
+        self.write(self.__exporter.make_table().to_csv(index=False))
+        self.finish()
+
+
+class AnnotationCollectionHandler(E2xApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        solution_cells = self.api.get_annotations(self.get_argument("submission_id"))
+        if solution_cells is None:
+            raise web.HTTPError(404)
+        return self.write(json.dumps(solution_cells))
+
+
+class AnnotationHandler(E2xApiHandler):
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def put(self, solution_cell_id):
+        data = self.get_json_body()
+        solution_cell = self.api.save_annotation(
+            submission_id=data.get("submission_id"),
+            name=data.get("name"),
+            annotation=data.get("annotation"),
+        )
+        if solution_cell is None:
+            raise web.HTTPError(404)
+
+        self.write(json.dumps(solution_cell))
+
+
 default_handlers = [
     (r"/formgrader/api/assignments", E2xAssignmentCollectionHandler),
     (r"/formgrader/api/assignment/([^/]+)", E2xAssignmentHandler),
@@ -92,4 +166,9 @@ default_handlers = [
         r"/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback",
         GenerateFeedbackHandler,
     ),
+    (r"/formgrader/api/export_grades/assignments/?", ExportAssignmentGradesHandler),
+    (r"/formgrader/api/export_grades/notebooks/?", ExportNotebookGradesHandler),
+    (r"/formgrader/api/export_grades/tasks/?", ExportTaskGradesHandler),
+    (r"/formgrader/api/annotations", AnnotationCollectionHandler),
+    (r"/formgrader/api/annotation/([^/]+)", AnnotationHandler),
 ]
