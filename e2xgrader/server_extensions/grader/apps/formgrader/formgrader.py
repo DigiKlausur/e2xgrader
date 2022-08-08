@@ -1,9 +1,12 @@
 import os
+from distutils.command.config import config
 
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 from tornado import web
 
+from e2xgrader.exporters import E2xExporter
+from e2xgrader.preprocessors import FilterCellsById
 from e2xgrader.server_extensions.grader.apps.base.base import BaseApp
 
 from .handlers import default_handlers
@@ -17,12 +20,22 @@ class FormgradeApp(NbGrader, BaseApp):
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
+        self.load_config_file()
+        if not self.config.has_key(
+            "HTMLExporter"
+        ) or not self.config.HTMLExporter.has_key("template_name"):
+            self.config.HTMLExporter.template_name = "formgrade"
 
     def load_app(self):
         self.log.info("Loading the formgrader app")
+        exporter = E2xExporter(config=self.config)
+        exporter.register_preprocessor(FilterCellsById)
 
         self.update_tornado_settings(
-            dict(nbgrader_jinja2_env=self.webapp.settings["e2xgrader"]["jinja_env"])
+            dict(
+                nbgrader_jinja2_env=self.webapp.settings["e2xgrader"]["jinja_env"],
+                nbgrader_exporter=exporter,
+            )
         )
         self.add_template_path(self.template_path)
         self.add_template_path(nbgrader_handlers.template_path)
