@@ -13,6 +13,7 @@ from e2xgrader.exporters import (
     GradeAssignmentExporter,
     GradeNotebookExporter,
     GradeTaskExporter,
+    exporter,
 )
 
 from .base import E2xApiHandler
@@ -83,35 +84,9 @@ class GraderHandler(E2xApiHandler):
         self.write(json.dumps(grader_settings))
 
 
-class ExportAssignmentGradesHandler(E2xApiHandler):
-    def initialize(self):
-        self.__exporter = GradeAssignmentExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportNotebookGradesHandler(E2xApiHandler):
-    def initialize(self):
-        self.__exporter = GradeNotebookExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportTaskGradesHandler(E2xApiHandler):
-    def initialize(self):
-        self.__exporter = GradeTaskExporter(self.gradebook)
+class ExportGradesHandler(E2xApiHandler):
+    def initialize(self, exporter_cls) -> None:
+        self.__exporter = exporter_cls(self.gradebook)
 
     @web.authenticated
     @check_xsrf
@@ -166,9 +141,21 @@ default_handlers = [
         r"/formgrader/api/assignment/([^/]+)/([^/]+)/generate_feedback",
         GenerateFeedbackHandler,
     ),
-    (r"/formgrader/api/export_grades/assignments/?", ExportAssignmentGradesHandler),
-    (r"/formgrader/api/export_grades/notebooks/?", ExportNotebookGradesHandler),
-    (r"/formgrader/api/export_grades/tasks/?", ExportTaskGradesHandler),
+    (
+        r"/formgrader/api/export_grades/assignments/?",
+        ExportGradesHandler,
+        dict(exporter_cls=GradeAssignmentExporter),
+    ),
+    (
+        r"/formgrader/api/export_grades/notebooks/?",
+        ExportGradesHandler,
+        dict(exporter_cls=GradeNotebookExporter),
+    ),
+    (
+        r"/formgrader/api/export_grades/tasks/?",
+        ExportGradesHandler,
+        dict(exporter_cls=GradeTaskExporter),
+    ),
     (r"/formgrader/api/annotations", AnnotationCollectionHandler),
     (r"/formgrader/api/annotation/([^/]+)", AnnotationHandler),
 ]
