@@ -111,6 +111,10 @@ class GenerateExerciseHandler(E2xApiHandler):
         self.write({"status": True})
 
 
+pool_regex = r"(?P<pool>[^/]+)"
+name_regex = r"(?P<name>[^/]+)"
+assignment_regex = r"(?P<assignment>[^/]+)"
+
 api_url = urljoin("e2x", "authoring", "api")
 default_handlers = [
     (urljoin(api_url, "presets"), PresetHandler),
@@ -120,7 +124,7 @@ default_handlers = [
         dict(model_cls=AssignmentModel),
     ),
     (
-        urljoin(api_url, "template", r"(?P<name>[^/]+)", "?"),
+        urljoin(api_url, "template", name_regex, "?"),
         BaseApiManageHandler,
         dict(model_cls=TemplateModel),
     ),
@@ -130,28 +134,28 @@ default_handlers = [
         dict(model_cls=TemplateModel),
     ),
     (
-        urljoin(api_url, "pool", r"(?P<name>[^/]+)", "?"),
+        urljoin(api_url, "pool", name_regex, "?"),
         BaseApiManageHandler,
         dict(model_cls=TaskPoolModel),
     ),
     (urljoin(api_url, "pools", "?"), BaseApiListHandler, dict(model_cls=TaskPoolModel)),
     (
-        urljoin(api_url, "pools", r"(?P<pool>[^/]+)", "?"),
+        urljoin(api_url, "pools", pool_regex, "?"),
         BaseApiListHandler,
         dict(model_cls=TaskModel),
     ),
     (
-        urljoin(api_url, "task", r"(?P<pool>[^/]+)", r"(?P<name>[^/]+)", "?"),
+        urljoin(api_url, "task", pool_regex, name_regex, "?"),
         BaseApiManageHandler,
         dict(model_cls=TaskModel),
     ),
     (
-        urljoin(api_url, "exercise", r"(?P<assignment>[^/]+)", r"(?P<name>[^/]+)", "?"),
+        urljoin(api_url, "exercise", assignment_regex, name_regex, "?"),
         BaseApiManageHandler,
         dict(model_cls=ExerciseModel),
     ),
     (
-        urljoin(api_url, "assignments", r"(?P<assignment>[^/]+)", "?"),
+        urljoin(api_url, "assignments", assignment_regex, "?"),
         BaseApiListHandler,
         dict(model_cls=ExerciseModel),
     ),
