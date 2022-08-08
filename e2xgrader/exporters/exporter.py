@@ -23,8 +23,6 @@ class E2xExporter(HTMLExporter):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        if kwargs and "config" in kwargs and "HTMLExporter" in kwargs["config"]:
-            self.template_name = kwargs["config"].HTMLExporter.template_name
         self.extra_template_basedirs = [
             os.path.abspath(
                 os.path.join(
