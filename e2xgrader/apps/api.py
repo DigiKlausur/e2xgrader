@@ -1,4 +1,6 @@
+import base64
 import os
+from typing import Dict, List, Union
 
 from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
 from nbgrader.apps.api import NbGraderAPI
@@ -317,3 +319,73 @@ class E2xAPI(NbGraderAPI):
         assignment["num_submissions"] = len(self.get_submitted_students(assignment_id))
 
         return assignment
+
+    def get_annotations(self, submission_id: str) -> Union[List[Dict[str, str]], None]:
+        """Get all annotations associated with a submission
+
+        Args:
+            submission_id (str): submission id
+
+        Returns:
+            Union[List[Dict[str, str]], None]: A list of solution cell dictionaries or None
+                                               Each dictionary contains the submission id
+                                               and annotation as a base64 encoded string
+        """
+        try:
+            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
+        except MissingEntry:
+            return
+
+        autograded_path = self.coursedir.format_path(
+            nbgrader_step=self.coursedir.autograded_directory,
+            student_id=notebook.student.id,
+            assignment_id=notebook.assignment.name,
+        )
+        annotation_path = os.path.join(autograded_path, "annotations")
+        solution_cells = [cell.to_dict() for cell in notebook.notebook.solution_cells]
+        for solution_cell in solution_cells:
+            solution_cell["submission_id"] = submission_id
+            # Try loading the annotation for that cell
+            try:
+                with open(
+                    os.path.join(annotation_path, f'{solution_cell["name"]}.png'), "rb"
+                ) as f:
+                    solution_cell["annotation"] = str(base64.b64encode(f.read()))[2:-1]
+            except FileNotFoundError:
+                solution_cell["annotation"] = None
+        return solution_cells
+
+    def save_annotation(
+        self, submission_id: str, name: str, annotation: str
+    ) -> Union[Dict[str, str], None]:
+        """Save an annotation for a cell
+
+        Args:
+            submission_id (str): submission id
+            name (str): name of the solution cell
+            annotation (str): base64 encoded image
+
+        Returns:
+            Union[Dict[str, str], None]: A dictionary containing the cell information or None
+        """
+        try:
+            notebook = self.gradebook.find_submission_notebook_by_id(submission_id)
+        except MissingEntry:
+            return
+
+        autograded_path = self.coursedir.format_path(
+            nbgrader_step=self.coursedir.autograded_directory,
+            student_id=notebook.student.id,
+            assignment_id=notebook.assignment.name,
+        )
+        annotation_path = os.path.join(autograded_path, "annotations")
+        os.makedirs(annotation_path, exist_ok=True)
+        with open(os.path.join(annotation_path, f"{name}.png"), "wb") as f:
+            f.write(base64.b64decode(annotation[22:]))
+        return dict(
+            id=submission_id,
+            name=name,
+            annotation=annotation,
+            notebook=notebook.notebook.name,
+            assignment=notebook.assignment.name,
+        )
