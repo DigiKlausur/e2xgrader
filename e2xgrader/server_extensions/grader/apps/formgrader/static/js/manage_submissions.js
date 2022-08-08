@@ -250,37 +250,25 @@ var SubmissionUI = Backbone.View.extend({
 
   feedback: function () {
     $("#generate-feedback-modal").modal("hide");
-    if (document.getElementById("show_cells").checked) {
-      this.clear();
-      this.$student_name.text("Please wait...");
-      var student = this.model.get("student");
-      var assignment = this.model.get("name");
-      $.post(
-        base_url +
-          "/formgrader/api/assignment/" +
-          assignment +
-          "/" +
-          student +
-          "/generate_feedback"
-      )
-        .done(_.bind(this.generate_feedback_success, this))
-        .fail(_.bind(this.generate_feedback_failure, this));
-    } else {
-      this.clear();
-      this.$student_name.text("Please wait...");
-      var student = this.model.get("student");
-      var assignment = this.model.get("name");
-      $.post(
-        base_url +
-          "/formgrader/api/assignment/" +
-          assignment +
-          "/" +
-          student +
-          "/generate_feedback_hide"
-      )
-        .done(_.bind(this.generate_feedback_success, this))
-        .fail(_.bind(this.generate_feedback_failure, this));
-    }
+    console.log(document.getElementById("show_cells").checked);
+    this.clear();
+    this.$student_name.text("Please wait...");
+    let url =
+      base_url +
+      "/formgrader/api/assignment/" +
+      this.model.get("name") +
+      "/" +
+      this.model.get("student") +
+      "/generate_feedback";
+    $.post(
+      url +
+        "?" +
+        new URLSearchParams({
+          hide_cells: document.getElementById("hide_cells").checked,
+        })
+    )
+      .done(_.bind(this.generate_feedback_success, this))
+      .fail(_.bind(this.generate_feedback_failure, this));
   },
 
   generate_feedback_success: function (response) {

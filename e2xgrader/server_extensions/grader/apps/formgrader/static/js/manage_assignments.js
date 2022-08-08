@@ -528,29 +528,24 @@ var AssignmentUI = Backbone.View.extend({
 
   feedback: function () {
     $("#generate-feedback-modal").modal("hide");
-    if (document.getElementById("show_cells").checked) {
-      this.clear();
-      this.$name.text("Please wait...");
-      $.post(
-        base_url +
-          "/formgrader/api/assignment/" +
-          this.model.get("name") +
-          "/generate_feedback"
-      )
-        .done(_.bind(this.generate_feedback_success, this))
-        .fail(_.bind(this.generate_feedback_failure, this));
-    } else {
-      this.clear();
-      this.$name.text("Please wait...");
-      $.post(
-        base_url +
-          "/formgrader/api/assignment/" +
-          this.model.get("name") +
-          "/generate_feedback_hide"
-      )
-        .done(_.bind(this.generate_feedback_success, this))
-        .fail(_.bind(this.generate_feedback_failure, this));
-    }
+    this.clear();
+    this.$name.text("Please wait...");
+    let url =
+      base_url +
+      "/formgrader/api/assignment/" +
+      this.model.get("name") +
+      "/generate_feedback";
+    console.log(url);
+
+    $.post(
+      url +
+        "?" +
+        new URLSearchParams({
+          hide_cells: document.getElementById("hide_cells").checked,
+        })
+    )
+      .done(_.bind(this.generate_feedback_success, this))
+      .fail(_.bind(this.generate_feedback_failure, this));
   },
 
   generate_feedback_success: function (response) {
