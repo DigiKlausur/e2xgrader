@@ -12,12 +12,6 @@ from nbgrader.server_extensions.formgrader.handlers import (
 )
 from tornado import web
 
-from e2xgrader.exporters import (
-    GradeAssignmentExporter,
-    GradeNotebookExporter,
-    GradeTaskExporter,
-)
-
 
 class ExportGradesHandler(BaseHandler):
     @web.authenticated
@@ -25,45 +19,6 @@ class ExportGradesHandler(BaseHandler):
     def get(self):
         html = self.render("export_grades.tpl", base_url=self.base_url)
         self.write(html)
-
-
-class ExportAssignmentGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeAssignmentExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportNotebookGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeNotebookExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
-
-
-class ExportTaskGradesHandler(BaseHandler):
-    def initialize(self):
-        self.__exporter = GradeTaskExporter(self.gradebook)
-
-    @web.authenticated
-    @check_xsrf
-    def get(self):
-        self.set_header("Content-Type", 'text/csv; charset="utf-8"')
-        self.set_header("Content-Disposition", "attachment; filename=grades.csv")
-        self.write(self.__exporter.make_table().to_csv(index=False))
-        self.finish()
 
 
 class GradebookAssignmentsHandler(BaseHandler):
@@ -284,9 +239,6 @@ _navigation_regex = r"(?P<action>next_incorrect|prev_incorrect|next|prev)"
 
 default_handlers = [
     (r"/formgrader/export_grades/?", ExportGradesHandler),
-    (r"/formgrader/export_grades/assignments/?", ExportAssignmentGradesHandler),
-    (r"/formgrader/export_grades/notebooks/?", ExportNotebookGradesHandler),
-    (r"/formgrader/export_grades/tasks/?", ExportTaskGradesHandler),
     (r"/formgrader/gradebook/?", GradebookAssignmentsHandler),
     (r"/formgrader/gradebook/([^/]+)/?", GradebookNotebooksHandler),
     (r"/formgrader/gradebook/tasks/([^/]+)/([^/]+)/?", GradebookTasksHandler),
