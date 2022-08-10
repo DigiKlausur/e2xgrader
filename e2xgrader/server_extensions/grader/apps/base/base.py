@@ -54,4 +54,4 @@ class BaseApp(Application):
         This method is called when the app is loaded.
         Use it to initialize your app with handlers, settings, etc.
         """
-        return
+        pass
