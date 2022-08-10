@@ -1,9 +1,10 @@
+import re
 from typing import List
 from urllib.parse import parse_qsl, urlencode, urlparse
 
 
 def urljoin(*parts: List[str]) -> str:
-    return ("/" + "/".join(parts)).replace("//", "/")
+    return re.sub(r"/+", r"/", ("/" + "/".join(parts)))
 
 
 def format_url(url, params):
