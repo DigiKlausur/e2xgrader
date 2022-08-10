@@ -14,6 +14,10 @@ from notebook.serverextensions import ToggleServerExtensionApp
 
 from .. import _jupyter_nbextension_paths
 
+NBGRADER_FORMGRADER = "nbgrader.server_extensions.formgrader"
+NBGRADER_ASSIGNMENT_LIST = "nbgrader.server_extensions.assignment_list"
+E2XGRADER_GRADER = "e2xgrader.server_extensions.grader"
+
 
 class ExtensionManager:
     def deactivate(self, sys_prefix=True, user=False):
@@ -59,8 +63,8 @@ class ExtensionManager:
         print(f"Activate teacher mode with sys_prefix = {sys_prefix} and user = {user}")
         # Enable server extensions
         self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("nbgrader.server_extensions.formgrader")
-        self.disable_serverextension("nbgrader.server_extensions.assignment_list")
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
 
         # Install nbgrader nbextensions
@@ -88,10 +92,10 @@ class ExtensionManager:
         print(f"Activate student mode with sys_prefix = {sys_prefix} and user = {user}")
         # Enable server extensions
         self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("nbgrader.server_extensions.formgrader")
-        self.disable_serverextension("nbgrader.server_extensions.assignment_list")
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("e2xgrader.server_extensions.grader")
+        self.disable_serverextension(E2XGRADER_GRADER)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
@@ -122,10 +126,10 @@ class ExtensionManager:
         )
         # Enable server extensions
         self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("nbgrader.server_extensions.formgrader")
-        self.disable_serverextension("nbgrader.server_extensions.assignment_list")
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("e2xgrader.server_extensions.grader")
+        self.disable_serverextension(E2XGRADER_GRADER)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
