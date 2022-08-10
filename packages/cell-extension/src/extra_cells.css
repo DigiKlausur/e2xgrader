@@ -89,3 +89,7 @@
 .attachment-controls > button > i {
   padding-right: 1em;
 }
+
+iframe {
+  z-index: 5000;
+}
