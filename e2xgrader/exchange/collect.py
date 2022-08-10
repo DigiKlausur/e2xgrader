@@ -1,13 +1,13 @@
-import os
 import glob
+import os
 from collections import defaultdict
+
+from nbgrader.api import Gradebook, MissingEntry
+from nbgrader.exchange.default.collect import ExchangeCollect, groupby
+from nbgrader.utils import check_mode
 from traitlets import Bool
 
-from nbgrader.exchange.default.collect import ExchangeCollect, groupby
 from .exchange import E2xExchange
-
-from nbgrader.utils import check_mode
-from nbgrader.api import Gradebook, MissingEntry
 
 
 class E2xExchangeCollect(E2xExchange, ExchangeCollect):

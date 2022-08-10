@@ -1,10 +1,10 @@
-from nbformat.notebooknode import NotebookNode
-from nbconvert.exporters.exporter import ResourcesDict
 from typing import Tuple
 
+from nbconvert.exporters.exporter import ResourcesDict
+from nbformat.notebooknode import NotebookNode
 from nbgrader.preprocessors import ClearSolutions as NbgraderClearSolutions
 
-from ..utils.extra_cells import is_extra_cell, is_diagram, get_options
+from ..utils.extra_cells import get_options, is_diagram, is_extra_cell
 
 
 class ClearSolutions(NbgraderClearSolutions):

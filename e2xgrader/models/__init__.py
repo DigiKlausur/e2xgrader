@@ -1,10 +1,10 @@
-from .taskmodel import TaskModel
-from .templatemodel import TemplateModel
-from .taskpoolmodel import TaskPoolModel
 from .assignmentmodel import AssignmentModel
+from .basemodel import BaseModel
 from .exercisemodel import ExerciseModel
 from .presetmodel import PresetModel
-from .basemodel import BaseModel
+from .taskmodel import TaskModel
+from .taskpoolmodel import TaskPoolModel
+from .templatemodel import TemplateModel
 
 __all__ = [
     "TaskModel",

@@ -1,7 +1,9 @@
-import os
 import glob
-from .basemodel import BaseModel
+import os
+
 from traitlets import Unicode
+
+from .basemodel import BaseModel
 
 
 class AssignmentModel(BaseModel):

@@ -1,8 +1,9 @@
 import unittest
-from nbformat.v4 import new_markdown_cell, new_code_cell
 
-from e2xgrader.utils.extra_cells import get_choices
+from nbformat.v4 import new_code_cell, new_markdown_cell
+
 from e2xgrader.preprocessors import ClearHiddenTests
+from e2xgrader.utils.extra_cells import get_choices
 
 
 class TestClearHiddenTests(unittest.TestCase):

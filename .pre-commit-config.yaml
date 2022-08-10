@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        files: \.py$
+        args: [--profile=black]
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: 'npm run prettier:files'
+        language: node
+        types_or: [json, markdown, ts, tsx, javascript, jsx, css]

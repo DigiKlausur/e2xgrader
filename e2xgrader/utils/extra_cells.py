@@ -1,6 +1,7 @@
-import nbgrader.utils as nbutils
-from typing import Tuple, Optional
 from logging import Logger
+from typing import Optional, Tuple
+
+import nbgrader.utils as nbutils
 from nbformat.notebooknode import NotebookNode
 
 

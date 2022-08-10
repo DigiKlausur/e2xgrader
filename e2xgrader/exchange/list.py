@@ -1,10 +1,11 @@
-import os
 import glob
-import re
 import hashlib
+import os
+import re
 
 from nbgrader.exchange.default import ExchangeList
-from nbgrader.utils import notebook_hash, make_unique_key
+from nbgrader.utils import make_unique_key, notebook_hash
+
 from .exchange import E2xExchange
 
 

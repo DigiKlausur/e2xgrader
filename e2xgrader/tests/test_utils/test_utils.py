@@ -1,9 +1,10 @@
-import nbformat
 from tempfile import TemporaryDirectory
+
+import nbformat
 from nbgrader.coursedir import CourseDirectory
 from nbgrader.utils import is_grade
 
-from e2xgrader.models import TemplateModel, PresetModel
+from e2xgrader.models import PresetModel, TemplateModel
 
 
 def create_temp_course():

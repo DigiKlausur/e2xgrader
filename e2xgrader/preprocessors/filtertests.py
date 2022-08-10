@@ -1,9 +1,10 @@
-from nbgrader.preprocessors import NbGraderPreprocessor
-from nbformat.notebooknode import NotebookNode
-from nbconvert.exporters.exporter import ResourcesDict
-from traitlets import Bool
 from typing import Tuple
+
+from nbconvert.exporters.exporter import ResourcesDict
+from nbformat.notebooknode import NotebookNode
+from nbgrader.preprocessors import NbGraderPreprocessor
 from nbgrader.utils import is_grade, is_solution
+from traitlets import Bool
 
 
 class FilterTests(NbGraderPreprocessor):

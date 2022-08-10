@@ -1,8 +1,9 @@
 import unittest
+
 from nbformat.v4 import new_markdown_cell, new_notebook
 
-from e2xgrader.utils.nbgrader_cells import grade_id
 from e2xgrader.preprocessors import FilterCellsById
+from e2xgrader.utils.nbgrader_cells import grade_id
 
 
 class TestFilterCellsById(unittest.TestCase):

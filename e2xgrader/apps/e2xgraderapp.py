@@ -1,15 +1,22 @@
-from argparse import ArgumentParser
 import sys
+from argparse import ArgumentParser
 from textwrap import dedent
-from notebook.serverextensions import ToggleServerExtensionApp
+
 from notebook.nbextensions import (
-    uninstall_nbextension_python,
-    install_nbextension_python,
-    enable_nbextension_python,
     disable_nbextension,
-    enable_nbextension,
     disable_nbextension_python,
+    enable_nbextension,
+    enable_nbextension_python,
+    install_nbextension_python,
+    uninstall_nbextension_python,
 )
+from notebook.serverextensions import ToggleServerExtensionApp
+
+from .. import _jupyter_nbextension_paths
+
+NBGRADER_FORMGRADER = "nbgrader.server_extensions.formgrader"
+NBGRADER_ASSIGNMENT_LIST = "nbgrader.server_extensions.assignment_list"
+E2XGRADER_GRADER = "e2xgrader.server_extensions.grader"
 
 
 class ExtensionManager:
@@ -56,8 +63,8 @@ class ExtensionManager:
         print(f"Activate teacher mode with sys_prefix = {sys_prefix} and user = {user}")
         # Enable server extensions
         self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("nbgrader.server_extensions.formgrader")
-        self.disable_serverextension("nbgrader.server_extensions.assignment_list")
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
 
         # Install nbgrader nbextensions
@@ -72,42 +79,23 @@ class ExtensionManager:
 
         # Install e2xgrader nbextensions
         self.install_nbextensions("e2xgrader", sys_prefix=sys_prefix, user=user)
-        enable_nbextension(
-            require="extra_cells/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
-        enable_nbextension(
-            require="create_assignment/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
-        enable_nbextension(
-            require="taskcreator/main", section="tree", sys_prefix=sys_prefix, user=user
-        )
-        enable_nbextension(
-            require="templatebar/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
-        enable_nbextension(
-            require="taskeditor/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
+        for nbextension in _jupyter_nbextension_paths():
+            if "teacher" in nbextension["dest"]:
+                enable_nbextension(
+                    require=nbextension["require"],
+                    section=nbextension["section"],
+                    sys_prefix=sys_prefix,
+                    user=user,
+                )
 
     def activate_student(self, sys_prefix=True, user=False):
         print(f"Activate student mode with sys_prefix = {sys_prefix} and user = {user}")
         # Enable server extensions
         self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("nbgrader.server_extensions.formgrader")
-        self.disable_serverextension("nbgrader.server_extensions.assignment_list")
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension("e2xgrader.server_extensions.formgrader")
+        self.disable_serverextension(E2XGRADER_GRADER)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
@@ -120,36 +108,50 @@ class ExtensionManager:
 
         # Install e2xgrader nbextensions
         self.install_nbextensions("e2xgrader", sys_prefix=sys_prefix, user=user)
-        enable_nbextension(
-            require="extra_cells/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
-        enable_nbextension(
-            require="assignment_extension/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
+        for nbextension in _jupyter_nbextension_paths():
+            if (
+                "student" in nbextension["dest"]
+                and "student_exam" not in nbextension["dest"]
+            ):
+                enable_nbextension(
+                    require=nbextension["require"],
+                    section=nbextension["section"],
+                    sys_prefix=sys_prefix,
+                    user=user,
+                )
 
     def activate_student_exam(self, sys_prefix=True, user=False):
         print(
             f"Activate student exam mode with sys_prefix = {sys_prefix} and user = {user}"
         )
         # Enable server extensions
-        self.activate_student(sys_prefix=sys_prefix, user=user)
+        self.enable_serverextension_py("nbgrader", sys_prefix=sys_prefix, user=user)
+        self.disable_serverextension(NBGRADER_FORMGRADER)
+        self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
+        self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
+        self.disable_serverextension(E2XGRADER_GRADER)
+
+        # Install nbgrader nbextensions
+        self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
         enable_nbextension(
-            require="exam_view/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
-        enable_nbextension(
-            require="restricted_tree/main",
+            require="assignment_list/main",
             section="tree",
             sys_prefix=sys_prefix,
             user=user,
+        )
+
+        # Install e2xgrader nbextensions
+        self.install_nbextensions("e2xgrader", sys_prefix=sys_prefix, user=user)
+        for nbextension in _jupyter_nbextension_paths():
+            if "student_exam" in nbextension["dest"]:
+                enable_nbextension(
+                    require=nbextension["require"],
+                    section=nbextension["section"],
+                    sys_prefix=sys_prefix,
+                    user=user,
+                )
+        print(
+            f"Activate student exam mode with sys_prefix = {sys_prefix} and user = {user}"
         )
 
 

@@ -1,30 +1,31 @@
-import os
 import base64
+import os
 import sys
-import nbformat
 from stat import (
-    S_IRUSR,
-    S_IWUSR,
-    S_IXUSR,
     S_IRGRP,
-    S_IWGRP,
-    S_IXGRP,
     S_IROTH,
-    S_IWOTH,
-    S_IXOTH,
+    S_IRUSR,
     S_ISGID,
+    S_IWGRP,
+    S_IWOTH,
+    S_IWUSR,
+    S_IXGRP,
+    S_IXOTH,
+    S_IXUSR,
 )
+
+import nbformat
 from nbgrader.exchange.default import ExchangeSubmit
 from nbgrader.utils import check_mode, get_username
 
 from .exchange import E2xExchange
 from .utils import (
-    compute_hashcode,
-    truncate_hashcode,
     append_hashcode,
     append_timestamp,
+    compute_hashcode,
     generate_html,
     generate_student_info,
+    truncate_hashcode,
 )
 
 

@@ -1,5 +1,7 @@
 import unittest
+
 from nbformat.v4 import new_markdown_cell
+
 from e2xgrader.preprocessors import ClearSolutions
 
 

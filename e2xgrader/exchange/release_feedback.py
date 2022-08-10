@@ -1,26 +1,24 @@
-import os
-import shutil
 import glob
+import os
 import re
-
+import shutil
 from stat import (
-    S_IRUSR,
-    S_IWUSR,
-    S_IXUSR,
     S_IRGRP,
+    S_IROTH,
+    S_IRUSR,
+    S_ISGID,
     S_IWGRP,
+    S_IWOTH,
+    S_IWUSR,
     S_IXGRP,
     S_IXOTH,
-    S_IWOTH,
-    S_IROTH,
-    S_ISGID,
+    S_IXUSR,
 )
 
 from nbgrader.exchange.default import ExchangeReleaseFeedback
+from nbgrader.utils import make_unique_key, notebook_hash
 
 from .exchange import E2xExchange
-
-from nbgrader.utils import notebook_hash, make_unique_key
 
 
 class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):

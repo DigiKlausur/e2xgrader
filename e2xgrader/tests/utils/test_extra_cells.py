@@ -1,19 +1,21 @@
-import nbformat
 import unittest
+
+import nbformat
 
 from e2xgrader.models import PresetModel
 from e2xgrader.utils.extra_cells import (
+    clear_choices,
+    get_choices,
+    get_num_of_choices,
+    get_options,
+    has_solution,
+    is_attachment_cell,
+    is_diagram,
     is_extra_cell,
     is_multiplechoice,
     is_singlechoice,
-    is_diagram,
-    is_attachment_cell,
-    get_choices,
-    get_num_of_choices,
-    clear_choices,
-    has_solution,
-    get_options,
 )
+
 from ..test_utils.test_utils import create_temp_course
 
 

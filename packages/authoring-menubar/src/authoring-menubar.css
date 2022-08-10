@@ -1,0 +1,35 @@
+.e2xtable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: auto;
+  width: 80%;
+  border: 1px solid #ddd;
+}
+
+.e2xtable td {
+  text-align: left;
+  padding: 0.5em;
+}
+
+.e2xtable tr:nth-child(odd) {
+  background-color: #f8fbfc;
+}
+
+.e2xtable tr:nth-child(even) {
+  background-color: #eaf4f7;
+}
+
+.e2xtable .column2 {
+  float: right;
+}
+
+.e2xtable select {
+  height: 2.5em;
+  width: 15em;
+  border: 1px solid #bbb;
+}
+
+.e2xtable input {
+  height: 2.5em;
+  width: 15em;
+}

@@ -13,9 +13,8 @@ class TestE2XGraderApp(unittest.TestCase):
             "nbgrader.server_extensions.validate_assignment",
             "nbgrader.server_extensions.assignment_list",
             "nbgrader.server_extensions.course_list",
-            "e2xgrader.server_extensions.formgrader",
+            "e2xgrader.server_extensions.grader",
             "e2xgrader.server_extensions.assignment_list",
-            "e2xgrader.server_extensions.e2xbase",
         ]
         self.manager = e2xgraderapp.ExtensionManager()
         self.manager.deactivate()
@@ -34,13 +33,8 @@ class TestE2XGraderApp(unittest.TestCase):
                 "student",
                 "student_exam",
             ],
-            "e2xgrader.server_extensions.formgrader": ["teacher"],
+            "e2xgrader.server_extensions.grader": ["teacher"],
             "e2xgrader.server_extensions.assignment_list": [
-                "teacher",
-                "student",
-                "student_exam",
-            ],
-            "e2xgrader.server_extensions.e2xbase": [
                 "teacher",
                 "student",
                 "student_exam",
@@ -55,20 +49,15 @@ class TestE2XGraderApp(unittest.TestCase):
     def get_nbextensions(self, role):
         nbextensions = {
             "tree": {
-                "formgrader/main": ["teacher"],
+                "teacher_tree/main": ["teacher"],
                 "assignment_list/main": ["teacher", "student", "student_exam"],
-                "course_list/main": ["teacher"],
-                "taskcreator/main": ["teacher"],
-                "restricted_tree/main": ["student_exam"],
+                "student_exam_tree/main": ["student_exam"],
             },
             "notebook": {
-                "create_assignment/main": ["teacher"],
+                "teacher_notebook/main": ["teacher"],
                 "validate_assignment/main": ["teacher"],
-                "extra_cells/main": ["teacher", "student", "student_exam"],
-                "taskeditor/main": ["teacher"],
-                "templatebar/main": ["teacher"],
-                "assignment_extension/main": ["student", "student_exam"],
-                "exam_view/main": ["student_exam"],
+                "student_notebook/main": ["student"],
+                "student_exam_notebook/main": ["student_exam"],
             },
         }
 

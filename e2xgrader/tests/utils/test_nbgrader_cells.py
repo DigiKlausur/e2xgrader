@@ -1,16 +1,17 @@
-import nbformat
 import unittest
 
-from e2xgrader.models import TaskModel, PresetModel
+import nbformat
+
+from e2xgrader.models import PresetModel, TaskModel
 from e2xgrader.utils.nbgrader_cells import (
-    get_valid_name,
-    get_tasks,
-    is_solution_cell,
-    is_description,
     get_points,
+    get_tasks,
+    get_valid_name,
+    is_description,
+    is_solution_cell,
 )
 
-from ..test_utils.test_utils import create_temp_course, add_question_to_task
+from ..test_utils.test_utils import add_question_to_task, create_temp_course
 
 
 class TestNbgraderCells(unittest.TestCase):

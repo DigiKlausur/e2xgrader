@@ -1,6 +1,7 @@
 import unittest
 
 from bs4 import BeautifulSoup
+
 from e2xgrader.exporters.filters import Highlight2HTMLwithLineNumbers
 
 

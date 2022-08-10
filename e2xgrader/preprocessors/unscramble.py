@@ -1,6 +1,7 @@
-import re
 import base64
 import pickle
+import re
+
 from nbgrader.preprocessors import NbGraderPreprocessor
 
 

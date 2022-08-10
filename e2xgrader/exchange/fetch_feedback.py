@@ -1,9 +1,10 @@
-import os
 import glob
+import os
 
 from nbgrader.exchange.default import ExchangeFetchFeedback
+from nbgrader.utils import check_mode, get_username, make_unique_key, notebook_hash
+
 from .exchange import E2xExchange
-from nbgrader.utils import check_mode, notebook_hash, make_unique_key, get_username
 
 
 class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):

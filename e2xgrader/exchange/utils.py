@@ -1,7 +1,8 @@
 import hashlib
+from textwrap import dedent
+
 import nbformat
 
-from textwrap import dedent
 from e2xgrader.exporters import E2xExporter
 
 

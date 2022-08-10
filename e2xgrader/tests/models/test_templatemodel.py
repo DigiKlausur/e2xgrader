@@ -1,9 +1,9 @@
 import os
 import unittest
-
 from os.path import join as pjoin
 
 from e2xgrader.models import TemplateModel
+
 from ..test_utils.test_utils import create_temp_course
 
 

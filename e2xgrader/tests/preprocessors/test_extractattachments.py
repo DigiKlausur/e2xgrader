@@ -1,11 +1,12 @@
 import unittest
 from copy import deepcopy
-from nbformat.v4 import new_notebook, new_markdown_cell
 
-from ..test_utils.test_utils import create_temp_course
+from nbformat.v4 import new_markdown_cell, new_notebook
 
 from e2xgrader.models import PresetModel
 from e2xgrader.preprocessors import ExtractAttachments
+
+from ..test_utils.test_utils import create_temp_course
 
 
 class TestExtractAttachments(unittest.TestCase):

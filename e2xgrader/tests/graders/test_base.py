@@ -1,6 +1,7 @@
 import unittest
-from nbformat.v4 import new_code_cell
+
 from nbformat.notebooknode import NotebookNode
+from nbformat.v4 import new_code_cell
 from nbgrader.utils import compute_checksum
 
 from e2xgrader.graders import BaseGrader

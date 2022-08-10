@@ -4,10 +4,10 @@ from e2xgrader.models import TemplateModel
 from e2xgrader.utils import NotebookVariableExtractor
 
 from ..test_utils.test_utils import (
-    create_temp_course,
-    add_template_with_header,
-    add_header_to_template,
     add_footer_to_template,
+    add_header_to_template,
+    add_template_with_header,
+    create_temp_course,
 )
 
 
