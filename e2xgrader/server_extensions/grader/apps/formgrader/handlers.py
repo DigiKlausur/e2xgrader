@@ -12,6 +12,8 @@ from nbgrader.server_extensions.formgrader.handlers import (
 )
 from tornado import web
 
+from e2xgrader.utils import format_url
+
 
 class ExportGradesHandler(BaseHandler):
     @web.authenticated
@@ -92,8 +94,9 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
             return "{}/formgrader/gradebook/{}/{}".format(
                 self.base_url, assignment_id, notebook_id
             )
-        return "{}/formgrader/gradebook/{}/{}/?view=task&filter={}".format(
-            self.base_url, assignment_id, notebook_id, task_id
+        return format_url(
+            f"{self.base_url}/formgrader/gradebook/{assignment_id}/{notebook_id}/",
+            dict(view="task", filter=task_id),
         )
 
     def _next(self, assignment_id, notebook_id, submission, task_id):
@@ -105,8 +108,8 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
                 assignment_id, notebook_id, task_id
             )
         else:
-            return self._submission_url(submission_ids[ix + 1]) + "?task={}".format(
-                task_id
+            return format_url(
+                self._submission_url(submission_ids[ix + 1]), dict(task=task_id)
             )
 
     def _prev(self, assignment_id, notebook_id, submission, task_id):
@@ -118,8 +121,8 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
                 assignment_id, notebook_id, task_id
             )
         else:
-            return self._submission_url(submission_ids[ix - 1]) + "?task={}".format(
-                task_id
+            return format_url(
+                self._submission_url(submission_ids[ix - 1]), dict(task=task_id)
             )
 
     def _next_incorrect(self, assignment_id, notebook_id, submission, task_id):
@@ -133,9 +136,10 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
                 assignment_id, notebook_id, task_id
             )
         else:
-            return self._submission_url(
-                submission_ids[ix_incorrect + 1]
-            ) + "?task={}".format(task_id)
+            return format_url(
+                self._submission_url(submission_ids[ix_incorrect + 1]),
+                dict(task=task_id),
+            )
 
     def _prev_incorrect(self, assignment_id, notebook_id, submission, task_id):
         # find previous incorrect submission
@@ -148,9 +152,10 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
                 assignment_id, notebook_id, task_id
             )
         else:
-            return self._submission_url(
-                submission_ids[ix_incorrect - 1]
-            ) + "?task={}".format(task_id)
+            return format_url(
+                self._submission_url(submission_ids[ix_incorrect - 1]),
+                dict(task=task_id),
+            )
 
     @web.authenticated
     @check_xsrf
