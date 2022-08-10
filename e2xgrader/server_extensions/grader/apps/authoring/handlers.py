@@ -19,7 +19,7 @@ class TaskcreatorHandler(BaseHandler):
     @check_xsrf
     @check_notebook_dir
     def get(self):
-        self.redirect(urljoin(app_url, "assignments"))
+        self.redirect(urljoin(self.base_url, app_url, "assignments"))
 
 
 class ManageAssignmentsHandler(BaseHandler):
