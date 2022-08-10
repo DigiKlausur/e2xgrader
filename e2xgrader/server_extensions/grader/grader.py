@@ -2,10 +2,10 @@ import os
 from importlib import import_module
 
 from jinja2 import Environment, FileSystemLoader
-from jupyter_core.paths import jupyter_config_path
-from nbgrader.apps import NbGrader
 from traitlets import Any, List, TraitError, validate
 from traitlets.config import Application
+
+from e2xgrader.utils import get_nbgrader_config
 
 from .apps.authoring import AuthoringApp
 from .apps.e2xgraderapi import E2xGraderApi
@@ -23,7 +23,7 @@ class E2xGrader(Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.log = self.parent.log
-        self.load_config()
+        self.config = get_nbgrader_config()
         self.log.info(self.apps)
         self.initialize_jinja_environment()
         self.initialize_apps()
@@ -48,11 +48,6 @@ class E2xGrader(Application):
         self.parent.web_app.settings["e2xgrader"] = {
             "jinja_env": Environment(loader=FileSystemLoader([]))
         }
-
-    def load_config(self):
-        app = NbGrader()
-        app.load_config_file()
-        self.config = app.config
 
 
 def load_jupyter_server_extension(nbapp):
