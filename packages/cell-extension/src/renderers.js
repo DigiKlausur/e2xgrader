@@ -1,4 +1,4 @@
-import { MarkdownCell } from "notebook/js/textcell";
+import { TextCell, MarkdownCell } from "notebook/js/textcell";
 import { utils } from "@e2xgrader/cells";
 
 const old_render = MarkdownCell.prototype.render;
