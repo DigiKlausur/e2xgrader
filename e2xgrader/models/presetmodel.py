@@ -60,7 +60,7 @@ class PresetModel(BaseModel):
     def list_template_presets(self):
         presets = self.list_presets(self.template_preset_path)
         if self.extra_template_preset_path is not None:
-            presets.extend(self.list_presets(self.extra_task_preset_path))
+            presets.extend(self.list_presets(self.extra_template_preset_path))
         return presets
 
     def get_template_preset(self, preset_name):
