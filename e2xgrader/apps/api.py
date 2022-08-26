@@ -208,7 +208,7 @@ class E2xAPI(NbGraderAPI):
 
         return submissions
 
-    def get_assignment(self, assignment_id, released=None):
+    def get_assignment(self, assignment_id, released=None, include_score=True):
         """Get information about an assignment given its name.
         Arguments
         ---------
@@ -217,6 +217,8 @@ class E2xAPI(NbGraderAPI):
         released: list
             (Optional) A set of names of released assignments, obtained via
             self.get_released_assignments().
+        include_score: bool
+            (Optional) If the score of the assignment should be included
         Returns
         -------
         assignment: dict
@@ -253,20 +255,25 @@ class E2xAPI(NbGraderAPI):
                     assignment["duedate_notimezone"] = None
                 assignment["duedate_timezone"] = to_numeric_tz(self.timezone)
 
-                assignment["average_code_score"] = gb.average_assignment_code_score(
-                    assignment_id
-                )
-                assignment[
-                    "average_written_score"
-                ] = gb.average_assignment_written_score(assignment_id)
-                assignment["average_task_score"] = gb.average_assignment_task_score(
-                    assignment_id
-                )
-                assignment["average_score"] = (
-                    assignment["average_code_score"]
-                    + assignment["average_written_score"]
-                    + assignment["average_task_score"]
-                )
+                if include_score:
+                    assignment["average_code_score"] = gb.average_assignment_code_score(
+                        assignment_id
+                    )
+                    assignment[
+                        "average_written_score"
+                    ] = gb.average_assignment_written_score(assignment_id)
+                    assignment["average_task_score"] = gb.average_assignment_task_score(
+                        assignment_id
+                    )
+                    assignment["average_score"] = (
+                        assignment["average_code_score"]
+                        + assignment["average_written_score"]
+                        + assignment["average_task_score"]
+                    )
+                else:
+                    assignment["average_code_score"] = None
+                    assignment["average_written_score"] = None
+                    assignment["average_score"] = None
 
         except MissingEntry:
             assignment = {
@@ -319,6 +326,28 @@ class E2xAPI(NbGraderAPI):
         assignment["num_submissions"] = len(self.get_submitted_students(assignment_id))
 
         return assignment
+
+    def get_assignments(self, include_score=True):
+        """Get list of information about all assignments
+
+        Arguments
+        ---------
+            include_score: bool
+                (Optional) If the score of the assignment should be included. Defaults to True
+        Returns
+        -------
+        assignments: list
+            A list of dictionaries containing information about each assignment
+
+        """
+        released = self.get_released_assignments()
+        
+        assignments = []
+        for x in self.get_source_assignments():
+            assignments.append(self.get_assignment(x, released=released, include_score=include_score))
+        
+        assignments.sort(key=lambda x: (x["duedate"] if x["duedate"] is not None else "None", x["name"]))
+        return assignments
 
     def get_annotations(self, submission_id: str) -> Union[List[Dict[str, str]], None]:
         """Get all annotations associated with a submission
