@@ -341,12 +341,19 @@ class E2xAPI(NbGraderAPI):
 
         """
         released = self.get_released_assignments()
-        
+
         assignments = []
         for x in self.get_source_assignments():
-            assignments.append(self.get_assignment(x, released=released, include_score=include_score))
-        
-        assignments.sort(key=lambda x: (x["duedate"] if x["duedate"] is not None else "None", x["name"]))
+            assignments.append(
+                self.get_assignment(x, released=released, include_score=include_score)
+            )
+
+        assignments.sort(
+            key=lambda x: (
+                x["duedate"] if x["duedate"] is not None else "None",
+                x["name"],
+            )
+        )
         return assignments
 
     def get_annotations(self, submission_id: str) -> Union[List[Dict[str, str]], None]:
