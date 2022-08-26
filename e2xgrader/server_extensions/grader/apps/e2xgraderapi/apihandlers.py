@@ -13,7 +13,6 @@ from e2xgrader.exporters import (
     GradeAssignmentExporter,
     GradeNotebookExporter,
     GradeTaskExporter,
-    exporter,
 )
 
 from .base import E2xApiHandler
@@ -24,7 +23,12 @@ class E2xAssignmentCollectionHandler(E2xApiHandler, AssignmentCollectionHandler)
     Inherit from E2xApiHandler to overwrite the internal NbgraderAPI with the E2xAPI
     """
 
-    pass
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self):
+        include_score = self.get_argument("include_score", "True").lower() == "true"
+        self.write(json.dumps(self.api.get_assignments(include_score=include_score)))
 
 
 class E2xAssignmentHandler(E2xApiHandler, AssignmentHandler):
@@ -32,7 +36,15 @@ class E2xAssignmentHandler(E2xApiHandler, AssignmentHandler):
     Inherit from E2xApiHandler to overwrite the internal NbgraderAPI with the E2xAPI
     """
 
-    pass
+    @web.authenticated
+    @check_xsrf
+    @check_notebook_dir
+    def get(self, assignment_id):
+        include_score = self.get_argument("include_score", "True").lower() == "true"
+        assignment = self.api.get_assignment(assignment_id, include_score=include_score)
+        if assignment is None:
+            raise web.HTTPError(404)
+        self.write(json.dumps(assignment))
 
 
 class SolutionCellCollectionHandler(E2xApiHandler):
