@@ -1,5 +1,8 @@
 import { TextCell, MarkdownCell } from "notebook/js/textcell";
 import { utils } from "@e2xgrader/cells";
+import markdown from "base/js/markdown";
+
+console.log(TextCell);
 
 const old_render = MarkdownCell.prototype.render;
 const old_unrender = MarkdownCell.prototype.unrender;
@@ -12,10 +15,10 @@ export function add_unsafe_renderer() {
     this.drag_counter = 0;
     this.inner_cell.removeClass("dropzone");
 
-    var cont = TextCell.prototype.render.apply(this);
+    let cont = TextCell.prototype.render.apply(this);
     if (cont) {
-      var that = this;
-      var text = this.get_text();
+      let that = this;
+      let text = this.get_text();
       if (text === "") {
         text = this.placeholder;
       }
@@ -35,7 +38,7 @@ export function add_unsafe_renderer() {
             .addBack(":header")
             .each(function (i, h) {
               h = $(h);
-              var hash = h.text().replace(/ /g, "-");
+              let hash = h.text().replace(/ /g, "-");
               h.attr("id", hash);
               h.append(
                 $("<a/>")
@@ -56,11 +59,11 @@ export function add_unsafe_renderer() {
           // in the cell's attachments
           html.find('img[src^="attachment:"]').each(function (i, h) {
             h = $(h);
-            var key = h.attr("src").replace(/^attachment:/, "");
+            let key = h.attr("src").replace(/^attachment:/, "");
 
             if (that.attachments.hasOwnProperty(key)) {
-              var att = that.attachments[key];
-              var mime = Object.keys(att)[0];
+              let att = that.attachments[key];
+              let mime = Object.keys(att)[0];
               h.attr("src", "data:" + mime + ";base64," + att[mime]);
             } else {
               h.attr("src", "");
