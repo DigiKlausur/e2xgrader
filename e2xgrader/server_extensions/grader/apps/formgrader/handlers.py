@@ -1,5 +1,4 @@
 import os
-import sys
 
 from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import (
