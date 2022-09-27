@@ -117,7 +117,7 @@ let SubmissionUI = Backbone.View.extend({
     this.$autograde.append(
       $("<a/>")
         .attr("href", "#")
-        .click(_.bind(this.autograde, this))
+        .on("click", _.bind(this.autograde, this))
         .append(
           $("<span/>")
             .addClass("glyphicon glyphicon-flash")
@@ -129,7 +129,7 @@ let SubmissionUI = Backbone.View.extend({
     this.$generate_feedback.append(
       $("<a/>")
         .attr("href", "#")
-        .click(_.bind(this.generate_feedback, this))
+        .on("click", _.bind(this.generate_feedback, this))
         .append(
           $("<span/>")
             .addClass("glyphicon glyphicon-comment")
@@ -141,7 +141,7 @@ let SubmissionUI = Backbone.View.extend({
     this.$release_feedback.append(
       $("<a/>")
         .attr("href", "#")
-        .click(_.bind(this.release_feedback, this))
+        .on("click", _.bind(this.release_feedback, this))
         .append(
           $("<span/>")
             .addClass("glyphicon glyphicon-envelope")

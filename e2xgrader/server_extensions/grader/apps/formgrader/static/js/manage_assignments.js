@@ -164,7 +164,7 @@ let AssignmentUI = Backbone.View.extend({
     this.$edit.append(
       $("<a/>")
         .attr("href", "#")
-        .click(_.bind(this.openModal, this))
+        .on("click", _.bind(this.openModal, this))
         .append(
           $("<span/>")
             .addClass("glyphicon glyphicon-pencil")
@@ -176,7 +176,7 @@ let AssignmentUI = Backbone.View.extend({
     this.$assign.append(
       $("<a/>")
         .attr("href", "#")
-        .click(_.bind(this.assign, this))
+        .on("click", _.bind(this.assign, this))
         .append(
           $("<span/>")
             .addClass("glyphicon glyphicon-education")
@@ -206,7 +206,7 @@ let AssignmentUI = Backbone.View.extend({
         this.$release.append(
           $("<a/>")
             .attr("href", "#")
-            .click(_.bind(this.release, this))
+            .on("click", _.bind(this.release, this))
             .append(
               $("<span/>")
                 .addClass("glyphicon glyphicon-cloud-upload")
@@ -217,7 +217,7 @@ let AssignmentUI = Backbone.View.extend({
         this.$release.append(
           $("<a/>")
             .attr("href", "#")
-            .click(_.bind(this.unrelease, this))
+            .on("click", _.bind(this.unrelease, this))
             .append(
               $("<span/>")
                 .addClass("glyphicon glyphicon-remove")
@@ -233,7 +233,7 @@ let AssignmentUI = Backbone.View.extend({
         this.$collect.append(
           $("<a/>")
             .attr("href", "#")
-            .click(_.bind(this.collect, this))
+            .on("click", _.bind(this.collect, this))
             .append(
               $("<span/>")
                 .addClass("glyphicon glyphicon-cloud-download")
@@ -266,7 +266,7 @@ let AssignmentUI = Backbone.View.extend({
       this.$generate_feedback.append(
         $("<a/>")
           .attr("href", "#")
-          .click(_.bind(this.generate_feedback, this))
+          .on("click", _.bind(this.generate_feedback, this))
           .append(
             $("<span/>")
               .addClass("glyphicon glyphicon-comment")
@@ -280,7 +280,7 @@ let AssignmentUI = Backbone.View.extend({
       this.$release_feedback.append(
         $("<a/>")
           .attr("href", "#")
-          .click(_.bind(this.release_feedback, this))
+          .on("click", _.bind(this.release_feedback, this))
           .append(
             $("<span/>")
               .addClass("glyphicon glyphicon-envelope")

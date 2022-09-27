@@ -58,13 +58,13 @@ let SubmittedNotebookUI = Backbone.View.extend({
       $("<span/>")
         .addClass("glyphicon glyphicon-eye-open name-hidden")
         .attr("aria-hidden", "true")
-        .click(_.bind(this.showName, this))
+        .on("click", _.bind(this.showName, this))
     );
     this.$reveal.append(
       $("<span/>")
         .addClass("glyphicon glyphicon-eye-close name-shown")
         .attr("aria-hidden", "true")
-        .click(_.bind(this.hideName, this))
+        .on("click", _.bind(this.hideName, this))
     );
 
     // notebook name
