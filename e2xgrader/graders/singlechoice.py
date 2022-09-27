@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 
 from nbformat.notebooknode import NotebookNode
 
-from ..utils.extra_cells import get_choices, get_instructor_choices, get_num_of_choices
+from ..utils.extra_cells import get_choices, get_instructor_choices
 from .base import BaseGrader
 
 

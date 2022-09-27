@@ -1,5 +1,4 @@
 import unittest
-from types import SimpleNamespace
 
 from nbformat.notebooknode import NotebookNode
 from nbformat.v4 import new_code_cell, new_output

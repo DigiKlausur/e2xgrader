@@ -1,4 +1,3 @@
-import os
 from importlib import import_module
 
 from jinja2 import Environment, FileSystemLoader

@@ -1,7 +1,4 @@
-import json
-
-from nbgrader.server_extensions.formgrader.base import BaseApiHandler, check_xsrf
-from tornado import web
+from nbgrader.server_extensions.formgrader.base import BaseApiHandler
 
 from e2xgrader.apps.api import E2xAPI
 

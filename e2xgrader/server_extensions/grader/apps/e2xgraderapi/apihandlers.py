@@ -1,6 +1,4 @@
-import base64
 import json
-import os
 
 from nbgrader.server_extensions.formgrader.apihandlers import (
     AssignmentCollectionHandler,

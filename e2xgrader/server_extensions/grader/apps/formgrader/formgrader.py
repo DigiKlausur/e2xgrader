@@ -1,5 +1,4 @@
 import os
-from distutils.command.config import config
 
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers

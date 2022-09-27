@@ -8,8 +8,6 @@ from nbgrader.converters import GenerateFeedback
 from nbgrader.utils import as_timezone, capture_log, temp_attrs, to_numeric_tz
 from traitlets.config import Config
 
-from ..exporters import E2xExporter
-
 
 class E2xAPI(NbGraderAPI):
     def generate_feedback(

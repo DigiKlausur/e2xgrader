@@ -38,13 +38,6 @@ class TestFilterCellsById(unittest.TestCase):
         assert all([idx in processed_cell_ids for idx in self.grade_ids])
 
     def test_non_empty_keyword(self):
-        resources = {"keyword": "Task12345"}
-        processed_nb, resources = FilterCellsById().preprocess(self.nb, resources)
-        processed_cell_ids = [grade_id(cell) for cell in processed_nb.cells]
-        assert len(processed_cell_ids) == 1
-        assert processed_cell_ids[0] == "Task12345"
-
-    def test_non_empty_keyword(self):
         keyword = "Task123"
         resources = {"keyword": keyword}
         processed_nb, resources = FilterCellsById().preprocess(self.nb, resources)

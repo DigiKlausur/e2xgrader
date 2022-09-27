@@ -1,7 +1,7 @@
 import unittest
 from copy import deepcopy
 
-from nbformat.v4 import new_markdown_cell, new_notebook
+from nbformat.v4 import new_notebook
 
 from e2xgrader.models import PresetModel
 from e2xgrader.preprocessors import ExtractAttachments

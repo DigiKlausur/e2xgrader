@@ -1,5 +1,4 @@
 import os
-import random as rd
 from os.path import join as pjoin
 
 from e2xgrader.models import TaskModel, TemplateModel

@@ -1,7 +1,6 @@
 import os
 
 from nbgrader.apps.baseapp import NbGrader
-from nbgrader.server_extensions.formgrader.apihandlers import default_handlers
 from tornado import web
 
 from e2xgrader.server_extensions.grader.apps.base import BaseApp

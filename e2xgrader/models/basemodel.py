@@ -1,6 +1,5 @@
 import re
 
-from nbgrader.apps import NbGrader
 from traitlets import Unicode
 from traitlets.config import LoggingConfigurable
 

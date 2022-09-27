@@ -1,10 +1,3 @@
-from logging import Logger
-from typing import Optional, Tuple
-
-import nbgrader.utils as nbutils
-from nbformat.notebooknode import NotebookNode
-
-
 def is_extra_cell(cell):
     """Returns True if the cell is a form cell."""
     if "nbgrader" not in cell.metadata:
