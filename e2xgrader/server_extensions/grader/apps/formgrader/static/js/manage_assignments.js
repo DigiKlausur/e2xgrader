@@ -1,14 +1,14 @@
-var Assignment = Backbone.Model.extend({
+let Assignment = Backbone.Model.extend({
   idAttribute: "name",
   urlRoot: base_url + "/formgrader/api/assignment",
 });
 
-var Assignments = Backbone.Collection.extend({
+let Assignments = Backbone.Collection.extend({
   model: Assignment,
   url: base_url + "/formgrader/api/assignments",
 });
 
-var AssignmentUI = Backbone.View.extend({
+let AssignmentUI = Backbone.View.extend({
   events: {},
 
   initialize: function () {
@@ -37,10 +37,10 @@ var AssignmentUI = Backbone.View.extend({
   },
 
   openModal: function () {
-    var body = $("<table/>").addClass("table table-striped form-table");
-    var tablebody = $("<tbody/>");
+    let body = $("<table/>").addClass("table table-striped form-table");
+    let tablebody = $("<tbody/>");
     body.append(tablebody);
-    var name = $("<tr/>");
+    let name = $("<tr/>");
     tablebody.append(name);
     name.append($("<td/>").addClass("align-middle").text("Name"));
     name.append(
@@ -52,7 +52,7 @@ var AssignmentUI = Backbone.View.extend({
       )
     );
 
-    var duedate = $("<tr/>");
+    let duedate = $("<tr/>");
     tablebody.append(duedate);
     duedate.append(
       $("<td/>").addClass("align-middle").text("Due date (optional)")
@@ -63,7 +63,7 @@ var AssignmentUI = Backbone.View.extend({
       )
     );
 
-    var timezone = $("<tr/>");
+    let timezone = $("<tr/>");
     tablebody.append(timezone);
     timezone.append(
       $("<td/>")
@@ -76,7 +76,7 @@ var AssignmentUI = Backbone.View.extend({
       )
     );
 
-    var footer = $("<div/>");
+    let footer = $("<div/>");
     footer.append(
       $("<button/>")
         .addClass("btn btn-primary save")
@@ -124,7 +124,7 @@ var AssignmentUI = Backbone.View.extend({
     this.clear();
 
     // assignment name
-    var name = this.model.get("name");
+    let name = this.model.get("name");
     this.$name.attr("data-order", name);
     this.$name.append(
       $("<a/>")
@@ -137,8 +137,8 @@ var AssignmentUI = Backbone.View.extend({
     );
 
     // duedate
-    var duedate = this.model.get("duedate");
-    var display_duedate = this.model.get("display_duedate");
+    let duedate = this.model.get("duedate");
+    let display_duedate = this.model.get("display_duedate");
     if (duedate === null) {
       duedate = "None";
       display_duedate = "None";
@@ -147,7 +147,7 @@ var AssignmentUI = Backbone.View.extend({
     this.$duedate.text(display_duedate);
 
     // status
-    var status = this.model.get("status");
+    let status = this.model.get("status");
     if (status === "draft") {
       this.$status.attr("data-order", "draft");
       this.$status.append(
@@ -185,7 +185,7 @@ var AssignmentUI = Backbone.View.extend({
     );
 
     // preview student version
-    var release_path = this.model.get("release_path");
+    let release_path = this.model.get("release_path");
     if (release_path) {
       this.$preview.append(
         $("<a/>")
@@ -200,7 +200,7 @@ var AssignmentUI = Backbone.View.extend({
     }
 
     // release
-    var releaseable = this.model.get("releaseable");
+    let releaseable = this.model.get("releaseable");
     if (release_path && releaseable) {
       if (status === "draft") {
         this.$release.append(
@@ -244,7 +244,7 @@ var AssignmentUI = Backbone.View.extend({
     }
 
     // number of submissions
-    var num_submissions = this.model.get("num_submissions");
+    let num_submissions = this.model.get("num_submissions");
     this.$num_submissions.attr("data-order", num_submissions);
     if (num_submissions === 0) {
       this.$num_submissions.text(0);
@@ -473,8 +473,8 @@ var AssignmentUI = Backbone.View.extend({
   },
 
   save: function () {
-    var duedate = this.$modal_duedate.val();
-    var timezone = this.$modal_timezone.val();
+    let duedate = this.$modal_duedate.val();
+    let timezone = this.$modal_timezone.val();
     if (duedate === "") {
       duedate = null;
       timezone = null;
@@ -492,16 +492,16 @@ var AssignmentUI = Backbone.View.extend({
   },
 
   generate_feedback: function () {
-    var select =
+    let select =
       '<form id="feedback_form"><strong>Please select the version of feedback to be generated.</strong><br><br>\
         <input type="radio" name="feedback_radio" id="show_cells" checked="checked"> <label for="show_cells">Show autograded cells</label><br>\
         <input type="radio" name="feedback_radio" id="hide_cells"> <label for="hide_cells">Hide autograded cells</label></form>';
 
-    var container_start = "<div>";
-    var container_end = "</div></div>";
-    var body = $(container_start + select + container_end);
+    let container_start = "<div>";
+    let container_end = "</div></div>";
+    let body = $(container_start + select + container_end);
 
-    var footer = $("<div/>");
+    let footer = $("<div/>");
     footer.append(
       $("<button/>")
         .addClass("btn btn-primary feedback")
@@ -642,8 +642,8 @@ var AssignmentUI = Backbone.View.extend({
   },
 });
 
-var insertRow = function (table) {
-  var row = $("<tr/>");
+let insertRow = function (table) {
+  let row = $("<tr/>");
   row.append($("<td/>").addClass("name"));
   row.append($("<td/>").addClass("text-center duedate"));
   row.append($("<td/>").addClass("text-center status"));
@@ -659,12 +659,12 @@ var insertRow = function (table) {
   return row;
 };
 
-var createAssignmentModal = function () {
-  var modal;
-  var createAssignment = function () {
-    var name = modal.find(".name").val();
-    var duedate = modal.find(".duedate").val();
-    var timezone = modal.find(".timezone").val();
+let createAssignmentModal = function () {
+  let modal;
+  let createAssignment = function () {
+    let name = modal.find(".name").val();
+    let duedate = modal.find(".duedate").val();
+    let timezone = modal.find(".timezone").val();
     if (duedate === "") {
       duedate = null;
       timezone = null;
@@ -677,16 +677,16 @@ var createAssignmentModal = function () {
       return;
     }
     if (name.indexOf("+") != -1) {
-      var err = $("#create-error");
+      let err = $("#create-error");
       err.text("Assignment names may not include the '+' character.");
       err.show();
       return;
     } else {
-      var err = $("#create-error");
+      let err = $("#create-error");
       err.hide();
     }
 
-    var model = new Assignment(
+    let model = new Assignment(
       {
         name: name,
         duedate_notimezone: duedate,
@@ -697,9 +697,9 @@ var createAssignmentModal = function () {
       }
     );
 
-    var tbl = $("#main-table");
-    var row = insertRow(tbl);
-    var view = new AssignmentUI({
+    let tbl = $("#main-table");
+    let row = insertRow(tbl);
+    let view = new AssignmentUI({
       model: model,
       el: row,
     });
@@ -710,14 +710,14 @@ var createAssignmentModal = function () {
     modal.modal("hide");
   };
 
-  var body = $("<p/>");
+  let body = $("<p/>");
   body.append(
     $("<p id='create-error' class='alert alert-danger' style='display: none'/>")
   );
-  var table = $("<table/>").addClass("table table-striped form-table");
-  var tablebody = $("<tbody/>");
+  let table = $("<table/>").addClass("table table-striped form-table");
+  let tablebody = $("<tbody/>");
   body.append(table.append(tablebody));
-  var name = $("<tr/>");
+  let name = $("<tr/>");
   tablebody.append(name);
   name.append($("<td/>").addClass("align-middle").text("Name"));
   name.append(
@@ -726,7 +726,7 @@ var createAssignmentModal = function () {
     )
   );
 
-  var duedate = $("<tr/>");
+  let duedate = $("<tr/>");
   tablebody.append(duedate);
   duedate.append(
     $("<td/>").addClass("align-middle").text("Due date (optional)")
@@ -737,7 +737,7 @@ var createAssignmentModal = function () {
     )
   );
 
-  var timezone = $("<tr/>");
+  let timezone = $("<tr/>");
   tablebody.append(timezone);
   timezone.append(
     $("<td/>")
@@ -748,7 +748,7 @@ var createAssignmentModal = function () {
     $("<td/>").append($("<input/>").addClass("timezone").attr("type", "text"))
   );
 
-  var footer = $("<div/>");
+  let footer = $("<div/>");
   footer.append(
     $("<button/>")
       .addClass("btn btn-primary save")
@@ -772,8 +772,8 @@ var createAssignmentModal = function () {
   );
 };
 
-var loadAssignments = function () {
-  var tbl = $("#main-table");
+let loadAssignments = function () {
+  let tbl = $("#main-table");
 
   models = new Assignments();
   views = [];
@@ -782,7 +782,7 @@ var loadAssignments = function () {
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        var view = new AssignmentUI({
+        let view = new AssignmentUI({
           model: model,
           el: insertRow(tbl),
         });
@@ -794,8 +794,8 @@ var loadAssignments = function () {
   });
 };
 
-var models = undefined;
-var views = [];
+let models = undefined;
+let views = [];
 $(window).on("load", function () {
   loadAssignments();
 });

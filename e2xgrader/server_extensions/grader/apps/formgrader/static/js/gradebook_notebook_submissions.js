@@ -1,5 +1,5 @@
-var SubmittedNotebook = Backbone.Model.extend({});
-var SubmittedNotebooks = Backbone.Collection.extend({
+let SubmittedNotebook = Backbone.Model.extend({});
+let SubmittedNotebooks = Backbone.Collection.extend({
   model: SubmittedNotebook,
   url:
     base_url +
@@ -12,7 +12,7 @@ var SubmittedNotebooks = Backbone.Collection.extend({
     task_id,
 });
 
-var SubmittedNotebookUI = Backbone.View.extend({
+let SubmittedNotebookUI = Backbone.View.extend({
   events: {},
 
   initialize: function () {
@@ -68,9 +68,9 @@ var SubmittedNotebookUI = Backbone.View.extend({
     );
 
     // notebook name
-    var last_name = this.model.get("last_name");
-    var first_name = this.model.get("first_name");
-    var name = this.model.get("student");
+    let last_name = this.model.get("last_name");
+    let first_name = this.model.get("first_name");
+    let name = this.model.get("student");
     if (last_name !== null && first_name !== null) {
       name = last_name + ", " + first_name;
     }
@@ -103,8 +103,8 @@ var SubmittedNotebookUI = Backbone.View.extend({
     );
 
     // score
-    var score = roundToPrecision(this.model.get("score"), 2);
-    var max_score = roundToPrecision(this.model.get("max_score"), 2);
+    let score = roundToPrecision(this.model.get("score"), 2);
+    let max_score = roundToPrecision(this.model.get("max_score"), 2);
     if (max_score === 0) {
       this.$score.attr("data-order", 0.0);
     } else {
@@ -179,8 +179,8 @@ var SubmittedNotebookUI = Backbone.View.extend({
   },
 });
 
-var insertRow = function (table) {
-  var row = $("<tr/>");
+let insertRow = function (table) {
+  let row = $("<tr/>");
   row.append($("<td/>").addClass("reveal"));
   row.append($("<td/>").addClass("name"));
   row.append($("<td/>").addClass("text-center score"));
@@ -194,8 +194,8 @@ var insertRow = function (table) {
   return row;
 };
 
-var loadSubmittedNotebooks = function () {
-  var tbl = $("#main-table");
+let loadSubmittedNotebooks = function () {
+  let tbl = $("#main-table");
 
   models = new SubmittedNotebooks();
 
@@ -226,7 +226,7 @@ var loadSubmittedNotebooks = function () {
   });
 };
 
-var models = undefined;
+let models = undefined;
 
 $(window).on("load", function () {
   loadSubmittedNotebooks();

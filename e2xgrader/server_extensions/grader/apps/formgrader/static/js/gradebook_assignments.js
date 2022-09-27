@@ -1,10 +1,10 @@
-var Assignment = Backbone.Model.extend({});
-var Assignments = Backbone.Collection.extend({
+let Assignment = Backbone.Model.extend({});
+let Assignments = Backbone.Collection.extend({
   model: Assignment,
   url: base_url + "/formgrader/api/assignments",
 });
 
-var AssignmentUI = Backbone.View.extend({
+let AssignmentUI = Backbone.View.extend({
   events: {},
 
   initialize: function () {
@@ -27,7 +27,7 @@ var AssignmentUI = Backbone.View.extend({
     this.clear();
 
     // assignment name
-    var name = this.model.get("name");
+    let name = this.model.get("name");
     this.$name.attr("data-order", name);
     this.$name.append(
       $("<a/>")
@@ -39,8 +39,8 @@ var AssignmentUI = Backbone.View.extend({
     );
 
     // duedate
-    var duedate = this.model.get("duedate");
-    var display_duedate = this.model.get("display_duedate");
+    let duedate = this.model.get("duedate");
+    let display_duedate = this.model.get("display_duedate");
     if (duedate === null) {
       duedate = "None";
       display_duedate = "None";
@@ -49,13 +49,13 @@ var AssignmentUI = Backbone.View.extend({
     this.$duedate.text(display_duedate);
 
     // number of submissions
-    var num_submissions = this.model.get("num_submissions");
+    let num_submissions = this.model.get("num_submissions");
     this.$num_submissions.attr("data-order", num_submissions);
     this.$num_submissions.text(num_submissions);
 
     // score
-    var score = roundToPrecision(this.model.get("average_score"), 2);
-    var max_score = roundToPrecision(this.model.get("max_score"), 2);
+    let score = roundToPrecision(this.model.get("average_score"), 2);
+    let max_score = roundToPrecision(this.model.get("max_score"), 2);
     if (max_score === 0) {
       this.$score.attr("data-order", 0.0);
     } else {
@@ -65,8 +65,8 @@ var AssignmentUI = Backbone.View.extend({
   },
 });
 
-var insertRow = function (table) {
-  var row = $("<tr/>");
+let insertRow = function (table) {
+  let row = $("<tr/>");
   row.append($("<td/>").addClass("name"));
   row.append($("<td/>").addClass("text-center duedate"));
   row.append($("<td/>").addClass("text-center num-submissions"));
@@ -75,8 +75,8 @@ var insertRow = function (table) {
   return row;
 };
 
-var loadAssignments = function () {
-  var tbl = $("#main-table");
+let loadAssignments = function () {
+  let tbl = $("#main-table");
 
   models = new Assignments();
   models.loaded = false;
@@ -95,7 +95,7 @@ var loadAssignments = function () {
   });
 };
 
-var models = undefined;
+let models = undefined;
 
 $(window).on("load", function () {
   loadAssignments();

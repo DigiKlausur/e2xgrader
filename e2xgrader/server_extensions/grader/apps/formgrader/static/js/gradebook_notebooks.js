@@ -1,10 +1,10 @@
-var Notebook = Backbone.Model.extend({});
-var Notebooks = Backbone.Collection.extend({
+let Notebook = Backbone.Model.extend({});
+let Notebooks = Backbone.Collection.extend({
   model: Notebook,
   url: base_url + "/formgrader/api/notebooks/" + assignment_id,
 });
 
-var NotebookUI = Backbone.View.extend({
+let NotebookUI = Backbone.View.extend({
   events: {},
 
   initialize: function () {
@@ -31,7 +31,7 @@ var NotebookUI = Backbone.View.extend({
     this.clear();
 
     // notebook name
-    var name = this.model.get("name");
+    let name = this.model.get("name");
     this.$name.attr("data-order", name);
     if (view === "task") {
       this.$name.append(
@@ -58,8 +58,8 @@ var NotebookUI = Backbone.View.extend({
     }
 
     // average score
-    var score = roundToPrecision(this.model.get("average_score"), 2);
-    var max_score = roundToPrecision(this.model.get("max_score"), 2);
+    let score = roundToPrecision(this.model.get("average_score"), 2);
+    let max_score = roundToPrecision(this.model.get("max_score"), 2);
     if (max_score === 0) {
       this.$avg_score.attr("data-order", 0.0);
     } else {
@@ -111,8 +111,8 @@ var NotebookUI = Backbone.View.extend({
   },
 });
 
-var insertRow = function (table) {
-  var row = $("<tr/>");
+let insertRow = function (table) {
+  let row = $("<tr/>");
   row.append($("<td/>").addClass("name"));
   row.append($("<td/>").addClass("text-center avg-score"));
   row.append($("<td/>").addClass("text-center avg-code-score"));
@@ -123,8 +123,8 @@ var insertRow = function (table) {
   return row;
 };
 
-var loadNotebooks = function () {
-  var tbl = $("#main-table");
+let loadNotebooks = function () {
+  let tbl = $("#main-table");
 
   models = new Notebooks();
   models.loaded = false;
@@ -143,7 +143,7 @@ var loadNotebooks = function () {
   });
 };
 
-var models = undefined;
+let models = undefined;
 
 $(window).on("load", function () {
   loadNotebooks();

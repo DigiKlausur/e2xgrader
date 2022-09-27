@@ -1,14 +1,14 @@
-var Submission = Backbone.Model.extend({
+let Submission = Backbone.Model.extend({
   idAttribute: "student",
   urlRoot: base_url + "/formgrader/api/submission/" + assignment_id,
 });
 
-var Submissions = Backbone.Collection.extend({
+let Submissions = Backbone.Collection.extend({
   model: Submission,
   url: base_url + "/formgrader/api/submissions/" + assignment_id,
 });
 
-var SubmissionUI = Backbone.View.extend({
+let SubmissionUI = Backbone.View.extend({
   events: {},
 
   initialize: function () {
@@ -40,15 +40,15 @@ var SubmissionUI = Backbone.View.extend({
   render: function () {
     this.clear();
 
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
 
     // student name
-    var last_name = this.model.get("last_name");
-    var first_name = this.model.get("first_name");
+    let last_name = this.model.get("last_name");
+    let first_name = this.model.get("first_name");
     if (last_name === null) last_name = "None";
     if (first_name === null) first_name = "None";
-    var name = last_name + ", " + first_name;
+    let name = last_name + ", " + first_name;
     this.$student_name.attr("data-order", name);
     if (this.model.get("autograded")) {
       this.$student_name.append(
@@ -72,8 +72,8 @@ var SubmissionUI = Backbone.View.extend({
     this.$student_id.text(student);
 
     // timestamp
-    var timestamp = this.model.get("timestamp");
-    var display_timestamp = this.model.get("display_timestamp");
+    let timestamp = this.model.get("timestamp");
+    let display_timestamp = this.model.get("display_timestamp");
     if (timestamp === null) {
       timestamp = "None";
       display_timestamp = "None";
@@ -101,8 +101,8 @@ var SubmissionUI = Backbone.View.extend({
 
     // score
     if (this.model.get("autograded")) {
-      var score = roundToPrecision(this.model.get("score"), 2);
-      var max_score = roundToPrecision(this.model.get("max_score"), 2);
+      let score = roundToPrecision(this.model.get("score"), 2);
+      let max_score = roundToPrecision(this.model.get("max_score"), 2);
       if (max_score === 0) {
         this.$score.attr("data-order", 0.0);
       } else {
@@ -153,8 +153,8 @@ var SubmissionUI = Backbone.View.extend({
   autograde: function () {
     this.clear();
     this.$student_name.text("Please wait...");
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     $.post(
       base_url +
         "/formgrader/api/submission/" +
@@ -170,8 +170,8 @@ var SubmissionUI = Backbone.View.extend({
   autograde_success: function (response) {
     this.model.fetch();
     response = JSON.parse(response);
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     if (response["success"]) {
       createLogModal(
         "success-modal",
@@ -200,8 +200,8 @@ var SubmissionUI = Backbone.View.extend({
 
   autograde_failure: function (response) {
     this.model.fetch();
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     createModal(
       "error-modal",
       "Error",
@@ -214,16 +214,16 @@ var SubmissionUI = Backbone.View.extend({
   },
 
   generate_feedback: function () {
-    var select =
+    let select =
       '<form id="feedback_form"><strong>Please select the version of feedback to be generated.</strong><br><br>\
         <input type="radio" name="feedback_radio" id="show_cells" checked="checked"> <label for="show_cells">Show autograded cells</label><br>\
         <input type="radio" name="feedback_radio" id="hide_cells"> <label for="hide_cells">Hide autograded cells</label></form>';
 
-    var container_start = "<div>";
-    var container_end = "</div></div>";
-    var body = $(container_start + select + container_end);
+    let container_start = "<div>";
+    let container_end = "</div></div>";
+    let body = $(container_start + select + container_end);
 
-    var footer = $("<div/>");
+    let footer = $("<div/>");
     footer.append(
       $("<button/>")
         .addClass("btn btn-primary feedback")
@@ -274,8 +274,8 @@ var SubmissionUI = Backbone.View.extend({
   generate_feedback_success: function (response) {
     this.model.fetch();
     response = JSON.parse(response);
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     if (response["success"]) {
       createLogModal(
         "success-modal",
@@ -304,8 +304,8 @@ var SubmissionUI = Backbone.View.extend({
 
   generate_feedback_failure: function (response) {
     this.model.fetch();
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     createModal(
       "error-modal",
       "Error",
@@ -320,8 +320,8 @@ var SubmissionUI = Backbone.View.extend({
   release_feedback: function () {
     this.clear();
     this.$student_name.text("Please wait...");
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     $.post(
       base_url +
         "/formgrader/api/assignment/" +
@@ -337,8 +337,8 @@ var SubmissionUI = Backbone.View.extend({
   release_feedback_success: function (response) {
     this.model.fetch();
     response = JSON.parse(response);
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     if (response["success"]) {
       createLogModal(
         "success-modal",
@@ -367,8 +367,8 @@ var SubmissionUI = Backbone.View.extend({
 
   release_feedback_failure: function (response) {
     this.model.fetch();
-    var student = this.model.get("student");
-    var assignment = this.model.get("name");
+    let student = this.model.get("student");
+    let assignment = this.model.get("name");
     createModal(
       "error-modal",
       "Error",
@@ -381,8 +381,8 @@ var SubmissionUI = Backbone.View.extend({
   },
 });
 
-var insertRow = function (table) {
-  var row = $("<tr/>");
+let insertRow = function (table) {
+  let row = $("<tr/>");
   row.append($("<td/>").addClass("student-name"));
   row.append($("<td/>").addClass("text-center student-id"));
   row.append($("<td/>").addClass("text-center timestamp"));
@@ -395,8 +395,8 @@ var insertRow = function (table) {
   return row;
 };
 
-var loadSubmissions = function () {
-  var tbl = $("#main-table");
+let loadSubmissions = function () {
+  let tbl = $("#main-table");
 
   models = new Submissions();
   views = [];
@@ -405,7 +405,7 @@ var loadSubmissions = function () {
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        var view = new SubmissionUI({
+        let view = new SubmissionUI({
           model: model,
           el: insertRow(tbl),
         });
@@ -417,8 +417,8 @@ var loadSubmissions = function () {
   });
 };
 
-var models = undefined;
-var views = [];
+let models = undefined;
+let views = [];
 $(window).on("load", function () {
   loadSubmissions();
 });
