@@ -183,7 +183,8 @@ class E2xAPI(NbGraderAPI):
                     grade, max_score = (
                         gb.db.query(Grade, GradeCell.max_score)
                         .filter(Grade.notebook_id == submitted_notebook.id)
-                        .filter(GradeCell.id == Grade.cell_id == grade_id[0])
+                        .filter(GradeCell.id == Grade.cell_id)
+                        .filter(GradeCell.id == grade_id[0])
                         .first()
                     )
                     submission["max_score"] += max_score
