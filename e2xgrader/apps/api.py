@@ -1,5 +1,6 @@
 import base64
 import os
+import statistics
 from typing import Dict, List, Union
 
 from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
@@ -71,62 +72,35 @@ class E2xAPI(NbGraderAPI):
         """
         solution_cells = []
         with self.gradebook as gb:
-            num_submissions = len(gb.notebook_submissions(notebook_id, assignment_id))
-            notebook_id = gb.find_notebook(notebook_id, assignment_id).id
+            notebook = gb.find_notebook(name=notebook_id, assignment=assignment_id)
+            grades = {cell.name: cell for cell in notebook.grade_cells}
 
-            for cell_name in (
-                gb.db.query(BaseCell.name)
-                .filter(BaseCell.type == "SolutionCell")
-                .filter(BaseCell.notebook_id == notebook_id)
-            ):
-
-                solution_cell = {
-                    "name": cell_name[0],
-                    "avg_score": 0,
-                    "max_score": 0,
-                    "needs_manual_grade": 0,
-                    "autograded": 0,
-                }
-                grade_ids = (
-                    gb.db.query(BaseCell.id)
-                    .filter(BaseCell.type == "GradeCell")
-                    .filter(BaseCell.notebook_id == notebook_id)
-                    .filter(BaseCell.name.contains(cell_name[0]))
-                    .all()
-                )
-                if len(grade_ids) < 1:
-                    continue
-
-                if (
-                    not gb.db.query(BaseCell.id)
-                    .filter(BaseCell.type == "GradeCell")
-                    .filter(BaseCell.notebook_id == notebook_id)
-                    .filter(BaseCell.name == cell_name[0])
-                    .first()
-                ):
-                    solution_cell["autograded"] = 1
-
-                for grade_id in grade_ids:
-                    solution_cell["max_score"] += (
-                        gb.db.query(GradeCell.max_score)
-                        .filter(GradeCell.id == grade_id[0])
-                        .first()[0]
+            solution_cells = []
+            for cell in notebook.solution_cells:
+                if cell.name in grades:
+                    grade = grades[cell.name]
+                    del grades[cell.name]
+                else:
+                    for name in grades:
+                        if cell.name in name:
+                            grade = grades[name]
+                            del grades[name]
+                            break
+                solution_cells.append(
+                    dict(
+                        name=cell.name,
+                        avg_score=statistics.mean(
+                            [grade.score for grade in grade.grades]
+                        ),
+                        max_score=grade.max_score,
+                        needs_manual_grade=int(
+                            any([grade.needs_manual_grade for grade in grade.grades])
+                        ),
+                        autograded=int(grade.name != cell.name),
                     )
-                    for manual_score, auto_score, needs_manual_grade in gb.db.query(
-                        Grade.manual_score, Grade.auto_score, Grade.needs_manual_grade
-                    ).filter(Grade.cell_id == grade_id[0]):
-                        solution_cell["needs_manual_grade"] = max(
-                            solution_cell["needs_manual_grade"], needs_manual_grade
-                        )
-                        if manual_score:
-                            solution_cell["avg_score"] += manual_score
-                        elif auto_score:
-                            solution_cell["avg_score"] += auto_score
-                if num_submissions > 0:
-                    solution_cell["avg_score"] /= num_submissions
+                )
 
-                solution_cells.append(solution_cell)
-            return solution_cells
+        return solution_cells
 
     def get_task_submissions(self, assignment_id, notebook_id, task_id):
         """Get a list of submissions for a particular notebook in an assignment.
