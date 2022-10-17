@@ -120,64 +120,43 @@ class E2xAPI(NbGraderAPI):
             A list of dictionaries containing information about each submission.
 
         """
+        submissions = []
         with self.gradebook as gb:
-            notebook_uid = gb.find_notebook(notebook_id, assignment_id).id
-            manual = (
-                gb.db.query(BaseCell.id)
-                .filter(BaseCell.notebook_id == notebook_uid)
-                .filter(BaseCell.type == "GradeCell")
-                .filter(BaseCell.name == task_id)
-                .first()
-            )
-            grade_ids = (
-                gb.db.query(BaseCell.id)
-                .filter(BaseCell.notebook_id == notebook_uid)
-                .filter(BaseCell.type == "GradeCell")
-                .filter(BaseCell.name.contains(task_id))
-                .all()
-            )
+            notebook = gb.find_notebook(notebook_id, assignment_id)
+            student_idx = {
+                submission.student.id: submission.id
+                for submission in gb.notebook_submissions(
+                    notebook=notebook_id, assignment=assignment_id
+                )
+            }
 
-            submissions = []
+            grades = {cell.name: cell for cell in notebook.grade_cells}
 
-            for idx, submitted_notebook in enumerate(
-                gb.notebook_submissions(notebook_id, assignment_id)
-            ):
-                submission = {
-                    "id": submitted_notebook.id,
-                    "student": submitted_notebook.student.id,
-                    "first_name": submitted_notebook.student.first_name,
-                    "last_name": submitted_notebook.student.last_name,
-                    "score": 0,
-                    "max_score": 0,
-                    "needs_manual_grade": 0,
-                    "failed_tests": 0,
-                    "index": idx,
-                }
-                for grade_id in grade_ids:
-                    grade, max_score = (
-                        gb.db.query(Grade, GradeCell.max_score)
-                        .filter(Grade.notebook_id == submitted_notebook.id)
-                        .filter(GradeCell.id == Grade.cell_id)
-                        .filter(GradeCell.id == grade_id[0])
-                        .first()
+            if task_id in grades:
+                grade_cell = grades[task_id]
+            else:
+                for name in grades:
+                    if task_id in name:
+                        grade_cell = grades[name]
+                        break
+
+            for grade in grade_cell.grades:
+                submissions.append(
+                    dict(
+                        id=student_idx[grade.student.id],
+                        student=grade.student.id,
+                        first_name=grade.student.first_name,
+                        last_name=grade.student.last_name,
+                        score=grade.score,
+                        max_score=grade.max_score,
+                        needs_manual_grade=int(grade.needs_manual_grade),
+                        failed_tests=int(grade.failed_tests),
                     )
-                    submission["max_score"] += max_score
-                    if grade.manual_score is not None:
-                        submission["score"] += grade.manual_score
-                    elif grade.auto_score is not None:
-                        submission["score"] += grade.auto_score
-                        if grade.auto_score < max_score and not manual:
-                            submission["failed_tests"] = 1
-                    submission["needs_manual_grade"] = max(
-                        submission["needs_manual_grade"], grade.needs_manual_grade
-                    )
-
-                submissions.append(submission)
+                )
 
         submissions.sort(key=lambda x: x["id"])
         for idx, submission in enumerate(submissions):
             submission["index"] = idx
-
         return submissions
 
     def get_assignment(self, assignment_id, released=None, include_score=True):
