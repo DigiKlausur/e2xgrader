@@ -22,16 +22,8 @@ class TestClearSolutions(unittest.TestCase):
 
     def test_valid_notebook_with_extra_cells(self):
         self.nb.cells[0].metadata.extended_cell.choice = ["1"]
-        try:
-            ValidateExtraCells().preprocess(self.nb, {})
-            assert True
-        except ValidationError:
-            assert False
+        ValidateExtraCells().preprocess(self.nb, {})
 
     def test_valid_notebook_without_extra_cells(self):
         self.nb.cells = [new_markdown_cell()]
-        try:
-            ValidateExtraCells().preprocess(self.nb, {})
-            assert True
-        except ValidationError:
-            assert False
+        ValidateExtraCells().preprocess(self.nb, {})
