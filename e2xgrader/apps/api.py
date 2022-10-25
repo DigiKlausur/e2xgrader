@@ -3,7 +3,7 @@ import os
 import statistics
 from typing import Dict, List, Union
 
-from nbgrader.api import BaseCell, Grade, GradeCell, MissingEntry
+from nbgrader.api import MissingEntry
 from nbgrader.apps.api import NbGraderAPI
 from nbgrader.converters import GenerateFeedback
 from nbgrader.utils import as_timezone, capture_log, temp_attrs, to_numeric_tz
@@ -149,8 +149,8 @@ class E2xAPI(NbGraderAPI):
                         last_name=grade.student.last_name,
                         score=grade.score,
                         max_score=grade.max_score,
-                        needs_manual_grade=int(grade.needs_manual_grade),
-                        failed_tests=int(grade.failed_tests),
+                        needs_manual_grade=grade.needs_manual_grade,
+                        failed_tests=grade.failed_tests,
                     )
                 )
 
