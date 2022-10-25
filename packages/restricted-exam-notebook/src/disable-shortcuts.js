@@ -1,7 +1,7 @@
 import Jupyter from "base/js/namespace";
 
-function disable_shortcuts() {
-  const shortcuts = (shortcuts = [
+export function disable_shortcuts() {
+  const shortcuts = [
     "x",
     "c",
     "v",
@@ -18,7 +18,7 @@ function disable_shortcuts() {
     "ctrl-shift-p",
     "p",
     "d,d",
-  ]);
+  ];
 
   for (let i in shortcuts) {
     try {
