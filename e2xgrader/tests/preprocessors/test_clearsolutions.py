@@ -6,6 +6,9 @@ from e2xgrader.preprocessors import ClearSolutions
 
 
 class TestClearSolutions(unittest.TestCase):
+
+    diagram_name = "diagram.png"
+
     def test_markdown_cell(self):
         cell = new_markdown_cell()
 
@@ -63,11 +66,11 @@ class TestClearSolutions(unittest.TestCase):
             },
         }
 
-        cell["attachments"] = {"diagram.png": {}}
+        cell["attachments"] = {self.diagram_name: {}}
         processed_cell, resources = ClearSolutions().preprocess_cell(
             cell, {"language": "python"}, 0
         )
-        assert "diagram.png" in cell.attachments
+        assert self.diagram_name in cell.attachments
 
     def test_diagram_cell_remove(self):
         cell = new_markdown_cell()
@@ -84,7 +87,7 @@ class TestClearSolutions(unittest.TestCase):
             },
         }
 
-        cell["attachments"] = {"diagram.png": {}}
+        cell["attachments"] = {self.diagram_name: {}}
         processed_cell, resources = ClearSolutions().preprocess_cell(
             cell, {"language": "python"}, 0
         )
