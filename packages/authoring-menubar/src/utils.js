@@ -68,10 +68,6 @@ export function set_template_ids(cells, template_name) {
 }
 
 export function get_file_options() {
-  let notebook_path = Jupyter.notebook.notebook_path.replace(
-    Jupyter.notebook.notebook_name,
-    ""
-  );
   let path = Jupyter.utils.url_path_join(
     Jupyter.notebook.base_url,
     "tree",
