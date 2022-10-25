@@ -1,8 +1,7 @@
 import Jupyter from "base/js/namespace";
 import events from "base/js/events";
 import { Notebook } from "notebook/js/notebook";
-import { TextCell } from "notebook/js/textcell";
-import { MarkdownCell } from "notebook/js/textcell";
+import { TextCell, MarkdownCell } from "notebook/js/textcell";
 import { utils, cells } from "@e2xgrader/cells";
 
 // Flag to check if we are creating an assignment or not
