@@ -3,7 +3,6 @@ import Jupyter from "base/js/namespace";
 import dialog from "base/js/dialog";
 import { utils } from "@e2xgrader/utils";
 import { Notebook } from "notebook/js/notebook";
-import { TextCell, MarkdownCell } from "notebook/js/textcell";
 import { Cell } from "notebook/js/cell";
 
 const old_to_code = Notebook.prototype.to_code;
