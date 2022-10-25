@@ -86,7 +86,7 @@ FormGrader.prototype.collapsibleCells = function () {
 };
 
 FormGrader.prototype.loadGrades = function () {
-  var that = this;
+  let that = this;
 
   this.grades = new Grades();
   this.grade_uis = [];
@@ -97,7 +97,7 @@ FormGrader.prototype.loadGrades = function () {
     },
     success: function () {
       that.grades.each(function (model) {
-        var grade_ui = new GradeUI({
+        let grade_ui = new GradeUI({
           model: model,
           el: $("#" + model.get("name")).parents(".nbgrader_cell"),
         });
@@ -109,7 +109,7 @@ FormGrader.prototype.loadGrades = function () {
 };
 
 FormGrader.prototype.loadComments = function () {
-  var that = this;
+  let that = this;
 
   this.comments = new Comments();
   this.comment_uis = [];
@@ -120,7 +120,7 @@ FormGrader.prototype.loadComments = function () {
     },
     success: function () {
       that.comments.each(function (model) {
-        var comment_ui = new CommentUI({
+        let comment_ui = new CommentUI({
           model: model,
           el: $("#" + model.get("name") + "-comment").parents(".nbgrader_cell"),
         });
@@ -132,7 +132,7 @@ FormGrader.prototype.loadComments = function () {
 };
 
 FormGrader.prototype.loadAnnotations = function () {
-  var that = this;
+  let that = this;
 
   this.annotations = new Annotations();
   this.annotation_uis = [];
@@ -144,7 +144,7 @@ FormGrader.prototype.loadAnnotations = function () {
     success: function () {
       that.annotations.each(function (model) {
         if (model.get("name").includes(task_id)) {
-          var annotation_ui = new AnnotationUI({
+          let annotation_ui = new AnnotationUI({
             model: model,
             el: $("#" + model.get("name") + "-canvas").parents(".cell"),
           });
@@ -171,35 +171,35 @@ FormGrader.prototype.navigateTo = function (location) {
 };
 
 FormGrader.prototype.nextAssignment = function () {
-  var url = this.navigateTo("next");
+  let url = this.navigateTo("next");
   this.save(function () {
     window.location = url;
   });
 };
 
 FormGrader.prototype.nextIncorrectAssignment = function () {
-  var url = this.navigateTo("next_incorrect");
+  let url = this.navigateTo("next_incorrect");
   this.save(function () {
     window.location = url;
   });
 };
 
 FormGrader.prototype.prevAssignment = function () {
-  var url = this.navigateTo("prev");
+  let url = this.navigateTo("prev");
   this.save(function () {
     window.location = url;
   });
 };
 
 FormGrader.prototype.prevIncorrectAssignment = function () {
-  var url = this.navigateTo("prev_incorrect");
+  let url = this.navigateTo("prev_incorrect");
   this.save(function () {
     window.location = url;
   });
 };
 
 FormGrader.prototype.save = function (callback) {
-  var elem = document.activeElement;
+  let elem = document.activeElement;
   if (elem.tagName === "INPUT" || elem.tagName === "TEXTAREA") {
     if (callback) {
       $(document).on("finished_saving", callback);
@@ -212,7 +212,7 @@ FormGrader.prototype.save = function (callback) {
 };
 
 FormGrader.prototype.getScrollPosition = function () {
-  var target = this.last_selected.parents(".nbgrader_cell");
+  let target = this.last_selected.parents(".nbgrader_cell");
   if (target.length === 0) {
     return $("body").offset().top;
   } else {
@@ -222,7 +222,7 @@ FormGrader.prototype.getScrollPosition = function () {
 
 FormGrader.prototype.getIndex = function (elem) {
   if (elem !== undefined) {
-    var elems = $(".tabbable");
+    let elems = $(".tabbable");
     return elems.index(elem);
   } else {
     return parseInt(getParameterByName(index)) || 0;
@@ -230,7 +230,7 @@ FormGrader.prototype.getIndex = function (elem) {
 };
 
 FormGrader.prototype.selectInput = function (index) {
-  var elems = $(".tabbable");
+  let elems = $(".tabbable");
   if (index === elems.length) {
     index = 0;
   } else if (index === -1) {
@@ -274,13 +274,13 @@ FormGrader.prototype.configureTooltips = function () {
 };
 
 FormGrader.prototype.setIndexFromUrl = function () {
-  var name = "index";
+  let name = "index";
 
   // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+  name = name.replace(/\[/, "\\[").replace(/\]/, "\\]");
+  let regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
     results = regex.exec(location.search);
-  var index =
+  let index =
     results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 
   this.setCurrentIndex(parseInt(index) || 0);
@@ -291,7 +291,7 @@ FormGrader.prototype.setCurrentIndex = function (index) {
   // if an index is not provided, then we compute it based
   // on whatver the most recently selected element was
   if (index === undefined) {
-    var target = this.last_selected.parents(".nbgrader_cell").find(".score");
+    let target = this.last_selected.parents(".nbgrader_cell").find(".score");
     if (target.length === 0) {
       this.current_index = this.getIndex(this.last_selected);
     } else {
@@ -315,7 +315,7 @@ FormGrader.prototype.scrollToLastSelected = function () {
   this.setCurrentIndex();
   history.replaceState(history.state, "", this.navigateTo(""));
 
-  var that = this;
+  let that = this;
   $("body, html").stop().animate(
     {
       scrollTop: that.getScrollPosition(),
@@ -325,7 +325,7 @@ FormGrader.prototype.scrollToLastSelected = function () {
 };
 
 FormGrader.prototype.configureScrolling = function () {
-  var that = this;
+  let that = this;
   $(".tabbable").focus(function (event) {
     if (that.last_selected[0] !== event.currentTarget) {
       that.last_selected = $(event.currentTarget);
@@ -352,7 +352,7 @@ FormGrader.prototype.flag = function () {
     url: base_url + "/api/submitted_notebook/" + submission_id + "/flag",
     headers: { "X-CSRFToken": getCookie("_xsrf") },
     success: function (data, status, xhr) {
-      var elem = $("#statusmessage");
+      let elem = $("#statusmessage");
       data = JSON.parse(data);
       if (data.flagged) {
         elem.text("Submission flagged");
@@ -374,7 +374,7 @@ FormGrader.prototype.flag = function () {
   });
 };
 
-var formgrader = new FormGrader(base_url, submission_id);
+let formgrader = new FormGrader(base_url, submission_id);
 $(window).on("load", function () {
   formgrader.init();
 });
