@@ -1,5 +1,4 @@
-import { BaseAPI } from "./base";
-import { pathJoin } from "./base";
+import { BaseAPI, pathJoin } from "./base";
 
 export class AuthoringAPI extends BaseAPI {
   constructor(base_url) {
