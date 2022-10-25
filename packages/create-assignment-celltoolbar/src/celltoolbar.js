@@ -50,9 +50,8 @@ export class CreateAssignmentToolbar {
   }
 
   clear_cell_types() {
-    let cells = Jupyter.notebook.get_cells();
-    for (let i = 0; i < cells.length; i++) {
-      utils.remove_nbgrader_field(cells[i], "cell_type");
+    for (let cell of Jupyter.notebook.get_cells()) {
+      utils.remove_nbgrader_field(cell, "cell_type");
     }
   }
 
