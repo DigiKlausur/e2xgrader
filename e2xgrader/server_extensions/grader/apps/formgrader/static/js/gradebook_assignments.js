@@ -12,8 +12,6 @@ let AssignmentUI = Backbone.View.extend({
     this.$duedate = this.$el.find(".duedate");
     this.$num_submissions = this.$el.find(".num-submissions");
     this.$score = this.$el.find(".score");
-
-    this.render();
   },
 
   clear: function () {
@@ -84,10 +82,11 @@ let loadAssignments = function () {
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        new AssignmentUI({
+        let ui = new AssignmentUI({
           model: model,
           el: insertRow(tbl),
         });
+        ui.render();
       });
       insertDataTable(tbl.parent());
       models.loaded = true;

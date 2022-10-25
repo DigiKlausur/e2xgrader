@@ -25,8 +25,6 @@ let SubmittedNotebookUI = Backbone.View.extend({
     this.$needs_manual_grade = this.$el.find(".needs-manual-grade");
     this.$tests_failed = this.$el.find(".tests-failed");
     this.$flagged = this.$el.find(".flagged");
-
-    this.render();
   },
 
   clear: function () {
@@ -204,10 +202,11 @@ let loadSubmittedNotebooks = function () {
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        new SubmittedNotebookUI({
+        let ui = new SubmittedNotebookUI({
           model: model,
           el: insertRow(tbl),
         });
+        ui.render();
       });
       if (view === "task") {
         // Hide unused columns

@@ -14,8 +14,6 @@ let NotebookUI = Backbone.View.extend({
     this.$avg_written_score = this.$el.find(".avg-written-score");
     this.$avg_task_score = this.$el.find(".avg-task-score");
     this.$needs_manual_grade = this.$el.find(".needs-manual-grade");
-
-    this.render();
   },
 
   clear: function () {
@@ -132,10 +130,11 @@ let loadNotebooks = function () {
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        new NotebookUI({
+        let ui = new NotebookUI({
           model: model,
           el: insertRow(tbl),
         });
+        ui.render();
       });
       insertDataTable(tbl.parent());
       models.loaded = true;
