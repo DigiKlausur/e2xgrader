@@ -8,12 +8,38 @@ from e2xgrader.server_extensions.grader.apps.formgrader.handlers import (
 
 from ..exporters import E2xExporter
 
+preprocessors = dict(
+    AssignLatePenalties="nbgrader.preprocessors.AssignLatePenalties",
+    CSSPreprocessor="nbconvert.preprocessors.CSSHTMLHeaderPreprocessor",
+    CheckCellMetadata="nbgrader.preprocessors.CheckCellMetadata",
+    ClearHiddenTests="e2xgrader.preprocessors.ClearHiddenTests",
+    ClearMarkScheme="nbgrader.preprocessors.ClearMarkScheme",
+    ClearOutput="nbgrader.preprocessors.ClearOutput",
+    ClearSolutions="e2xgrader.preprocessors.ClearSolutions",
+    ComputeChecksums="nbgrader.preprocessors.ComputeChecksums",
+    DeduplicateIds="nbgrader.preprocessors.DeduplicateIds",
+    Execute="nbgrader.preprocessors.Execute",
+    ExtractAttachments="e2xgrader.preprocessors.ExtractAttachments",
+    FilterTests="e2xgrader.preprocessors.FilterTests",
+    GetGrades="nbgrader.preprocessors.GetGrades",
+    IncludeHeaderFooter="nbgrader.preprocessors.IncludeHeaderFooter",
+    LimitOutput="nbgrader.preprocessors.LimitOutput",
+    LockCells="nbgrader.preprocessors.LockCells",
+    OverwriteCells="e2xgrader.preprocessors.OverwriteCells",
+    OverwriteKernelspec="nbgrader.preprocessors.OverwriteKernelspec",
+    SaveAutoGrades="e2xgrader.preprocessors.SaveAutoGrades",
+    SaveCells="e2xgrader.preprocessors.SaveCells",
+    UnpermuteTasks="e2xgrader.preprocessors.UnpermuteTasks",
+    Unscramble="e2xgrader.preprocessors.Unscramble",
+    ValidateExtracCells="e2xgrader.preprocessors.ValidateExtraCells",
+)
+
 
 def configure_feedback(config):
     config.GenerateFeedback.preprocessors = [
-        "nbgrader.preprocessors.GetGrades",
-        "e2xgrader.preprocessors.FilterTests",
-        "nbconvert.preprocessors.CSSHTMLHeaderPreprocessor",
+        preprocessors["GetGrades"],
+        preprocessors["FilterTests"],
+        preprocessors["CSSPreprocessor"],
     ]
     config.GenerateFeedback.exporter_class = E2xExporter
     config.HTMLExporter.extra_template_basedirs = [
@@ -24,35 +50,35 @@ def configure_feedback(config):
 
 def configure_base(config):
     config.Autograde.sanitize_preprocessors = [
-        "nbgrader.preprocessors.ClearOutput",
-        "nbgrader.preprocessors.DeduplicateIds",
-        "nbgrader.preprocessors.OverwriteKernelspec",
-        "e2xgrader.preprocessors.OverwriteCells",
-        "nbgrader.preprocessors.CheckCellMetadata",
-        "e2xgrader.preprocessors.UnpermuteTasks",
-        "e2xgrader.preprocessors.Unscramble",
+        preprocessors["ClearOutput"],
+        preprocessors["DeduplicateIds"],
+        preprocessors["OverwriteKernelspec"],
+        preprocessors["OverwriteCells"],
+        preprocessors["CheckCellMetadata"],
+        preprocessors["UnpermuteTasks"],
+        preprocessors["Unscramble"],
     ]
     config.Autograde.autograde_preprocessors = [
-        "e2xgrader.preprocessors.ExtractAttachments",
-        "nbgrader.preprocessors.Execute",
-        "nbgrader.preprocessors.LimitOutput",
-        "e2xgrader.preprocessors.SaveAutoGrades",
-        "nbgrader.preprocessors.AssignLatePenalties",
-        "nbgrader.preprocessors.CheckCellMetadata",
+        preprocessors["ExtractAttachments"],
+        preprocessors["Execute"],
+        preprocessors["LimitOutput"],
+        preprocessors["SaveAutoGrades"],
+        preprocessors["AssignLatePenalties"],
+        preprocessors["CheckCellMetadata"],
     ]
     config.GenerateAssignment.preprocessors = [
-        "e2xgrader.preprocessors.ValidateExtraCells",
-        "nbgrader.preprocessors.IncludeHeaderFooter",
-        "nbgrader.preprocessors.LockCells",
-        "e2xgrader.preprocessors.ClearSolutions",
-        "nbgrader.preprocessors.ClearOutput",
-        "nbgrader.preprocessors.CheckCellMetadata",
-        "nbgrader.preprocessors.ComputeChecksums",
-        "e2xgrader.preprocessors.SaveCells",
-        "e2xgrader.preprocessors.ClearHiddenTests",
-        "nbgrader.preprocessors.ClearMarkScheme",
-        "nbgrader.preprocessors.ComputeChecksums",
-        "nbgrader.preprocessors.CheckCellMetadata",
+        preprocessors["ValidateExtracCells"],
+        preprocessors["IncludeHeaderFooter"],
+        preprocessors["LockCells"],
+        preprocessors["ClearSolutions"],
+        preprocessors["ClearOutput"],
+        preprocessors["CheckCellMetadata"],
+        preprocessors["ComputeChecksums"],
+        preprocessors["SaveCells"],
+        preprocessors["ClearHiddenTests"],
+        preprocessors["ClearMarkScheme"],
+        preprocessors["ComputeChecksums"],
+        preprocessors["CheckCellMetadata"],
     ]
     configure_feedback(config)
 
