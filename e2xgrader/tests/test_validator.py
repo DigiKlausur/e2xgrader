@@ -3,7 +3,7 @@ import unittest
 from tempfile import TemporaryDirectory
 
 import nbformat
-from nbformat.v4 import new_markdown_cell, new_notebook
+from nbformat.v4 import new_notebook
 
 from e2xgrader.tests.test_utils.cells import (
     new_multiplechoice_cell,
