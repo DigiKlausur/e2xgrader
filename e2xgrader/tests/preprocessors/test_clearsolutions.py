@@ -35,7 +35,8 @@ class TestClearSolutions(unittest.TestCase):
 
     def test_diagram_cell_no_remove(self):
         cell = new_diagram_cell(
-            options=dict(replace_diagram=dict(value=False)), diagram="some_base64_encoded_data"
+            options=dict(replace_diagram=dict(value=False)),
+            diagram="some_base64_encoded_data",
         )
         processed_cell, _ = ClearSolutions().preprocess_cell(
             cell=cell, resources=self.resources, cell_index=0
@@ -44,7 +45,8 @@ class TestClearSolutions(unittest.TestCase):
 
     def test_diagram_cell_remove(self):
         cell = new_diagram_cell(
-            options=dict(replace_diagram=dict(value=True)), diagram="some_base64_encoded_data"
+            options=dict(replace_diagram=dict(value=True)),
+            diagram="some_base64_encoded_data",
         )
         processed_cell, _ = ClearSolutions().preprocess_cell(
             cell=cell, resources=self.resources, cell_index=0
