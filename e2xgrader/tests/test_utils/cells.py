@@ -1,4 +1,3 @@
-from importlib.metadata import metadata
 from typing import Any, Dict, List, Union
 
 from nbformat.notebooknode import NotebookNode
