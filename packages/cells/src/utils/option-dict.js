@@ -18,6 +18,11 @@ export class OptionDict {
       }
     });
     to_remove.forEach((key) => delete current_options[key]);
+    Object.keys(this.options).forEach((key) => {
+      if (!current_options.hasOwnProperty(key)) {
+        current_options[key] = this.options[key];
+      }
+    });
     set_e2x_field(this.cell, "options", current_options);
   }
 
@@ -29,21 +34,33 @@ export class OptionDict {
     return this.options[key]["value"];
   }
 
+  set_option(key, value) {
+    console.log("Setting options", key, value);
+    let options = get_e2x_field(this.cell, "options");
+    options[key]["value"] = value;
+    set_e2x_field(this.cell, "options", options);
+  }
+
   render() {
     let that = this;
     let container = $("<div/>").addClass("e2x_options");
 
-    for (const [key, value] of Object.entries(this.options)) {
+    for (const [key, value] of Object.entries(
+      get_e2x_field(this.cell, "options")
+    )) {
       if (value["type"] == "checkbox") {
+        console.log(value);
         let node = $("<div/>");
         let input = $("<input/>").attr("type", value["type"]);
         node.append(input);
         node.append($("<span/>").text(value["text"]));
 
-        if (this.get_option(key)) {
+        if (value["value"]) {
           input.attr("checked", "checked");
         }
-        input.on("change", () => that.set_option(key, !!this.checked));
+        input.on("change", function () {
+          that.set_option(key, !!this.checked);
+        });
         container.append(node);
       }
     }
