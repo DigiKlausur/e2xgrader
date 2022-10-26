@@ -87,7 +87,7 @@ class TestExtraCells(unittest.TestCase):
     def test_get_options(self):
         cells = self.model.get_question_preset(self.diagram)
         assert len(get_options(cells[1])) == 0
-        cells[1].metadata.extended_cell["options"] = {"key": "value"}
+        cells[1].metadata.extended_cell["options"] = {"key": {"value": "value"}}
         assert get_options(cells[1])["key"] == "value"
 
     def tearDown(self):

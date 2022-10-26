@@ -52,7 +52,10 @@ class TestClearSolutions(unittest.TestCase):
         cell = new_markdown_cell()
 
         cell.metadata = {
-            "extended_cell": {"type": "diagram", "options": {"replace_diagram": False}},
+            "extended_cell": {
+                "type": "diagram",
+                "options": {"replace_diagram": {"value": False}},
+            },
             "nbgrader": {
                 "grade": True,
                 "grade_id": "text_solution",
@@ -73,7 +76,10 @@ class TestClearSolutions(unittest.TestCase):
         cell = new_markdown_cell()
 
         cell.metadata = {
-            "extended_cell": {"type": "diagram", "options": {"replace_diagram": True}},
+            "extended_cell": {
+                "type": "diagram",
+                "options": {"replace_diagram": {"value": True}},
+            },
             "nbgrader": {
                 "grade": True,
                 "grade_id": "text_solution",
