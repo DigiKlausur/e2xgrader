@@ -1,7 +1,5 @@
 import unittest
 
-from nbformat.v4 import new_markdown_cell
-
 from e2xgrader.preprocessors import ClearSolutions
 from e2xgrader.tests.test_utils.cells import (
     new_diagram_cell,
