@@ -154,7 +154,7 @@ def new_diagram_cell(
 def new_upload_cell(
     source: str = "",
     points: int = 0,
-    grade_id: str = "diagram",
+    grade_id: str = "attachments",
     attachments: Dict[str, Dict[str, str]] = None,
     **kwargs
 ):
@@ -165,6 +165,6 @@ def new_upload_cell(
             nbgrader=nbgrader_metadata(
                 grade=True, solution=True, points=points, grade_id=grade_id
             ),
-            extended_cell=extra_cell_metadata(type="diagram", **kwargs),
+            extended_cell=extra_cell_metadata(type="attachments", **kwargs),
         ),
     )
