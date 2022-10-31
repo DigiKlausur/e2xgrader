@@ -19,13 +19,14 @@ class AddTaskHeader(Preprocessor):
             "schema_version": 3,
         }
         header.source = dedent(
-            """# Task {}
+            """
+        # Task {}
 
         **[{} Point(s)]**
         """.format(
                 idx, points
             )
-        )
+        ).strip()
         return header
 
     def get_sub_header(self, idx, sub_idx, points):
@@ -39,13 +40,14 @@ class AddTaskHeader(Preprocessor):
             "schema_version": 3,
         }
         header.source = dedent(
-            """## Task {}.{}
+            """
+        ## Task {}.{}
 
         **[{} Point(s)]**
         """.format(
                 idx, sub_idx, points
             )
-        )
+        ).strip()
         return header
 
     def add_headers(self, nb, idx):
