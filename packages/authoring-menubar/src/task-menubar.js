@@ -25,7 +25,6 @@ export class TaskMenubar extends Menubar {
   insert_question_preset(name) {
     this.api.get_question_preset(name).then((cells) => {
       insert_question_preset_dialog(name, (task_name, points) => {
-        let idx = Jupyter.notebook.ncells();
         set_task_ids(cells, task_name, points);
         insert_cells(cells);
       });

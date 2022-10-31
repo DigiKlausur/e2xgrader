@@ -50,9 +50,8 @@ export class CreateAssignmentToolbar {
   }
 
   clear_cell_types() {
-    let cells = Jupyter.notebook.get_cells();
-    for (let i = 0; i < cells.length; i++) {
-      utils.remove_nbgrader_field(cells[i], "cell_type");
+    for (let cell of Jupyter.notebook.get_cells()) {
+      utils.remove_nbgrader_field(cell, "cell_type");
     }
   }
 
@@ -293,7 +292,7 @@ export class CreateAssignmentToolbar {
         return;
       }
 
-      var options_list = [];
+      let options_list = [];
       options_list.push(["-", ""]);
       options_list.push(["Manually graded answer", "manual"]);
       options_list.push(["Manually graded task", "task"]);
@@ -309,15 +308,15 @@ export class CreateAssignmentToolbar {
         options_list.push(["Autograder tests", "tests"]);
       }
       options_list.push(["Read-only", "readonly"]);
-      var setter = function (cell, val) {
+      let setter = function (cell, val) {
         that.cellfactory.to_cell(cell, val);
       };
 
-      var getter = function (cell) {
+      let getter = function (cell) {
         return that.cellfactory.get_type(cell);
       };
 
-      var select = $("<select/>");
+      let select = $("<select/>");
       for (let option of options_list) {
         let opt = $("<option/>").attr("value", option[1]).text(option[0]);
         select.append(opt);

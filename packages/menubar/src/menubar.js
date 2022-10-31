@@ -55,11 +55,11 @@ export class Menubar {
 
     let menuitems = $("<ul/>").addClass("e2x-dropdown-content");
 
-    for (let i = 0; i < items.length; i++) {
+    for (const item of items) {
       let li = $("<li/>")
         .addClass("e2x-dropdown-item")
-        .append($("<a/>").append(items[i].label));
-      li.on("click", items[i].callback);
+        .append($("<a/>").append(item.label));
+      li.on("click", item.callback);
       menuitems.append(li);
     }
     this.element.append(dropdown.append(menuitems));

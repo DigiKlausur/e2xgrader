@@ -7,7 +7,6 @@ function remove_metadata(cell) {
 }
 
 function to_nbgrader(cell) {
-  //remove_metadata(cell);
   utils.create_nbgrader_metadata(cell);
   utils.set_schema_version(cell);
 }

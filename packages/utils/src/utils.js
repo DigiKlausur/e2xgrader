@@ -228,15 +228,6 @@ export function set_points(cell, points) {
  */
 export function get_grade_id(cell) {
   return get_nbgrader_field(cell, "grade_id", "cell-" + randomString(16));
-  /*
-  if (
-    !is_nbgrader(cell) ||
-    get_nbgrader_field(cell, "grade_id", undefined) ===
-      undefined
-  ) {
-    return "cell-" + randomString(16);
-  }
-  return get_nbgrader_field(cell, "grade_id");*/
 }
 
 /**

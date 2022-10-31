@@ -10,37 +10,35 @@ from ..test_utils.test_utils import create_temp_course
 
 
 class TestExtractAttachments(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tmp_dir, self.coursedir = create_temp_course()
+        self.resources = dict(
+            metadata=dict(path=self.coursedir.root),
+            outputs=dict(),
+            output_files_dir=self.coursedir.root,
+        )
+
+    def tearDown(self) -> None:
+        self.tmp_dir.cleanup()
+
     def testPreprocessStandardCell(self):
-        tmp_dir, coursedir = create_temp_course()
         nb = new_notebook()
-        nb.cells = PresetModel(coursedir).get_question_preset("Single Choice")
+        nb.cells = PresetModel(self.coursedir).get_question_preset("Single Choice")
 
         processed_nb = deepcopy(nb)
         processed_nb, _ = ExtractAttachments().preprocess(
-            processed_nb,
-            {
-                "metadata": {"path": coursedir.root},
-                "outputs": {},
-                "output_files_dir": coursedir.root,
-            },
+            nb=processed_nb, resources=self.resources
         )
 
         self.assertDictEqual(nb, processed_nb)
-        tmp_dir.cleanup()
 
     def testPreprocessDiagramCell(self):
-        tmp_dir, coursedir = create_temp_course()
         nb = new_notebook()
-        nb.cells = PresetModel(coursedir).get_question_preset("Diagram")
+        nb.cells = PresetModel(self.coursedir).get_question_preset("Diagram")
 
         processed_nb = deepcopy(nb)
         processed_nb, _ = ExtractAttachments().preprocess(
-            processed_nb,
-            {
-                "metadata": {"path": coursedir.root},
-                "outputs": {},
-                "output_files_dir": coursedir.root,
-            },
+            nb=processed_nb, resources=self.resources
         )
 
         attachment_string = "![diagram](attachment:diagram.png)"
@@ -50,5 +48,3 @@ class TestExtractAttachments(unittest.TestCase):
                 assert attachment_string not in processed_cell.source
                 assert "<a href=" in processed_cell.source
                 assert "diagram.png" in processed_cell.attachments
-
-        tmp_dir.cleanup()

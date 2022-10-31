@@ -32,7 +32,8 @@ def get_options(cell):
 
 def get_choices(cell):
     if is_singlechoice(cell) or is_multiplechoice(cell):
-        return [int(i) for i in cell.metadata.extended_cell.choice]
+        choice = cell.metadata.extended_cell.get("choice", [])
+        return [int(i) for i in choice]
     return []
 
 

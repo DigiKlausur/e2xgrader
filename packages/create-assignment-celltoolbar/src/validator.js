@@ -40,13 +40,13 @@ export class NbgraderValidator {
     let elems = $(".nbgrader-id-input");
     let set = new Object();
 
-    for (let i = 0; i < elems.length; i++) {
-      let label = $(elems[i]).val();
+    for (const element of elems) {
+      let label = $(element).val();
       if (!this.grade_id_regex.test(label)) {
         modal_opts.title = "Invalid nbgrader cell ID";
         modal_opts.body =
           "At least one cell has an invalid nbgrader ID. Cell IDs must contain at least one character, and may only contain letters, numbers, hyphens, and/or underscores.";
-        warning = dialog.modal(modal_opts);
+        this.warning = dialog.modal(modal_opts);
         break;
       } else if (label in set) {
         modal_opts.title = "Duplicate nbgrader cell ID";
@@ -54,7 +54,7 @@ export class NbgraderValidator {
           'The nbgrader ID "' +
           label +
           '" has been used for more than one cell. Please make sure all grade cells have unique ids.';
-        warning = dialog.modal(modal_opts);
+        this.warning = dialog.modal(modal_opts);
         break;
       } else {
         set[label] = true;
@@ -74,8 +74,8 @@ export class NbgraderValidator {
     let cells = Jupyter.notebook.get_cells();
     let modal_opts = this.get_modal_opts();
 
-    for (let i = 0; i < cells.length; i++) {
-      let schema = utils.get_schema_version(cells[i]);
+    for (const cell of cells) {
+      let schema = utils.get_schema_version(cell);
       if (schema !== undefined && schema < utils.nbgrader_schema_version) {
         modal_opts.title = "Outdated schema version";
         modal_opts.body = $("<p/>").html(
