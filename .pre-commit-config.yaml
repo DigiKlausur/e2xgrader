@@ -17,4 +17,5 @@ repos:
         name: prettier
         entry: 'npm run prettier:files'
         language: node
+        language_version: system
         types_or: [json, markdown, ts, tsx, javascript, jsx, css]
