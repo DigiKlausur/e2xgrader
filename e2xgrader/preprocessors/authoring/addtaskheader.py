@@ -19,10 +19,7 @@ class AddTaskHeader(Preprocessor):
             "schema_version": 3,
         }
         header.source = dedent(
-            """
-        ---
-
-        # Task {}
+            """# Task {}
 
         **[{} Point(s)]**
         """.format(
@@ -42,8 +39,7 @@ class AddTaskHeader(Preprocessor):
             "schema_version": 3,
         }
         header.source = dedent(
-            """
-        ## Task {}.{}
+            """## Task {}.{}
 
         **[{} Point(s)]**
         """.format(
