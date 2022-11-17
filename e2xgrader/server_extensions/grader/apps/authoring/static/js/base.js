@@ -95,7 +95,6 @@ let BaseUI = Backbone.View.extend({
   removeModel: function () {
     this.model.destroy();
     this.remove();
-    console.log(this.$el);
     dataTable.row(this.$el).remove().draw();
   },
 });

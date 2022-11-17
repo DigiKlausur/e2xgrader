@@ -2,8 +2,6 @@ import { TextCell, MarkdownCell } from "notebook/js/textcell";
 import { utils } from "@e2xgrader/cells";
 import markdown from "base/js/markdown";
 
-console.log(TextCell);
-
 const old_render = MarkdownCell.prototype.render;
 const old_unrender = MarkdownCell.prototype.unrender;
 

@@ -8,7 +8,6 @@ import { CellFactory } from "./cellfactory";
 import "./create-assignment.css";
 import { utils } from "@e2xgrader/utils";
 
-console.log(utils);
 const old_global_hide = CellToolbar.global_hide;
 const old_rebuild = CellToolbar.prototype.rebuild;
 
