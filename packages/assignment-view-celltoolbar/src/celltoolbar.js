@@ -51,19 +51,14 @@ export class AssignmentViewToolbar {
    * Initialize the events associated with this toolbar
    */
   initialize_events() {
-    events.on(
-      "global_hide.CellToolbar toolbar_rebuild.CellToolbar",
-      function (evt, cell) {
-        if (cell.celltoolbar === null) {
-          return;
-        }
-        if (cell.celltoolbar.inner_element.hasClass(this.highlight)) {
-          cell.celltoolbar.inner_element.removeClass(this.highlight);
-        } else if (cell.celltoolbar.inner_element.hasClass(this.minimized)) {
-          cell.celltoolbar.inner_element.removeClass(this.minimized);
+    let that = this;
+    events.on("preset_activated.CellToolbar", function (evt, preset) {
+      if (preset.name != that.preset_name) {
+        for (const cell of Jupyter.notebook.get_cells()) {
+          that.remove_classes(cell);
         }
       }
-    );
+    });
   }
 
   /**
