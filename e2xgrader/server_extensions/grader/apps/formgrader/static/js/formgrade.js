@@ -69,12 +69,11 @@ FormGrader.prototype.init = function () {
 };
 
 FormGrader.prototype.collapsibleCells = function () {
-  console.log("hello");
   $(".collapsible").each(function (idx, elem) {
     let button = $(elem);
     let body = button.parent().parent().find(".panel-body");
 
-    button.click(function () {
+    button.on("click", function () {
       $(body).toggle();
       if ($(body).is(":hidden")) {
         button.text("Show Test Code");

@@ -1,12 +1,8 @@
 import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
 import { AuthoringAPI } from "@e2xgrader/api";
-import {
-  insert_cells,
-  get_file_options,
-  set_template_ids,
-  manage_tags,
-} from "./utils";
+import { insert_cells, get_file_options, set_template_ids } from "./utils";
+import { manage_tags } from "./dialogs";
 import { utils } from "@e2xgrader/utils";
 
 export class TemplateMenubar extends Menubar {

@@ -49,7 +49,6 @@ export class OptionDict {
       get_e2x_field(this.cell, "options")
     )) {
       if (value["type"] == "checkbox") {
-        console.log(value);
         let node = $("<div/>");
         let input = $("<input/>").attr("type", value["type"]);
         node.append(input);

@@ -7,7 +7,7 @@ import { patch_assignment_notebook } from "@e2xgrader/restricted-assignment-note
 function initialize() {
   initialize_cell_extension();
   patch_assignment_notebook();
-  new AssignmentViewToolbar().register();
+  new AssignmentViewToolbar().activate();
 }
 
 export function load_ipython_extension() {

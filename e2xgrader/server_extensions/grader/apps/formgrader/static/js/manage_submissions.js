@@ -250,7 +250,6 @@ let SubmissionUI = Backbone.View.extend({
 
   feedback: function () {
     $("#generate-feedback-modal").modal("hide");
-    console.log(document.getElementById("show_cells").checked);
     this.clear();
     this.$student_name.text("Please wait...");
     let url =

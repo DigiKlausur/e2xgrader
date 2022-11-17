@@ -10,9 +10,7 @@ function initialize() {
   initialize_cell_extension();
   patch_assignment_notebook();
   new ExamMenubar().activate();
-  let toolbar = new AssignmentViewToolbar();
-  toolbar.register();
-  toolbar.activate();
+  new AssignmentViewToolbar().activate();
   disable_shortcuts();
 }
 
