@@ -121,7 +121,7 @@ export class AssignmentViewToolbar {
       .attr("id", btn_id)
       .addClass("exam_btn")
       .text(btn_text);
-    btn.click(callback);
+    btn.on("click", callback);
     return btn;
   }
 
