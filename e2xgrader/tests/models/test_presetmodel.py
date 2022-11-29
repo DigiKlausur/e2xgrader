@@ -68,6 +68,9 @@ class TestPresetModel(unittest.TestCase):
         assert len(self.model.list_template_presets()) == 1
         assert "MyPreset" in self.model.list_template_presets()
 
+    def test_non_existing_preset_path(self):
+        assert len(self.model.list_presets("/this/is/not/a/valid/path")) == 0
+
     def test_custom_task_preset_path(self):
         nbformat.write(
             nbformat.v4.new_notebook(), pjoin(self.tmp_dir.name, "MyPreset.ipynb")
