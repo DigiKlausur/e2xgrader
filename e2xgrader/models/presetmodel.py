@@ -30,6 +30,8 @@ class PresetModel(BaseModel):
 
     def list_presets(self, preset_path):
         presets = []
+        if not os.path.exists(preset_path):
+            return presets
         for item in os.listdir(preset_path):
             if ".ipynb_checkpoints" in item:
                 continue
