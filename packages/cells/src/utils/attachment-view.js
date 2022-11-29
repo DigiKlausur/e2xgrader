@@ -77,7 +77,7 @@ class Webcam {
               );
             let dataUrl = tmpCanvas[0].toDataURL("image/png");
             let key = that.model.getName("webcam", "png");
-            that.model.addAttachment(key, dataUrl);
+            that.model.setAttachment(key, dataUrl);
           },
         },
         Cancel: {},
