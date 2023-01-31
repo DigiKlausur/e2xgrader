@@ -28,6 +28,7 @@ function to_autograded_answer(cell) {
 }
 
 function to_read_only(cell) {
+  remove_metadata(cell);
   to_nbgrader(cell);
   utils.set_solution(cell, false);
   utils.set_grade(cell, false);
