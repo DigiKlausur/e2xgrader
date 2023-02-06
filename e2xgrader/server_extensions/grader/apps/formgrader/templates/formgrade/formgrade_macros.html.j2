@@ -41,8 +41,7 @@ function toggle_name(on) {
 
 {% macro nav(resources) %}
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="col-md-2">
+    <div id="nav-left">
         <ul class="nav navbar-nav navbar-left">
           <li class="previous">
             <a data-toggle="tooltip" data-trigger="hover" data-placement="right" title="{{ resources.index }} remaining" href="{{ resources.base_url }}/formgrader/submissions/{{ resources.submission_id }}/prev/?task={{ resources.keyword }}">
@@ -50,8 +49,8 @@ function toggle_name(on) {
             </a>
           </li>
         </ul>
-      </div>
-      <div class="col-md-8">
+    </div>
+      <div id="nav-center">
         <ul class="nav text-center">
           <ul class="breadcrumb">
             {%- if resources.keyword != '' -%}
@@ -81,7 +80,8 @@ function toggle_name(on) {
           </ul>
         </ul>
       </div>
-      <div class="col-md-2">
+      <div id="nav-right">
+
         <ul class="nav navbar-nav navbar-right">
           <li class="next">
             <a class="tabbable" data-trigger="hover" data-toggle="tooltip" data-placement="left" title="{{ resources.total - (resources.index + 1) }} remaining" href="{{ resources.base_url }}/formgrader/submissions/{{ resources.submission_id }}/next/?task={{ resources.keyword }}">
@@ -90,7 +90,6 @@ function toggle_name(on) {
           </li>
         </ul>
       </div>
-    </div>
     </div>
   </nav>
   <script type="text/javascript">
