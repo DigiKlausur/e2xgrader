@@ -28,6 +28,7 @@ function to_autograded_answer(cell) {
 }
 
 function to_read_only(cell) {
+  remove_metadata(cell);
   to_nbgrader(cell);
   utils.set_solution(cell, false);
   utils.set_grade(cell, false);
@@ -59,22 +60,6 @@ function to_e2x_answer(cell, type) {
   cell.render();
 }
 
-function to_singlechoice(cell) {
-  to_e2x_answer(cell, "singlechoice");
-}
-
-function to_multiplechoice(cell) {
-  to_e2x_answer(cell, "multiplechoice");
-}
-
-function to_attachment(cell) {
-  to_e2x_answer(cell, "attachments");
-}
-
-function to_diagram(cell) {
-  to_e2x_answer(cell, "diagram");
-}
-
 function to_pdf(cell) {
   to_read_only(cell);
   e2xutils.remove_e2x_metadata(cell);
@@ -88,11 +73,11 @@ export class CellFactory {
     this.cell_types = {
       manual: to_manual_answer,
       task: to_task,
-      singlechoice: to_singlechoice,
-      multiplechoice: to_multiplechoice,
-      attachments: to_attachment,
+      singlechoice: (cell) => to_e2x_answer(cell, "singlechoice"),
+      multiplechoice: (cell) => to_e2x_answer(cell, "multiplechoice"),
+      attachments: (cell) => to_e2x_answer(cell, "attachments"),
+      diagram: (cell) => to_e2x_answer(cell, "diagram"),
       pdf: to_pdf,
-      diagram: to_diagram,
       readonly: to_read_only,
       tests: to_test,
       solution: to_autograded_answer,
