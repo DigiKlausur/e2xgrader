@@ -15,7 +15,6 @@ from .converter import Converter
 
 
 class GenerateExercise(Converter):
-
     preprocessors = List(
         [
             RemoveExercise,

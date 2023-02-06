@@ -9,7 +9,6 @@ from .apihandlers import default_handlers
 
 
 class E2xGraderApi(NbGrader, BaseApp):
-
     template_path = os.path.join(os.path.dirname(__file__), "templates")
 
     def __init__(self, **kwargs):

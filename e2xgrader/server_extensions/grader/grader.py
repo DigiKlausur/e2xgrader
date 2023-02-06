@@ -13,7 +13,6 @@ from .apps.nbgraderapi import NbGraderApi
 
 
 class E2xGrader(Application):
-
     apps = List(
         trait=Any(),
         default_value=[E2xGraderApi, NbGraderApi, FormgradeApp, AuthoringApp],

@@ -8,7 +8,6 @@ from .basemodel import BaseModel
 
 
 class ExerciseModel(BaseModel):
-
     directory = Unicode("source", help="The directory where assignments go.")
 
     def get(self, **kwargs):

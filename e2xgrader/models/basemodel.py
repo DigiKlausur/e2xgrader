@@ -7,7 +7,6 @@ from ..utils import get_nbgrader_config
 
 
 class BaseModel(LoggingConfigurable):
-
     directory = Unicode(".", help="The directory of the model")
 
     def __init__(self, coursedir):

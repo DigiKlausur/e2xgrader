@@ -14,7 +14,6 @@ from ..utils.nbgrader_cells import grade_id
 
 
 class SaveAutoGrades(NbgraderSaveAutoGrades):
-
     graders = Dict(
         key_trait=Unicode(),
         value_trait=Instance(klass=BaseGrader),

@@ -11,7 +11,6 @@ from .exchange import E2xExchange
 
 
 class E2xExchangeCollect(E2xExchange, ExchangeCollect):
-
     update = Bool(
         False, help="Update existing submissions with ones that have newer timestamps."
     ).tag(config=True)

@@ -9,7 +9,6 @@ from .basemodel import BaseModel
 
 
 class TemplateModel(BaseModel):
-
     directory = Unicode("templates", help="The directory where the templates go.")
 
     def __init__(self, course_prefix):

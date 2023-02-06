@@ -7,7 +7,6 @@ from .basemodel import BaseModel
 
 
 class AssignmentModel(BaseModel):
-
     directory = Unicode("source", help="The directory where assignments go.")
 
     def __get_assignment_info(self, assignment):

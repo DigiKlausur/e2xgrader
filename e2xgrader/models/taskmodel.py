@@ -10,7 +10,6 @@ from .basemodel import BaseModel
 
 
 class TaskModel(BaseModel):
-
     directory = Unicode("pools", help="The directory where the task pools go.")
 
     def new_taskbook(self, name):
