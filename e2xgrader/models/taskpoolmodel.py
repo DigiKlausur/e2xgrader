@@ -7,7 +7,6 @@ from .basemodel import BaseModel
 
 
 class TaskPoolModel(BaseModel):
-
     directory = Unicode("pools", help="The directory where the task pools go.")
 
     def new(self, **kwargs):

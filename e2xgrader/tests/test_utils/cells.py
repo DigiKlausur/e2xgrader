@@ -134,7 +134,7 @@ def new_diagram_cell(
     points: int = 0,
     grade_id: str = "diagram",
     diagram: str = None,
-    **kwargs
+    **kwargs,
 ):
     attachments = dict()
     if diagram is not None:
@@ -156,7 +156,7 @@ def new_upload_cell(
     points: int = 0,
     grade_id: str = "attachments",
     attachments: Dict[str, Dict[str, str]] = None,
-    **kwargs
+    **kwargs,
 ):
     return new_markdown_cell(
         source=source,

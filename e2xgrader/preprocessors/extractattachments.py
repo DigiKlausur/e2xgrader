@@ -9,7 +9,6 @@ from ..utils.extra_cells import is_attachment_cell, is_diagram
 
 
 class ExtractAttachments(NbGraderPreprocessor):
-
     subdirectory = Unicode("attachments").tag(config=True)
 
     output_filename_template = Unicode("attach_{cell_index}_{name}").tag(config=True)

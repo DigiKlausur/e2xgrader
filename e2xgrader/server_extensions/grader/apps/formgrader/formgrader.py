@@ -12,7 +12,6 @@ from .handlers import default_handlers
 
 
 class FormgradeApp(NbGrader, BaseApp):
-
     template_path = os.path.join(os.path.dirname(__file__), "templates")
     static_path = os.path.join(os.path.dirname(__file__), "static")
 

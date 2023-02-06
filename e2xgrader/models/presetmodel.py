@@ -7,7 +7,6 @@ from .basemodel import BaseModel
 
 
 class PresetModel(BaseModel):
-
     task_preset_path = Unicode(
         os.path.join(os.path.dirname(__file__), "presets", "questions")
     ).tag(config=True)

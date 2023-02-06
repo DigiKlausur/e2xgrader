@@ -9,7 +9,6 @@ from .preprocessor import Preprocessor
 class MakeExercise(Preprocessor):
     def new_notebook(self, resources):
         if "kernel" in resources["exercise_options"]:
-
             kernelspec = (
                 KernelSpecManager()
                 .get_kernel_spec(resources["exercise_options"]["kernel"])

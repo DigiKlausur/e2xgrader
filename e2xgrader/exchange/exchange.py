@@ -6,7 +6,6 @@ from traitlets import Bool, Unicode
 
 
 class E2xExchange(Exchange):
-
     personalized_outbound = Bool(
         False, help="Whether to use a personalized outbound directory per student"
     ).tag(config=True)
