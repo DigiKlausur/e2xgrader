@@ -1,3 +1,4 @@
+import base64
 import glob
 import os
 import os.path
@@ -112,19 +113,21 @@ class E2xExporter(HTMLExporter):
     def discover_annotations(self, resources):
         if resources is None:
             return
-        resources["annotations"] = []
+        resources["annotations"] = dict()
         if "metadata" not in resources or "path" not in resources["metadata"]:
             return
 
         path = resources["metadata"]["path"]
 
-        for annoation in glob.glob(os.path.join(path, "annotations", "*.png")):
-            resources["annotations"].append(
-                os.path.splitext(os.path.basename(annoation))[0]
-            )
+        for annotation in glob.glob(os.path.join(path, "annotations", "*.png")):
+            cell_id = os.path.splitext(os.path.basename(annotation))[0]
+            with open(annotation, "rb") as f:
+                img = base64.b64encode(f.read()).decode("utf-8")
+                resources["annotations"][cell_id] = f"data:image/png;base64,{img}"
 
     def from_notebook_node(self, nb, resources=None, **kw):
         self.discover_annotations(resources)
+
         self.exclude_input = False
         langinfo = nb.metadata.get("language_info", {})
         lexer = langinfo.get("pygments_lexer", langinfo.get("name", None))
