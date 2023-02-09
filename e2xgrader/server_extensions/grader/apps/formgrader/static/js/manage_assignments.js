@@ -5,7 +5,7 @@ let Assignment = Backbone.Model.extend({
 
 let Assignments = Backbone.Collection.extend({
   model: Assignment,
-  url: base_url + "/formgrader/api/assignments",
+  url: base_url + "/formgrader/api/assignments?include_score=false",
 });
 
 let AssignmentUI = Backbone.View.extend({
