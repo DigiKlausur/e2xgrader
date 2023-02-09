@@ -228,7 +228,7 @@ span.nbgrader-label {
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
       {%- if cell.metadata.nbgrader.solution and cell.metadata.nbgrader.grade_id in resources.annotations -%}
-        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='annotations/{{ cell.metadata.nbgrader.grade_id }}.png'></img>
+        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='{{ resources.annotations[cell.metadata.nbgrader.grade_id] }}' />
       {%- endif -%}
       <div class="text_cell_render border-box-sizing rendered_html">
         {{ cell.source  | markdown2html | strip_files_prefix | to_choicecell }}
@@ -256,7 +256,7 @@ span.nbgrader-label {
     {{ nbgrader_heading(cell) }}
     <div class="panel-body">
       {%- if cell.metadata.nbgrader.solution and cell.metadata.nbgrader.grade_id in resources.annotations -%}
-        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='annotations/{{ cell.metadata.nbgrader.grade_id }}.png'></img>
+        <img class='annotation' id='{{ cell.metadata.nbgrader.grade_id }}-annotation' src='{{ resources.annotations[cell.metadata.nbgrader.grade_id] }}' />
       {%- endif -%}
 
       <div class="input_area">
