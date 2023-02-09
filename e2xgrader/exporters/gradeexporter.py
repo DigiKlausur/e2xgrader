@@ -2,7 +2,6 @@ import typing
 from collections import defaultdict
 from textwrap import dedent
 
-import numpy as np
 import pandas as pd
 from nbgrader.api import Grade
 from traitlets import Bool, List, Unicode
