@@ -15,6 +15,25 @@ class FormgradeApp(NbGrader, BaseApp):
     template_path = os.path.join(os.path.dirname(__file__), "templates")
     static_path = os.path.join(os.path.dirname(__file__), "static")
 
+    app_static_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "..",
+            "..",
+            "..",
+            "static",
+            "templates",
+            "grader",
+            "static",
+        )
+    )
+    app_template_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__), "..", "..", "..", "..", "static", "templates"
+        )
+    )
+
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
@@ -26,6 +45,7 @@ class FormgradeApp(NbGrader, BaseApp):
 
     def load_app(self):
         self.log.info("Loading the formgrader app")
+
         exporter = E2xExporter(config=self.config)
         exporter.register_preprocessor(FilterCellsById)
 
@@ -37,6 +57,7 @@ class FormgradeApp(NbGrader, BaseApp):
         )
         self.add_template_path(self.template_path)
         self.add_template_path(nbgrader_handlers.template_path)
+        self.add_template_path(self.app_template_path)
         self.add_handlers(default_handlers)
         self.add_handlers(nbgrader_handlers.default_handlers)
 
@@ -50,6 +71,11 @@ class FormgradeApp(NbGrader, BaseApp):
                 r"/e2xgrader/static/(.*)",
                 web.StaticFileHandler,
                 {"path": self.static_path},
+            ),
+            (
+                r"/e2x/grader/static/(.*)",
+                web.StaticFileHandler,
+                {"path": self.app_static_path},
             ),
         ]
 
