@@ -14,6 +14,14 @@ from tornado import web
 from e2xgrader.utils import format_url
 
 
+class AppHandler(BaseHandler):
+    @web.authenticated
+    @check_xsrf
+    def get(self):
+        html = self.render(os.path.join("grader", "index.html"), base_url=self.base_url)
+        self.write(html)
+
+
 class ExportGradesHandler(BaseHandler):
     @web.authenticated
     @check_xsrf
@@ -252,4 +260,5 @@ default_handlers = [
         SubmissionNavigationHandler,
     ),
     (r"/formgrader/submissions/([^/]+)/?", SubmissionHandler),
+    (r"/e2x/grader/app/?.*", AppHandler),
 ]
