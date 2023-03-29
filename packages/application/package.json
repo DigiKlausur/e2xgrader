@@ -1,0 +1,61 @@
+{
+    "name": "@e2xgrader/app",
+    "author": "Tim Metzler",
+    "license": "MIT",
+    "homepage": "e2x/grader",
+    "version": "0.1.0.dev0",
+    "private": true,
+    "description": "webapp for e2xgrader",
+    "dependencies": {
+        "@e2xgrader/utils": "*",
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@fontsource/roboto": "^4.5.8",
+        "@mui/icons-material": "^5.11.0",
+        "@mui/material": "^5.11.8",
+        "@mui/x-data-grid": "^5.17.23",
+        "@mui/x-date-pickers": "^5.0.18",
+        "@reduxjs/toolkit": "^1.9.2",
+        "date-fns": "^2.29.3",
+        "formik": "^2.2.9",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-markdown": "^8.0.5",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.8.1",
+        "react-scripts": "5.0.1",
+        "react-syntax-highlighter": "^15.5.0",
+        "rehype-katex": "^6.0.2",
+        "rehype-mathjax": "^4.0.2",
+        "rehype-raw": "^6.1.1",
+        "remark-math": "^5.1.1",
+        "yup": "^1.0.0"
+    },
+    "scripts": {
+        "start": "react-app-rewired start",
+        "build": "BUILD_PATH='../../e2xgrader/static/templates/grader' react-app-rewired build",
+        "test": "react-app-rewired test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "react-app-rewired": "^2.2.1"
+    }
+}
