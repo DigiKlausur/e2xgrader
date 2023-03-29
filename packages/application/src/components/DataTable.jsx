@@ -1,7 +1,7 @@
 import React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
-export default function DataTable(rows, ...props) {
+export default function DataTable({ rows, ...props }) {
   const [pageSize, setPageSize] = React.useState(20);
 
   return (
