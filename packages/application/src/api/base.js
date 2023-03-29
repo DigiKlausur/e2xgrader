@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { getCookie, urlJoin, ROOT } from "./utils";
 
@@ -10,9 +10,9 @@ const baseSettings = {
     "X-CSRFToken": getCookie("_xsrf"),
   },
 };
-  
+
 export const baseApi = createApi({
-  reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: NBGRADER_API_ROOT, ...baseSettings}),
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({ baseUrl: NBGRADER_API_ROOT, ...baseSettings }),
   endpoints: () => ({}),
 });
