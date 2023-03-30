@@ -44,24 +44,22 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function BaseDialog(props) {
-  // Only close if it is not a backdrop click (clicking outside the dialog)
-  const handleClose = (event, reason) => {
-    if (reason !== "backdropClick") {
-      props.handleClose(event, reason);
-    }
-  };
+export default function BaseDialog({ open, handleClose, ...props }) {
   return (
     <>
       <BootstrapDialog
-        onClose={handleClose}
+        onClose={(event, reason) => {
+          if (reason !== "backdropClick") {
+            handleClose(event, reason);
+          }
+        }}
         aria-labelledby="customized-dialog-title"
-        open={props.open}
+        open={open}
         maxWidth
       >
         <BootstrapDialogTitle
           id="customized-dialog-title"
-          onClose={props.handleClose}
+          onClose={handleClose}
         >
           {props.title}
         </BootstrapDialogTitle>
@@ -72,7 +70,7 @@ export default function BaseDialog(props) {
             autoFocus
             variant="contained"
             color="error"
-            onClick={props.handleClose}
+            onClick={handleClose}
           >
             Cancel
           </Button>
