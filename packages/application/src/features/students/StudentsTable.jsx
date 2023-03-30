@@ -1,9 +1,12 @@
 import React from "react";
+import EditIcon from "@mui/icons-material/Edit";
 
 import DataTable from "../../components/DataTable";
 import MuiNavLink from "../../components/MuiNavLink";
 import { urlJoin, APP_URL } from "../../api/utils";
 import { useGetStudentsQuery } from "../../api/studentApi";
+import EditStudentDialog from "./EditStudentDialog";
+import { IconButton } from "@mui/material";
 
 export default function StudentsTable() {
   const {
@@ -14,9 +17,14 @@ export default function StudentsTable() {
 
   const columns = React.useMemo(() => [
     {
+      field: "id",
+      headerName: "Student ID",
+      flex: 1,
+    },
+    {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      flex: 2,
       renderCell: (params) => (
         <MuiNavLink to={urlJoin(APP_URL, "students", params.row.id)}>
           {`${
@@ -26,14 +34,9 @@ export default function StudentsTable() {
       ),
     },
     {
-      field: "id",
-      headerName: "Student ID",
-      flex: 1,
-    },
-    {
       field: "email",
       headerName: "Email",
-      flex: 1,
+      flex: 2,
       valueGetter: (params) =>
         `${params.row.email === null ? "None" : params.row.email}`,
     },
@@ -47,9 +50,35 @@ export default function StudentsTable() {
           params.row.max_score
         }`,
     },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Edit",
+      flex: 1,
+      getActions: (params) => [
+        <EditStudentDialog
+          key={params.row.id}
+          student={params.row}
+          buttonElement={
+            <IconButton color="primary">
+              <EditIcon />
+            </IconButton>
+          }
+        />,
+      ],
+    },
   ]);
 
   return (
-    <DataTable rows={students} loading={studentsLoading} columns={columns} />
+    <DataTable
+      rows={students}
+      loading={studentsLoading}
+      columns={columns}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "id", sort: "asc" }],
+        },
+      }}
+    />
   );
 }
