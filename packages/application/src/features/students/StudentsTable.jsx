@@ -20,18 +20,20 @@ export default function StudentsTable() {
       field: "id",
       headerName: "Student ID",
       flex: 1,
+      renderCell: (params) => (
+        <MuiNavLink to={urlJoin(APP_URL, "students", params.row.id)}>
+          {params.row.id}
+        </MuiNavLink>
+      ),
     },
     {
       field: "name",
       headerName: "Name",
       flex: 2,
-      renderCell: (params) => (
-        <MuiNavLink to={urlJoin(APP_URL, "students", params.row.id)}>
-          {`${
-            params.row.first_name !== null ? params.row.first_name : "None"
-          }, ${params.row.last_name !== null ? params.row.last_name : "None"}`}
-        </MuiNavLink>
-      ),
+      valueGetter: (params) =>
+        `${params.row.first_name === null ? "None" : params.row.first_name}, ${
+          params.row.last_name === null ? "None" : params.row.last_name
+        }`,
     },
     {
       field: "email",
