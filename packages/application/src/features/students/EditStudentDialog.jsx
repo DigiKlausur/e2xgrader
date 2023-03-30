@@ -7,7 +7,7 @@ import FormDialogWithoutButton from "../../components/dialog/FormDialogWithoutBu
 import FormikTextField from "../../components/form/FormikTextField";
 import { useCreateOrUpdateStudentMutation } from "../../api/studentApi";
 
-export default function EditStudentDialog({ student }) {
+export default function EditStudentDialog({ student, buttonElement }) {
   const [open, setOpen] = React.useState(false);
   const [updateStudent, { isLoading: isUpdating }] =
     useCreateOrUpdateStudentMutation();
@@ -37,9 +37,7 @@ export default function EditStudentDialog({ student }) {
           )
         ),
       };
-      console.log(student.id, student_info);
-      const student_id = student.id;
-      updateStudent({ studentId: student_id, updatedStudent: student_info });
+      updateStudent({ studentId: student.id, updatedStudent: student_info });
       if (!isUpdating) {
         setOpen(false);
       }
@@ -49,11 +47,16 @@ export default function EditStudentDialog({ student }) {
     formik.resetForm();
     setOpen(false);
   };
+
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        Edit Student
-      </Button>
+      <div onClick={() => setOpen(true)}>
+        {buttonElement ? (
+          buttonElement
+        ) : (
+          <Button variant="contained">Edit Student</Button>
+        )}
+      </div>
       <FormDialogWithoutButton
         title={`Edit Student Info for ${student.id}`}
         buttonText="Save"
