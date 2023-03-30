@@ -4,9 +4,9 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { Button, Stack } from "@mui/material";
 
-import FormDialogWithoutButton from "../../../../components/dialog/FormDialogWithoutButton";
-import FormikTextField from "../../../../components/form/FormikTextField";
-import { useCreateOrUpdateStudentMutation } from "../../../../api/studentApi";
+import FormDialogWithoutButton from "../../components/dialog/FormDialogWithoutButton";
+import FormikTextField from "../../components/form/FormikTextField";
+import { useCreateOrUpdateStudentMutation } from "../../api/studentApi";
 
 export default function AddStudentDialog() {
   const [open, setOpen] = React.useState(false);
