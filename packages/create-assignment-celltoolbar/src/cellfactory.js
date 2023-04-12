@@ -7,6 +7,7 @@ function remove_metadata(cell) {
 }
 
 function to_nbgrader(cell) {
+  e2xutils.remove_e2x_metadata(cell);
   utils.create_nbgrader_metadata(cell);
   utils.set_schema_version(cell);
 }
@@ -28,7 +29,6 @@ function to_autograded_answer(cell) {
 }
 
 function to_read_only(cell) {
-  remove_metadata(cell);
   to_nbgrader(cell);
   utils.set_solution(cell, false);
   utils.set_grade(cell, false);
