@@ -95,4 +95,19 @@ export function insert_cells(cells) {
     }
     idx += 1;
   });
+  remove_empty_cells();
+}
+
+function remove_empty_cells() {
+  let to_remove = [];
+  for (const [index, cell] of Jupyter.notebook.get_cells().entries()) {
+    if (
+      !utils.is_nbgrader(cell) &&
+      cell.get_text().trim().length === 0 &&
+      Object.keys(cell.attachments).length === 0
+    ) {
+      to_remove.push(index);
+    }
+  }
+  Jupyter.notebook.delete_cells(to_remove);
 }
