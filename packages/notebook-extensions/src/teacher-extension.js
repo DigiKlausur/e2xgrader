@@ -3,6 +3,7 @@ import events from "base/js/events";
 import { initialize_cell_extension } from "@e2xgrader/cell-extension";
 import { CreateAssignmentToolbar } from "@e2xgrader/create-assignment-celltoolbar";
 import { TaskMenubar, TemplateMenubar } from "@e2xgrader/authoring-menubar";
+import { shortcuts as utils } from "@e2xgrader/utils";
 
 function is_taskbook() {
   let metadata = Jupyter.notebook.metadata;
@@ -35,9 +36,11 @@ function initialize() {
   if (is_taskbook()) {
     celltoolbar.activate();
     new TaskMenubar().activate();
+    utils.disable_add_cell_on_execute();
   } else if (is_templatebook()) {
     celltoolbar.activate();
     new TemplateMenubar().activate();
+    utils.disable_add_cell_on_execute();
   }
 }
 
