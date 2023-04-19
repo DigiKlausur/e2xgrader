@@ -1,1 +1,2 @@
-export * as utils from "./utils";
+export * as utils from "./cells";
+export * as shortcuts from "./shortcuts";
