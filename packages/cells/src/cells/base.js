@@ -44,8 +44,4 @@ export class E2xCell {
     );
     html.append(container);
   }
-
-  render() {
-    this.cell.render();
-  }
 }
