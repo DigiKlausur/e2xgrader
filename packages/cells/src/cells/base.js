@@ -35,6 +35,7 @@ export class E2xCell {
       $("<button/>")
         .attr("type", "button")
         .addClass("e2x_unrender")
+        .addClass("btn-e2x")
         .on("click", function () {
           that.cell.unrender_force();
           that.cell.keyboard_manager.enable();
