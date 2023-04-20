@@ -1,6 +1,10 @@
 import Jupyter from "base/js/namespace";
 import { Notebook } from "notebook/js/notebook";
 
+/**
+ * Defines a new method `execute_cell_and_select_below_without_insert()` for the `Notebook` prototype object,
+ * which executes the currently selected cell and then selects the cell below it.
+ */
 function add_Notebook_execute_cell_and_select() {
   Notebook.prototype.execute_cell_and_select_below_without_insert =
     function () {
@@ -22,6 +26,12 @@ function add_Notebook_execute_cell_and_select() {
     };
 }
 
+/**
+ * Returns the keyboard manager object for the specified mode.
+ * @param {string} mode - The keyboard manager mode to get ("command" or "edit").
+ * @throws {Error} If the mode is not "command" or "edit".
+ * @returns {object} The keyboard manager object for the specified mode.
+ */
 function get_manager(mode) {
   if (mode === "command") {
     return Jupyter.keyboard_manager.command_shortcuts;
@@ -32,6 +42,11 @@ function get_manager(mode) {
   }
 }
 
+/**
+ * Removes the specified shortcuts from the keyboard manager for the specified mode.
+ * @param {string} mode - The keyboard manager mode to remove shortcuts from ("command" or "edit").
+ * @param  {...string} shortcuts - The shortcut keys to remove.
+ */
 export function remove_shortcuts(mode, ...shortcuts) {
   const manager = get_manager(mode);
   for (const shortcut of shortcuts) {
@@ -43,6 +58,14 @@ export function remove_shortcuts(mode, ...shortcuts) {
   }
 }
 
+/**
+ * Adds a new shortcut to the keyboard manager for the specified mode.
+ * @param {string} mode - The keyboard manager mode to add the shortcut to ("command" or "edit").
+ * @param {string} key - The key combination for the shortcut.
+ * @param {function} handler - The function to be called when the shortcut is activated.
+ * @param {string} help - The help text for the shortcut.
+ * @param {string} [help_index="zz"] - The help index for the shortcut.
+ */
 export function add_shortcut(mode, key, handler, help, help_index = "zz") {
   const manager = get_manager(mode);
   manager.add_shortcut(key, {
@@ -52,6 +75,11 @@ export function add_shortcut(mode, key, handler, help, help_index = "zz") {
   });
 }
 
+/**
+ * Disables the default behavior of adding a new cell after executing a cell by removing the "alt-enter" and "shift-enter"
+ * shortcuts for both the command and edit modes, and adding new shortcuts that execute the current cell and select
+ * the cell below it using the `execute_cell_and_select_below_without_insert()` method.
+ */
 export function disable_add_cell_on_execute() {
   add_Notebook_execute_cell_and_select();
   const shortcut_keys = ["alt-enter", "shift-enter"];
