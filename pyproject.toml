@@ -34,7 +34,8 @@ Source = "https://github.com/Digiklausur/e2xgrader"
 [project.optional-dependencies]
 dev = [
     "pre-commit",
-    "hatchling"
+    "hatchling",
+    "tbump"
 ]
 
 [project.scripts]
