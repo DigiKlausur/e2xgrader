@@ -21,6 +21,11 @@ classifiers=[
 ]
 dependencies = [
     "nbgrader==0.7.1",
+    "jupyter-core<4.11.2",
+    "jupyter-client<7.4",
+    "jupyter-server<1.20",
+    "nbconvert>=6.5",
+    "notebook>=6,<6.5",
     "beautifulsoup4",
     "pandas"
 ]
