@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/create-assignment-celltoolbar",
-  "version": "0.1.0-dev0",
+  "version": "0.1.0-dev1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
-    "@e2xgrader/cells": "0.1.0-dev0",
-    "@e2xgrader/utils": "0.1.0-dev0"
+    "@e2xgrader/cells": "0.1.0-dev1",
+    "@e2xgrader/utils": "0.1.0-dev1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
