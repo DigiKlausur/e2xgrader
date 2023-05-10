@@ -55,12 +55,16 @@ class E2xExporter(HTMLExporter):
     @property
     def template_paths(self):
         return super()._template_paths() + [
-            os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "server_extensions",
-                "formgrader",
-                "templates",
+            os.path.abspath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "server_extensions",
+                    "grader",
+                    "apps",
+                    "formgrader",
+                    "templates",
+                )
             )
         ]
 
