@@ -62,7 +62,7 @@ class ValidateAssignmentHandler(IPythonHandler):
             self.log.error(msg)
             retvalue = {"success": False, "value": msg}
 
-        except:
+        except Exception:
             self.log.error(traceback.format_exc())
             retvalue = {"success": False, "value": traceback.format_exc()}
 
