@@ -1,4 +1,4 @@
-name: Lint with black
+name: Format with black
 
 on: [push, pull_request]
 
