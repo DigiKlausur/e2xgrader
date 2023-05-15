@@ -17,12 +17,17 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
 
     before_duedate = Bool(
         False,
-        help="Collect the last submission before due date or the last submission if no submission before due date.",
+        help=(
+            "Collect the last submission before due date or the last submission\n"
+            "if no submission before due date."
+        ),
     ).tag(config=True)
 
     check_owner = Bool(
         default_value=True,
-        help="Whether to cross-check the student_id with the UNIX-owner of the submitted directory.",
+        help=(
+            "Whether to cross-check the student_id with the UNIX-owner of the submitted directory."
+        ),
     ).tag(config=True)
 
     def init_submissions(self):

@@ -161,7 +161,8 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             ),
         )
 
-        # Make this 0777=ugo=rwx so the instructor can delete later. Hidden from other users by the timestamp.
+        # Make this 0777=ugo=rwx so the instructor can delete later.
+        # Hidden from other users by the timestamp.
         os.chmod(
             dest_path,
             S_IRUSR
