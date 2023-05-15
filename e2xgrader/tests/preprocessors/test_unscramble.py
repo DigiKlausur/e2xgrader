@@ -32,7 +32,10 @@ class TestUnscramble(unittest.TestCase):
                 ),
                 new_readonly_code_cell(source="# Here we want to replace {{myvar2 }}"),
                 new_manually_graded_code_cell(
-                    source="# Here we want to replace everything {{myvar1}} {{ myvar2 }} and {{ somevar }}"
+                    source=(
+                        "# Here we want to replace everything {{myvar1}} "
+                        "{{ myvar2 }} and {{ somevar }}"
+                    )
                 ),
             ]
         )

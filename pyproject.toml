@@ -94,3 +94,7 @@ search = '"version": "{current_version}'
 [[tool.tbump.file]]
 src = "packages/*/package.json"
 search = '"@e2xgrader/[\w-]+": "{current_version}'
+
+[tool.ruff]
+line-length = 100
+exclude = ["nbgrader_config.py"]
