@@ -18,7 +18,7 @@ class FormgradeApp(NbGrader, BaseApp):
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
-        self.load_config_file()
+        self.initialize([])
         if not self.config.has_key(
             "HTMLExporter"
         ) or not self.config.HTMLExporter.has_key("template_name"):
