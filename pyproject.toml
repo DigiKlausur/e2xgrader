@@ -20,13 +20,8 @@ classifiers=[
     "Programming Language :: Python :: 3.9",
 ]
 dependencies = [
-    "nbgrader==0.7.1",
-    "jupyter-core<4.11.2",
-    "jupyter-client<7.4",
-    "jupyter-server<1.20",
+    "nbgrader==0.7.*",
     "nbconvert>=6.5",
-    "notebook>=6,<6.5",
-    "beautifulsoup4",
     "pandas"
 ]
 dynamic = ["version"]
@@ -98,4 +93,4 @@ search = '"version": "{current_version}'
 
 [[tool.tbump.file]]
 src = "packages/*/package.json"
-search = '"@e2xgrader/\w+": "{current_version}'
+search = '"@e2xgrader/[\w-]+": "{current_version}'
