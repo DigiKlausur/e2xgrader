@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/tree-extensions",
-  "version": "0.1.0-dev1",
+  "version": "0.1.0-dev2",
   "description": "",
   "scripts": {
     "build": "webpack --config webpack.config.js",

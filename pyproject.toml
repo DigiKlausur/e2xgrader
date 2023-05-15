@@ -61,7 +61,7 @@ artifacts = [
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "0.1.0-dev1"
+current = "0.1.0-dev2"
 
 regex = '''
   (?P<major>\d+)
