@@ -166,11 +166,11 @@ class Manager:
             description="E2X extension manager.",
             usage=dedent(
                 """
-                                             e2xgrader <command> [<args>]
+                e2xgrader <command> [<args>]
 
-                                             Available sub commands are:
-                                               activate      activate a specific mode (teacher, student, student-exam)
-                                               deactivate    deactivate all extensions"""
+                Available sub commands are:
+                activate      activate a specific mode (teacher, student, student-exam)
+                deactivate    deactivate all extensions"""
             ),
         )
 
@@ -188,12 +188,12 @@ class Manager:
             description="Activate different modes",
             usage=dedent(
                 """
-                                             e2xgrader activate <mode> [--sys-prefix] [--user]
+                e2xgrader activate <mode> [--sys-prefix] [--user]
 
-                                             Available modes are:
-                                               teacher         activate the grader and all teaching extensions
-                                               student         activate the student extensions
-                                               student_exam    activate the student extensions in exam mode"""
+                Available modes are:
+                teacher         activate the grader and all teaching extensions
+                student         activate the student extensions
+                student_exam    activate the student extensions in exam mode"""
             ),
         )
         # prefixing the argument with -- means it's optional
