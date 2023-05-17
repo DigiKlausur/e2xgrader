@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/utils",
-  "version": "0.1.0-dev2",
+  "version": "0.1.0-dev3",
   "main": "lib/index.js",
   "description": "utility functions for e2xgrader",
   "scripts": {
