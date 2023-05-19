@@ -17,7 +17,8 @@ from .. import _jupyter_nbextension_paths
 NBGRADER_FORMGRADER = "nbgrader.server_extensions.formgrader"
 NBGRADER_ASSIGNMENT_LIST = "nbgrader.server_extensions.assignment_list"
 NBGRADER_VALIDATE_ASSIGNMENT = "nbgrader.server_extensions.validate_assignment"
-E2XGRADER_GRADER = "e2xgrader.server_extensions.grader"
+E2XGRADER_TEACHER = "e2xgrader.server_extensions.teacher"
+E2XGRADER_STUDENT = "e2xgrader.server_extensions.student"
 
 
 class ExtensionManager:
@@ -68,6 +69,7 @@ class ExtensionManager:
         self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.disable_serverextension(NBGRADER_VALIDATE_ASSIGNMENT)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
+        self.disable_serverextension(E2XGRADER_STUDENT)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
@@ -98,7 +100,7 @@ class ExtensionManager:
         self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.disable_serverextension(NBGRADER_VALIDATE_ASSIGNMENT)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension(E2XGRADER_GRADER)
+        self.disable_serverextension(E2XGRADER_TEACHER)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)
@@ -133,7 +135,7 @@ class ExtensionManager:
         self.disable_serverextension(NBGRADER_ASSIGNMENT_LIST)
         self.disable_serverextension(NBGRADER_VALIDATE_ASSIGNMENT)
         self.enable_serverextension_py("e2xgrader", sys_prefix=sys_prefix, user=user)
-        self.disable_serverextension(E2XGRADER_GRADER)
+        self.disable_serverextension(E2XGRADER_TEACHER)
 
         # Install nbgrader nbextensions
         self.install_nbextensions("nbgrader", sys_prefix=sys_prefix, user=user)

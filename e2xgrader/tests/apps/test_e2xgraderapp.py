@@ -13,9 +13,8 @@ class TestE2XGraderApp(unittest.TestCase):
             "nbgrader.server_extensions.validate_assignment",
             "nbgrader.server_extensions.assignment_list",
             "nbgrader.server_extensions.course_list",
-            "e2xgrader.server_extensions.grader",
-            "e2xgrader.server_extensions.assignment_list",
-            "e2xgrader.server_extensions.validate_assignment",
+            "e2xgrader.server_extensions.teacher",
+            "e2xgrader.server_extensions.student",
         ]
         self.manager = e2xgraderapp.ExtensionManager()
         self.manager.deactivate()
@@ -30,14 +29,8 @@ class TestE2XGraderApp(unittest.TestCase):
                 "student",
                 "student_exam",
             ],
-            "e2xgrader.server_extensions.grader": ["teacher"],
-            "e2xgrader.server_extensions.assignment_list": [
-                "teacher",
-                "student",
-                "student_exam",
-            ],
-            "e2xgrader.server_extensions.validate_assignment": [
-                "teacher",
+            "e2xgrader.server_extensions.teacher": ["teacher"],
+            "e2xgrader.server_extensions.student": [
                 "student",
                 "student_exam",
             ],
