@@ -1,9 +1,8 @@
 import os
 
+from e2xgrader_base_app import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from tornado import web
-
-from e2xgrader.server_extensions.grader.apps.base import BaseApp
 
 from .apihandlers import default_handlers as default_api_handlers
 from .handlers import default_handlers

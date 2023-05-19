@@ -1,9 +1,8 @@
 import os
 
+from e2xgrader_base_app import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader.apihandlers import default_handlers
-
-from e2xgrader.server_extensions.grader.apps.base import BaseApp
 
 
 class NbGraderApi(NbGrader, BaseApp):

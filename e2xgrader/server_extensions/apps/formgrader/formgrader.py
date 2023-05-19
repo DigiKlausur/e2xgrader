@@ -1,12 +1,12 @@
 import os
 
+from e2xgrader_base_app import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 from tornado import web
 
 from e2xgrader.exporters import E2xExporter
 from e2xgrader.preprocessors import FilterCellsById
-from e2xgrader.server_extensions.grader.apps.base.base import BaseApp
 
 from .handlers import default_handlers
 
