@@ -103,3 +103,5 @@ search = '"@e2xgrader/[\w-]+": "{current_version}'
 [tool.ruff]
 line-length = 100
 exclude = ["nbgrader_config.py"]
+ignore-init-module-imports = true
+select = ["F", "E", "I"]
