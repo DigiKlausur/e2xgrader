@@ -5,12 +5,12 @@ from tempfile import TemporaryDirectory
 import nbformat
 from nbformat.v4 import new_notebook
 
+from e2xgrader.server_extensions.apps.validate_assignment.validator import E2XValidator
 from e2xgrader.tests.test_utils.cells import (
     new_multiplechoice_cell,
     new_singlechoice_cell,
     new_upload_cell,
 )
-from e2xgrader.validator import E2XValidator
 
 
 class TestValidator(unittest.TestCase):

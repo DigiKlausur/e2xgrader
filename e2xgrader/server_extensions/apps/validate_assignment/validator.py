@@ -4,7 +4,7 @@ from nbformat.notebooknode import NotebookNode
 from nbgrader import utils
 from nbgrader.validator import Validator
 
-from .utils.extra_cells import (
+from ....utils.extra_cells import (
     get_choices,
     is_attachment_cell,
     is_extra_cell,
@@ -34,7 +34,7 @@ class E2XValidator(Validator):
     def _get_failed_cells(self, nb: NotebookNode) -> List[NotebookNode]:
         failed = []
         for cell in nb.cells:
-            if not (self.validate_all or utils.is_grade(cell) or utils.is_locked(cell)):
+            if self._should_skip_cell(cell):
                 continue
 
             # if it's a grade cell, the check the grade
@@ -47,8 +47,14 @@ class E2XValidator(Validator):
                 # it's a markdown cell, so we can't do anything
                 if score is not None and score < max_score:
                     failed.append(cell)
-            elif self.validate_all and cell.cell_type == "code":
-                if self.code_cell_errored(cell):
-                    failed.append(cell)
+            elif (
+                self.validate_all
+                and cell.cell_type == "code"
+                and self.code_cell_errored(cell)
+            ):
+                failed.append(cell)
 
         return failed
+
+    def _should_skip_cell(self, cell: NotebookNode) -> bool:
+        return not (self.validate_all or utils.is_grade(cell) or utils.is_locked(cell))

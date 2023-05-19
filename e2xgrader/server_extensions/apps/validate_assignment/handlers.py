@@ -1,5 +1,3 @@
-"""Tornado handlers for nbgrader assignment list web service."""
-
 import json
 import os
 import traceback
@@ -11,10 +9,9 @@ from nbgrader.server_extensions.validate_assignment.handlers import (
     NbGraderVersionHandler,
 )
 from notebook.base.handlers import IPythonHandler
-from notebook.utils import url_path_join as ujoin
 from tornado import web
 
-from ...validator import E2XValidator
+from .validator import E2XValidator
 
 static = os.path.join(os.path.dirname(__file__), "static")
 
@@ -85,14 +82,3 @@ default_handlers = [
     (r"/assignments/validate", ValidateAssignmentHandler),
     (r"/nbgrader_version", NbGraderVersionHandler),
 ]
-
-
-def load_jupyter_server_extension(nbapp):
-    """Load the nbserver"""
-    nbapp.log.info("Loading the validate_assignment e2xgrader serverextension")
-    webapp = nbapp.web_app
-    base_url = webapp.settings["base_url"]
-    webapp.settings["notebook_dir"] = nbapp.notebook_dir
-    webapp.add_handlers(
-        ".*$", [(ujoin(base_url, pat), handler) for pat, handler in default_handlers]
-    )
