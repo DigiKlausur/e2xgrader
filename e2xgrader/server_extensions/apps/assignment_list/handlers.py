@@ -1,5 +1,3 @@
-"""Tornado handlers for nbgrader assignment list web service."""
-
 import contextlib
 import json
 import os
@@ -11,12 +9,8 @@ from nbgrader.exchange import ExchangeFactory
 from nbgrader.server_extensions.assignment_list.handlers import (
     AssignmentList,
     BaseAssignmentHandler,
-    default_handlers,
 )
-from notebook.utils import url_path_join as ujoin
 from tornado import web
-
-static = os.path.join(os.path.dirname(__file__), "static")
 
 
 @contextlib.contextmanager
@@ -96,21 +90,6 @@ class AssignmentActionHandler(BaseAssignmentHandler):
 
 _assignment_action_regex = r"(?P<action>fetch|submit|fetch_feedback)"
 
-e2x_default_handlers = [
+default_handlers = [
     (r"/assignments/%s" % _assignment_action_regex, AssignmentActionHandler),
 ]
-
-
-def load_jupyter_server_extension(nbapp):
-    """Load the nbserver"""
-    nbapp.log.info("Loading the assignment_list e2xgrader serverextension")
-    webapp = nbapp.web_app
-    webapp.settings["assignment_list_manager"] = E2xAssignmentList(parent=nbapp)
-    base_url = webapp.settings["base_url"]
-    webapp.add_handlers(
-        ".*$",
-        [
-            (ujoin(base_url, pat), handler)
-            for pat, handler in e2x_default_handlers + default_handlers
-        ],
-    )
