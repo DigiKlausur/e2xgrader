@@ -20,6 +20,7 @@ classifiers=[
     "Programming Language :: Python :: 3.9",
 ]
 dependencies = [
+    "e2xgrader_base_app",
     "nbgrader==0.7.*",
     "nbconvert>=6.5",
     "notebook>=6,<7",
@@ -39,6 +40,7 @@ Source = "https://github.com/Digiklausur/e2xgrader"
 [project.optional-dependencies]
 dev = [
     "pre-commit",
+    "pytest-cov",
     "hatchling",
     "tbump"
 ]
