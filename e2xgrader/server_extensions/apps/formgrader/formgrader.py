@@ -1,6 +1,6 @@
 import os
 
-from e2xgrader_base_app import BaseApp
+from e2xcore import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 from tornado import web

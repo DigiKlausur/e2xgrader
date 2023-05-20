@@ -20,7 +20,7 @@ classifiers=[
     "Programming Language :: Python :: 3.9",
 ]
 dependencies = [
-    "e2xgrader_base_app",
+    "e2xcore",
     "nbgrader==0.7.*",
     "nbconvert>=6.5",
     "notebook>=6,<7",

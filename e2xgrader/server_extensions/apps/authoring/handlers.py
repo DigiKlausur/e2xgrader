@@ -1,6 +1,7 @@
 import os
 import sys
 
+from e2xcore import urljoin
 from nbgrader.server_extensions.formgrader.base import (
     BaseHandler,
     check_notebook_dir,
@@ -9,7 +10,6 @@ from nbgrader.server_extensions.formgrader.base import (
 from tornado import web
 
 from e2xgrader.models import ExerciseModel, TaskPoolModel, TemplateModel
-from e2xgrader.utils import urljoin
 
 app_url = urljoin("e2x", "authoring", "app")
 

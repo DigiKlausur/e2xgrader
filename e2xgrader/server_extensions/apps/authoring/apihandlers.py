@@ -1,6 +1,7 @@
 import json
 import os
 
+from e2xcore import urljoin
 from jupyter_client.kernelspec import KernelSpecManager
 from nbgrader.server_extensions.formgrader.base import check_xsrf
 from tornado import web
@@ -14,9 +15,9 @@ from e2xgrader.models import (
     TaskPoolModel,
     TemplateModel,
 )
-from e2xgrader.utils import NotebookVariableExtractor, urljoin
 
 from ..e2xgraderapi.base import E2xApiHandler
+from .notebookvariableextractor import NotebookVariableExtractor
 
 
 class BaseApiManageHandler(E2xApiHandler):

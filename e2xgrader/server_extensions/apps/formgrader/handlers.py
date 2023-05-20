@@ -1,5 +1,6 @@
 import os
 
+from e2xcore import format_url
 from nbgrader.api import MissingEntry
 from nbgrader.server_extensions.formgrader.base import (
     BaseHandler,
@@ -10,8 +11,6 @@ from nbgrader.server_extensions.formgrader.handlers import (
     SubmissionNavigationHandler as NbgraderSubmissionNavigationHandler,
 )
 from tornado import web
-
-from e2xgrader.utils import format_url
 
 
 class ExportGradesHandler(BaseHandler):

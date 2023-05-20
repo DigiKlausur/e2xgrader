@@ -1,4 +1,4 @@
-from e2xgrader_base_app import BaseApp
+from e2xcore import BaseApp
 
 from .handlers import default_handlers
 
