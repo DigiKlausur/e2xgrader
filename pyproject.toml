@@ -21,13 +21,7 @@ classifiers=[
 ]
 dependencies = [
     "e2xcore",
-    "nbgrader==0.7.*",
-    "nbconvert>=6.5",
-    "notebook>=6,<7",
-    "jupyter-server<2",
-    "jupyter-core<5",
-    "ipykernel<6.19",
-    "nbclient<0.6.4",
+    "nbgrader>=0.7,<0.9",
     "pandas"
 ]
 dynamic = ["version"]
