@@ -9,6 +9,15 @@ class NbGraderApi(NbGrader, BaseApp):
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
+        if self.parent.name == "jupyter-notebook":
+            self.root_dir = self.parent.notebook_dir
+        else:
+            self.root_dir = self.parent.root_dir
+
+    @property
+    def url_prefix(self):
+        relpath = os.path.relpath(self.coursedir.root, self.root_dir)
+        return relpath
 
     def load_app(self):
         self.log.info("Loading the nbgrader api app")
@@ -29,10 +38,12 @@ class NbGraderApi(NbGrader, BaseApp):
         else:
             nbgrader_bad_setup = False
 
+        # Save which kind of application is running : Jupyterlab like or classic Notebook
+        self.webapp.settings["is_jlab"] = self.name != "jupyter-notebook"
+
         tornado_settings = dict(
-            nbgrader_url_prefix=os.path.relpath(
-                self.coursedir.root, self.parent.notebook_dir
-            ),
+            nbgrader_url_prefix=self.url_prefix,
+            nbgrader_formgrader=self,
             nbgrader_coursedir=self.coursedir,
             nbgrader_authenticator=self.authenticator,
             nbgrader_gradebook=None,
