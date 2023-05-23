@@ -17,6 +17,7 @@ NBGRADER_ASSIGNMENT_LIST = "nbgrader.server_extensions.assignment_list"
 NBGRADER_VALIDATE_ASSIGNMENT = "nbgrader.server_extensions.validate_assignment"
 E2XGRADER_TEACHER = "e2xgrader.server_extensions.teacher"
 E2XGRADER_STUDENT = "e2xgrader.server_extensions.student"
+E2XGRADER_STUDENT_EXAM = "e2xgrader.server_extensions.student_exam"
 
 
 class BaseExtensionManager:
@@ -96,6 +97,7 @@ class E2xExtensionManager(BaseExtensionManager):
 
         # Disable e2xgrader server extensions for other mode
         self.disable_serverextension(E2XGRADER_STUDENT)
+        self.disable_serverextension(E2XGRADER_STUDENT_EXAM)
 
     def activate_student(self, sys_prefix=True, user=False):
         print(f"Activate student mode with sys_prefix = {sys_prefix} and user = {user}")
@@ -115,6 +117,7 @@ class E2xExtensionManager(BaseExtensionManager):
 
         # Disable e2xgrader server extensions for other mode
         self.disable_serverextension(E2XGRADER_TEACHER)
+        self.disable_serverextension(E2XGRADER_STUDENT_EXAM)
 
     def activate_student_exam(self, sys_prefix=True, user=False):
         print(
@@ -136,3 +139,4 @@ class E2xExtensionManager(BaseExtensionManager):
 
         # Disable e2xgrader server extensions for other mode
         self.disable_serverextension(E2XGRADER_TEACHER)
+        self.disable_serverextension(E2XGRADER_STUDENT)

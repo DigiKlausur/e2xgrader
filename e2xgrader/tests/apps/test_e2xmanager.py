@@ -32,6 +32,8 @@ class TestE2XExtensionManager(unittest.TestCase):
             "e2xgrader.server_extensions.teacher": ["teacher"],
             "e2xgrader.server_extensions.student": [
                 "student",
+            ],
+            "e2xgrader.server_extensions.student_exam": [
                 "student_exam",
             ],
         }
