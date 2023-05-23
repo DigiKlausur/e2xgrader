@@ -1,9 +1,10 @@
 import unittest
 
 from e2xgrader.models import TemplateModel
-from e2xgrader.utils import NotebookVariableExtractor
-
-from ..test_utils.test_utils import (
+from e2xgrader.server_extensions.apps.authoring.notebookvariableextractor import (
+    NotebookVariableExtractor,
+)
+from e2xgrader.tests.test_utils.test_utils import (
     add_footer_to_template,
     add_header_to_template,
     add_template_with_header,
