@@ -32,6 +32,7 @@ def _jupyter_server_extension_paths():
     paths = [
         dict(module="e2xgrader.server_extensions.teacher"),
         dict(module="e2xgrader.server_extensions.student"),
+        dict(module="e2xgrader.server_extensions.student_exam"),
     ]
 
     return paths
