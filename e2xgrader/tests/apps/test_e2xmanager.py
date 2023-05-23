@@ -3,10 +3,10 @@ import unittest
 
 from notebook.serverextensions import BaseJSONConfigManager, jupyter_config_path
 
-from e2xgrader.apps import e2xgraderapp
+from e2xgrader.apps import e2xmanager
 
 
-class TestE2XGraderApp(unittest.TestCase):
+class TestE2XExtensionManager(unittest.TestCase):
     def setUp(self):
         self.serverextensions = [
             "nbgrader.server_extensions.formgrader",
@@ -16,7 +16,7 @@ class TestE2XGraderApp(unittest.TestCase):
             "e2xgrader.server_extensions.teacher",
             "e2xgrader.server_extensions.student",
         ]
-        self.manager = e2xgraderapp.ExtensionManager()
+        self.manager = e2xmanager.E2xExtensionManager()
         self.manager.deactivate()
 
     def get_serverextensions(self, role):
@@ -123,6 +123,7 @@ class TestE2XGraderApp(unittest.TestCase):
 
             for extension, status in extensions.items():
                 if extension in config_dict["load_extensions"]:
+                    print("Testing extension", extension)
                     assert config_dict["load_extensions"][extension] == status
                 else:
                     assert not status
