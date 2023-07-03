@@ -1,6 +1,7 @@
 from traitlets import Any, List
 
 from ..apps.assignment_list import AssignmentList
+from ..apps.help import Help
 from ..apps.validate_assignment import ValidateAssignment
 from ..base import BaseExtension
 
@@ -8,7 +9,7 @@ from ..base import BaseExtension
 class StudentExtension(BaseExtension):
     apps = List(
         trait=Any(),
-        default_value=[AssignmentList, ValidateAssignment],
+        default_value=[AssignmentList, ValidateAssignment, Help],
     ).tag(config=True)
 
 
