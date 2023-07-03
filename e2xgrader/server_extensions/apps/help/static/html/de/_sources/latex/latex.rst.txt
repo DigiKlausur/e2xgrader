@@ -1,0 +1,21 @@
+LaTeX Math Editor
+############################
+
+To make it easier to write equations in Markdown cells, you are provided with a LaTeX editor.
+
+1. Open folder with editor
+----------------------------
+
+.. image:: img/open_folder.png
+
+
+2. Open editor
+----------------------------
+
+.. image:: img/open_editor.png
+
+
+3. Use editor
+----------------------------
+
+.. image:: img/editor.png

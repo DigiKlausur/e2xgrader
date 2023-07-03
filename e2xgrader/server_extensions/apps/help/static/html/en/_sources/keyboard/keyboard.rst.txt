@@ -1,0 +1,53 @@
+Change the Keyboard Layout
+############################
+
+The way to change the keyboard layout depends on the device you are using.
+If you are in the rooms C063, C175, C177 or C181, you are in a PC pool.
+If you are in the rooms C115, C117 or C119, you are in a Notebook pool.
+
+PC Pools
+***********************
+
+1. Open Keyboard Settings
+---------------------------------------------------------------
+
+.. image:: img/open_keyboard_menu.png
+
+
+2. Deactivate option *Use system defaults* and click *Add*
+---------------------------------------------------------------
+
+.. image:: img/add_layout.png
+
+
+3. Choose your preferred layout
+---------------------------------------------------------------
+
+.. image:: img/select_layout.png
+
+
+4. Delete old layout
+---------------------------------------------------------------
+
+.. image:: img/delete_layout.png
+
+
+5. Close the window
+---------------------------------------------------------------
+
+.. image:: img/close_keyboard_menu.png
+
+
+Notebook Pools
+***********************
+
+1. Select language settings
+---------------------------------------------------------------
+
+.. image:: img/language_menu.png
+
+
+2. Choose your preferred layout
+---------------------------------------------------------------
+
+.. image:: img/keyboard_layout.png

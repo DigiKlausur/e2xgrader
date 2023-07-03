@@ -1,0 +1,85 @@
+Submit Exam
+#######################
+
+Submitting your exam consists of two steps.
+
+1. Submit
+2. Validate your submission
+
+Submitting the exam
+***********************
+
+1. Save your exam
+-----------------------
+
+.. figure:: img/save.png
+
+
+2. Submit your exam
+-----------------------
+
+.. figure:: img/submit.png
+
+
+3. Check your timestamp
+-----------------------
+
+.. figure:: img/submitted.png
+
+
+Validating your submission
+***************************
+You can validate your submission after you submit it by opening 
+the html version of the submitted version.
+
+
+1. Check the HTML version of your submission
+---------------------------------------------
+
+Validate that you have submitted the most recent version
+of your work. Anything on the html should have been present
+on the server.
+
+.. figure:: img/html_submission.png
+
+2. Check your timestamp in the html version
+---------------------------------------------
+
+At the bottom of the page, you will find the timestamp of your
+submission.
+
+.. figure:: img/timestamp_html.png
+
+   Verify that the timestamp is updated and reload
+   the page if necessary.
+
+You can also find the hashcode below the timestamp on this page.
+However, should you not be able to open this file, you can find
+the hashcode in the text file as described in the next section.
+
+3. Check the textfile with your hashcode
+---------------------------------------------
+
+Go to home page, and then open info file (`e.g. tmetzl2m_info.txt`)
+and find your hashcode there.
+
+.. figure:: img/hashcode_txt.png
+
+
+4. Fill out the sheet for the exam supervisor
+---------------------------------------------
+
+Write down your hashcode and timestamp (HH:MM:SS) on the provided 
+sheet. Also, write down the laptop and usb stick number if you
+do your exam in laptop pool rooms.
+
+.. figure:: img/sheet_supervisor.png
+
+
+5. Fill out the sheet for you to take home
+---------------------------------------------
+
+Write down your hashcode and timestamp (HH:MM:SS) on the provided 
+sheet.
+
+.. figure:: img/sheet_student.png
