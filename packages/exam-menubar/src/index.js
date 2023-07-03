@@ -2,6 +2,7 @@ import $ from "jquery";
 import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
 import { Submit } from "./submit";
+import utils from "base/js/utils";
 import "./exam-menubar.css";
 
 export class ExamMenubar extends Menubar {
@@ -17,6 +18,76 @@ export class ExamMenubar extends Menubar {
         .append($(".kernel_indicator_name").css("padding-left", ".5em"))
         .append($("#kernel_indicator_icon").css("padding-left", ".5em"))
     );
+  }
+
+  add_help() {
+    let url = utils.url_path_join(
+      Jupyter.notebook.base_url,
+      "e2x/help/api/files"
+    );
+    let that = this;
+    let dropwdown_content = [
+      {
+        label: "E2X Help (Deutsch)",
+        callback: function () {
+          window.open(
+            utils.url_path_join(
+              Jupyter.notebook.base_url,
+              "e2x/help/static/html/de/index.html"
+            ),
+            "_blank"
+          );
+        },
+      },
+      {
+        label: "E2X Help (English)",
+        callback: function () {
+          window.open(
+            utils.url_path_join(
+              Jupyter.notebook.base_url,
+              "e2x/help/static/html/en/index.html"
+            ),
+            "_blank"
+          );
+        },
+      },
+    ];
+    utils.ajax(url, {
+      type: "GET",
+      dataType: "json",
+      processData: false,
+      cache: false,
+      success: function (data, status, xhr) {
+        data.forEach(function (entry) {
+          dropwdown_content.push({
+            label: entry[0],
+            callback: function () {
+              window.open(
+                utils.url_path_join(
+                  Jupyter.notebook.base_url,
+                  "e2x/help/shared/",
+                  entry[1]
+                ),
+                "_blank"
+              );
+            },
+          });
+        });
+        that.add_dropdown("help", "Additional Resources", dropwdown_content);
+      },
+      error: utils.log_ajax_error,
+      complete: function (data) {
+        that.element.append(
+          $("<div/>")
+            .addClass("e2x-button e2x-submit")
+            .on("click", function () {
+              that.submit.prepare_submit();
+            })
+            .append("Submit")
+            .append($("<i/>").addClass("fa fa-paper-plane"))
+        );
+      },
+    });
   }
 
   activate() {
@@ -37,16 +108,9 @@ export class ExamMenubar extends Menubar {
       },
     ]);
     this.add_divider();
-    let that = this;
-    this.element.append(
-      $("<div/>")
-        .addClass("e2x-button e2x-submit")
-        .on("click", function () {
-          that.submit.prepare_submit();
-        })
-        .append("Submit")
-        .append($("<i/>").addClass("fa fa-paper-plane"))
-    );
+    this.add_help();
+    this.add_divider();
+
     super.activate();
   }
 }
