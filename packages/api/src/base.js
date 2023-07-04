@@ -28,10 +28,17 @@ export const pathJoin = (parts, sep) => {
 
 export class BaseAPI {
   async get(url, params = undefined) {
+    let settings = {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": getCookie("_xsrf"),
+      },
+    };
     if (params !== undefined) {
       url += "?" + new URLSearchParams(params).toString();
     }
-    const response = await fetch(url);
+    const response = await fetch(url, settings);
     const json = await response.json();
     return json;
   }
