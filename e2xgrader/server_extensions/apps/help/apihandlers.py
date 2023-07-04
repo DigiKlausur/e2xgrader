@@ -8,8 +8,9 @@ from ..e2xgraderapi.base import E2xApiHandler
 
 
 class ListFilesHandler(E2xApiHandler):
-    def list_files(self, path):
-        if path is None:
+    def list_files(self, path_id, path):
+        self.log.info(f"Listing files from {path}")
+        if path is None or not os.path.exists(path):
             return []
         file_list = []
         exclude_dirs = []
@@ -33,7 +34,10 @@ class ListFilesHandler(E2xApiHandler):
                 file_list.append((os.path.join(root, name), os.path.join(root, name)))
 
         file_list = [
-            (os.path.relpath(name, path), os.path.relpath(url, path))
+            (
+                os.path.relpath(name, path),
+                os.path.join(path_id, os.path.relpath(url, path)),
+            )
             for name, url in file_list
         ]
 
@@ -41,7 +45,9 @@ class ListFilesHandler(E2xApiHandler):
 
     @web.authenticated
     def get(self):
-        files = self.list_files(self.settings["e2xhelp_shared_dir"])
+        files = []
+        for path_id, path in self.settings.get("e2xhelp_shared_dirs", dict()).items():
+            files.extend(self.list_files(path_id, path))
         self.write(json.dumps(files))
 
 
