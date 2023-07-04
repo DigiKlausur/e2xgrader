@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
+import { BaseAPI } from "@e2xgrader/api";
 import { Submit } from "./submit";
 import utils from "base/js/utils";
 import "./exam-menubar.css";
@@ -9,6 +10,7 @@ export class ExamMenubar extends Menubar {
   constructor() {
     super();
     this.submit = new Submit();
+    this.api = new BaseAPI();
   }
 
   add_kernel_indiciator() {
@@ -21,10 +23,6 @@ export class ExamMenubar extends Menubar {
   }
 
   add_help() {
-    let url = utils.url_path_join(
-      Jupyter.notebook.base_url,
-      "e2x/help/api/files"
-    );
     let that = this;
     let dropwdown_content = [
       {
@@ -33,7 +31,7 @@ export class ExamMenubar extends Menubar {
           window.open(
             utils.url_path_join(
               Jupyter.notebook.base_url,
-              "e2x/help/static/html/de/index.html"
+              "e2x/help/static/base/html/de/index.html"
             ),
             "_blank"
           );
@@ -45,19 +43,16 @@ export class ExamMenubar extends Menubar {
           window.open(
             utils.url_path_join(
               Jupyter.notebook.base_url,
-              "e2x/help/static/html/en/index.html"
+              "e2x/help/static/base/html/en/index.html"
             ),
             "_blank"
           );
         },
       },
     ];
-    utils.ajax(url, {
-      type: "GET",
-      dataType: "json",
-      processData: false,
-      cache: false,
-      success: function (data, status, xhr) {
+    this.api
+      .get(utils.url_path_join(Jupyter.notebook.base_url, "e2x/help/api/files"))
+      .then((data) => {
         data.forEach(function (entry) {
           dropwdown_content.push({
             label: entry[0],
@@ -65,7 +60,7 @@ export class ExamMenubar extends Menubar {
               window.open(
                 utils.url_path_join(
                   Jupyter.notebook.base_url,
-                  "e2x/help/shared/",
+                  "e2x/help/static/",
                   entry[1]
                 ),
                 "_blank"
@@ -73,10 +68,9 @@ export class ExamMenubar extends Menubar {
             },
           });
         });
+      })
+      .finally(() => {
         that.add_dropdown("help", "Additional Resources", dropwdown_content);
-      },
-      error: utils.log_ajax_error,
-      complete: function (data) {
         that.element.append(
           $("<div/>")
             .addClass("e2x-button e2x-submit")
@@ -86,8 +80,7 @@ export class ExamMenubar extends Menubar {
             .append("Submit")
             .append($("<i/>").addClass("fa fa-paper-plane"))
         );
-      },
-    });
+      });
   }
 
   activate() {
