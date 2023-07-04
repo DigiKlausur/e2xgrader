@@ -49,6 +49,7 @@ class TestE2XExtensionManager(unittest.TestCase):
                 "teacher_tree/main": ["teacher"],
                 "assignment_list/main": ["teacher", "student", "student_exam"],
                 "student_exam_tree/main": ["student_exam"],
+                "student_tree/main": ["student"],
             },
             "notebook": {
                 "teacher_notebook/main": ["teacher"],
