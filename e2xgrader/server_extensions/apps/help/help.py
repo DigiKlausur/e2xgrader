@@ -41,7 +41,7 @@ class Help(NbGrader, BaseApp):
                 (
                     f"/e2x/help/static/{idx}/(.*)",
                     web.StaticFileHandler,
-                    dict(path=self.static_path, default_filename="index.html"),
+                    dict(path=path, default_filename="index.html"),
                 )
             )
         return static_handlers
