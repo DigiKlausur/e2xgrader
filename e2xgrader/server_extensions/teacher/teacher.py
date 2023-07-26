@@ -1,7 +1,7 @@
+from e2xauthoring.app import AuthoringApp
 from traitlets import Any, List
 
 from ..apps.assignment_list import AssignmentList
-from ..apps.authoring import AuthoringApp
 from ..apps.e2xgraderapi import E2xGraderApi
 from ..apps.formgrader import FormgradeApp
 from ..apps.help import Help
