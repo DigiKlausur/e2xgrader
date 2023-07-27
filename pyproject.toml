@@ -20,8 +20,8 @@ classifiers=[
     "Programming Language :: Python :: 3.9",
 ]
 dependencies = [
-    "e2xcore",
-    "e2xauthoring",
+    "e2xcore==0.0.2",
+    "e2xauthoring==0.2.0.dev1",
     "pandas"
 ]
 dynamic = ["version"]
