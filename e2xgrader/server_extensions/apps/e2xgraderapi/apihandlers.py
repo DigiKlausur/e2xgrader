@@ -1,5 +1,6 @@
 import json
 
+from e2xcore.handlers.base import E2xApiHandler
 from nbgrader.server_extensions.formgrader.apihandlers import (
     AssignmentCollectionHandler,
     AssignmentHandler,
@@ -8,8 +9,6 @@ from nbgrader.server_extensions.formgrader.base import check_notebook_dir, check
 from tornado import web
 
 from e2xgrader.exporters import GradeExporter
-
-from .base import E2xApiHandler
 
 
 class E2xAssignmentCollectionHandler(E2xApiHandler, AssignmentCollectionHandler):
