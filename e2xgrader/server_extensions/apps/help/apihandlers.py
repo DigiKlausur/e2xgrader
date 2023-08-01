@@ -2,9 +2,8 @@ import json
 import os
 
 from e2xcore import urljoin
+from e2xcore.handlers import E2xApiHandler
 from tornado import web
-
-from ..e2xgraderapi.base import E2xApiHandler
 
 
 class ListFilesHandler(E2xApiHandler):
