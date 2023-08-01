@@ -23,7 +23,8 @@ export class TaskMenubar extends Menubar {
   }
 
   insert_question_preset(name) {
-    this.api.get_question_preset(name).then((cells) => {
+    this.api.get_question_preset(name).then((res) => {
+      const cells = res.data;
       insert_question_preset_dialog(name, (task_name, points) => {
         set_task_ids(cells, task_name, points);
         insert_cells(cells);
@@ -33,7 +34,7 @@ export class TaskMenubar extends Menubar {
 
   activate() {
     this.api.list_question_presets().then((presets) => {
-      this.presets = presets;
+      this.presets = presets.data;
       this.add_save_button();
       this.add_divider();
       this.add_question_menu();

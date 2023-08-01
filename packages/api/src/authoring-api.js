@@ -12,31 +12,27 @@ export class AuthoringAPI extends BaseAPI {
 
   list_question_presets() {
     return this.get_presets({
-      type: "question",
-      action: "list",
+      action: "list_question_presets",
     });
   }
 
   list_template_presets() {
     return this.get_presets({
-      type: "template",
-      action: "list",
+      action: "list_template_presets",
     });
   }
 
   get_question_preset(name) {
     return this.get_presets({
-      type: "question",
-      action: "get",
-      name: name,
+      action: "get_question_preset",
+      preset_name: name,
     });
   }
 
   get_template_preset(name) {
     return this.get_presets({
-      type: "template",
-      action: "get",
-      name: name,
+      action: "get_template_preset",
+      preset_name: name,
     });
   }
 }
