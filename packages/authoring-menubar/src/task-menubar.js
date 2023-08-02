@@ -1,13 +1,11 @@
-import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
 import { manage_tags, insert_question_preset_dialog } from "./dialogs";
-import { AuthoringAPI } from "@e2xgrader/api";
 import { get_file_options, insert_cells, set_task_ids } from "./utils";
+import API from "@e2xauthoring/api";
 
 export class TaskMenubar extends Menubar {
   constructor() {
     super();
-    this.api = new AuthoringAPI(Jupyter.notebook.base_url);
     this.presets = [];
   }
 
@@ -23,7 +21,7 @@ export class TaskMenubar extends Menubar {
   }
 
   insert_question_preset(name) {
-    this.api.get_question_preset(name).then((res) => {
+    API.get_question_preset(name).then((res) => {
       const cells = res.data;
       insert_question_preset_dialog(name, (task_name, points) => {
         set_task_ids(cells, task_name, points);
@@ -33,7 +31,7 @@ export class TaskMenubar extends Menubar {
   }
 
   activate() {
-    this.api.list_question_presets().then((presets) => {
+    API.list_question_presets().then((presets) => {
       this.presets = presets.data;
       this.add_save_button();
       this.add_divider();
