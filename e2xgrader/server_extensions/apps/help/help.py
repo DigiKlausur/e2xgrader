@@ -1,5 +1,3 @@
-import os
-
 from e2xcore import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from tornado import web
@@ -9,15 +7,6 @@ from .apihandlers import default_handlers
 
 
 class Help(NbGrader, BaseApp):
-    static_path = Unicode(
-        os.path.join(os.path.dirname(__file__), "static"),
-        help="path to static files shipped with package",
-    ).tag(config=True)
-
-    shared_path = Unicode(
-        None, help="path to extra files served under /e2x/help/shared", allow_none=True
-    ).tag(config=True)
-
     shared_paths = List(
         trait=Unicode(),
         default_value=[],
@@ -31,10 +20,11 @@ class Help(NbGrader, BaseApp):
     def get_static_handlers(self):
         static_handlers = [
             (
-                r"/e2x/help/static/base/(.*)",
+                f"/e2x/help/static/{idx}/(.*)",
                 web.StaticFileHandler,
-                dict(path=self.static_path, default_filename="index.html"),
-            ),
+                dict(path=path, default_filename="index.html"),
+            )
+            for idx, path in enumerate(self.shared_paths)
         ]
         for idx, path in enumerate(self.shared_paths):
             static_handlers.append(
