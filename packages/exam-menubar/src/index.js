@@ -1,7 +1,7 @@
 import $ from "jquery";
 import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
-import { BaseAPI } from "@e2xgrader/api";
+import { urlJoin, requests } from "@e2xgrader/api";
 import { Submit } from "./submit";
 import utils from "base/js/utils";
 import "./exam-menubar.css";
@@ -10,7 +10,6 @@ export class ExamMenubar extends Menubar {
   constructor() {
     super();
     this.submit = new Submit();
-    this.api = new BaseAPI();
   }
 
   add_kernel_indiciator() {
@@ -24,41 +23,16 @@ export class ExamMenubar extends Menubar {
 
   add_help() {
     let that = this;
-    let dropwdown_content = [
-      {
-        label: "E2X Help (Deutsch)",
-        callback: function () {
-          window.open(
-            utils.url_path_join(
-              Jupyter.notebook.base_url,
-              "e2x/help/static/base/html/de/index.html"
-            ),
-            "_blank"
-          );
-        },
-      },
-      {
-        label: "E2X Help (English)",
-        callback: function () {
-          window.open(
-            utils.url_path_join(
-              Jupyter.notebook.base_url,
-              "e2x/help/static/base/html/en/index.html"
-            ),
-            "_blank"
-          );
-        },
-      },
-    ];
-    this.api
-      .get(utils.url_path_join(Jupyter.notebook.base_url, "e2x/help/api/files"))
+    let dropwdown_content = [];
+    requests
+      .get(urlJoin(Jupyter.notebook.base_url, "e2x/help/api/files"))
       .then((data) => {
         data.forEach(function (entry) {
           dropwdown_content.push({
             label: entry[0],
             callback: function () {
               window.open(
-                utils.url_path_join(
+                urlJoin(
                   Jupyter.notebook.base_url,
                   "e2x/help/static/",
                   entry[1]
@@ -70,7 +44,9 @@ export class ExamMenubar extends Menubar {
         });
       })
       .finally(() => {
-        that.add_dropdown("help", "Additional Resources", dropwdown_content);
+        if (dropwdown_content.length > 0) {
+          that.add_dropdown("help", "Additional Resources", dropwdown_content);
+        }
         that.element.append(
           $("<div/>")
             .addClass("e2x-button e2x-submit")
