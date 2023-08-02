@@ -1,10 +1,9 @@
 from tempfile import TemporaryDirectory
 
 import nbformat
+from e2xauthoring.managers import PresetManager, TemplateManager
 from nbgrader.coursedir import CourseDirectory
 from nbgrader.utils import is_grade
-
-from e2xgrader.models import PresetModel, TemplateModel
 
 
 def create_temp_course():
@@ -15,8 +14,8 @@ def create_temp_course():
 
 
 def add_template_with_header(coursedir, name, header_source):
-    templatemodel = TemplateModel(coursedir)
-    presetmodel = PresetModel(coursedir)
+    templatemodel = TemplateManager(coursedir)
+    presetmodel = PresetManager(coursedir)
     res = templatemodel.new(name=name)
 
     nb = nbformat.read(res["path"], as_version=nbformat.NO_CONVERT)
@@ -28,7 +27,7 @@ def add_template_with_header(coursedir, name, header_source):
 
 
 def add_header_to_template(coursedir, path, header_source):
-    presetmodel = PresetModel(coursedir)
+    presetmodel = PresetManager(coursedir)
     nb = nbformat.read(path, as_version=nbformat.NO_CONVERT)
     header_cells = presetmodel.get_template_preset("Header")
     header_cells[0].source = header_source
@@ -38,7 +37,7 @@ def add_header_to_template(coursedir, path, header_source):
 
 
 def add_footer_to_template(coursedir, path, footer_source):
-    presetmodel = PresetModel(coursedir)
+    presetmodel = PresetManager(coursedir)
     nb = nbformat.read(path, as_version=nbformat.NO_CONVERT)
     footer_cells = presetmodel.get_template_preset("Footer")
     footer_cells[0].source = footer_source
@@ -48,7 +47,7 @@ def add_footer_to_template(coursedir, path, footer_source):
 
 
 def add_question_to_task(coursedir, path, question_type, grade_id=None, points=0):
-    presetmodel = PresetModel(coursedir)
+    presetmodel = PresetManager(coursedir)
     nb = nbformat.read(path, as_version=nbformat.NO_CONVERT)
     cells = presetmodel.get_question_preset(question_type)
     if grade_id is not None:
