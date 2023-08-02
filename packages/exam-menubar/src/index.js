@@ -3,7 +3,6 @@ import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
 import { urlJoin, requests } from "@e2xgrader/api";
 import { Submit } from "./submit";
-import utils from "base/js/utils";
 import "./exam-menubar.css";
 
 export class ExamMenubar extends Menubar {
