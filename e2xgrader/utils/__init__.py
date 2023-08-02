@@ -1,4 +1,3 @@
-from .notebookvariableextractor import NotebookVariableExtractor
-from .utils import format_url, get_nbgrader_config, urljoin
+from .utils import get_nbgrader_config
 
-__all__ = ["NotebookVariableExtractor", "urljoin", "format_url", "get_nbgrader_config"]
+__all__ = ["get_nbgrader_config"]

@@ -3,12 +3,11 @@ from collections import defaultdict
 from textwrap import dedent
 
 import pandas as pd
+from e2xcore.api import E2xAPI
+from e2xcore.utils.utils import get_nbgrader_config
 from nbgrader.api import Grade
 from traitlets import Bool, List, Unicode
 from traitlets.config import LoggingConfigurable
-
-from ..apps import E2xAPI
-from ..utils import get_nbgrader_config
 
 
 class GradeExporter(LoggingConfigurable):

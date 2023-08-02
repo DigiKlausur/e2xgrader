@@ -24,7 +24,8 @@ export class TemplateMenubar extends Menubar {
   }
 
   insert_template_preset(name) {
-    this.api.get_template_preset(name).then((cells) => {
+    this.api.get_template_preset(name).then((res) => {
+      const cells = res.data;
       set_template_ids(cells, utils.randomString(8));
       insert_cells(cells);
     });
@@ -32,7 +33,7 @@ export class TemplateMenubar extends Menubar {
 
   activate() {
     this.api.list_template_presets().then((presets) => {
-      this.presets = presets;
+      this.presets = presets.data;
       this.add_save_button();
       this.add_divider();
       this.add_template_menu();

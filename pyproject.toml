@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "e2xgrader"
 description = "An addon for nbgrader"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = "MIT"
 authors = [
   { name = "Tim Metzler", email = "tim.metzler@h-brs.de" },
@@ -14,19 +14,14 @@ authors = [
 classifiers=[
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
-    "nbgrader==0.7.*",
-    "nbconvert>=6.5",
-    "notebook>=6,<7",
-    "jupyter-server<2",
-    "jupyter-core<5",
-    "ipykernel<6.19",
-    "nbclient<0.6.4",
+    "e2xcore==0.0.2",
+    "e2xauthoring==0.2.0.dev2",
     "pandas"
 ]
 dynamic = ["version"]
@@ -39,6 +34,7 @@ Source = "https://github.com/Digiklausur/e2xgrader"
 [project.optional-dependencies]
 dev = [
     "pre-commit",
+    "pytest-cov",
     "hatchling",
     "tbump"
 ]
@@ -62,8 +58,7 @@ artifacts = [
 ]
 
 [tool.tbump]
-# Uncomment this if your project is hosted on GitHub:
-# github_url = "https://github.com/<user or organization>/<project>/"
+github_url = "https://github.com/Digiklausur/e2xgrader/"
 
 [tool.tbump.version]
 current = "0.1.0-dev3"

@@ -1,5 +1,6 @@
 import unittest
 
+from e2xcore.utils.nbgrader_cells import grade_id
 from nbformat.v4 import new_notebook
 
 from e2xgrader.preprocessors import FilterCellsById
@@ -9,7 +10,6 @@ from e2xgrader.tests.test_utils.cells import (
     new_manually_graded_code_cell,
     new_readonly_markdown_cell,
 )
-from e2xgrader.utils.nbgrader_cells import grade_id
 
 
 class TestFilterCellsById(unittest.TestCase):

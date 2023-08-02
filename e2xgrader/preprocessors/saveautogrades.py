@@ -1,6 +1,8 @@
 from textwrap import dedent
 from typing import Tuple
 
+from e2xcore.utils.e2xgrader_cells import is_extra_cell
+from e2xcore.utils.nbgrader_cells import grade_id
 from nbconvert.exporters.exporter import ResourcesDict
 from nbformat.notebooknode import NotebookNode
 from nbgrader.api import Gradebook
@@ -9,8 +11,6 @@ from nbgrader.utils import determine_grade
 from traitlets import Dict, Instance, List, TraitError, Unicode, validate
 
 from ..graders import BaseGrader, CodeGrader, MultipleChoiceGrader, SingleChoiceGrader
-from ..utils.extra_cells import is_extra_cell
-from ..utils.nbgrader_cells import grade_id
 
 
 class SaveAutoGrades(NbgraderSaveAutoGrades):

@@ -30,9 +30,9 @@ def _jupyter_nbextension_paths():
 
 def _jupyter_server_extension_paths():
     paths = [
-        dict(module="e2xgrader.server_extensions.assignment_list"),
-        dict(module="e2xgrader.server_extensions.grader"),
-        dict(module="e2xgrader.server_extensions.validate_assignment"),
+        dict(module="e2xgrader.server_extensions.teacher"),
+        dict(module="e2xgrader.server_extensions.student"),
+        dict(module="e2xgrader.server_extensions.student_exam"),
     ]
 
     return paths

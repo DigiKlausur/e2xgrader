@@ -1,9 +1,9 @@
 import unittest
 from copy import deepcopy
 
+from e2xauthoring.managers import PresetManager
 from nbformat.v4 import new_notebook
 
-from e2xgrader.models import PresetModel
 from e2xgrader.preprocessors import ExtractAttachments
 
 from ..test_utils.test_utils import create_temp_course
@@ -23,7 +23,7 @@ class TestExtractAttachments(unittest.TestCase):
 
     def testPreprocessStandardCell(self):
         nb = new_notebook()
-        nb.cells = PresetModel(self.coursedir).get_question_preset("Single Choice")
+        nb.cells = PresetManager(self.coursedir).get_question_preset("Single Choice")
 
         processed_nb = deepcopy(nb)
         processed_nb, _ = ExtractAttachments().preprocess(
@@ -34,7 +34,7 @@ class TestExtractAttachments(unittest.TestCase):
 
     def testPreprocessDiagramCell(self):
         nb = new_notebook()
-        nb.cells = PresetModel(self.coursedir).get_question_preset("Diagram")
+        nb.cells = PresetManager(self.coursedir).get_question_preset("Diagram")
 
         processed_nb = deepcopy(nb)
         processed_nb, _ = ExtractAttachments().preprocess(

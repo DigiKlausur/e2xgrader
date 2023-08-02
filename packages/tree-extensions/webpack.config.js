@@ -2,6 +2,7 @@ const path = require("path");
 module.exports = {
   entry: {
     "student_exam/main": "./src/student-exam-extension.js",
+    "student/main": "./src/student-extension.js",
     "teacher/main": "./src/teacher-extension.js",
   },
   output: {

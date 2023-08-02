@@ -1,6 +1,7 @@
 import $ from "jquery";
 import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
+import { urlJoin, requests } from "@e2xgrader/api";
 import { Submit } from "./submit";
 import "./exam-menubar.css";
 
@@ -17,6 +18,44 @@ export class ExamMenubar extends Menubar {
         .append($(".kernel_indicator_name").css("padding-left", ".5em"))
         .append($("#kernel_indicator_icon").css("padding-left", ".5em"))
     );
+  }
+
+  add_help() {
+    let that = this;
+    let dropwdown_content = [];
+    requests
+      .get(urlJoin(Jupyter.notebook.base_url, "e2x/help/api/files"))
+      .then((data) => {
+        data.forEach(function (entry) {
+          dropwdown_content.push({
+            label: entry[0],
+            callback: function () {
+              window.open(
+                urlJoin(
+                  Jupyter.notebook.base_url,
+                  "e2x/help/static/",
+                  entry[1]
+                ),
+                "_blank"
+              );
+            },
+          });
+        });
+      })
+      .finally(() => {
+        if (dropwdown_content.length > 0) {
+          that.add_dropdown("help", "Additional Resources", dropwdown_content);
+        }
+        that.element.append(
+          $("<div/>")
+            .addClass("e2x-button e2x-submit")
+            .on("click", function () {
+              that.submit.prepare_submit();
+            })
+            .append("Submit")
+            .append($("<i/>").addClass("fa fa-paper-plane"))
+        );
+      });
   }
 
   activate() {
@@ -37,16 +76,9 @@ export class ExamMenubar extends Menubar {
       },
     ]);
     this.add_divider();
-    let that = this;
-    this.element.append(
-      $("<div/>")
-        .addClass("e2x-button e2x-submit")
-        .on("click", function () {
-          that.submit.prepare_submit();
-        })
-        .append("Submit")
-        .append($("<i/>").addClass("fa fa-paper-plane"))
-    );
+    this.add_help();
+    this.add_divider();
+
     super.activate();
   }
 }
