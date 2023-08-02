@@ -12,7 +12,7 @@
   "dependencies": {
     "@e2xgrader/menubar": "0.1.0-dev3",
     "@e2xgrader/utils": "0.1.0-dev3",
-    "@e2xauthoring/api": "0.2.0-dev2"
+    "@e2xgrader/api": "0.1.0-dev3"
   },
   "devDependencies": {
     "webpack": "^5.73.0",

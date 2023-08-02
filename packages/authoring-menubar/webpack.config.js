@@ -16,7 +16,7 @@ module.exports = {
     /^notebook\/js*/,
   ],
   optimization: {
-    minimize: true,
+    minimize: false,
   },
   module: {
     rules: [

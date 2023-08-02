@@ -1,14 +1,12 @@
-import Jupyter from "base/js/namespace";
 import { Menubar } from "@e2xgrader/menubar";
-import { AuthoringAPI } from "@e2xgrader/api";
 import { insert_cells, get_file_options, set_template_ids } from "./utils";
 import { manage_tags } from "./dialogs";
 import { utils } from "@e2xgrader/utils";
+import API from "./api";
 
 export class TemplateMenubar extends Menubar {
   constructor() {
     super();
-    this.api = new AuthoringAPI(Jupyter.notebook.base_url);
     this.presets = [];
   }
 
@@ -24,7 +22,7 @@ export class TemplateMenubar extends Menubar {
   }
 
   insert_template_preset(name) {
-    this.api.get_template_preset(name).then((res) => {
+    API.get_template_preset(name).then((res) => {
       const cells = res.data;
       set_template_ids(cells, utils.randomString(8));
       insert_cells(cells);
@@ -32,7 +30,7 @@ export class TemplateMenubar extends Menubar {
   }
 
   activate() {
-    this.api.list_template_presets().then((presets) => {
+    API.list_template_presets().then((presets) => {
       this.presets = presets.data;
       this.add_save_button();
       this.add_divider();

@@ -1,7 +1,7 @@
 import { Menubar } from "@e2xgrader/menubar";
 import { manage_tags, insert_question_preset_dialog } from "./dialogs";
 import { get_file_options, insert_cells, set_task_ids } from "./utils";
-import API from "@e2xauthoring/api";
+import API from "./api";
 
 export class TaskMenubar extends Menubar {
   constructor() {
