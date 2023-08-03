@@ -8,7 +8,10 @@ from nbgrader.coursedir import CourseDirectory
 from nbgrader.exchange import ExchangeFactory
 from nbgrader.server_extensions.assignment_list.handlers import (
     AssignmentList,
+    AssignmentListHandler,
     BaseAssignmentHandler,
+    CourseListHandler,
+    NbGraderVersionHandler,
 )
 from tornado import web
 
@@ -91,5 +94,8 @@ class AssignmentActionHandler(BaseAssignmentHandler):
 _assignment_action_regex = r"(?P<action>fetch|submit|fetch_feedback)"
 
 default_handlers = [
+    (r"/assignments", AssignmentListHandler),
     (r"/assignments/%s" % _assignment_action_regex, AssignmentActionHandler),
+    (r"/courses", CourseListHandler),
+    (r"/nbgrader_version", NbGraderVersionHandler),
 ]
