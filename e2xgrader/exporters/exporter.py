@@ -9,6 +9,8 @@ from nbconvert.exporters import HTMLExporter
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
 from traitlets import Unicode
 
+from ..server_extensions.apps.e2xgraderapi import E2xGraderApi
+from ..server_extensions.apps.formgrader import FormgradeApp
 from ..utils import extra_cells as utils
 from .filters import Highlight2HTMLwithLineNumbers
 
@@ -25,26 +27,8 @@ class E2xExporter(HTMLExporter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.extra_template_basedirs = [
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "apps",
-                    "e2xgraderapi",
-                    "templates",
-                )
-            ),
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "apps",
-                    "formgrader",
-                    "templates",
-                )
-            ),
+            E2xGraderApi.template_path,
+            FormgradeApp.template_path,
             nbgrader_handlers.template_path,
         ]
         # The notebook seems to sometimes set exclude_input to true
@@ -52,19 +36,7 @@ class E2xExporter(HTMLExporter):
 
     @property
     def template_paths(self):
-        return super()._template_paths() + [
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "grader",
-                    "apps",
-                    "formgrader",
-                    "templates",
-                )
-            )
-        ]
+        return super()._template_paths() + [FormgradeApp.template_path]
 
     @pass_context
     def to_choicecell(self, context, source):
