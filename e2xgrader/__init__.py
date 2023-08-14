@@ -6,6 +6,16 @@ import glob
 import os
 from os.path import join as pjoin
 
+from .server_extensions.student import (
+    _load_jupyter_server_extension as load_student_extension,
+)
+from .server_extensions.student_exam import (
+    _load_jupyter_server_extension as load_student_exam_extension,
+)
+from .server_extensions.teacher import (
+    _load_jupyter_server_extension as load_teacher_extension,
+)
+
 
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
@@ -36,3 +46,13 @@ def _jupyter_server_extension_paths():
     ]
 
     return paths
+
+
+def _jupyter_server_extension_points():
+    return [dict(module="e2xgrader")]
+
+
+def _load_jupyter_server_extension(app):
+    load_student_extension(app)
+    load_student_exam_extension(app)
+    load_teacher_extension(app)
