@@ -1,0 +1,9 @@
+{
+  "ServerApp": {
+    "jpserver_extensions": {
+      "e2xgrader.server_extensions.student": false,
+      "e2xgrader.server_extensions.student_exam": false,
+      "e2xgrader.server_extensions.teacher": false
+    }
+  }
+}
