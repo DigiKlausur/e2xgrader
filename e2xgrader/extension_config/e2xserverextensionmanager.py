@@ -12,7 +12,7 @@ from .conf import (
 )
 
 
-def discover_jupyter_server_config_file(module_name: str) -> str | None:
+def discover_jupyter_server_config_file(module_name: str):
     for path in jupyter_config_path():
         config_path = os.path.join(
             path, "jupyter_server_config.d", f"{module_name}.json"
