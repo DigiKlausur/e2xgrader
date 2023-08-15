@@ -3,7 +3,7 @@ import unittest
 
 from notebook.serverextensions import BaseJSONConfigManager, jupyter_config_path
 
-from e2xgrader.apps import e2xmanager
+from e2xgrader.extension_config import e2xmanager
 
 
 class TestE2XExtensionManager(unittest.TestCase):
