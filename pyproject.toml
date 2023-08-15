@@ -20,8 +20,8 @@ classifiers=[
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
-    "e2xcore==0.0.2",
-    "e2xauthoring==0.2.0.dev2",
+    "e2xcore>=0.0.3",
+    "e2xauthoring>=0.2.0.dev3",
     "pandas"
 ]
 dynamic = ["version"]
@@ -56,6 +56,9 @@ build_cmd = "build"
 artifacts = [
     "e2xgrader/static/"
 ]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"etc/jupyter/jupyter_server_config.d" = "etc/jupyter/jupyter_server_config.d"
 
 [tool.tbump]
 github_url = "https://github.com/Digiklausur/e2xgrader/"
