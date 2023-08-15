@@ -3,6 +3,8 @@ import os
 
 from jupyter_core.paths import jupyter_config_path
 
+from e2xgrader.extension_config.base import ExtensionManager
+
 from .conf import (
     E2XGRADER_EXTENSIONS,
     E2XGRADER_STUDENT,
@@ -41,7 +43,7 @@ class JupyterServerConfigManager:
         self.config["ServerApp"]["jpserver_extensions"][import_path] = True
 
 
-class E2xServerExtensionManager:
+class E2xServerExtensionManager(ExtensionManager):
     def __init__(self):
         self.nbgrader_config_path = discover_jupyter_server_config_file("nbgrader")
         self.e2xgrader_config_path = discover_jupyter_server_config_file("e2xgrader")

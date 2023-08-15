@@ -1,9 +1,11 @@
+from e2xgrader.extension_config.base import ExtensionManager
+
 from .e2xclassicserverextensionmanager import E2xClassicServerExtensionManager
 from .e2xnotebookextensionmanager import E2xNotebookExtensionManager
 from .e2xserverextensionmanager import E2xServerExtensionManager
 
 
-class E2xExtensionManager:
+class E2xExtensionManager(ExtensionManager):
     def __init__(self):
         self.managers = [
             E2xNotebookExtensionManager(),

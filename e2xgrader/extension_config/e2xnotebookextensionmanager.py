@@ -10,9 +10,10 @@ from notebook.nbextensions import (
 )
 
 from e2xgrader import _jupyter_nbextension_paths
+from e2xgrader.extension_config.base import ExtensionManager
 
 
-class E2xNotebookExtensionManager:
+class E2xNotebookExtensionManager(ExtensionManager):
     def discover_nbextensions(self, mode: str) -> List[Dict[str, str]]:
         extensions = list()
         for nbextension in _jupyter_nbextension_paths():

@@ -1,5 +1,7 @@
 from notebook.serverextensions import ToggleServerExtensionApp
 
+from e2xgrader.extension_config.base import ExtensionManager
+
 from .conf import (
     E2XGRADER_EXTENSIONS,
     E2XGRADER_STUDENT,
@@ -9,7 +11,7 @@ from .conf import (
 )
 
 
-class E2xClassicServerExtensionManager:
+class E2xClassicServerExtensionManager(ExtensionManager):
     def enable_serverextension_py(self, module, sys_prefix=True, user=False):
         toggler = ToggleServerExtensionApp()
         toggler.sys_prefix = sys_prefix
