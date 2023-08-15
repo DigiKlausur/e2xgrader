@@ -21,7 +21,7 @@ classifiers=[
 ]
 dependencies = [
     "e2xcore>=0.0.3",
-    "e2xauthoring==0.2.0.dev2",
+    "e2xauthoring>=0.2.0.dev3",
     "pandas"
 ]
 dynamic = ["version"]
