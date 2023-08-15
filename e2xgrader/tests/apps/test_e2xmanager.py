@@ -3,7 +3,7 @@ import unittest
 
 from notebook.serverextensions import BaseJSONConfigManager, jupyter_config_path
 
-from e2xgrader.extension_config import e2xmanager
+from e2xgrader.extensions import E2xExtensionManager
 
 
 class TestE2XExtensionManager(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestE2XExtensionManager(unittest.TestCase):
             "e2xgrader.server_extensions.teacher",
             "e2xgrader.server_extensions.student",
         ]
-        self.manager = e2xmanager.E2xExtensionManager()
+        self.manager = E2xExtensionManager()
         self.manager.deactivate()
 
     def get_serverextensions(self, role):
