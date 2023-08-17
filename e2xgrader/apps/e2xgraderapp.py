@@ -2,7 +2,7 @@ import sys
 from argparse import ArgumentParser
 from textwrap import dedent
 
-from ..extension_config import E2xExtensionManager
+from ..extensions import E2xExtensionManager
 
 
 class Manager:
