@@ -3,12 +3,12 @@ import os
 import traceback
 
 from jupyter_core.paths import jupyter_config_path
+from jupyter_server.base.handlers import JupyterHandler
 from nbgrader.apps import NbGrader
 from nbgrader.nbgraderformat import SchemaTooNewError, SchemaTooOldError
 from nbgrader.server_extensions.validate_assignment.handlers import (
     NbGraderVersionHandler,
 )
-from notebook.base.handlers import IPythonHandler
 from tornado import web
 
 from .validator import E2XValidator
@@ -16,7 +16,7 @@ from .validator import E2XValidator
 static = os.path.join(os.path.dirname(__file__), "static")
 
 
-class ValidateAssignmentHandler(IPythonHandler):
+class ValidateAssignmentHandler(JupyterHandler):
     @property
     def notebook_dir(self):
         return self.settings["notebook_dir"]
