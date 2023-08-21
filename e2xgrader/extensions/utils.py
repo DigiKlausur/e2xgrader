@@ -40,20 +40,6 @@ def discover_nbextensions(mode: str) -> List[Dict[str, str]]:
     return extensions
 
 
-def get_serverextension_toggler() -> Optional[ModuleType]:
-    if is_installed("notebook") and get_notebook_major_version() < 7:
-        module = import_module("notebook.serverextensions")
-        return module.ToggleServerExtensionApp()
-    if is_installed("jupyter_server"):
-        module = import_module("jupyter_server.extension.serverextension")
-        toggler = module.ToggleServerExtensionApp
-        toggler.toggle_server_extension_python = staticmethod(
-            module.toggle_server_extension_python
-        )
-        return toggler()
-    return None
-
-
 def get_serverextension_toggle() -> Optional[ModuleType]:
     if is_installed("notebook") and get_notebook_major_version() < 7:
         module = import_module("notebook.serverextensions")
