@@ -2,8 +2,8 @@ import json
 import os
 import traceback
 
+from e2xcore.handlers import E2xHandler
 from jupyter_core.paths import jupyter_config_path
-from jupyter_server.base.handlers import JupyterHandler
 from nbgrader.apps import NbGrader
 from nbgrader.nbgraderformat import SchemaTooNewError, SchemaTooOldError
 from nbgrader.server_extensions.validate_assignment.handlers import (
@@ -16,10 +16,10 @@ from .validator import E2XValidator
 static = os.path.join(os.path.dirname(__file__), "static")
 
 
-class ValidateAssignmentHandler(JupyterHandler):
+class ValidateAssignmentHandler(E2xHandler):
     @property
-    def notebook_dir(self):
-        return self.settings["notebook_dir"]
+    def root_dir(self):
+        return self.settings["root_dir"]
 
     def load_config(self):
         paths = jupyter_config_path()
@@ -32,7 +32,7 @@ class ValidateAssignmentHandler(JupyterHandler):
         return app.config
 
     def validate_notebook(self, path):
-        fullpath = os.path.join(self.notebook_dir, path)
+        fullpath = os.path.join(self.root_dir, path)
 
         try:
             config = self.load_config()
