@@ -1,9 +1,5 @@
 name: Lint with Ruff
-on:
-  workflow_run:
-    workflows: ["Format with black"]
-    types:
-      - completed
+on: [ push, pull_request ]
 
 jobs:
   ruff:
