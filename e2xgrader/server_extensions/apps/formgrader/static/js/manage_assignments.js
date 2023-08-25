@@ -775,14 +775,13 @@ let createAssignmentModal = function () {
 let loadAssignments = function () {
   let tbl = $("#main-table");
 
-  models = new Assignments();
-  views = [];
+  const models = new Assignments();
   models.loaded = false;
   models.fetch({
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        let view = new AssignmentUI({
+        new AssignmentUI({
           model: model,
           el: insertRow(tbl),
         });
@@ -794,8 +793,6 @@ let loadAssignments = function () {
   });
 };
 
-let models = undefined;
-let views = [];
 $(window).on("load", function () {
   loadAssignments();
 });

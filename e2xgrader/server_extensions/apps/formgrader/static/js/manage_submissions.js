@@ -397,18 +397,16 @@ let insertRow = function (table) {
 let loadSubmissions = function () {
   let tbl = $("#main-table");
 
-  models = new Submissions();
-  views = [];
+  const models = new Submissions();
   models.loaded = false;
   models.fetch({
     success: function () {
       tbl.empty();
       models.each(function (model) {
-        let view = new SubmissionUI({
+        new SubmissionUI({
           model: model,
           el: insertRow(tbl),
         });
-        views.push(view);
       });
       insertDataTable(tbl.parent());
       models.loaded = true;
@@ -416,8 +414,6 @@ let loadSubmissions = function () {
   });
 };
 
-let models = undefined;
-let views = [];
 $(window).on("load", function () {
   loadSubmissions();
 });
