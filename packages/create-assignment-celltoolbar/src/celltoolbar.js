@@ -86,10 +86,10 @@ export class CreateAssignmentToolbar {
     events.on(
       "global_hide.CellToolbar toolbar_rebuild.CellToolbar",
       function (evt, cell) {
-        if (cell.element && cell.element.hasClass(that.cell_cls)) {
+        if (cell.element?.hasClass(that.cell_cls)) {
           cell.element.removeClass(that.cell_cls);
         }
-        if (cell.element && cell.element.hasClass(that.highlight)) {
+        if (cell.element?.hasClass(that.highlight)) {
           cell.element.removeClass(that.highlight);
         }
       }
@@ -161,34 +161,31 @@ export class CreateAssignmentToolbar {
    * nbgrader cell type.
    */
   display_cell(cell) {
-    if (
-      utils.is_grade(cell) ||
-      utils.is_task(cell) ||
-      utils.is_solution(cell)
-    ) {
-      if (cell.element && !cell.element.hasClass(this.highlight)) {
+    if (!cell.element) {
+      return;
+    }
+    const isGradeOrTaskOrSolution =
+      utils.is_grade(cell) || utils.is_task(cell) || utils.is_solution(cell);
+    const isLocked = utils.is_locked(cell);
+    const isTask = utils.is_task(cell);
+
+    if (isGradeOrTaskOrSolution) {
+      if (!cell.element.hasClass(this.highlight)) {
         cell.element.addClass(this.highlight);
       }
     }
-    if (
-      utils.is_grade(cell) ||
-      utils.is_task(cell) ||
-      utils.is_solution(cell) ||
-      utils.is_locked(cell)
-    ) {
-      if (cell.element && !cell.element.hasClass(this.cell_cls)) {
+    if (isGradeOrTaskOrSolution || isLocked) {
+      if (!cell.element.hasClass(this.cell_cls)) {
         cell.element.addClass(this.cell_cls);
       }
     }
 
-    if (utils.is_task(cell)) {
-      if (cell.element && !cell.element.hasClass(this.task_cls)) {
+    if (isTask) {
+      if (!cell.element.hasClass(this.task_cls)) {
         cell.element.addClass(this.task_cls);
       }
-    } else {
-      if (cell.element && cell.element.hasClass(this.task_cls)) {
-        cell.element.removeClass(this.task_cls);
-      }
+    } else if (cell.element.hasClass(this.task_cls)) {
+      cell.element.removeClass(this.task_cls);
     }
   }
 
