@@ -5,7 +5,7 @@ import { utils } from "@e2xgrader/utils";
 export class NbgraderValidator {
   constructor() {
     this.warning = undefined;
-    this.grade_id_regex = /^[a-zA-Z0-9_\-]+$/;
+    this.grade_id_regex = /^[a-zA-Z0-9_-]+$/;
   }
 
   /**
