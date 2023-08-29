@@ -23,7 +23,8 @@ The layout of the app is:
     └── grade_converter
         ├── app.py
         ├── handlers.py
-        └── templates  
+        └── templates
+            ├── base.tpl
             └── convert_grades.tpl
 
 The Basic App
@@ -79,7 +80,7 @@ Let's start by looking at the file `app.py`.
 
 The grading scheme can be configured via the `grading_scheme` trait. **e2xgrader** will call the `load_app` method when loading the app. 
 Here we first start by putting the grading scheme in the tornado settings, making it accessible anywhere.
-Then we add the handlers defined in `handlers.py`. Finally we add a template from `templates/convert_grades.tpl`.
+Then we add the handlers defined in `handlers.py`. Finally we add the templates.
 
 The Handlers
 ~~~~~~~~~~~~
@@ -142,6 +143,28 @@ Let's define the handlers next. The file `handlers.py` looks like this:
 Template
 ~~~~~~~~
 
+If we want to create a link in the nbgrader formgrader sidebar, we have to change the base template ``base.tpl``.
+This template is located at ``e2xgrader/e2xgrader/server_extensions/apps/formgrader/templates/base.tpl``.
+
+We copy the template and change the lines concerning the sidebar:
+
+.. code-block:: jinja
+    :caption: base.tpl
+
+    ...
+
+    {%- block sidebar -%}
+      <li role="presentation" id="manage_assignments"><a href="{{ base_url }}/formgrader/manage_assignments">Manage Assignments</a></li>
+      <li role="presentation" id="gradebook"><a href="{{ base_url }}/formgrader/gradebook">Manual Grading</a></li>
+      <li role="presentation" id="gradebook_questions"><a href="{{ base_url }}/formgrader/gradebook?view=task">Manual Grading (Task View)</a></li>
+      <li role="presentation" id="manage_students"><a href="{{ base_url }}/formgrader/manage_students">Manage Students</a></li>
+      <li role="presentation" id="export_grades"><a href="{{ base_url }}/formgrader/export_grades">Export Grades</a></li>
+      <li role="presentation" id="convert_grades"><a href="{{ base_url }}/e2x/convert/app">Convert Grades</a></li>
+    {%- endblock -%}
+
+    ...
+
+
 Next we define a very simple template in which we can move a slider to select the percentage and convert it with a click of a button.
 
 .. code-block:: jinja
@@ -153,17 +176,57 @@ Next we define a very simple template in which we can move a slider to select th
     Convert Grades
     {%- endblock -%}
 
+    {%- block sidebar -%}
+    {{ super() }}
+    <script type="text/javascript">
+        $('#convert_grades').addClass("active");
+    </script>
+    {%- endblock -%}
+
     {%- block table_body -%}
 
-    <form method="get" action="{{ base_url }}/e2x/convert/api"/>
-    <fieldset>
+    <form method="get" id="gradeForm" action="{{ base_url }}/e2x/convert/api"/>
+      <fieldset>
         <div>
-        <input type="range" name="percentage" id="percentage" min="0" max="1" step="0.01" />
-        <label for="percentage">Percentage of the student (0.0-1.0)</label><br />
+          <label for="percentage">Percentage of the student (0.00-1.00)</label><br />
+          <input type="number" name="percentage" id="percentage" min="0" max="1" step="0.01" />      
         </div>
-        <input type="submit" value="Convert Grades">
-    </fieldset>
+        <br/>
+        <input type="submit" value="Convert Grade">
+      </fieldset>
     </form>
+    <div>
+    <h3 id="grade"></h3>
+    </div>
+
+    <script>
+    // Function to handle form submission
+    function handleSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        
+        const form = event.target;
+        const percentage = form.elements.percentage.value;
+
+        // Make the API call
+        fetch(`{{base_url}}/e2x/convert/api?percentage=${percentage}`)
+        .then(response => response.text())
+        .then(data => {
+            // Update the content of the h3 element with the API response
+            const gradeSpan = document.getElementById("grade");
+            gradeSpan.textContent = `Your grade is ${data}`;
+            
+            // You can also handle different responses or errors as needed
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+            // Handle error scenarios if necessary
+        });     
+    }  
+
+    // Attach the form submission handler to the form
+    const gradeForm = document.getElementById("gradeForm");
+    gradeForm.addEventListener("submit", handleSubmit);
+    </script>
     {%- endblock -%}
 
 Make the App Installable
@@ -219,6 +282,41 @@ Now we need to activate the app in the `nbgrader_config.py`. We decide the app s
     configure_base(c)
 
     # Add the app in teacher mode
-    c.TeacherExtension.apps.append(GradeConverter)
+    # We need to add it as the first app since we want to overwrite base.tpl
+    # If you give multiple directories with templates with the same name to jinja,
+    # the first one will take precedence.
+    c.TeacherExtension.apps.insert(0, GradeConverter)
 
-You can try it out by starting the Jupyter notebook server and navigating to `/e2x/convert/app/`.
+You can try it out by starting the Jupyter notebook server and opening the formgrader tab. Then click on the "Convert Grades" link in the sidebar.
+
+.. figure:: img/convert_grades.png
+    :alt: The convert grades app
+
+    The GradeConverter app in action
+
+Configuring the App
+~~~~~~~~~~~~~~~~~~~
+
+We can now easily change the grading scheme via the ``nbgrader_config.py``.
+
+.. code-block:: python
+    :caption: nbgrader_config.py
+
+    # nbgrader_config.py
+
+    from e2xgrader.config import configure_base
+    from grade_converter.app import GradeConverter
+
+    c = get_config()
+    configure_base(c)
+
+    # Configure the grading scheme
+    c.GradeConverter.grading_scheme = {
+      "great": 0.9,
+      "good": 0.8,
+      "okay": 0.7,
+      "average": 0.6,
+      "fail": 0.0
+    }
+
+    # ...
