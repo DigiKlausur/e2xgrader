@@ -9,7 +9,7 @@
 project = "e2xgrader"
 copyright = "2023, Tim Metzler"
 author = "Tim Metzler"
-release = "0.1.0-dev3"
+release = "0.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
