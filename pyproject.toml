@@ -81,6 +81,9 @@ tag_template = "v{new_version}"
 src = "e2xgrader/__version__.py"
 
 [[tool.tbump.file]]
+src = "docs/source/conf.py"
+
+[[tool.tbump.file]]
 src = "lerna.json"
 
 [[tool.tbump.file]]
