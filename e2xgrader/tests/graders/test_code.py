@@ -1,7 +1,7 @@
 import unittest
-from nbformat.v4 import new_code_cell, new_output
+
 from nbformat.notebooknode import NotebookNode
-from types import SimpleNamespace
+from nbformat.v4 import new_code_cell, new_output
 
 from e2xgrader.graders import CodeGrader
 

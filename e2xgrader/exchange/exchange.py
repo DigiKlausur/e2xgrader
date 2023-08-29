@@ -1,11 +1,11 @@
+from textwrap import dedent
+
 from nbgrader.exchange.default import Exchange
 from nbgrader.utils import check_directory
 from traitlets import Bool, Unicode
-from textwrap import dedent
 
 
 class E2xExchange(Exchange):
-
     personalized_outbound = Bool(
         False, help="Whether to use a personalized outbound directory per student"
     ).tag(config=True)

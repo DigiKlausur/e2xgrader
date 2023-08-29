@@ -1,4 +1,4 @@
-from nbconvert.filters.highlight import _pygments_highlight, Highlight2HTML
+from nbconvert.filters.highlight import Highlight2HTML, _pygments_highlight
 
 
 class Highlight2HTMLwithLineNumbers(Highlight2HTML):

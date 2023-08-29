@@ -2,76 +2,57 @@
 A system for creating assignments.
 """
 
+import glob
 import os
 from os.path import join as pjoin
+
+from .server_extensions.student import (
+    _load_jupyter_server_extension as load_student_extension,
+)
+from .server_extensions.student_exam import (
+    _load_jupyter_server_extension as load_student_exam_extension,
+)
+from .server_extensions.teacher import (
+    _load_jupyter_server_extension as load_teacher_extension,
+)
 
 
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
-    if os.path.exists(pjoin(root, "nbextensions", "lib")):
-        base_path = pjoin(root, "nbextensions", "lib")
-    else:
-        base_path = pjoin(root, "nbextensions", "src")
+    base_path = pjoin(root, "static", "nbextensions")
 
-    paths = [
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "common", "extra_cells"),
-            dest="extra_cells",
-            require="extra_cells/main",
-        ),
-        dict(
-            section="tree",
-            src=pjoin(base_path, "teacher", "taskcreator"),
-            dest="taskcreator",
-            require="taskcreator/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "create_assignment"),
-            dest="create_assignment",
-            require="create_assignment/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "taskeditor"),
-            dest="taskeditor",
-            require="taskeditor/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "teacher", "templatebar"),
-            dest="templatebar",
-            require="templatebar/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "student", "assignment", "assignment_extension"),
-            dest="assignment_extension",
-            require="assignment_extension/main",
-        ),
-        dict(
-            section="notebook",
-            src=pjoin(base_path, "student", "exam", "exam_view"),
-            dest="exam_view",
-            require="exam_view/main",
-        ),
-        dict(
-            section="tree",
-            src=pjoin(base_path, "student", "exam", "restricted_tree"),
-            dest="restricted_tree",
-            require="restricted_tree/main",
-        ),
-    ]
+    paths = []
+
+    for section in ["notebook", "tree"]:
+        for notebook_extension in glob.glob(pjoin(base_path, section, "*")):
+            name = f"{os.path.split(notebook_extension)[-1]}_{section}"
+            paths.append(
+                dict(
+                    section=section,
+                    src=notebook_extension,
+                    dest=name,
+                    require=pjoin(name, "main"),
+                )
+            )
 
     return paths
 
 
 def _jupyter_server_extension_paths():
     paths = [
-        dict(module="e2xgrader.server_extensions.formgrader"),
-        dict(module="e2xgrader.server_extensions.assignment_list"),
-        dict(module="e2xgrader.server_extensions.e2xbase"),
+        dict(module="e2xgrader.server_extensions.teacher"),
+        dict(module="e2xgrader.server_extensions.student"),
+        dict(module="e2xgrader.server_extensions.student_exam"),
     ]
 
     return paths
+
+
+def _jupyter_server_extension_points():
+    return [dict(module="e2xgrader")]
+
+
+def _load_jupyter_server_extension(app):
+    load_student_extension(app)
+    load_student_exam_extension(app)
+    load_teacher_extension(app)

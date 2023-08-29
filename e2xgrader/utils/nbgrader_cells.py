@@ -1,5 +1,5 @@
-from nbgrader.utils import is_grade, is_solution, is_locked
-from nbformat.v4 import new_markdown_cell, new_code_cell
+from nbformat.v4 import new_code_cell, new_markdown_cell
+from nbgrader.utils import is_grade, is_locked, is_solution
 
 
 def new_read_only_cell(grade_id, source=None, cell_type="markdown"):

@@ -1,9 +1,3 @@
-import nbgrader.utils as nbutils
-from typing import Tuple, Optional
-from logging import Logger
-from nbformat.notebooknode import NotebookNode
-
-
 def is_extra_cell(cell):
     """Returns True if the cell is a form cell."""
     if "nbgrader" not in cell.metadata:
@@ -29,13 +23,17 @@ def is_diagram(cell):
 
 def get_options(cell):
     if is_extra_cell(cell) and "options" in cell.metadata.extended_cell:
-        return cell.metadata.extended_cell["options"]
+        return {
+            key: value["value"]
+            for key, value in cell.metadata.extended_cell["options"].items()
+        }
     return dict()
 
 
 def get_choices(cell):
     if is_singlechoice(cell) or is_multiplechoice(cell):
-        return [int(i) for i in cell.metadata.extended_cell.choice]
+        choice = cell.metadata.extended_cell.get("choice", [])
+        return [int(i) for i in choice]
     return []
 
 

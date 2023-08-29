@@ -1,10 +1,11 @@
-import os
 import glob
-import re
 import hashlib
+import os
+import re
 
 from nbgrader.exchange.default import ExchangeList
-from nbgrader.utils import notebook_hash, make_unique_key
+from nbgrader.utils import make_unique_key, notebook_hash
+
 from .exchange import E2xExchange
 
 
@@ -66,28 +67,33 @@ class E2xExchangeList(E2xExchange, ExchangeList):
         self.assignments = sorted(glob.glob(pattern))
 
     def parse_assignment(self, assignment):
+        course_id = r".*/(?P<course_id>.*)/"
         if self.inbound:
             regexp = (
-                r".*/(?P<course_id>.*)/"
+                course_id
                 + self.inbound_directory
-                + r"/(?P<student_id>[^+]*)\+(?P<assignment_id>[^+]*)\+(?P<timestamp>[^+]*)(?P<random_string>\+.*)?"
+                + r"/(?P<student_id>[^+]*)\+"
+                + r"(?P<assignment_id>[^+]*)\+"
+                + r"(?P<timestamp>[^+]*)"
+                + r"(?P<random_string>\+.*)?"
             )
         elif self.cached:
-            regexp = r".*/(?P<course_id>.*)/(?P<student_id>.*)\+(?P<assignment_id>.*)\+(?P<timestamp>.*)"
+            regexp = (
+                course_id
+                + r"(?P<student_id>.*)\+"
+                + r"(?P<assignment_id>.*)\+"
+                + r"(?P<timestamp>.*)"
+            )
         else:
             if self.personalized_outbound:
                 regexp = (
-                    r".*/(?P<course_id>.*)/"
+                    course_id
                     + self.outbound_directory
                     + r"/(?P<student_id>.*)"
                     + r"/(?P<assignment_id>.*)"
                 )
             else:
-                regexp = (
-                    r".*/(?P<course_id>.*)/"
-                    + self.outbound_directory
-                    + r"/(?P<assignment_id>.*)"
-                )
+                regexp = course_id + self.outbound_directory + r"/(?P<assignment_id>.*)"
 
         m = re.match(regexp, assignment)
         if m is None:
@@ -114,7 +120,8 @@ class E2xExchangeList(E2xExchange, ExchangeList):
                 and info["assignment_id"] in released_assignments
             ):
                 self.log.debug(
-                    "Grader role and personalized-outbound are enabled, and the assignment is known to be released already"
+                    "Grader role and personalized-outbound are enabled, "
+                    "and the assignment is known to be released already"
                 )
                 continue
 

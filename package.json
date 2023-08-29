@@ -1,11 +1,16 @@
 {
   "name": "e2xgrader",
-  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "version": "0.1.0-dev3",
   "description": "An addon for nbgrader",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel e2xgrader/nbextensions/src -d e2xgrader/nbextensions/lib --copy-files"
+    "install": "lerna run bootstrap",
+    "build": "lerna run build",
+    "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+    "prettier:files": "prettier --write"
   },
   "repository": {
     "type": "git",
@@ -23,8 +28,11 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "lerna": "^5.3.0",
+    "prettier": "^2.7.1"
   },
   "bugs": {
     "url": "https://github.com/DigiKlausur/e2xgrader/issues"

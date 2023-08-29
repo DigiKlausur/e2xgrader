@@ -1,6 +1,6 @@
+from e2xcore.utils.nbgrader_cells import get_tasks, grade_id
 from nbformat.v4 import new_notebook
 from nbgrader.preprocessors import NbGraderPreprocessor
-from ..utils.nbgrader_cells import grade_id, get_tasks
 
 
 class UnpermuteTasks(NbGraderPreprocessor):

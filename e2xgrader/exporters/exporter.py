@@ -1,13 +1,13 @@
+import base64
+import glob
 import os
 import os.path
 
-import glob
-
-from traitlets import Unicode
-from nbconvert.exporters import HTMLExporter
-from jinja2.filters import pass_context
 from bs4 import BeautifulSoup
+from jinja2.filters import pass_context
+from nbconvert.exporters import HTMLExporter
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
+from traitlets import Unicode
 
 from ..utils import extra_cells as utils
 from .filters import Highlight2HTMLwithLineNumbers
@@ -24,14 +24,23 @@ class E2xExporter(HTMLExporter):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        if kwargs and "config" in kwargs and "HTMLExporter" in kwargs["config"]:
-            self.template_name = kwargs["config"].HTMLExporter.template_name
         self.extra_template_basedirs = [
             os.path.abspath(
                 os.path.join(
                     os.path.dirname(__file__),
                     "..",
                     "server_extensions",
+                    "apps",
+                    "e2xgraderapi",
+                    "templates",
+                )
+            ),
+            os.path.abspath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "server_extensions",
+                    "apps",
                     "formgrader",
                     "templates",
                 )
@@ -44,12 +53,16 @@ class E2xExporter(HTMLExporter):
     @property
     def template_paths(self):
         return super()._template_paths() + [
-            os.path.join(
-                os.path.dirname(__file__),
-                "..",
-                "server_extensions",
-                "formgrader",
-                "templates",
+            os.path.abspath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "server_extensions",
+                    "grader",
+                    "apps",
+                    "formgrader",
+                    "templates",
+                )
             )
         ]
 
@@ -102,19 +115,21 @@ class E2xExporter(HTMLExporter):
     def discover_annotations(self, resources):
         if resources is None:
             return
-        resources["annotations"] = []
+        resources["annotations"] = dict()
         if "metadata" not in resources or "path" not in resources["metadata"]:
             return
 
         path = resources["metadata"]["path"]
 
-        for annoation in glob.glob(os.path.join(path, "annotations", "*.png")):
-            resources["annotations"].append(
-                os.path.splitext(os.path.basename(annoation))[0]
-            )
+        for annotation in glob.glob(os.path.join(path, "annotations", "*.png")):
+            cell_id = os.path.splitext(os.path.basename(annotation))[0]
+            with open(annotation, "rb") as f:
+                img = base64.b64encode(f.read()).decode("utf-8")
+                resources["annotations"][cell_id] = f"data:image/png;base64,{img}"
 
     def from_notebook_node(self, nb, resources=None, **kw):
         self.discover_annotations(resources)
+
         self.exclude_input = False
         langinfo = nb.metadata.get("language_info", {})
         lexer = langinfo.get("pygments_lexer", langinfo.get("name", None))

@@ -1,0 +1,27 @@
+{
+  "name": "@e2xgrader/notebook-extensions",
+  "version": "0.1.0-dev3",
+  "description": "",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Metzler",
+  "license": "ISC",
+  "dependencies": {
+    "@e2xgrader/cell-extension": "0.1.0-dev3",
+    "@e2xgrader/create-assignment-celltoolbar": "0.1.0-dev3",
+    "@e2xgrader/assignment-view-celltoolbar": "0.1.0-dev3",
+    "@e2xgrader/restricted-assignment-notebook": "0.1.0-dev3",
+    "@e2xgrader/restricted-exam-notebook": "0.1.0-dev3",
+    "@e2xgrader/exam-menubar": "0.1.0-dev3",
+    "@e2xgrader/authoring-menubar": "0.1.0-dev3"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "css-loader": "^6.6.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}

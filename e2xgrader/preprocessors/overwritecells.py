@@ -1,13 +1,12 @@
 import json
-
-from nbformat.notebooknode import NotebookNode
-from nbconvert.exporters.exporter import ResourcesDict
 from typing import Tuple
 
+from nbconvert.exporters.exporter import ResourcesDict
+from nbformat.notebooknode import NotebookNode
 from nbgrader.api import MissingEntry
 from nbgrader.preprocessors import OverwriteCells as NbgraderOverwriteCells
 
-from ..utils.extra_cells import is_singlechoice, is_multiplechoice
+from ..utils.extra_cells import is_multiplechoice, is_singlechoice
 
 
 class OverwriteCells(NbgraderOverwriteCells):

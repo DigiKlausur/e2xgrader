@@ -1,0 +1,102 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "e2xgrader"
+description = "An addon for nbgrader"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+  { name = "Tim Metzler", email = "tim.metzler@h-brs.de" },
+]
+classifiers=[
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "e2xcore>=0.0.5",
+    "e2xauthoring>=0.2.1",
+    "pandas"
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://e2x.inf.h-brs.de"
+Issues = "https://github.com/Digiklausur/e2xgrader/issues"
+Source = "https://github.com/Digiklausur/e2xgrader"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "pytest-cov",
+    "hatchling",
+    "tbump"
+]
+
+[project.scripts]
+e2xgrader = "e2xgrader.apps.e2xgraderapp:main"
+
+[tool.hatch.version]
+path = "e2xgrader/__version__.py"
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder"]
+build-function = "hatch_jupyter_builder.npm_builder"
+
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+build_cmd = "build"
+
+[tool.hatch.build.targets.wheel]
+artifacts = [
+    "e2xgrader/static/"
+]
+
+[tool.tbump]
+github_url = "https://github.com/Digiklausur/e2xgrader/"
+
+[tool.tbump.version]
+current = "0.1.0-dev3"
+
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (?P<dev>-dev\d+)?
+  '''
+
+[tool.tbump.git]
+message_template = "Bump to {new_version}"
+tag_template = "v{new_version}"
+
+# Files with the version present
+[[tool.tbump.file]]
+src = "e2xgrader/__version__.py"
+
+[[tool.tbump.file]]
+src = "lerna.json"
+
+[[tool.tbump.file]]
+src = "package.json"
+search = '"version": "{current_version}'
+
+[[tool.tbump.file]]
+src = "packages/*/package.json"
+search = '"version": "{current_version}'
+
+[[tool.tbump.file]]
+src = "packages/*/package.json"
+search = '"@e2xgrader/[\w-]+": "{current_version}'
+
+[tool.ruff]
+line-length = 100
+exclude = ["nbgrader_config.py"]
+ignore-init-module-imports = true
+select = ["F", "E", "I"]

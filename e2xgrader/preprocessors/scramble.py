@@ -1,9 +1,10 @@
-import re
-import random
-import copy
-import nbformat
 import base64
+import copy
 import pickle
+import random
+import re
+
+import nbformat
 from nbgrader.preprocessors import NbGraderPreprocessor
 
 

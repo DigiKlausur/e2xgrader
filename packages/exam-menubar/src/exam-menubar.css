@@ -1,0 +1,8 @@
+#e2x-menubar .e2x-submit {
+  background-color: var(--orange);
+  border: 2px solid var(--orange-border);
+}
+
+#e2x-menubar .e2x-submit i {
+  padding-left: 0.5em;
+}

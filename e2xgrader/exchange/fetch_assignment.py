@@ -1,12 +1,12 @@
-import os
 import glob
-import nbformat
-
+import os
 from textwrap import dedent
+
+import nbformat
 from nbgrader.exchange.default import ExchangeFetchAssignment
 from nbgrader.utils import check_mode
 
-from ..preprocessors import Scramble, PermuteTasks
+from ..preprocessors import PermuteTasks, Scramble
 from .exchange import E2xExchange
 
 

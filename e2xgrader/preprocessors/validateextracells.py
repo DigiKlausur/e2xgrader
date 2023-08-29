@@ -8,7 +8,6 @@ from ..utils.extra_cells import is_singlechoice
 
 class ExtraCellValidator:
     def validate_cell(self, cell):
-
         if "nbgrader" not in cell.metadata:
             return
 

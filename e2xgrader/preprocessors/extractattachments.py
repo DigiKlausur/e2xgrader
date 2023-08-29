@@ -1,13 +1,14 @@
 import os
 import sys
 from binascii import a2b_base64
-from traitlets import Unicode, Set
+
 from nbgrader.preprocessors import NbGraderPreprocessor
+from traitlets import Set, Unicode
+
 from ..utils.extra_cells import is_attachment_cell, is_diagram
 
 
 class ExtractAttachments(NbGraderPreprocessor):
-
     subdirectory = Unicode("attachments").tag(config=True)
 
     output_filename_template = Unicode("attach_{cell_index}_{name}").tag(config=True)

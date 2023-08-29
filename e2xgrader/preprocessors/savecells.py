@@ -1,11 +1,11 @@
 import json
+
 from nbformat.notebooknode import NotebookNode
-
-from nbgrader.preprocessors import SaveCells as NbgraderSaveCells
-from nbgrader.api import MissingEntry
 from nbgrader import utils
+from nbgrader.api import MissingEntry
+from nbgrader.preprocessors import SaveCells as NbgraderSaveCells
 
-from ..utils.extra_cells import is_singlechoice, is_multiplechoice
+from ..utils.extra_cells import is_multiplechoice, is_singlechoice
 
 
 class SaveCells(NbgraderSaveCells):
