@@ -61,7 +61,7 @@ artifacts = [
 github_url = "https://github.com/Digiklausur/e2xgrader/"
 
 [tool.tbump.version]
-current = "0.1.0-dev3"
+current = "0.1.0"
 
 regex = '''
   (?P<major>\d+)
@@ -79,6 +79,9 @@ tag_template = "v{new_version}"
 # Files with the version present
 [[tool.tbump.file]]
 src = "e2xgrader/__version__.py"
+
+[[tool.tbump.file]]
+src = "docs/source/conf.py"
 
 [[tool.tbump.file]]
 src = "lerna.json"

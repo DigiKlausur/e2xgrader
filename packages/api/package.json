@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/api",
-  "version": "0.1.0-dev3",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "description": "api functions for e2xgrader",
   "scripts": {
