@@ -22,7 +22,6 @@ An annotated student answer:
 ![annotation](docs/source/user_docs/img/annotate_answer.png)
 <br/>
 
-
 A per question grading view for teachers:
 ![task_view](docs/source/user_docs/img/task_view.png)
 <br/>
@@ -40,6 +39,11 @@ An assignment toolbar for students:
 An exam toolbar for students:
 ![exam_toolbar](docs/source/user_docs/img/exam_toolbar.png)
 <br/>
+
+
+## JupyterCon 2023 Talk
+
+[![e2xgrader: An Add on for Improved Grading and Teaching with Jupyter Notebooks at Scale | JupyterCon 2023](https://img.youtube.com/vi/fc3Tvr_jm3w/hqdefault.jpg)](https://www.youtube.com/watch?v=fc3Tvr_jm3w "e2xgrader: An Add on for Improved Grading and Teaching with Jupyter Notebooks at Scale | JupyterCon 2023")
 
 ## Install
 
