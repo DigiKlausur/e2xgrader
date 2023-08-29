@@ -3,7 +3,7 @@ name: Dispatch
 on:
   workflow_run:
     workflows: ["Python package"]
-    branches: [master, dev]
+    branches: [main, dev]
     types:
       - completed
 
