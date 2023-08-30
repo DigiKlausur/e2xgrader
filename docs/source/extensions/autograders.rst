@@ -1,5 +1,6 @@
 .. _custom_autograders:
 
+=========================
 Adding Custom Autograders
 =========================
 

@@ -1,5 +1,6 @@
 .. _e2xgrader_modes:
 
+==========================
 Activating Different Modes
 ==========================
 

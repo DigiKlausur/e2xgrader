@@ -1,5 +1,6 @@
 .. _help_extension:
 
+==============
 Help Extension
 ==============
 

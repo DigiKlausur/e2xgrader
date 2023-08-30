@@ -59,22 +59,15 @@ Getting Started
 .. toctree::
    :maxdepth: 2
 
-   getting_started/installation
-   getting_started/modes
-   getting_started/configuration
+   getting_started/index
 
 User Documentation
 ==================
+
 .. toctree::
    :maxdepth: 2
 
-   user_docs/modes
-   user_docs/authoring
-   user_docs/cells/cells
-   user_docs/grading
-   user_docs/grade_export
-   user_docs/exchange/index
-   user_docs/help_extension
+   user_docs/index
 
 Develop Extensions
 ==================
@@ -82,11 +75,7 @@ Develop Extensions
 .. toctree::
    :maxdepth: 2
 
-   extensions/autograders
-   extensions/apps
-   
-
-
+   extensions/index
 
 Indices and tables
 ==================
