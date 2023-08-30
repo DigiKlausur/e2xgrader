@@ -1,5 +1,6 @@
 .. _configure_e2xgrader:
 
+===================
 Configure e2xgrader
 ===================
 
@@ -24,6 +25,7 @@ The basic configuration is only needed in teacher mode. It makes sure all custom
    configure_base(c)
 
 .. _configuring-the-exchange:
+
 Configuring the Exchange
 ------------------------
 
