@@ -27,9 +27,10 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://e2x.inf.h-brs.de"
-Issues = "https://github.com/Digiklausur/e2xgrader/issues"
 Source = "https://github.com/Digiklausur/e2xgrader"
+Documentation = "https://e2xgrader.readthedocs.io/en/latest/"
+Issues = "https://github.com/Digiklausur/e2xgrader/issues"
+Pypi = "https://pypi.org/project/e2xgrader/"
 
 [project.optional-dependencies]
 dev = [
