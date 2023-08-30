@@ -30,12 +30,11 @@ html_theme_options = {
         {
             "name": "GitHub",
             "url": "https://github.com/Digiklausur/e2xgrader",
-            "icon": "fa-brands fa-github"
+            "icon": "fa-brands fa-github",
         }
-
     ],
     "use_edit_page_button": True,
-    "navbar_align": "left"
+    "navbar_align": "left",
 }
 
 html_static_path = ["_static"]
@@ -45,5 +44,5 @@ html_context = {
     "github_user": "DigiKlausur",
     "github_repo": "e2xgrader",
     "github_version": "main",
-    "doc_path": "docs/source/"
+    "doc_path": "docs/source/",
 }
