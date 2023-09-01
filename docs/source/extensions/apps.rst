@@ -69,10 +69,15 @@ Let's start by looking at the file `app.py`.
             },
         ).tag(config=True)
 
+        def __init__(self, **kwargs):
+            NbGrader.__init__(self, **kwargs)
+            BaseApp.__init__(self, **kwargs)
+
         template_path = os.path.join(os.path.dirname(__file__), "templates")
 
         def load_app(self):
             self.log.info("Loading the convert grades app")
+            self.initialize([])
             # Add the grading scheme to the tornado settings
             self.update_tornado_settings(dict(e2x_grading_scheme=self.grading_scheme))
             self.add_handlers(default_handlers)

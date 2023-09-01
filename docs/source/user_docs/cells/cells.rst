@@ -99,6 +99,24 @@ In student mode the `Edit Cell` button is deactivated and students can not unren
 
 .. _diagrams.net: https://diagrams.net
 
+Configuring the Diagram Cells
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can configure the following options for the diagram cells in your ``nbgrader_config.py``:
+
+* ``drawDomain``: The domain of the diagram instance to use
+* ``drawOrigin``: The url of the origin of the diagram instance. This is the url from which the diagram instance sends messages
+* ``libraries``: A list of libraries which should be active by default (e.g. *uml*, *general*, *kubernetes*, etc)
+
+.. code-block:: python
+    :caption: Example of configuring the diagram editor
+
+    # nbgrader_config.py
+
+    c.DiagramEditor.drawDomain = "https://embed.diagrams.net/"
+    c.DiagramEditor.drawOrigin = "https://embed.diagrams.net/"
+    c.DiagramEditor.libraries = ["uml", "general", "arrows2"]
+
 
 Upload Cells
 ------------
