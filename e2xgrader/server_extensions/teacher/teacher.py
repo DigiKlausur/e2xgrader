@@ -2,6 +2,7 @@ from e2xauthoring.app import AuthoringApp
 from traitlets import Any, List
 
 from ..apps.assignment_list import AssignmentList
+from ..apps.diagram_editor import DiagramEditor
 from ..apps.e2xgraderapi import E2xGraderApi
 from ..apps.formgrader import FormgradeApp
 from ..apps.help import Help
@@ -21,6 +22,7 @@ class TeacherExtension(BaseExtension):
             ValidateAssignment,
             AssignmentList,
             Help,
+            DiagramEditor,
         ],
     ).tag(config=True)
 
