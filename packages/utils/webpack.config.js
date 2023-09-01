@@ -8,7 +8,7 @@ module.exports = {
     filename: "[name].js",
     libraryTarget: "commonjs-module",
   },
-  externals: {},
+  externals: [/^base\/js*/, /^notebook\/js*/],
   optimization: {
     minimize: false,
   },
