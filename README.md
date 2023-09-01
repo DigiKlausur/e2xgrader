@@ -9,7 +9,7 @@
 
 e2xgrader is an add-on for nbgrader that adds functionality for teachers and students.
 e2xgrader introduces new cell types and tools for graders (per question grading view, authoring component, pen-based grading) and students (assignment toolbar, exam toolbar, restricted notebook extension).
-Please refer to the [documenation](https://e2xgrader.readthedocs.io) for further information.
+Please refer to the [documentation](https://e2xgrader.readthedocs.io) for further information.
 
 _Currently e2xgrader works with notebook<7 or nbclassic. We are working on porting the notebook extension to lab extensions_
 
