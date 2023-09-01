@@ -12,7 +12,7 @@ function add_Notebook_execute_cell_and_select() {
       let cell_index;
       if (indices.length > 1) {
         this.execute_cells(indices);
-        cell_index = Math.max.apply(Math, indices);
+        cell_index = Math.max(...indices);
       } else {
         let cell = this.get_selected_cell();
         cell_index = this.find_cell_index(cell);
