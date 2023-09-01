@@ -3,6 +3,21 @@ import events from "base/js/events";
 import { initialize_cell_extension } from "@e2xgrader/cell-extension";
 import { CreateAssignmentToolbar } from "@e2xgrader/create-assignment-celltoolbar";
 import { TaskMenubar, TemplateMenubar } from "@e2xgrader/authoring-menubar";
+import { shortcuts, utils } from "@e2xgrader/utils";
+
+export function remove_empty_cells() {
+  let to_remove = [];
+  for (const [index, cell] of Jupyter.notebook.get_cells().entries()) {
+    if (
+      !utils.is_nbgrader(cell) &&
+      cell.get_text().trim().length === 0 &&
+      Object.keys(cell.attachments).length === 0
+    ) {
+      to_remove.push(index);
+    }
+  }
+  Jupyter.notebook.delete_cells(to_remove);
+}
 
 function is_taskbook() {
   let metadata = Jupyter.notebook.metadata;
@@ -35,9 +50,13 @@ function initialize() {
   if (is_taskbook()) {
     celltoolbar.activate();
     new TaskMenubar().activate();
+    shortcuts.disable_add_cell_on_execute();
+    events.on("before_save.Notebook", remove_empty_cells);
   } else if (is_templatebook()) {
     celltoolbar.activate();
     new TemplateMenubar().activate();
+    shortcuts.disable_add_cell_on_execute();
+    events.on("before_save.Notebook", remove_empty_cells);
   }
 }
 
