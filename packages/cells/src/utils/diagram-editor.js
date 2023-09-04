@@ -233,31 +233,35 @@ class DiagramEditor {
   }
 
   getFrameUrl() {
-    let url = this.drawDomain + "?proto=json&spin=1";
+    const url = new URL(this.drawDomain);
+    url.searchParams.append("proto", "json");
+    url.searchParams.append("spin", "1");
 
     if (this.ui != null) {
-      url += "&ui=" + this.ui;
+      url.searchParams.append("ui", this.ui);
     }
 
     if (this.libraries != null) {
-      url += "&libraries=1";
+      url.searchParams.append("libraries", "1");
     }
 
     if (this.config != null) {
-      url += "&configure=1";
+      url.searchParams.append("configure", "1");
     }
 
     if (this.libs.length > 0) {
-      url += "&libs=" + this.libs.join(";");
+      url.searchParams.append("libs", this.libs.join(";"));
     }
+
+    let href = url.href;
 
     if (this.urlParams != null) {
-      url += "&" + this.urlParams.join("&");
+      href += "&" + this.urlParams.join("&");
     }
 
-    console.log("The url", url);
+    console.log("The url", href);
 
-    return url;
+    return href;
   }
 
   createFrame(url, style) {
