@@ -156,10 +156,12 @@ export class Submit {
       body.append($("<pre/>").text(data["hashcode"]));
 
       body.append(
-        $("<p/>")
-          .append("You can verify your submission ")
-          .append($("<a/>").attr("href", hashcode_html).text("here"))
-          .append(".")
+        $("<h4/>").append(
+          $("<a/>")
+            .attr("href", hashcode_html)
+            .attr("target", "_blank")
+            .text("Click here to view the HTML version of your submitted exam.")
+        )
       );
     }
 
