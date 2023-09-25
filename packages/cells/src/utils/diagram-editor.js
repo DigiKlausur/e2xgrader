@@ -206,7 +206,7 @@ class DiagramEditor {
     if (this.frame != null) {
       this.frame.contentWindow.postMessage(
         JSON.stringify(msg),
-        this.drawOrigin
+        this.origin
       );
     }
   }
