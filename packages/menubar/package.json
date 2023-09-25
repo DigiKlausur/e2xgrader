@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/menubar",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "lib/index.js",
   "description": "a menubar for e2xgrader",
   "scripts": {
