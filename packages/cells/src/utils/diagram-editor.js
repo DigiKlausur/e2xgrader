@@ -1,410 +1,355 @@
-import $ from "jquery";
+import { urlJoin, requests } from "@e2xgrader/api";
+import Jupyter from "base/js/namespace";
 
-/**
- * Copyright (c) 2006-2020, JGraph Ltd
- * Copyright (c) 2006-2020, Gaudenz Alder
- *
- * Usage: DiagramEditor.editElement(elt) where elt is an img or object with
- * a data URI src or data attribute or an svg node with a content attribute.
- *
- * See https://jgraph.github.io/drawio-integration/javascript.html
- */
-export function DiagramEditor(config, ui, done, initialized, urlParams, cell) {
-  this.config = config != null ? config : this.config;
-  this.ui = ui != null ? ui : this.ui;
-  this.done = done != null ? done : this.done;
-  this.initialized = initialized != null ? initialized : this.initialized;
-  this.urlParams = urlParams;
-  this.cell = cell;
+let baseOptionsLoaded = false;
+let baseOptions = {};
 
-  var self = this;
+async function fetchBaseOptions() {
+  if (!baseOptionsLoaded) {
+    try {
+      baseOptions = await requests.get(
+        urlJoin(Jupyter.notebook.base_url, "e2x", "diagrams", "api")
+      );
+      baseOptionsLoaded = true;
+    } catch (error) {
+      console.error("Error fetching DiagramEditor base options:", error);
+      baseOptionsLoaded = true;
+    }
+  }
+}
 
-  this.handleMessageEvent = function (evt) {
-    if (evt.origin !== "https://embed.diagrams.net") {
+class DiagramEditor {
+  constructor(config, ui, done, initialized, urlParams, cell, options = {}) {
+    const mergedOptions = { ...baseOptions, ...options };
+    this.config = config || this.config;
+    this.ui = ui || this.ui;
+    this.done = done || function () {};
+    this.initialized = initialized || function () {};
+    this.urlParams = urlParams;
+    this.cell = cell;
+    this.handleMessageEvent = this.handleMessageEvent.bind(this);
+    this.frame = null;
+    this.startElement = null;
+    this.format = "xml";
+    this.xml = null;
+    this.drawDomain = mergedOptions.drawDomain || "https://embed.diagrams.net/";
+    this.origin = mergedOptions.drawOrigin || "https://embed.diagrams.net/";
+    this.frameStyle =
+      "position:absolute;bottom:0;border:0;width:100%;height:100%;";
+    this.libs = mergedOptions.libs || [];
+  }
+
+  handleMessageEvent(evt) {
+    const expectedOrigin = new URL(this.origin);
+    const actualOrigin = new URL(evt.origin);
+    if (actualOrigin.href !== expectedOrigin.href) {
       console.log(
-        "Message should come from https://embed.diagrams.net but came from " +
-          evt.origin
+        `Message should come from ${expectedOrigin.href} but came from ${actualOrigin.href}`
       );
     }
     if (
-      self.frame != null &&
-      evt.source == self.frame.contentWindow &&
+      this.frame != null &&
+      evt.source == this.frame.contentWindow &&
       evt.data.length > 0
     ) {
       try {
-        var msg = JSON.parse(evt.data);
+        const msg = JSON.parse(evt.data);
 
         if (msg != null) {
-          self.handleMessage(msg);
+          this.handleMessage(msg);
         }
       } catch (e) {
         console.error(e);
       }
     }
-  };
-}
-
-/**
- * Static method to edit the diagram in the given img or object.
- */
-DiagramEditor.editElement = function (cell, elt, config, ui, done, urlParams) {
-  if (!elt.diagramEditorStarting) {
-    elt.diagramEditorStarting = true;
-
-    return new DiagramEditor(
-      config,
-      ui,
-      done,
-      function () {
-        delete elt.diagramEditorStarting;
-      },
-      urlParams,
-      cell
-    ).editElement(elt);
   }
-};
 
-/**
- * Global configuration.
- */
-DiagramEditor.prototype.config = null;
+  static editElement(cell, elt, config, ui, done, urlParams, options = {}) {
+    if (!elt.diagramEditorStarting) {
+      elt.diagramEditorStarting = true;
 
-/**
- * Protocol and domain to use.
- */
-DiagramEditor.prototype.drawDomain = "https://embed.diagrams.net/";
+      return new DiagramEditor(
+        config,
+        ui,
+        done,
+        function () {
+          delete elt.diagramEditorStarting;
+        },
+        urlParams,
+        cell,
+        options
+      ).editElement(elt);
+    }
+  }
 
-/**
- * UI theme to be use.
- */
-DiagramEditor.prototype.ui = "min";
-
-/**
- * Contains XML for pending image export.
- */
-DiagramEditor.prototype.xml = null;
-
-/**
- * Format to use.
- */
-DiagramEditor.prototype.format = "xml";
-
-/**
- * Specifies if libraries should be enabled.
- */
-DiagramEditor.prototype.libraries = true;
-
-/**
- * CSS style for the iframe.
- */
-DiagramEditor.prototype.frameStyle =
-  "position:absolute;bottom:0;border:0;width:100%;height:100%;";
-
-/**
- * Adds the iframe and starts editing.
- */
-DiagramEditor.prototype.editElement = function (elem) {
-  var src = this.getElementData(elem);
-  this.startElement = elem;
-  var fmt = this.format;
-
-  if (src.substring(0, 15) === "data:image/png;") {
-    fmt = "xmlpng";
-  } else if (
-    src.substring(0, 19) === "data:image/svg+xml;" ||
-    elem.nodeName.toLowerCase() == "svg"
+  static async editDiagram(
+    cell,
+    elt,
+    config,
+    ui,
+    done,
+    urlParams,
+    options = {}
   ) {
-    fmt = "xmlsvg";
+    fetchBaseOptions().then(() => {
+      return this.editElement(cell, elt, config, ui, done, urlParams, options);
+    });
   }
 
-  this.startEditing(src, fmt);
+  config = null;
+  ui = "min";
+  xml = null;
+  format = "xml";
+  libraries = true;
+  frameStyle = "position:absolute;bottom:0;border:0;width:100%;height:100%;";
 
-  return this;
-};
+  editElement(elem) {
+    const src = this.getElementData(elem);
+    this.startElement = elem;
+    let fmt = this.format;
 
-/**
- * Adds the iframe and starts editing.
- */
-DiagramEditor.prototype.getElementData = function (elem) {
-  var name = elem.nodeName.toLowerCase();
-
-  let attribute = "";
-  if (name == "svg") {
-    attribute = "content";
-  } else if (name == "img") {
-    attribute = "src";
-  } else {
-    attribute = "data";
-  }
-
-  return elem.getAttribute(attribute);
-};
-
-/**
- * Adds the iframe and starts editing.
- */
-DiagramEditor.prototype.setElementData = function (elem, data) {
-  var name = elem.nodeName.toLowerCase();
-
-  if (name == "svg") {
-    elem.outerHTML = atob(data.substring(data.indexOf(",") + 1));
-  } else {
-    elem.setAttribute(name == "img" ? "src" : "data", data);
-  }
-
-  return elem;
-};
-
-/**
- * Starts the editor for the given data.
- */
-DiagramEditor.prototype.startEditing = function (data, format, title) {
-  if (this.frame == null) {
-    window.addEventListener("message", this.handleMessageEvent);
-    this.format = format != null ? format : this.format;
-    this.title = title != null ? title : this.title;
-    this.data = data;
-
-    this.frame = this.createFrame(this.getFrameUrl(), this.getFrameStyle());
-    document.body.appendChild(this.frame);
-    this.setWaiting(true);
-  }
-};
-
-/**
- * Updates the waiting cursor.
- */
-DiagramEditor.prototype.setWaiting = function (waiting) {
-  if (this.startElement != null) {
-    // Redirect cursor to parent for SVG and object
-    var elt = this.startElement;
-    var name = elt.nodeName.toLowerCase();
-
-    if (name == "svg" || name == "object") {
-      elt = elt.parentNode;
+    if (src.substring(0, 15) === "data:image/png;") {
+      fmt = "xmlpng";
+    } else if (
+      src.substring(0, 19) === "data:image/svg+xml;" ||
+      elem.nodeName.toLowerCase() == "svg"
+    ) {
+      fmt = "xmlsvg";
     }
 
-    if (elt != null) {
-      if (waiting) {
-        this.frame.style.pointerEvents = "none";
-        this.previousCursor = elt.style.cursor;
-        elt.style.cursor = "wait";
-      } else {
-        elt.style.cursor = this.previousCursor;
-        this.frame.style.pointerEvents = "";
+    this.startEditing(src, fmt);
+
+    return this;
+  }
+
+  getElementData(elem) {
+    const name = elem.nodeName.toLowerCase();
+
+    let attribute = "";
+    if (name == "svg") {
+      attribute = "content";
+    } else if (name == "img") {
+      attribute = "src";
+    } else {
+      attribute = "data";
+    }
+
+    return elem.getAttribute(attribute);
+  }
+
+  setElementData(elem, data) {
+    const name = elem.nodeName.toLowerCase();
+
+    if (name == "svg") {
+      elem.outerHTML = atob(data.substring(data.indexOf(",") + 1));
+    } else {
+      elem.setAttribute(name == "img" ? "src" : "data", data);
+    }
+
+    return elem;
+  }
+
+  startEditing(data, format, title) {
+    if (this.frame == null) {
+      window.addEventListener("message", this.handleMessageEvent);
+      this.format = format || this.format;
+      this.title = title || this.title;
+      this.data = data;
+
+      this.frame = this.createFrame(this.getFrameUrl(), this.getFrameStyle());
+      document.body.appendChild(this.frame);
+      this.setWaiting(true);
+    }
+  }
+
+  setWaiting(waiting) {
+    if (this.startElement != null) {
+      let elt = this.startElement;
+      const name = elt.nodeName.toLowerCase();
+
+      if (name == "svg" || name == "object") {
+        elt = elt.parentNode;
+      }
+
+      if (elt != null) {
+        if (waiting) {
+          this.frame.style.pointerEvents = "none";
+          this.previousCursor = elt.style.cursor;
+          elt.style.cursor = "wait";
+        } else {
+          elt.style.cursor = this.previousCursor;
+          this.frame.style.pointerEvents = "";
+        }
       }
     }
   }
-};
 
-/**
- * Updates the waiting cursor.
- */
-DiagramEditor.prototype.setActive = function (active) {
-  if (active) {
-    this.previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = this.previousOverflow;
+  setActive(active) {
+    if (active) {
+      this.previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = this.previousOverflow;
+    }
   }
-};
 
-/**
- * Removes the iframe.
- */
-DiagramEditor.prototype.stopEditing = function () {
-  if (this.frame != null) {
-    window.removeEventListener("message", this.handleMessageEvent);
-    document.body.removeChild(this.frame);
-    this.setActive(false);
-    this.frame = null;
+  stopEditing() {
+    if (this.frame != null) {
+      window.removeEventListener("message", this.handleMessageEvent);
+      document.body.removeChild(this.frame);
+      this.setActive(false);
+      this.frame = null;
+    }
   }
-};
 
-/**
- * Send the given message to the iframe.
- */
-DiagramEditor.prototype.postMessage = function (msg) {
-  if (this.frame != null) {
-    this.frame.contentWindow.postMessage(
-      JSON.stringify(msg),
-      "https://embed.diagrams.net"
+  postMessage(msg) {
+    if (this.frame != null) {
+      this.frame.contentWindow.postMessage(
+        JSON.stringify(msg),
+        this.drawOrigin
+      );
+    }
+  }
+
+  getData() {
+    return this.data;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getFrameStyle() {
+    const header = document.getElementById("header");
+    return (
+      this.frameStyle +
+      ";left:" +
+      document.body.scrollLeft +
+      "px;top:" +
+      document.body.scrollTop +
+      header.offsetHeight +
+      "px;"
     );
   }
-};
 
-/**
- * Returns the diagram data.
- */
-DiagramEditor.prototype.getData = function () {
-  return this.data;
-};
+  getFrameUrl() {
+    const url = new URL(this.drawDomain);
+    url.searchParams.append("proto", "json");
+    url.searchParams.append("spin", "1");
 
-/**
- * Returns the title for the editor.
- */
-DiagramEditor.prototype.getTitle = function () {
-  return this.title;
-};
+    if (this.ui != null) {
+      url.searchParams.append("ui", this.ui);
+    }
 
-/**
- * Returns the CSS style for the iframe.
- */
-DiagramEditor.prototype.getFrameStyle = function () {
-  return (
-    this.frameStyle +
-    ";left:" +
-    document.body.scrollLeft +
-    "px;top:" +
-    document.body.scrollTop +
-    $("#header").height() +
-    "px;"
-  );
-};
+    if (this.libraries != null) {
+      url.searchParams.append("libraries", "1");
+    }
 
-/**
- * Returns the URL for the iframe.
- */
-DiagramEditor.prototype.getFrameUrl = function () {
-  var url = this.drawDomain + "?proto=json&spin=1";
+    if (this.config != null) {
+      url.searchParams.append("configure", "1");
+    }
 
-  if (this.ui != null) {
-    url += "&ui=" + this.ui;
+    if (this.libs.length > 0) {
+      url.searchParams.append("libs", this.libs.join(";"));
+    }
+
+    let href = url.href;
+
+    if (this.urlParams != null) {
+      href += "&" + this.urlParams.join("&");
+    }
+
+    console.log("The url", href);
+
+    return href;
   }
 
-  if (this.libraries != null) {
-    url += "&libraries=1";
+  createFrame(url, style) {
+    const frame = document.createElement("iframe");
+    frame.setAttribute("frameborder", "0");
+    frame.setAttribute("style", style);
+    frame.setAttribute("src", url);
+
+    return frame;
   }
 
-  if (this.config != null) {
-    url += "&configure=1";
+  setStatus(messageKey, modified) {
+    this.postMessage({
+      action: "status",
+      messageKey: messageKey,
+      modified: modified,
+    });
   }
 
-  if (this.urlParams != null) {
-    url += "&" + this.urlParams.join("&");
-  }
+  handleMessage(msg) {
+    if (msg.event == "configure") {
+      this.configureEditor();
+    } else if (msg.event == "init") {
+      this.initializeEditor();
+    } else if (msg.event == "autosave") {
+      this.save(msg.xml, true, this.startElement);
+    } else if (msg.event == "export") {
+      this.cell.model.setAttachment("diagram.png", msg.data);
+      this.setElementData(this.startElement, msg.data);
+      this.stopEditing();
+      this.xml = null;
+    } else if (msg.event == "save") {
+      this.save(msg.xml, false, this.startElement);
+      this.xml = msg.xml;
 
-  return url;
-};
+      if (msg.exit) {
+        msg.event = "exit";
+      } else {
+        this.setStatus("allChangesSaved", false);
+      }
+    }
 
-/**
- * Creates the iframe.
- */
-DiagramEditor.prototype.createFrame = function (url, style) {
-  var frame = document.createElement("iframe");
-  frame.setAttribute("frameborder", "0");
-  frame.setAttribute("style", style);
-  frame.setAttribute("src", url);
-
-  return frame;
-};
-
-/**
- * Sets the status of the editor.
- */
-DiagramEditor.prototype.setStatus = function (messageKey, modified) {
-  this.postMessage({
-    action: "status",
-    messageKey: messageKey,
-    modified: modified,
-  });
-};
-
-/**
- * Handles the given message.
- */
-DiagramEditor.prototype.handleMessage = function (msg) {
-  if (msg.event == "configure") {
-    this.configureEditor();
-  } else if (msg.event == "init") {
-    this.initializeEditor();
-  } else if (msg.event == "autosave") {
-    this.save(msg.xml, true, this.startElement);
-  } else if (msg.event == "export") {
-    this.cell.model.setAttachment("diagram.png", msg.data);
-    this.setElementData(this.startElement, msg.data);
-    this.stopEditing();
-    this.xml = null;
-  } else if (msg.event == "save") {
-    this.save(msg.xml, false, this.startElement);
-    this.xml = msg.xml;
-
-    if (msg.exit) {
-      msg.event = "exit";
-    } else {
-      this.setStatus("allChangesSaved", false);
+    if (msg.event == "exit") {
+      this.handleExitMessage(msg);
     }
   }
 
-  if (msg.event == "exit") {
-    this.handleExitMessage(msg);
-  }
-};
-
-/**
- * Handles the exit message.
- */
-DiagramEditor.prototype.handleExitMessage = function (msg) {
-  if (this.format != "xml") {
-    if (this.xml != null) {
-      this.postMessage({
-        action: "export",
-        format: this.format,
-        xml: this.xml,
-        spinKey: "export",
-      });
+  handleExitMessage(msg) {
+    if (this.format != "xml") {
+      if (this.xml != null) {
+        this.postMessage({
+          action: "export",
+          format: this.format,
+          xml: this.xml,
+          spinKey: "export",
+        });
+      } else {
+        this.stopEditing(msg);
+      }
     } else {
+      if (msg.modified == null || msg.modified) {
+        this.save(msg.xml, false, this.startElement);
+      }
       this.stopEditing(msg);
     }
-  } else {
-    if (msg.modified == null || msg.modified) {
-      this.save(msg.xml, false, this.startElement);
-    }
-    this.stopEditing(msg);
   }
-};
 
-/**
- * Posts configure message to editor.
- */
-DiagramEditor.prototype.configureEditor = function () {
-  this.postMessage({ action: "configure", config: this.config });
-};
+  configureEditor() {
+    this.postMessage({ action: "configure", config: this.config });
+  }
 
-/**
- * Posts load message to editor.
- */
-DiagramEditor.prototype.initializeEditor = function () {
-  this.postMessage({
-    action: "load",
-    autosave: 1,
-    saveAndExit: "1",
-    modified: "unsavedChanges",
-    xml: this.getData(),
-    title: this.getTitle(),
-  });
-  this.setWaiting(false);
-  this.setActive(true);
-  this.initialized();
-};
+  initializeEditor() {
+    this.postMessage({
+      action: "load",
+      autosave: 1,
+      saveAndExit: "1",
+      modified: "unsavedChanges",
+      xml: this.getData(),
+      title: this.getTitle(),
+    });
+    this.setWaiting(false);
+    this.setActive(true);
+    this.initialized();
+  }
 
-/**
- * Saves the given data.
- */
-DiagramEditor.prototype.save = function (data, draft, elt) {
-  this.done(data, draft, elt);
-};
+  save(data, draft, elt) {
+    this.done(data, draft, elt);
+  }
+}
 
-/**
- * Invoked after save.
- */
-DiagramEditor.prototype.done = function () {
-  // hook for subclassers
-};
-
-/**
- * Invoked after the editor has sent the init message.
- */
-DiagramEditor.prototype.initialized = function () {
-  // hook for subclassers
-};
+export default DiagramEditor;

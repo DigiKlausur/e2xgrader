@@ -175,6 +175,12 @@ let Comments = Backbone.Collection.extend({
 
 let AnnotationUI = Backbone.View.extend({
   initialize: function () {
+    if (this.$el.length == 0) {
+      console.log(
+        "Failed to create AnnotationUI. Cell is not present in the notebook"
+      );
+      return;
+    }
     this.$switch = this.$el.find('input[name="annotate"]');
     this.$switch.prop("checked", "checked");
 

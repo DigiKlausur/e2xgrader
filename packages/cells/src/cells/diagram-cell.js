@@ -1,6 +1,6 @@
 import { E2xCell } from "./base";
 import { AttachmentModel } from "../utils/attachment-model";
-import { DiagramEditor } from "../utils/diagram-editor";
+import DiagramEditor from "../utils/diagram-editor";
 
 class DiagramCellModel extends AttachmentModel {
   postSaveHook() {
@@ -56,7 +56,14 @@ export class DiagramCell extends E2xCell {
     let button = $("<button/>")
       .append("Edit Diagram")
       .addClass("btn-e2x btn-diagram");
-    button.on("click", () => DiagramEditor.editElement(that, img[0]));
+
+    button.on("click", async () => {
+      try {
+        await DiagramEditor.editDiagram(that, img[0]);
+      } catch (error) {
+        console.error("Failed to load DiagramEditor:", error);
+      }
+    });
 
     html.append(img);
     html.append(button);
