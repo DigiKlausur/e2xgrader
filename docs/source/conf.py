@@ -9,7 +9,7 @@
 project = "e2xgrader"
 copyright = "2023, Tim Metzler"
 author = "Tim Metzler"
-release = "0.2.0-dev1"
+release = "0.2.0"
 github_project_url = "https://github.com/Digiklausur/e2xgrader"
 
 # -- General configuration ---------------------------------------------------
