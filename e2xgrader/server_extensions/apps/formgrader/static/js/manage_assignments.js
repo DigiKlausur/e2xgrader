@@ -785,7 +785,6 @@ let loadAssignments = function () {
           model: model,
           el: insertRow(tbl),
         });
-        views.push(view);
       });
       insertDataTable(tbl.parent());
       models.loaded = true;
