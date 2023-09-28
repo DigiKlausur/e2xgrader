@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/exam-menubar",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "lib/index.js",
   "description": "a menubar for students during an exams",
   "scripts": {
@@ -10,8 +10,8 @@
   "author": "TM",
   "license": "MIT",
   "dependencies": {
-    "@e2xgrader/menubar": "0.2.1",
-    "@e2xgrader/api": "0.2.1"
+    "@e2xgrader/menubar": "0.2.2",
+    "@e2xgrader/api": "0.2.2"
   },
   "devDependencies": {
     "webpack": "^5.73.0",
