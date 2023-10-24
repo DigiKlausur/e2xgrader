@@ -699,10 +699,15 @@ let createAssignmentModal = function () {
 
     let tbl = $("#main-table");
     let row = insertRow(tbl);
-    new AssignmentUI({
-      model: model,
-      el: row,
-    });
+    try {
+      new AssignmentUI({
+        model: model,
+        el: row,
+      });
+    } catch (e) {
+      console.err("Failed to create new view", e);
+    }
+
     model.save();
     tbl.parent().DataTable().row.add(row).draw();
 
