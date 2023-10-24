@@ -699,11 +699,15 @@ let createAssignmentModal = function () {
 
     let tbl = $("#main-table");
     let row = insertRow(tbl);
-    let view = new AssignmentUI({
-      model: model,
-      el: row,
-    });
-    views.push(view);
+    try {
+      new AssignmentUI({
+        model: model,
+        el: row,
+      });
+    } catch (e) {
+      console.err("Failed to create new view", e);
+    }
+
     model.save();
     tbl.parent().DataTable().row.add(row).draw();
 
@@ -775,7 +779,7 @@ let createAssignmentModal = function () {
 let loadAssignments = function () {
   let tbl = $("#main-table");
 
-  const models = new Assignments();
+  models = new Assignments();
   models.loaded = false;
   models.fetch({
     success: function () {
@@ -785,13 +789,14 @@ let loadAssignments = function () {
           model: model,
           el: insertRow(tbl),
         });
-        views.push(view);
       });
       insertDataTable(tbl.parent());
       models.loaded = true;
     },
   });
 };
+
+let models = new Assignments();
 
 $(window).on("load", function () {
   loadAssignments();
