@@ -83,9 +83,9 @@ class GradeExporter(LoggingConfigurable):
                         for key, value in grades.items():
                             data[key].update(value)
                     elif self.notebooks:
-                        data[(assignment_id, notebook_id)][
-                            submission["student"]
-                        ] = submission["score"]
+                        data[(assignment_id, notebook_id)][submission["student"]] = (
+                            submission["score"]
+                        )
                     else:
                         data[assignment_id][submission["student"]] += submission[
                             "score"
