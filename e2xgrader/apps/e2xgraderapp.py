@@ -2,12 +2,13 @@ import sys
 from argparse import ArgumentParser
 from textwrap import dedent
 
-from ..extensions import E2xExtensionManager
+from .modeswitcher import E2xGraderModes, E2xModeSwitcher
 
 
 class Manager:
     def __init__(self):
-        self.extension_manager = E2xExtensionManager()
+        self.mode_switcher = E2xModeSwitcher()
+        self.mode_switcher.initialize([])
         parser = ArgumentParser(
             description="E2X extension manager.",
             usage=dedent(
@@ -16,7 +17,8 @@ class Manager:
 
                 Available sub commands are:
                 activate      activate a specific mode (teacher, student, student-exam)
-                deactivate    deactivate all extensions"""
+                deactivate    deactivate all extensions
+                mode          show the current mode"""
             ),
         )
 
@@ -28,6 +30,9 @@ class Manager:
             parser.print_help()
             exit(1)
         getattr(self, args.command)()
+
+    def mode(self):
+        print(self.mode_switcher.mode)
 
     def activate(self):
         parser = ArgumentParser(
@@ -59,19 +64,14 @@ class Manager:
         )
 
         args = parser.parse_args(sys.argv[2:])
-        if not hasattr(self.extension_manager, f"activate_{args.mode}"):
-            print("Unrecognized mode")
-            parser.print_help()
-            exit(1)
+
         sys_prefix = False
         user = False
         if args.sys_prefix:
             sys_prefix = True
         if args.user:
             user = True
-        getattr(self.extension_manager, f"activate_{args.mode}")(
-            sys_prefix=sys_prefix, user=user
-        )
+        self.mode_switcher.activate_mode(args.mode, user=user, sys_prefix=sys_prefix)
 
     def deactivate(self):
         parser = ArgumentParser(
@@ -98,7 +98,9 @@ class Manager:
             sys_prefix = True
         if args.user:
             user = True
-        self.extension_manager.deactivate(sys_prefix=sys_prefix, user=user)
+        self.mode_switcher.activate_mode(
+            E2xGraderModes.DEACTIVATED, user=user, sys_prefix=sys_prefix
+        )
 
 
 def main():
