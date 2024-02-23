@@ -57,6 +57,9 @@ class TestE2xModeSwitcher(unittest.TestCase):
                     E2xGraderModes.EXAM.value, config.E2xModeSwitcher.mode
                 )
 
+
+class TestGetE2xGraderMode(unittest.TestCase):
+
     @patch("e2xgrader.apps.modeswitcher.E2xModeSwitcher")
     def test_get_e2xgrader_mode(self, mock_e2x_mode_switcher):
         """
@@ -67,12 +70,15 @@ class TestE2xModeSwitcher(unittest.TestCase):
         mock_e2x_mode_switcher.return_value.mode = E2xGraderModes.EXAM.value
         self.assertEqual(get_e2xgrader_mode(), E2xGraderModes.EXAM)
 
-    def test_get_jupyter_config_path(self):
-        """
-        Test case for the get_jupyter_config_path function.
 
-        This test verifies that a ValueError is raised when both the `user` and `sys_prefix`
-        arguments are set to True.
-        """
+class TestGetJupyterConfigPath(unittest.TestCase):
+
+    @patch("e2xgrader.apps.modeswitcher.jupyter_config_dir")
+    def test_get_user_config_path(self, mock_jupyter_config_dir):
+        mock_jupyter_config_dir.return_value = "/mock/user/config/path"
+        self.assertEqual(get_jupyter_config_path(user=True), "/mock/user/config/path")
+        mock_jupyter_config_dir.assert_called_once()
+
+    def test_both_user_and_sys_prefix_raises_value_error(self):
         with self.assertRaises(ValueError):
             get_jupyter_config_path(user=True, sys_prefix=True)
