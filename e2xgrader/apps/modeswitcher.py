@@ -5,7 +5,7 @@ from typing import Union
 
 from jupyter_core.application import JupyterApp
 from jupyter_core.paths import ENV_CONFIG_PATH, SYSTEM_CONFIG_PATH, jupyter_config_dir
-from traitlets import Unicode, default, validate
+from traitlets import Any, default, validate
 
 from ..extensions import E2xExtensionManager
 
@@ -64,7 +64,7 @@ class E2xModeSwitcher(JupyterApp):
         mode (str): The current mode of E2xGrader.
     """
 
-    mode = Unicode(
+    mode = Any(
         default_value=E2xGraderModes.DEACTIVATED.value,
         allow_none=True,
         config=True,
