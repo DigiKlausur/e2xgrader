@@ -1,4 +1,5 @@
 from ..extensions import E2xExtensionManager
+from ..utils.mode import infer_e2xgrader_mode
 from .baseapp import E2xGrader
 
 
@@ -37,11 +38,16 @@ class ToggleModeApp(E2xGrader):
             getattr(extension_manager, f"activate_{self.mode}")(
                 sys_prefix=self.sys_prefix, user=self.user
             )
-        self.log.info(
-            f"Activated mode {self.mode}. "
-            f"Writing config file to {self.get_config_file_path()}"
-        )
-        self.write_mode_config_file()
+        self.log.info(f"Activated mode {self.mode}. ")
+        try:
+            mode = infer_e2xgrader_mode()
+            if mode != self.mode:
+                self.log.warning(
+                    f"The activated mode {self.mode} does not match the infered mode {mode}. \n"
+                    f"The mode {mode} may be activated on a higher level."
+                )
+        except ValueError as e:
+            self.log.error(str(e))
 
     def start(self) -> None:
         super().start()
