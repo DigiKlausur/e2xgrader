@@ -18,6 +18,12 @@ To deactivate all e2xgrader modes:
 
    e2xgrader deactivate --sys-prefix
 
+To show the current active mode:
+
+.. code-block:: sh
+
+   e2xgrader show_mode
+
 Teacher Mode
 ------------
 
