@@ -1,9 +1,10 @@
 import os
 import unittest
 
-from notebook.serverextensions import BaseJSONConfigManager, jupyter_config_path
+from jupyter_core.paths import jupyter_config_path
 
 from e2xgrader.extensions import E2xExtensionManager
+from e2xgrader.extensions.utils import get_notebook_config_manager
 
 
 class TestE2XExtensionManager(unittest.TestCase):
@@ -16,7 +17,12 @@ class TestE2XExtensionManager(unittest.TestCase):
             "e2xgrader.server_extensions.teacher",
             "e2xgrader.server_extensions.student",
         ]
+
         self.manager = E2xExtensionManager()
+        # Deactivate all extensions with all flags (sys_prefix, user)
+        self.manager.deactivate()
+
+    def tearDown(self):
         self.manager.deactivate()
 
     def get_serverextensions(self, role):
@@ -68,7 +74,7 @@ class TestE2XExtensionManager(unittest.TestCase):
     def test_deactivated_serverextensions(self):
         config_dict = {}
         for config_dir in jupyter_config_path():
-            cm = BaseJSONConfigManager(config_dir=config_dir)
+            cm = get_notebook_config_manager()(config_dir=config_dir)
             config_dict.update(cm.get("jupyter_notebook_config"))
         extensions = config_dict["NotebookApp"]["nbserver_extensions"]
         for serverextension in self.serverextensions:
@@ -80,7 +86,7 @@ class TestE2XExtensionManager(unittest.TestCase):
 
         config_dict = {}
         for config_dir in jupyter_config_path():
-            cm = BaseJSONConfigManager(config_dir=config_dir)
+            cm = get_notebook_config_manager()(config_dir=config_dir)
             config_dict.update(cm.get("jupyter_notebook_config"))
         extensions = config_dict["NotebookApp"]["nbserver_extensions"]
         for serverextension, status in teacher_serverextensions.items():
@@ -93,7 +99,7 @@ class TestE2XExtensionManager(unittest.TestCase):
             config_dict = {}
             for config_dir in jupyter_config_path():
                 config_dir = os.path.join(config_dir, "nbconfig")
-                cm = BaseJSONConfigManager(config_dir=config_dir)
+                cm = get_notebook_config_manager()(config_dir=config_dir)
                 config_dict.update(cm.get(section))
 
             for extension, status in extensions.items():
@@ -108,7 +114,7 @@ class TestE2XExtensionManager(unittest.TestCase):
 
         config_dict = {}
         for config_dir in jupyter_config_path():
-            cm = BaseJSONConfigManager(config_dir=config_dir)
+            cm = get_notebook_config_manager()(config_dir=config_dir)
             config_dict.update(cm.get("jupyter_notebook_config"))
         extensions = config_dict["NotebookApp"]["nbserver_extensions"]
         for serverextension, status in student_serverextensions.items():
@@ -121,7 +127,7 @@ class TestE2XExtensionManager(unittest.TestCase):
             config_dict = {}
             for config_dir in jupyter_config_path():
                 config_dir = os.path.join(config_dir, "nbconfig")
-                cm = BaseJSONConfigManager(config_dir=config_dir)
+                cm = get_notebook_config_manager()(config_dir=config_dir)
                 config_dict.update(cm.get(section))
 
             for extension, status in extensions.items():
@@ -137,7 +143,7 @@ class TestE2XExtensionManager(unittest.TestCase):
 
         config_dict = {}
         for config_dir in jupyter_config_path():
-            cm = BaseJSONConfigManager(config_dir=config_dir)
+            cm = get_notebook_config_manager()(config_dir=config_dir)
             config_dict.update(cm.get("jupyter_notebook_config"))
         extensions = config_dict["NotebookApp"]["nbserver_extensions"]
         for serverextension, status in student_serverextensions.items():
@@ -150,7 +156,7 @@ class TestE2XExtensionManager(unittest.TestCase):
             config_dict = {}
             for config_dir in jupyter_config_path():
                 config_dir = os.path.join(config_dir, "nbconfig")
-                cm = BaseJSONConfigManager(config_dir=config_dir)
+                cm = get_notebook_config_manager()(config_dir=config_dir)
                 config_dict.update(cm.get(section))
 
             for extension, status in extensions.items():
@@ -158,6 +164,3 @@ class TestE2XExtensionManager(unittest.TestCase):
                     assert config_dict["load_extensions"][extension] == status
                 else:
                     assert not status
-
-    def tearDown(self):
-        self.manager.deactivate()
