@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from e2xgrader.apps.togglemodeapp import ToggleModeApp
+from e2xgrader.utils.mode import E2xGraderMode
 
 
 class TestToggleModeApp(unittest.TestCase):
@@ -21,27 +22,21 @@ class TestToggleModeApp(unittest.TestCase):
             "e2xgrader.apps.togglemodeapp.E2xExtensionManager"
         ) as mock_extension_manager:
 
-            self.app.mode = "teacher"
+            self.app.mode = E2xGraderMode.TEACHER.value
             self.app.activate_mode()
             mock_extension_manager.return_value.activate_teacher.assert_called_once_with(
                 sys_prefix=False, user=False
             )
 
-            self.app.mode = "student"
+            self.app.mode = E2xGraderMode.STUDENT.value
             self.app.activate_mode()
             mock_extension_manager.return_value.activate_student.assert_called_once_with(
                 sys_prefix=False, user=False
             )
 
-            self.app.mode = "student_exam"
+            self.app.mode = E2xGraderMode.STUDENT_EXAM.value
             self.app.activate_mode()
             mock_extension_manager.return_value.activate_student_exam.assert_called_once_with(
-                sys_prefix=False, user=False
-            )
-
-            self.app.mode = "None"
-            self.app.activate_mode()
-            mock_extension_manager.return_value.deactivate.assert_called_once_with(
                 sys_prefix=False, user=False
             )
 
@@ -57,6 +52,7 @@ class TestToggleModeApp(unittest.TestCase):
                     self.app.initialize([])
                     self.app.activate_mode()
                     mock_log.error.assert_called_once_with("error")
+                    self.assertEqual(self.app.mode, E2xGraderMode.INVALID.value)
 
     def test_flags(self):
         with patch("e2xgrader.apps.togglemodeapp.E2xExtensionManager"):
