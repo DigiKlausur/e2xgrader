@@ -1,14 +1,10 @@
 from jupyter_core.application import JupyterApp
-from traitlets import Bool, Enum
+from traitlets import Enum
 
 from ..utils.mode import infer_e2xgrader_mode
 
 
 class E2xGrader(JupyterApp):
-
-    sys_prefix = Bool(False, help="Install extensions to sys.prefix", config=True)
-
-    user = Bool(False, help="Install extensions to the user space", config=True)
 
     mode = Enum(
         values=["teacher", "student", "student_exam", "None"],

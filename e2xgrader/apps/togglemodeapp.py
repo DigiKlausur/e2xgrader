@@ -1,3 +1,5 @@
+from traitlets import Bool
+
 from ..extensions import E2xExtensionManager
 from ..utils.mode import infer_e2xgrader_mode
 from .baseapp import E2xGrader
@@ -5,13 +7,17 @@ from .baseapp import E2xGrader
 
 class ToggleModeApp(E2xGrader):
 
+    sys_prefix = Bool(False, help="Install extensions to sys.prefix", config=True)
+
+    user = Bool(False, help="Install extensions to the user space", config=True)
+
     flags = {
         "sys-prefix": (
-            {"E2xGrader": {"sys_prefix": True}},
+            {"ToggleModeApp": {"sys_prefix": True}},
             "Install extensions to sys.prefix",
         ),
         "user": (
-            {"E2xGrader": {"user": True}},
+            {"ToggleModeApp": {"user": True}},
             "Install extensions to the user space",
         ),
     }
