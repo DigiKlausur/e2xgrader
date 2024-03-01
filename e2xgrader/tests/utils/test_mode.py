@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from e2xgrader.utils.mode import (
+    E2xGraderMode,
     infer_e2xgrader_mode,
     infer_nbextension_mode,
     infer_serverextension_mode,
@@ -15,7 +16,12 @@ class TestInferE2xGraderMode(unittest.TestCase):
     def test_infer_e2xgrader_mode(
         self, mock_infer_serverextension_mode, mock_infer_nbextension_mode
     ):
-        for mode in ["teacher", "student", "student_exam", "None"]:
+        for mode in [
+            E2xGraderMode.TEACHER.value,
+            E2xGraderMode.STUDENT.value,
+            E2xGraderMode.STUDENT_EXAM.value,
+            E2xGraderMode.INACTIVE.value,
+        ]:
             mock_infer_serverextension_mode.return_value = mode
             mock_infer_nbextension_mode.return_value = mode
             self.assertEqual(infer_e2xgrader_mode(), mode)
@@ -101,14 +107,14 @@ class TestInferServerExtensionMode(unittest.TestCase):
         mock_get_serverextension_config.return_value = {
             "e2xgrader.server_extensions.teacher": True,
         }
-        self.assertEqual(infer_serverextension_mode(), "teacher")
+        self.assertEqual(infer_serverextension_mode(), E2xGraderMode.TEACHER.value)
 
     @patch("e2xgrader.utils.mode.get_serverextension_config")
     def test_infer_serverextension_mode_with_no_mode_activated(
         self, mock_get_serverextension_config
     ):
         mock_get_serverextension_config.return_value = {}
-        self.assertEqual(infer_serverextension_mode(), "None")
+        self.assertEqual(infer_serverextension_mode(), E2xGraderMode.INACTIVE.value)
 
     @patch("e2xgrader.utils.mode.get_serverextension_config")
     def test_infer_serverextension_mode_fails_with_multiple_modes_activated(
