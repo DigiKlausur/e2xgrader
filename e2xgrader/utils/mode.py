@@ -1,10 +1,19 @@
 import os
+from enum import Enum
 from typing import Dict
 
 from jupyter_core.paths import jupyter_config_path
 
 from .. import _jupyter_server_extension_paths
 from ..extensions.utils import discover_nbextensions, get_notebook_config_manager
+
+
+class E2xGraderMode(Enum):
+    TEACHER = "teacher"
+    STUDENT = "student"
+    STUDENT_EXAM = "student_exam"
+    INVALID = "invalid"
+    INACTIVE = "inactive"
 
 
 def get_nbextension_config() -> Dict[str, Dict[str, bool]]:
@@ -61,7 +70,11 @@ def infer_nbextension_mode() -> str:
         ValueError: If more than one mode is active or if tree and notebook extensions don't match.
     """
     config = get_nbextension_config()
-    modes = ["teacher", "student_exam", "student"]
+    modes = [
+        E2xGraderMode.TEACHER.value,
+        E2xGraderMode.STUDENT_EXAM.value,
+        E2xGraderMode.STUDENT.value,
+    ]
     is_active = dict(tree=[], notebook=[])
     for mode in modes:
         for extension in discover_nbextensions(mode):
@@ -76,9 +89,9 @@ def infer_nbextension_mode() -> str:
         if len(is_active["tree"]) == 1:
             return is_active["tree"][0]
         elif len(is_active["tree"]) == 0:
-            return "None"
+            return E2xGraderMode.INACTIVE.value
     raise ValueError(
-        "More than one mode is active or tree and notebook extensions don't match"
+        "More than one mode is active or tree and notebook extensions don't match\n"
         f"The current config is {config}"
     )
 
@@ -102,7 +115,7 @@ def infer_serverextension_mode() -> str:
         if is_active:
             active.append(extension["module"].split(".")[-1])
     if len(active) == 0:
-        return "None"
+        return E2xGraderMode.INACTIVE.value
     elif len(active) == 1:
         return active[0]
     raise ValueError("More than one mode is active" f"The current config is {config}")
