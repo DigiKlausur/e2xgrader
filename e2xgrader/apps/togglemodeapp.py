@@ -1,7 +1,7 @@
 from traitlets import Bool
 
 from ..extensions import E2xExtensionManager
-from ..utils.mode import infer_e2xgrader_mode
+from ..utils.mode import E2xGraderMode, infer_e2xgrader_mode
 from .baseapp import E2xGrader
 
 
@@ -30,7 +30,7 @@ class ToggleModeApp(E2xGrader):
         If the mode is "None", it deactivates all e2xgrader extensions.
         """
         extension_manager = E2xExtensionManager()
-        if self.mode == "None":
+        if self.mode == E2xGraderMode.INACTIVE.value:
             print(
                 f"Deactivating e2xgrader extensions with sys_prefix={self.sys_prefix} "
                 f"and user={self.user}"
@@ -54,6 +54,7 @@ class ToggleModeApp(E2xGrader):
                 )
         except ValueError as e:
             self.log.error(str(e))
+            self.mode = E2xGraderMode.INVALID.value
 
     def start(self) -> None:
         super().start()
