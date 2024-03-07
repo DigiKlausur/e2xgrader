@@ -1,10 +1,9 @@
 from importlib import import_module
 
+from e2xcore.utils.utils import get_nbgrader_config
 from jinja2 import Environment, FileSystemLoader
 from traitlets import Any, List, TraitError, validate
 from traitlets.config import Application
-
-from e2xgrader.utils import get_nbgrader_config
 
 
 class BaseExtension(Application):

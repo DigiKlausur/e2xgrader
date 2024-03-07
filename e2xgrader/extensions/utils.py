@@ -27,6 +27,14 @@ def get_nbextension_utils() -> Optional[ModuleType]:
     return None
 
 
+def get_notebook_config_manager() -> Optional[ModuleType]:
+    if is_installed("jupyter_server"):
+        return import_module("jupyter_server.config_manager").BaseJSONConfigManager
+    if is_installed("notebook") and get_notebook_major_version() < 7:
+        return import_module("notebook.services.config.manager").BaseJSONConfigManager
+    return None
+
+
 def discover_nbextensions(mode: str) -> List[Dict[str, str]]:
     extensions = list()
     for nbextension in _jupyter_nbextension_paths():
