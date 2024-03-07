@@ -70,12 +70,26 @@ export class Submit {
     utils.ajax(url, settings);
   }
 
+  disable_submit_button() {
+    $(".e2x-submit").off("click");
+    $(".e2x-submit").css("background-color", "gray");
+  }
+
+  enable_submit_button() {
+    let that = this;
+    $(".e2x-submit").on("click", function () {
+      that.prepare_submit();
+    });
+    $(".e2x-submit").css("background-color", "");
+  }
+
   prepare_submit() {
     let that = this;
     // Save
     Jupyter.notebook
       .save_checkpoint()
       .then(function () {
+        that.disable_submit_button();
         that.submit_spinner();
         that.submit();
       })
@@ -93,6 +107,9 @@ export class Submit {
             .addClass("fa fa-spinner fa-spin")
             .attr("id", "submit_spinner")
         )
+        .append(
+          $("<p/>").text("Submitting exam. This may take a few seconds...")
+        )
     );
   }
 
@@ -106,8 +123,8 @@ export class Submit {
           course_id: this.assignment.course_id,
           assignment_id: this.assignment.assignment_id,
         },
-        success: this.submit_success_modal,
-        error: this.handle_submit_error,
+        success: this.submit_success_modal.bind(this),
+        error: this.handle_submit_error.bind(this),
       };
       let url = utils.url_path_join(this.base_url, "assignments", "submit");
       utils.ajax(url, settings);
@@ -120,6 +137,7 @@ export class Submit {
 
   submit_error_modal(data) {
     $("#submitting").remove();
+    this.enable_submit_button();
 
     let body = $("<div/>");
     body.append(
@@ -143,6 +161,7 @@ export class Submit {
 
   submit_success_modal(data) {
     $("#submitting").remove();
+    this.enable_submit_button();
     console.log(data);
     let hashcode_html =
       window.location.href.split(".ipynb")[0] + "_hashcode.html";

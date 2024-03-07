@@ -6,3 +6,14 @@
 #e2x-menubar .e2x-submit i {
   padding-left: 0.5em;
 }
+
+#submitting {
+  background-color: (0, 0, 0, 0.5);
+}
+
+#submitting p {
+  margin-top: 2em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+}
