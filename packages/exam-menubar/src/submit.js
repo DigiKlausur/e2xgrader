@@ -103,12 +103,16 @@ export class Submit {
       $("<div/>")
         .attr("id", "submitting")
         .append(
-          $("<i/>")
-            .addClass("fa fa-spinner fa-spin")
-            .attr("id", "submit_spinner")
-        )
-        .append(
-          $("<p/>").text("Submitting exam. This may take a few seconds...")
+          $("<div/>")
+            .attr("id", "submitting_box")
+            .append(
+              $("<i/>")
+                .addClass("fa fa-spinner fa-spin")
+                .attr("id", "submit_spinner")
+            )
+            .append(
+              $("<p/>").text("Submitting exam. This may take a few seconds...")
+            )
         )
     );
   }
@@ -163,33 +167,38 @@ export class Submit {
     $("#submitting").remove();
     this.enable_submit_button();
     console.log(data);
-    let hashcode_html =
-      window.location.href.split(".ipynb")[0] + "_hashcode.html";
+
     let body = $("<div/>");
 
-    body.append($("<h4/>").text("Your Timestamp:"));
+    body.append($("<h4/>").text("We have received your submission at:"));
     body.append($("<pre/>").text(data["timestamp"].split(".")[0]));
 
-    if (data.hasOwnProperty("hashcode") && data.hashcode.length > 0) {
-      body.append($("<h4/>").text("Your Hashcode:"));
-      body.append($("<pre/>").text(data["hashcode"]));
-
-      body.append(
-        $("<h4/>").append(
-          $("<a/>")
-            .attr("href", hashcode_html)
-            .attr("target", "_blank")
-            .text("Click here to view the HTML version of your submitted exam.")
-        )
-      );
-    }
+    body.append($("<h4/>").text("Do you want to end your exam now?"));
+    body.append(
+      $("<p/>")
+        .append("You will receive your ")
+        .append($("<span/>").append("hashcode").attr("id", "hashcode_label"))
+        .append(" when you end the exam.")
+    );
 
     dialog.modal({
       keyboard_manager: Jupyter.keyboard_manager,
-      title: "Assignment has been successfully submitted!",
+      title: "Exam has been submitted successfully!",
       body: body,
       buttons: {
-        OK: {},
+        "No, continue working on the exam": {
+          class: "btn-warning",
+        },
+        "Yes, exit the exam": {
+          click: function () {
+            window.location.href = utils.url_path_join(
+              Jupyter.notebook.base_url,
+              "view",
+              Jupyter.notebook.notebook_path.replace(".ipynb", "_hashcode.html")
+            );
+          },
+          class: "btn-success",
+        },
       },
     });
   }
