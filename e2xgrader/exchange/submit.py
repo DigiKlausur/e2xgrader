@@ -15,11 +15,13 @@ from stat import (
     S_IXOTH,
     S_IXUSR,
 )
+from textwrap import dedent
 
-import nbformat
 from nbgrader.exchange.default import ExchangeSubmit
 from nbgrader.utils import check_mode, get_username
+from traitlets import Type
 
+from ..exporters import SubmissionExporter
 from ..utils.mode import E2xGraderMode, infer_e2xgrader_mode
 from .exchange import E2xExchange
 from .hash_utils import (
@@ -27,10 +29,23 @@ from .hash_utils import (
     generate_directory_hash_file,
     truncate_hashcode,
 )
-from .utils import generate_exam_submitted_html, generate_student_info_file
+from .utils import generate_student_info_file, generate_submission_html
 
 
 class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
+
+    submission_exporter_class = Type(
+        SubmissionExporter,
+        klass="nbconvert.exporters.HTMLExporter",
+        help=dedent(
+            """
+            The class used for creating HTML files from exam notebooks.
+            Must be a subclass of `nbconvert.exporters.HTMLExporter`.
+            The exporter will receive the hashcode and timestamp as resources.
+            """
+        ),
+    ).tag(config=True)
+
     def init_dest(self):
         if self.coursedir.course_id == "":
             self.fail("No course id specified. Re-run with --course flag.")
@@ -151,16 +166,19 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         )
 
         # Discover all ipynb files in the src_path and generate HTML files for them
+        exporter = self.submission_exporter_class(config=self.config)
         ipynb_files = glob.glob(os.path.join(self.src_path, "*.ipynb"))
         for ipynb_file in ipynb_files:
-            notebook_name = os.path.splitext(os.path.basename(ipynb_file))[0]
-            generate_exam_submitted_html(
-                nb=nbformat.read(ipynb_file, as_version=4),
-                output_file=os.path.join(
-                    self.src_path, f"{notebook_name}_hashcode.html"
+            generate_submission_html(
+                ipynb_file,
+                os.path.join(
+                    self.src_path,
+                    os.path.splitext(os.path.basename(ipynb_file))[0]
+                    + "_hashcode.html",
                 ),
-                timestamp=self.format_timestamp(format="%Y-%m-%d %H:%M:%S"),
-                hashcode=hashcode,
+                hashcode,
+                self.format_timestamp(format="%Y-%m-%d %H:%M:%S"),
+                exporter,
             )
         return hashcode
 
