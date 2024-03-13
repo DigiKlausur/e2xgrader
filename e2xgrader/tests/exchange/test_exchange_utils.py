@@ -41,18 +41,19 @@ class TestGenerateSubmissionHtml(unittest.TestCase):
     def setUp(self):
         self.temp_dir = TemporaryDirectory()
         self.directory = self.temp_dir.name
-
-    def tearDown(self):
-        self.temp_dir.cleanup()
-
-    def test_generate_submission_html(self):
-        exporter = SubmissionExporter()
         nb = new_notebook(
             cells=[
                 new_markdown_cell("This is a markdown cell"),
             ]
         )
         nbformat.write(nb, os.path.join(self.directory, "notebook.ipynb"))
+
+    def tearDown(self):
+        self.temp_dir.cleanup()
+
+    def test_generate_submission_html(self):
+        exporter = SubmissionExporter()
+
         generate_submission_html(
             os.path.join(self.directory, "notebook.ipynb"),
             os.path.join(self.directory, "submission.html"),
@@ -77,24 +78,17 @@ class TestGenerateSubmissionHtml(unittest.TestCase):
         exporter.exam_submitted_message = msg1
         exporter.your_hashcode_message = msg2
         exporter.verify_exam_message = msg3
-        nb = new_notebook(
-            cells=[
-                new_markdown_cell("This is a markdown cell"),
-            ]
-        )
-        nbformat.write(nb, os.path.join(self.directory, "notebook.ipynb"))
+
         generate_submission_html(
             os.path.join(self.directory, "notebook.ipynb"),
-            os.path.join(self.directory, "submission.html"),
+            os.path.join(self.directory, "submission1.html"),
             "123456",
             "2022-01-01 00:00:00",
             exporter,
         )
-        with open(os.path.join(self.directory, "submission.html"), "r") as f:
+        with open(os.path.join(self.directory, "submission1.html"), "r") as f:
             content = f.read()
 
-        self.assertIn("This is a markdown cell", content)
-        self.assertIn("2022-01-01 00:00:00", content)
         self.assertIn(msg1, content)
         self.assertIn(msg2, content)
         self.assertIn(msg3, content)
