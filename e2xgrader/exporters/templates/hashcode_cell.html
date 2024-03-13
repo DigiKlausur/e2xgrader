@@ -1,0 +1,17 @@
+<div class="alert alert-success alert-block" style="text-align: center;">
+    <div style="text-align:right;">{{timestamp}}</div>
+    <div style="font-size:1.75em;font-weight:bold;margin: 1em 0;">{{ exam_submitted_message }}</div>
+    <div style="font-size:1.25em;font-weight:bold;margin: 1em 0;">{{ your_hashcode_message }}</div>
+    <table style="font-size: 1.5em;">
+      <tr>
+        {% for char in hashcode %}
+          {% if char == '-' %}
+            <td style="text-align: center;font-weight: bold;" class="alert alert-success">{{ char }}</td> 
+          {% else %}
+            <td style="border: 1px solid #999;font-weight: bold;text-align: center;">{{ char }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    </table>
+    <div style="font-size:1.25em;font-weight:bold;margin: 1em 0;">{{ verify_exam_message }}</div>
+</div>
