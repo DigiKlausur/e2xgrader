@@ -82,8 +82,8 @@ class TestGenerateSubmissionHtml(unittest.TestCase):
         generate_submission_html(
             os.path.join(self.directory, "notebook.ipynb"),
             os.path.join(self.directory, "submission1.html"),
-            "123456",
-            "2022-01-01 00:00:00",
+            "ABC-DEF",
+            "12:34:56",
             exporter,
         )
         with open(os.path.join(self.directory, "submission1.html"), "r") as f:
