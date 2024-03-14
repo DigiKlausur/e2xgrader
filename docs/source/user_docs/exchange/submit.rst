@@ -1,3 +1,6 @@
+.. _custom_submit_exchange:
+
+======================
 Custom Submit Exchange
 ======================
 
