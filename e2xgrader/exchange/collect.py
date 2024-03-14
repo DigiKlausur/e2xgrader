@@ -31,14 +31,22 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
     ).tag(config=True)
 
     def init_submissions(self):
+        student_id = self.coursedir.student_id if self.coursedir.student_id else "*"
         if self.personalized_inbound:
             self.log.info("Collecting from restricted submit dirs")
-            submit_dirs = [
-                username
-                for username in os.listdir(self.inbound_path)
-                if "+" not in username
-                and os.path.isdir(os.path.join(self.inbound_path, username))
-            ]
+            if student_id == "*":
+                submit_dirs = [
+                    username
+                    for username in os.listdir(self.inbound_path)
+                    if "+" not in username
+                    and os.path.isdir(os.path.join(self.inbound_path, username))
+                ]
+            else:
+                submit_dirs = [
+                    username
+                    for username in os.listdir(self.inbound_path)
+                    if username == student_id
+                ]
             self.log.info(f"Submission dirs: {submit_dirs}")
 
             usergroups = defaultdict(list)
@@ -59,7 +67,6 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                 records.append(user_records)
 
         else:
-            student_id = self.coursedir.student_id if self.coursedir.student_id else "*"
             pattern = os.path.join(
                 self.inbound_path,
                 "{}+{}+*".format(student_id, self.coursedir.assignment_id),
