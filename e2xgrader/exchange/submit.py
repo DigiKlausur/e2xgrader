@@ -256,7 +256,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         if self.personalized_outbound:
             self.release_path = os.path.join(
                 outbound_path,
-                os.getenv("JUPYTERHUB_USER"),
+                get_username(),
                 self.coursedir.assignment_id,
             )
         else:
