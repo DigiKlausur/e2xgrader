@@ -50,7 +50,7 @@ def hash_files_in_directory(
             Defaults to None.
 
     Returns:
-        List[Tuple[str, str]]: A list of tuples containing the relative file paths and their
+        List[Tuple[str, str]]: A sorted list of tuples containing the relative file paths and their
             corresponding hash codes.
 
     Examples:
