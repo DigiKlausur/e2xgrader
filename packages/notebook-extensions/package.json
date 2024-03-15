@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/notebook-extensions",
-  "version": "0.3.0-dev1",
+  "version": "0.3.0-dev2",
   "description": "",
   "scripts": {
     "build": "webpack --config webpack.config.js",
@@ -9,14 +9,14 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
-    "@e2xgrader/cell-extension": "0.3.0-dev1",
-    "@e2xgrader/create-assignment-celltoolbar": "0.3.0-dev1",
-    "@e2xgrader/assignment-view-celltoolbar": "0.3.0-dev1",
-    "@e2xgrader/restricted-assignment-notebook": "0.3.0-dev1",
-    "@e2xgrader/restricted-exam-notebook": "0.3.0-dev1",
-    "@e2xgrader/exam-menubar": "0.3.0-dev1",
-    "@e2xgrader/authoring-menubar": "0.3.0-dev1",
-    "@e2xgrader/utils": "0.3.0-dev1"
+    "@e2xgrader/cell-extension": "0.3.0-dev2",
+    "@e2xgrader/create-assignment-celltoolbar": "0.3.0-dev2",
+    "@e2xgrader/assignment-view-celltoolbar": "0.3.0-dev2",
+    "@e2xgrader/restricted-assignment-notebook": "0.3.0-dev2",
+    "@e2xgrader/restricted-exam-notebook": "0.3.0-dev2",
+    "@e2xgrader/exam-menubar": "0.3.0-dev2",
+    "@e2xgrader/authoring-menubar": "0.3.0-dev2",
+    "@e2xgrader/utils": "0.3.0-dev2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",

@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/cell-extension",
-  "version": "0.3.0-dev1",
+  "version": "0.3.0-dev2",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
-    "@e2xgrader/cells": "0.3.0-dev1"
+    "@e2xgrader/cells": "0.3.0-dev2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
