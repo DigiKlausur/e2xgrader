@@ -18,12 +18,16 @@ export function disable_shortcuts() {
     "d,d",
   ];
 
-  utils.remove_shortcuts("command", shortcuts);
-  utils.remove_shortcuts("edit", shortcuts);
+  const modes = ["command", "edit"];
+
+  for (let mode of modes) {
+    utils.remove_shortcuts(mode, ...shortcuts);
+  }
 
   utils.remove_shortcuts("command", "crtl-v");
 
   utils.disable_add_cell_on_execute();
+
   utils.add_shortcut(
     "command",
     "ctrl-v",
