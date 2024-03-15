@@ -4,7 +4,12 @@
 Personalized Exchange
 =====================
 
-`e2xgrader` comes with an optional custom exchange. The exchange provides personalized directories for each student.
+`e2xgrader` comes with an optional custom exchange. The exchange takes care of distributing assignments and feedback to students and collecting submissions.
+Our exchange is based on the original nbgrader exchange and extends it with the following features:
+
+- Custom :ref:`submit <custom_submit_exchange>` behavior based on e2xgrader mode, with advanced features like hashing and HTML conversion for exams in student_exam mode.
+- Personalized inbound and feedback directory for each student, to prevent students from reading each other's submissions and feedback. (Activated by default)
+- Personalized outbound directory for each student, to provide personalized versions of an assignment. (Deactivated by default)
 
 Activating the Exchange
 -----------------------
@@ -14,19 +19,15 @@ To activate the exchange head over to the section about :ref:`configuring e2xgra
 Personalized Inbound
 --------------------
 
-The custom exchange can be configured to use a personalized inbound. 
-If this is activated, each student will have a personalized inbound directory.
+The inbound directory is the directory where students submit their assignments.
+The custom exchange can be configured to use a personalized inbound directory. This is activated by default.
+When this is active, students submit to :code:`<exchange_directory>/<course_id>/personalized-inbound/<student_id>/`.
+Students will only have access to their own submissions.
 
-Assume you have the course *MyCourse* and the assignment
-*MyAssignment*. In the original nbgrader exchange the student
-will submit to :code:`<exchange_directory>/MyCourse/inbound/`.
-This will be the same for each student and causes a potential security 
-issue. If a student knows the name of the submission of another student,
-they can read their submission.
+In the original nbgrader exchange, the inbound directory is the same for all students (:code:`<exchange_directory>/<course_id>/inbound/`).
+This can be a security issue, as students can read each other's submissions if they know the timestamp or random string of the submission.
 
-If the personalized inbound is used, the student will submit to
-:code:`<exchange_directory>/MyCourse/personalized-inbound/<student_id>/`.
-This directory is only readable by the student.
+To configure the personalized inbound, add the following to your `nbgrader_config.py`:
 
 .. code-block:: python
 
@@ -45,25 +46,23 @@ This directory is only readable by the student.
    # Activate the personalized inbound
    c.Exchange.personalized_inbound = True
 
+
 Personalized Outbound
 ---------------------
 
-If activated, the custom exchange uses a personalized outbound
-directory for each student.
+The outbound directory is the directory where students fetch their assignments from.
+If the personalized outbound is activated, students will fetch from a personalized directory.
+This is useful if you want to create personalized versions of an assignment for each student.
 
-This allows for creating custom versions of an assignment per student.
 Students will fetch from 
-:code:`<exchange_directory>/MyCourse/outbound/MyAssignment/<student_id>/`.
+:code:`<exchange_directory>/<course_id>/outbound/<assignment_id>/<student_id>/`.
 
-For this to work you will need a release version for each student.
-In your formgrader you will need to create a folder for each student 
-under the release version of an assignment.
+To create personalized versions of an assignment, you will need to create a directory for each student under the release version of an assignment.
 
 Instead of having your notebooks under
-:code:`release/MyAssignment/MyNotebook.ipynb` you will need to create a
+:code:`release/<assignment_id>/MyNotebook.ipynb` you will need to create a
 directory for each student as
-:code:`release/MyAssignment/<student_id>/MyNotebook.ipynb`. These notebooks
-can then be personalized.
+:code:`release/<assignment_id>/<student_id>/MyNotebook.ipynb`. These notebooks can be personalized for each student.
 
 .. code-block:: python
 
@@ -82,11 +81,14 @@ can then be personalized.
    # Activate the personalized outbound
    c.Exchange.personalized_outbound = True
 
+
 Personalized Feedback
 ---------------------
 
+The feedback directory is the directory where students fetch their feedback from. This is activated by default.
 Similar to the personalized outbound, there is an option for personalized feedback. 
 This makes sure students can only read their feedback directory. 
+To configure the personalized feedback, add the following to your `nbgrader_config.py`:
 
 .. code-block:: python
 
