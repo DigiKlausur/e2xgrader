@@ -7,24 +7,47 @@ from traitlets import Bool, Unicode
 
 class E2xExchange(Exchange):
     personalized_outbound = Bool(
-        False, help="Whether to use a personalized outbound directory per student"
+        False,
+        help=dedent(
+            """
+            Whether to use a personalized outbound directory per student.
+            This is the directory where students fetch their assignments from.
+            If this is set to True, each student will have their own version of the assignment.
+            """
+        ),
     ).tag(config=True)
 
     personalized_inbound = Bool(
-        False, help="Whether to use a personalized inbound directory per student"
+        True,
+        help=dedent(
+            """
+            Whether to use a personalized inbound directory per student.
+            This is the directory where students submit their assignments to.
+            If this is set to True, each student will submit their assignments 
+            to their own directory.
+            """
+        ),
     ).tag(config=True)
 
     personalized_feedback = Bool(
-        False, help="Whether to use a personalized feedback directory per student"
+        True,
+        help=dedent(
+            """
+            Whether to use a personalized feedback directory per student.
+            This is the directory where students receive feedback for their assignments.
+            If this is set to True, each student will receive feedback in their own directory.
+            """
+        ),
     ).tag(config=True)
 
     grader = Bool(
         False,
         help=dedent(
-            """A flag whether the current user is grader. Used for personalized-outbound
-               to retrive the released assignment for one of the students,so that
-               lister only shows one released assignment instead of showing all
-               individualized assignments from all users
+            """
+            A flag whether the current user is grader. Used for personalized-outbound
+            to retrive the released assignment for one of the students,so that
+            lister only shows one released assignment instead of showing all
+            individualized assignments from all users
             """
         ),
     ).tag(config=True)
