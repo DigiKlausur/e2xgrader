@@ -67,7 +67,7 @@ artifacts = [
 github_url = "https://github.com/Digiklausur/e2xgrader/"
 
 [tool.tbump.version]
-current = "0.3.0-dev0"
+current = "0.3.0-dev1"
 
 regex = '''
   (?P<major>\d+)
