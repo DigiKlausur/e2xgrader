@@ -51,7 +51,7 @@ class SubmissionExporter(E2xExporter):
         )
         hashcode_cell = new_markdown_cell(
             source=hashcode_template.render(
-                hashcode=resources["hashcode"],
+                hashcode=resources["hashcode"].upper(),
                 timestamp=resources["timestamp"],
                 exam_submitted_message=self.exam_submitted_message,
                 verify_exam_message=self.verify_exam_message,
