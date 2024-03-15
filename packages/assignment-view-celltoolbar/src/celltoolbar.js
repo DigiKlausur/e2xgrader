@@ -129,8 +129,9 @@ export class AssignmentViewToolbar {
    */
   create_header(div, cell, celltoolbar) {
     if (cell.cell_type === null) {
+      let that = this;
       setTimeout(function () {
-        this.create_header(div, cell, celltoolbar);
+        that.create_header(div, cell, celltoolbar);
       }, 100);
     } else {
       if (!nbgrader_utils.is_solution(cell)) {
