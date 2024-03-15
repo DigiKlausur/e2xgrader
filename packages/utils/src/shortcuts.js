@@ -53,6 +53,14 @@ export function remove_shortcuts(mode, ...shortcuts) {
     try {
       manager.remove_shortcut(shortcut);
     } catch (e) {
+      console.log(
+        "Error removing shortcut",
+        shortcut,
+        "from",
+        mode,
+        "mode:",
+        e.message
+      );
       // Shortcut does not exist and can't be removed;
     }
   }
@@ -83,8 +91,8 @@ export function add_shortcut(mode, key, handler, help, help_index = "zz") {
 export function disable_add_cell_on_execute() {
   add_Notebook_execute_cell_and_select();
   const shortcut_keys = ["alt-enter", "shift-enter"];
-  remove_shortcuts("edit", shortcut_keys);
-  remove_shortcuts("command", shortcut_keys);
+  remove_shortcuts("edit", ...shortcut_keys);
+  remove_shortcuts("command", ...shortcut_keys);
 
   const help = "run cell";
   const handler = function (event) {
