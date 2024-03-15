@@ -5,6 +5,7 @@ import { AssignmentViewToolbar } from "@e2xgrader/assignment-view-celltoolbar";
 import { patch_assignment_notebook } from "@e2xgrader/restricted-assignment-notebook";
 import { disable_shortcuts } from "@e2xgrader/restricted-exam-notebook";
 import { ExamMenubar } from "@e2xgrader/exam-menubar";
+import { username } from "@e2xgrader/utils";
 
 function initialize() {
   initialize_cell_extension();
@@ -12,6 +13,7 @@ function initialize() {
   new ExamMenubar().activate();
   new AssignmentViewToolbar().activate();
   disable_shortcuts();
+  username.add_username();
 }
 
 export function load_ipython_extension() {

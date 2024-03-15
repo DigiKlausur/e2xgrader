@@ -13,6 +13,7 @@ from nbgrader.server_extensions.assignment_list.handlers import (
     CourseListHandler,
     NbGraderVersionHandler,
 )
+from nbgrader.utils import get_username
 from tornado import web
 
 
@@ -86,6 +87,12 @@ class AssignmentActionHandler(BaseAssignmentHandler):
             self.finish(json.dumps(self.manager.list_assignments(course_id=course_id)))
 
 
+class UsernameHandler(BaseAssignmentHandler):
+    @web.authenticated
+    def get(self):
+        self.finish(json.dumps({"username": get_username()}))
+
+
 # -----------------------------------------------------------------------------
 #  URL to handler mappings
 # -----------------------------------------------------------------------------
@@ -98,4 +105,5 @@ default_handlers = [
     (r"/assignments/%s" % _assignment_action_regex, AssignmentActionHandler),
     (r"/courses", CourseListHandler),
     (r"/nbgrader_version", NbGraderVersionHandler),
+    (r"/nbgrader_username", UsernameHandler),
 ]

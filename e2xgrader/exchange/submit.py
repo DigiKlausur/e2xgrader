@@ -1,6 +1,8 @@
 import base64
+import glob
 import os
 import sys
+from datetime import datetime
 from stat import (
     S_IRGRP,
     S_IROTH,
@@ -13,23 +15,37 @@ from stat import (
     S_IXOTH,
     S_IXUSR,
 )
+from textwrap import dedent
 
-import nbformat
 from nbgrader.exchange.default import ExchangeSubmit
 from nbgrader.utils import check_mode, get_username
+from traitlets import Type
 
+from ..exporters import SubmissionExporter
+from ..utils.mode import E2xGraderMode, infer_e2xgrader_mode
 from .exchange import E2xExchange
-from .utils import (
-    append_hashcode,
-    append_timestamp,
-    compute_hashcode,
-    generate_html,
-    generate_student_info,
+from .hash_utils import (
+    compute_hashcode_of_file,
+    generate_directory_hash_file,
     truncate_hashcode,
 )
+from .utils import generate_student_info_file, generate_submission_html
 
 
 class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
+
+    submission_exporter_class = Type(
+        SubmissionExporter,
+        klass="nbconvert.exporters.HTMLExporter",
+        help=dedent(
+            """
+            The class used for creating HTML files from exam notebooks.
+            Must be a subclass of `nbconvert.exporters.HTMLExporter`.
+            The exporter will receive the hashcode and timestamp as resources.
+            """
+        ),
+    ).tag(config=True)
+
     def init_dest(self):
         if self.coursedir.course_id == "":
             self.fail("No course id specified. Re-run with --course flag.")
@@ -38,39 +54,57 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         ):
             self.fail("You do not have access to this course.")
 
-        self.inbound_path = os.path.join(
+        self.inbound_path = self.get_inbound_path()
+
+        if self.personalized_inbound:
+            self.create_personalized_inbound_directory()
+
+        self.ensure_inbound_directory_exists()
+
+        self.ensure_write_permissions()
+
+        self.cache_path = self.get_cache_path()
+
+        self.set_assignment_filename()
+
+        self.timestamp_file = "timestamp.txt"
+
+    def get_inbound_path(self):
+        inbound_path = os.path.join(
             self.root, self.coursedir.course_id, self.inbound_directory
         )
 
         if self.personalized_inbound:
-            self.inbound_path = os.path.join(
-                self.inbound_path, os.getenv("JUPYTERHUB_USER")
+            inbound_path = os.path.join(inbound_path, get_username())
+
+        return inbound_path
+
+    def create_personalized_inbound_directory(self):
+        if not os.path.isdir(self.inbound_path):
+            self.log.info(
+                "Inbound directory doesn't exist, creating {}".format(self.inbound_path)
+            )
+            # 0777 with set GID so student instructors can read students' submissions
+            self.ensure_directory(
+                self.inbound_path,
+                S_ISGID
+                | S_IRUSR
+                | S_IWUSR
+                | S_IXUSR
+                | S_IRGRP
+                | S_IWGRP
+                | S_IXGRP
+                | S_IROTH
+                | S_IWOTH
+                | S_IXOTH
+                | (S_IRGRP if self.coursedir.groupshared else 0),
             )
 
-            if not os.path.isdir(self.inbound_path):
-                self.log.warning(
-                    "Inbound directory doesn't exist, creating {}".format(
-                        self.inbound_path
-                    )
-                )
-                # 0777 with set GID so student instructors can read students' submissions
-                self.ensure_directory(
-                    self.inbound_path,
-                    S_ISGID
-                    | S_IRUSR
-                    | S_IWUSR
-                    | S_IXUSR
-                    | S_IRGRP
-                    | S_IWGRP
-                    | S_IXGRP
-                    | S_IROTH
-                    | S_IWOTH
-                    | S_IXOTH
-                    | (S_IRGRP if self.coursedir.groupshared else 0),
-                )
-
+    def ensure_inbound_directory_exists(self):
         if not os.path.isdir(self.inbound_path):
             self.fail("Inbound directory doesn't exist: {}".format(self.inbound_path))
+
+    def ensure_write_permissions(self):
         if not check_mode(self.inbound_path, write=True, execute=True):
             self.fail(
                 "You don't have write permissions to the directory: {}".format(
@@ -78,7 +112,10 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
                 )
             )
 
-        self.cache_path = os.path.join(self.cache, self.coursedir.course_id)
+    def get_cache_path(self):
+        return os.path.join(self.cache, self.coursedir.course_id)
+
+    def set_assignment_filename(self):
         if self.coursedir.student_id != "*":
             # An explicit student id has been specified on the command line; we use it as student_id
             if "*" in self.coursedir.student_id or "+" in self.coursedir.student_id:
@@ -100,42 +137,59 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
                 student_id, self.coursedir.assignment_id, self.timestamp
             )
 
+    def format_timestamp(self, format: str = "%H:%M:%S") -> str:
+        return datetime.strptime(self.timestamp, "%Y-%m-%d %H:%M:%S.%f %Z").strftime(
+            format
+        )
+
+    def create_exam_files(self):
+        username = get_username()
+        generate_directory_hash_file(
+            self.src_path,
+            method="sha1",
+            exclude_files=[self.timestamp_file, f"{username}_info.txt", "*.html"],
+            exclude_subfolders=[".ipynb_checkpoints"],
+            output_file="SHA1SUM.txt",
+        )
+        hashcode = truncate_hashcode(
+            compute_hashcode_of_file(
+                os.path.join(self.src_path, "SHA1SUM.txt"), method="sha1"
+            ),
+            number_of_chunks=3,
+            chunk_size=4,
+        )
+        generate_student_info_file(
+            os.path.join(self.src_path, f"{username}_info.txt"),
+            username=username,
+            hashcode=hashcode,
+            timestamp=self.format_timestamp(),
+        )
+
+        # Discover all ipynb files in the src_path and generate HTML files for them
+        exporter = self.submission_exporter_class(config=self.config)
+        ipynb_files = glob.glob(os.path.join(self.src_path, "*.ipynb"))
+        for ipynb_file in ipynb_files:
+            generate_submission_html(
+                ipynb_file,
+                os.path.join(
+                    self.src_path,
+                    os.path.splitext(os.path.basename(ipynb_file))[0]
+                    + "_hashcode.html",
+                ),
+                hashcode,
+                self.format_timestamp(format="%Y-%m-%d %H:%M:%S"),
+                exporter,
+            )
+        return hashcode
+
     def copy_files(self):
         self.init_release()
 
-        hashcode = "No hashcode present"
+        hashcode = "No hashcode generated"
 
-        # Original notebook file
-        student_notebook_file = os.path.join(
-            self.src_path, f"{self.coursedir.assignment_id}.ipynb"
-        )
-
-        if os.path.isfile(student_notebook_file):
-            nb = nbformat.read(student_notebook_file, as_version=nbformat.NO_CONVERT)
-            nb = append_timestamp(nb, self.timestamp)
-            nbformat.write(nb, student_notebook_file)
-            hashcode = truncate_hashcode(
-                compute_hashcode(student_notebook_file, method="sha1")
-            )
-
-            username = get_username()
-            generate_student_info(
-                os.path.join(self.src_path, f"{username}_info.txt"),
-                username,
-                hashcode,
-                self.timestamp,
-            )
-            nb = append_hashcode(nb, hashcode)
-            generate_html(
-                nb,
-                os.path.join(
-                    self.src_path, f"{self.coursedir.assignment_id}_hashcode.html"
-                ),
-            )
-        else:
-            self.log.warning(
-                "Can not generate hashcode, notebook and assignment name does not match."
-            )
+        if infer_e2xgrader_mode() == E2xGraderMode.STUDENT_EXAM.value:
+            self.log.info("Exam mode detected. Generating exam files.")
+            hashcode = self.create_exam_files()
 
         dest_path = os.path.join(self.inbound_path, self.assignment_filename)
         if self.add_random_string:
@@ -151,7 +205,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         # copy to the real location
         self.check_filename_diff()
         self.do_copy(self.src_path, dest_path)
-        with open(os.path.join(dest_path, "timestamp.txt"), "w") as fh:
+        with open(os.path.join(dest_path, self.timestamp_file), "w") as fh:
             fh.write(self.timestamp)
         self.set_perms(
             dest_path,
@@ -180,7 +234,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         if not os.path.isdir(self.cache_path):
             os.makedirs(self.cache_path)
         self.do_copy(self.src_path, cache_path)
-        with open(os.path.join(cache_path, "timestamp.txt"), "w") as fh:
+        with open(os.path.join(cache_path, self.timestamp_file), "w") as fh:
             fh.write(self.timestamp)
 
         self.log.info(
@@ -191,7 +245,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             )
         )
 
-        return hashcode, self.timestamp
+        return hashcode.upper(), self.timestamp
 
     def init_release(self):
         if self.coursedir.course_id == "":
@@ -202,7 +256,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         if self.personalized_outbound:
             self.release_path = os.path.join(
                 outbound_path,
-                os.getenv("JUPYTERHUB_USER"),
+                get_username(),
                 self.coursedir.assignment_id,
             )
         else:
