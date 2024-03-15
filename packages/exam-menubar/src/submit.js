@@ -170,7 +170,7 @@ export class Submit {
 
     let body = $("<div/>");
 
-    body.append($("<h4/>").text("We have received your submission at:"));
+    body.append($("<h4/>").text("We have received your submission on:"));
     body.append($("<pre/>").text(data["timestamp"].split(".")[0]));
 
     body.append($("<h4/>").text("Do you want to end your exam now?"));
