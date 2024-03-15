@@ -81,7 +81,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
 
     def create_personalized_inbound_directory(self):
         if not os.path.isdir(self.inbound_path):
-            self.log.warning(
+            self.log.info(
                 "Inbound directory doesn't exist, creating {}".format(self.inbound_path)
             )
             # 0777 with set GID so student instructors can read students' submissions
