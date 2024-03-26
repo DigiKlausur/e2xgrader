@@ -1,4 +1,4 @@
-from .apps.e2xgraderapp import Manager
+from .apps.e2xgraderapp import E2xGraderApp
 
 if __name__ == "__main__":
-    Manager()
+    E2xGraderApp.launch_instance()
