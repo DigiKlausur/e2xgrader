@@ -4,7 +4,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "version": "0.3.0-dev3",
+  "version": "0.3.0",
   "description": "An addon for nbgrader",
   "scripts": {
     "install": "lerna run bootstrap",

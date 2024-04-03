@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/restricted-assignment-notebook",
-  "version": "0.3.0-dev3",
+  "version": "0.3.0",
   "main": "lib/index.js",
   "description": "utility functions for e2xgrader",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "TM",
   "license": "MIT",
   "dependencies": {
-    "@e2xgrader/utils": "0.3.0-dev3"
+    "@e2xgrader/utils": "0.3.0"
   },
   "devDependencies": {
     "webpack": "^5.73.0",
