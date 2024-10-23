@@ -27,8 +27,8 @@ def get_serverextension_config() -> Dict[str, bool]:
     config = dict()
     for path in jupyter_config_path():
         contextmanager = get_notebook_config_manager()(config_dir=path)
-        config.update(contextmanager.get("jupyter_notebook_config"))
-    return config.get("NotebookApp", dict()).get("nbserver_extensions", dict())
+        config.update(contextmanager.get("jupyter_server_config"))
+    return config.get("ServerApp", dict()).get("jpserver_extensions", dict())
 
 
 def infer_serverextension_mode() -> str:
