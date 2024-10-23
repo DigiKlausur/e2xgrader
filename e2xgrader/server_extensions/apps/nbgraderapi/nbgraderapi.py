@@ -3,9 +3,13 @@ import os
 from e2xcore import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader.apihandlers import default_handlers
+from nbgrader.server_extensions.formgrader.formgrader import FormgradeExtension
 
 
 class NbGraderApi(NbGrader, BaseApp):
+
+    debug = FormgradeExtension.debug.tag(config=True)
+
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
@@ -49,6 +53,7 @@ class NbGraderApi(NbGrader, BaseApp):
             nbgrader_gradebook=None,
             nbgrader_db_url=self.coursedir.db_url,
             nbgrader_bad_setup=nbgrader_bad_setup,
+            initial_config=self.config,
         )
 
         self.update_tornado_settings(tornado_settings)
