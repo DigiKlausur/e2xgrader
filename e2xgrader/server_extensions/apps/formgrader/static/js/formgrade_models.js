@@ -181,6 +181,7 @@ let AnnotationUI = Backbone.View.extend({
       );
       return;
     }
+    this.canvas_width = 1200;
     this.$switch = this.$el.find('input[name="annotate"]');
     this.$switch.prop("checked", "checked");
 
@@ -253,9 +254,10 @@ let AnnotationUI = Backbone.View.extend({
     this.rect = this.$canvas.getBoundingClientRect();
     this.offsetHeight = this.$canvas.offsetHeight;
     this.offsetWidth = this.$canvas.offsetWidth;
-    this.$canvas.width = 800;
-    this.scaling = 800 / this.offsetWidth;
-    this.$canvas.height = (this.offsetHeight / this.offsetWidth) * 800;
+    this.$canvas.width = this.canvas_width;
+    this.scaling = this.canvas_width / this.offsetWidth;
+    this.$canvas.height =
+      (this.offsetHeight / this.offsetWidth) * this.canvas_width;
     this.$canvas.addEventListener(
       "mousedown",
       this.onMouseDown.bind(this),
