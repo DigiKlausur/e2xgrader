@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version>=0.3.2"]
 build-backend = "hatchling.build"
 
 [project]
@@ -45,23 +45,62 @@ e2xgrader = "e2xgrader.apps.e2xgraderapp:main"
 
 [tool.hatch.version]
 path = "e2xgrader/__version__.py"
+validate-bump = false
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.hooks.jupyter-builder]
-dependencies = ["hatch-jupyter-builder"]
+dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
+ensured-targets = [
+    "e2xgrader/static/labextensions/@e2xgrader/labextension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/labextension/package.json",
+]
+skip-if-exists = [
+    "e2xgrader/static/labextension/@e2xgrader/labextension/static/style.js",
+]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+build_cmd = "build:prod"
+npm = ["jlpm"]
+source_dir = "packages"
+build_dir = "e2xgrader/static/labextensions"
+
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
 build_cmd = "build"
+npm = ["jlpm"]
+source_dir = "packages"
+build_dir = "e2xgrader/static/labextensions"
 
 [tool.hatch.build.targets.sdist]
 artifacts = [
-    "e2xgrader/static"
+    "e2xgrader/static/labextension"
 ]
 
 [tool.hatch.build.targets.wheel]
 artifacts = [
-    "e2xgrader/static"
+    "e2xgrader/static/labextension"
 ]
+include = ["/e2xgrader"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"e2xgrader/static/labextensions/@e2xgrader/labextension" = "share/jupyter/labextensions/@e2xgrader/labextension"
+"install.json" = "share/jupyter/labextensions/@e2xgrader/labextension/install.json"
+
+[tool.jupyter-releaser.options]
+version_cmd = "hatch version"
+
+[tool.jupyter-releaser.hooks]
+before-build-npm = [
+    "python -m pip install 'jupyterlab>=4.0.0,<5'",
+    "jlpm",
+    "jlpm build:prod"
+]
+before-build-python = ["jlpm clean:all"]
+
+[tool.check-wheel-contents]
+ignore = ["W002"]
 
 [tool.tbump]
 github_url = "https://github.com/Digiklausur/e2xgrader/"
