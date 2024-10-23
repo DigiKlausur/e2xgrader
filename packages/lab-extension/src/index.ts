@@ -3,6 +3,8 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
+import { hello_world } from '@e2xgrader/cells';
+
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 /**
@@ -18,7 +20,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     settingRegistry: ISettingRegistry | null
   ) => {
     console.log('JupyterLab extension @e2xgrader/labextension is activated!');
-
+    hello_world();
     if (settingRegistry) {
       settingRegistry
         .load(plugin.id)

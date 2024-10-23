@@ -1,11 +1,10 @@
 {
-    "name": "@e2xgrader/labextension",
+    "name": "@e2xgrader/cells",
     "version": "0.1.0",
-    "description": "A JupyterLab extension which bundles e2xgrader extensions",
+    "description": "Custom e2xgrader cells for Jupyter notebooks",
     "keywords": [
         "jupyter",
-        "jupyterlab",
-        "jupyterlab-extension"
+        "jupyterlab"
     ],
     "homepage": "https://github.com/DigiKlausur/e2xgrader",
     "bugs": {
@@ -57,9 +56,8 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
-        "@e2xgrader/cells": "^0.1.0",
-        "@jupyterlab/application": "^4.0.0",
-        "@jupyterlab/settingregistry": "^4.0.0"
+        "@jupyterlab/cells": "^4.2.5",
+        "@jupyterlab/rendermime": "^4.2.5"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
@@ -97,9 +95,8 @@
         "access": "public"
     },
     "jupyterlab": {
-        "extension": true,
-        "outputDir": "../../e2xgrader/static/labextensions/@e2xgrader/labextension",
-        "schemaDir": "schema"
+        "extension": false,
+        "outputDir": "../../e2xgrader/static/labextensions/@e2xgrader/cells"
     },
     "eslintIgnore": [
         "node_modules",
