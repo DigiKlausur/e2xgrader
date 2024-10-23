@@ -3,6 +3,7 @@
 .stylelintcache
 *.tsbuildinfo
 node_modules
+.yarn/
 
 # Integration tests
 ui-tests/test-results/
