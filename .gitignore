@@ -1,6 +1,12 @@
 # Node modules
-
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
 node_modules
+
+# Integration tests
+ui-tests/test-results/
+ui-tests/playwright-report/
 
 # Build static files
 e2xgrader/static
