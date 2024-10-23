@@ -1,12 +1,11 @@
 from .base import BaseExtensionManager
-from .nbextensions import NbExtensionManager
 from .serverextensions import ServerExtensionManager
 
 
 class E2xExtensionManager(BaseExtensionManager):
     def __init__(self):
         super().__init__()
-        self.managers = [NbExtensionManager(), ServerExtensionManager()]
+        self.managers = [ServerExtensionManager()]
 
     def deactivate(self, sys_prefix: bool = True, user: bool = False) -> None:
         for manager in self.managers:

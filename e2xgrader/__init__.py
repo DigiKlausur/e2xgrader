@@ -2,10 +2,6 @@
 A system for creating assignments.
 """
 
-import glob
-import os
-from os.path import join as pjoin
-
 from .server_extensions.student import (
     _load_jupyter_server_extension as load_student_extension,
 )
@@ -35,27 +31,6 @@ def _jupyter_labextension_paths():
             "dest": "@e2xgrader/labextension",
         }
     ]
-
-
-def _jupyter_nbextension_paths():
-    root = os.path.dirname(__file__)
-    base_path = pjoin(root, "static", "nbextensions")
-
-    paths = []
-
-    for section in ["notebook", "tree"]:
-        for notebook_extension in glob.glob(pjoin(base_path, section, "*")):
-            name = f"{os.path.split(notebook_extension)[-1]}_{section}"
-            paths.append(
-                dict(
-                    section=section,
-                    src=notebook_extension,
-                    dest=name,
-                    require=pjoin(name, "main"),
-                )
-            )
-
-    return paths
 
 
 def _jupyter_server_extension_paths():
