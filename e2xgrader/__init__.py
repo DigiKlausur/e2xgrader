@@ -16,6 +16,26 @@ from .server_extensions.teacher import (
     _load_jupyter_server_extension as load_teacher_extension,
 )
 
+try:
+    from .__version__ import __version__
+except ImportError:
+    # Fallback when using the package in dev mode without installing
+    # in editable mode with pip. It is highly recommended to install
+    # the package from a stable release or in editable mode: https://pip.pypa.io/en/stable/topics/local-project-installs/#editable-installs
+    import warnings
+
+    warnings.warn("Importing 'e2xgrader_extensions' outside a proper installation.")
+    __version__ = "dev"
+
+
+def _jupyter_labextension_paths():
+    return [
+        {
+            "src": "static/labextensions/@e2xgrader/labextension",
+            "dest": "@e2xgrader/labextension",
+        }
+    ]
+
 
 def _jupyter_nbextension_paths():
     root = os.path.dirname(__file__)
