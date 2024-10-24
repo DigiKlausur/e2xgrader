@@ -30,3 +30,31 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.e2xgrader-cell-label {
+  float: left;
+  margin-left: calc(
+    var(--jp-cell-prompt-width) + var(--jp-code-padding) + 3 *
+      var(--jp-border-width)
+  );
+  border: var(--jp-border-width) solid #ddd;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 5px;
+  padding-bottom: 2px;
+}
+
+.jp-Cell-header {
+  height: auto;
+}
+
+.jp-mod-selected
+  > .jp-Cell-inputWrapper
+  > .jp-Cell-inputArea
+  > .jp-MarkdownOutput {
+  border: var(--jp-border-width) solid var(--jp-cell-editor-active-border-color);
+}
+
+.jp-RenderedMarkdown {
+  border: var(--jp-border-width) solid #ddd;
+}

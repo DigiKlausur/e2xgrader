@@ -8,6 +8,7 @@ import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { MarkdownCell } from '@jupyterlab/cells';
 import { e2xCellFactory, e2xCellUtils } from '@e2xgrader/cells';
+import { addCellLabel, removeCellLabel } from '@e2xgrader/cell-labels';
 import Settings from '@e2xgrader/settings';
 
 const PLUGIN_ID = '@e2xgrader/cell-extension:plugin';
@@ -35,10 +36,12 @@ function listenToRenderChanges(cell: MarkdownCell) {
     }
     Settings.getInstance(PLUGIN_ID).then(
       (settings: ISettingRegistry.ISettings) => {
-        console.log('Settings loaded:', settings);
         const e2xCell = e2xCellFactory(cell, settings);
         if (e2xCell) {
           e2xCell.onCellRendered();
+          addCellLabel(cell, e2xCellUtils.getE2xGraderCellType(cell));
+        } else {
+          removeCellLabel(cell);
         }
       }
     );
