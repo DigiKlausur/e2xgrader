@@ -1,0 +1,69 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "@e2xgrader/cell-extension",
+  "description": "@e2xgrader/cell-extension settings.",
+  "properties": {
+    "edit_mode": {
+      "title": "Edit Mode",
+      "description": "If the edit cell button is displayed",
+      "type": "boolean",
+      "default": true
+    },
+    "dummy": {
+      "title": "Dummy",
+      "description": "A dummy setting",
+      "type": "string",
+      "default": "dummy"
+    },
+    "drawDomain": {
+      "title": "drawDomain",
+      "description": "The URL of the diagram editor",
+      "type": "string",
+      "default": "https://embed.diagrams.net/"
+    },
+    "drawOrigin": {
+      "title": "drawOrigin URL",
+      "description": "The URL of the origin of the diagram editor",
+      "type": "string",
+      "default": "https://embed.diagrams.net/"
+    },
+    "drawLibs": {
+      "title": "Diagram Libraries",
+      "description": "Libraries that are active by default. If empty standard libraries are active.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "diagram_options": {
+      "title": "Diagram Editor Options",
+      "description": "The options for the diagram editor",
+      "type": "object",
+      "properties": {
+        "drawDomain": {
+          "title": "drawDomain",
+          "description": "The URL of the diagram editor",
+          "type": "string",
+          "default": "https://embed.diagrams.net/"
+        },
+        "drawOrigin": {
+          "title": "drawOrigin URL",
+          "description": "The URL of the origin of the diagram editor",
+          "type": "string",
+          "default": "https://embed.diagrams.net/"
+        },
+        "libs": {
+          "title": "Diagram Libraries",
+          "description": "Libraries that are active by default. If empty standard libraries are active.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    }
+  },
+  "type": "object"
+}
