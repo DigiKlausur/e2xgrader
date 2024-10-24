@@ -1,7 +1,7 @@
 {
     "name": "@e2xgrader/cells",
     "version": "0.1.0",
-    "description": "Custom e2xgrader cells for Jupyter notebooks",
+    "description": "Provides custom e2xgrader cells",
     "keywords": [
         "jupyter",
         "jupyterlab"
@@ -17,13 +17,10 @@
     },
     "files": [
         "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
-        "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-        "src/**/*.{ts,tsx}",
-        "schema/*.json"
+        "src/**/*.{ts,tsx}"
     ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
-    "style": "style/index.css",
     "repository": {
         "type": "git",
         "url": "https://github.com/DigiKlausur/e2xgrader.git"
@@ -51,13 +48,11 @@
         "stylelint": "jlpm stylelint:check --fix",
         "stylelint:check": "stylelint --cache \"style/**/*.css\"",
         "test": "jest --coverage",
-        "watch": "run-p watch:src watch:labextension",
-        "watch:src": "tsc -w --sourceMap",
-        "watch:labextension": "jupyter labextension watch ."
+        "watch": "run-p watch:src",
+        "watch:src": "tsc -w --sourceMap"
     },
     "dependencies": {
-        "@jupyterlab/cells": "^4.2.5",
-        "@jupyterlab/rendermime": "^4.2.5"
+        "@jupyterlab/settingregistry": "^4.2.5"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
@@ -86,11 +81,6 @@
         "typescript": "~5.0.2",
         "yjs": "^13.5.0"
     },
-    "sideEffects": [
-        "style/*.css",
-        "style/index.js"
-    ],
-    "styleModule": "style/index.js",
     "publishConfig": {
         "access": "public"
     },
