@@ -27,7 +27,7 @@
     "stylelint:check": "lerna run stylelint:check",
     "test": "jest --coverage",
     "watch": "run-p watch:labextension",
-    "watch:labextension": "lerna exec --stream --scope @e2xgrader/labextension -- jlpm watch"
+    "watch:labextension": "lerna exec --stream --scope @e2xgrader/labextension --scope @e2xgrader/cell-extension -- jlpm watch"
   },
   "repository": {
     "type": "git",

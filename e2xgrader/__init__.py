@@ -29,7 +29,11 @@ def _jupyter_labextension_paths():
         {
             "src": "static/labextensions/@e2xgrader/labextension",
             "dest": "@e2xgrader/labextension",
-        }
+        },
+        {
+            "src": "static/labextensions/@e2xgrader/cell-extension",
+            "dest": "@e2xgrader/cell-extension",
+        },
     ]
 
 

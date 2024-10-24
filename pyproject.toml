@@ -87,6 +87,7 @@ include = ["/e2xgrader"]
 [tool.hatch.build.targets.wheel.shared-data]
 "etc/jupyter/jupyter_server_config.d" = "etc/jupyter/jupyter_server_config.d"
 "e2xgrader/static/labextensions/@e2xgrader/labextension" = "share/jupyter/labextensions/@e2xgrader/labextension"
+"e2xgrader/static/labextensions/@e2xgrader/cell-extension" = "share/jupyter/labextensions/@e2xgrader/cell-extension"
 "install.json" = "share/jupyter/labextensions/@e2xgrader/labextension/install.json"
 
 [tool.jupyter-releaser.options]
