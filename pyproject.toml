@@ -56,6 +56,9 @@ build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
     "e2xgrader/static/labextensions/@e2xgrader/labextension/static/style.js",
     "e2xgrader/static/labextensions/@e2xgrader/labextension/package.json",
+    "e2xgrader/static/labextensions/@e2xgrader/cell-extension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/cell-extension/package.json",
+    "e2xgrader/static/labextensions/@e2xgrader/cell-registry-extension/package.json",
 ]
 skip-if-exists = [
     "e2xgrader/static/labextension/@e2xgrader/labextension/static/style.js",
@@ -88,6 +91,7 @@ include = ["/e2xgrader"]
 "etc/jupyter/jupyter_server_config.d" = "etc/jupyter/jupyter_server_config.d"
 "e2xgrader/static/labextensions/@e2xgrader/labextension" = "share/jupyter/labextensions/@e2xgrader/labextension"
 "e2xgrader/static/labextensions/@e2xgrader/cell-extension" = "share/jupyter/labextensions/@e2xgrader/cell-extension"
+"e2xgrader/static/labextensions/@e2xgrader/cell-registry-extension" = "share/jupyter/labextensions/@e2xgrader/cell-registry-extension"
 "install.json" = "share/jupyter/labextensions/@e2xgrader/labextension/install.json"
 
 [tool.jupyter-releaser.options]
