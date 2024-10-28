@@ -2,51 +2,72 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { INotebookTracker } from '@jupyterlab/notebook';
-
+import { INotebookTracker, Notebook } from '@jupyterlab/notebook';
 import { MarkdownCell } from '@jupyterlab/cells';
-import { e2xCellFactory, e2xCellUtils } from '@e2xgrader/cells';
-import { addCellLabel, removeCellLabel } from '@e2xgrader/cell-labels';
-import Settings from '@e2xgrader/settings';
+
+import { RenderUtils, ICellRegistry } from '@e2xgrader/cell-core';
+import {
+  MultipleChoiceCell,
+  E2X_MULTIPLECHOICE_CELL_TYPE,
+  SingleChoiceCell,
+  E2X_SINGLECHOICE_CELL_TYPE
+} from '@e2xgrader/choice-cell';
+import { DiagramCell, E2X_DIAGRAM_CELL_TYPE } from '@e2xgrader/diagram-cell';
+
+import { CellFactory } from './factory';
+import { CellHandlers } from './cellHandlers';
 
 const PLUGIN_ID = '@e2xgrader/cell-extension:plugin';
+const CELL_TYPE_MARKDOWN = 'markdown';
+const CELL_CHANGE_TYPE_ADD = 'add';
 
-function listenToMetadataChanges(cell: MarkdownCell) {
-  const model = cell.model;
-  // Problem: This does not seem to be triggered when a metadata key is removed via the metadata editor
-  // However, it is triggered when the metadata is changed via deleteMetadata
-  model.metadataChanged.connect((_: any, args: any) => {
-    console.log(
-      'Did the e2xgrader cell type change?',
-      e2xCellUtils.hasE2xGraderCellTypeChanged(args)
-    );
-    if (e2xCellUtils.hasE2xGraderCellTypeChanged(args)) {
-      e2xCellUtils.forceRender(cell);
-    }
-  });
-}
-
-function listenToRenderChanges(cell: MarkdownCell) {
-  cell.renderedChanged.connect((_: any, isRendered: boolean) => {
-    // Skip if the cell is not rendered
-    if (!isRendered) {
+/**
+ * Handles changes to the cells in a notebook. Specifically, it listens for the addition of new cells
+ * and performs specific actions if the new cell is a markdown cell.
+ *
+ * @param notebook - The notebook instance whose cells are being monitored.
+ * @param cellRegistry - The registry that keeps track of cell types and their handlers.
+ *
+ * The function performs the following actions when a new markdown cell is added:
+ * - Finds the corresponding cell widget in the notebook.
+ * - Listens to metadata changes on the markdown cell.
+ * - Listens to render changes on the markdown cell.
+ * - Listens for new cell registrations.
+ * - Forces a render of the markdown cell to ensure it is displayed correctly.
+ */
+function handleCellsChanged(notebook: Notebook, cellRegistry: ICellRegistry) {
+  if (!notebook?.model) {
+    return;
+  }
+  notebook.model.cells.changed.connect((_, args) => {
+    if (args.type !== CELL_CHANGE_TYPE_ADD) {
       return;
     }
-    Settings.getInstance(PLUGIN_ID).then(
-      (settings: ISettingRegistry.ISettings) => {
-        const e2xCell = e2xCellFactory(cell, settings);
-        if (e2xCell) {
-          e2xCell.onCellRendered();
-          addCellLabel(cell, e2xCellUtils.getE2xGraderCellType(cell));
-        } else {
-          removeCellLabel(cell);
-        }
+
+    for (const cell of args.newValues) {
+      if (!cell.type || cell.type !== CELL_TYPE_MARKDOWN) {
+        continue;
       }
-    );
+
+      const cellWidget = notebook.widgets.find(
+        widget => widget.model.id === cell.id
+      );
+      if (!cellWidget) {
+        console.error('Cell widget not found');
+        continue;
+      }
+
+      const markdownCellWidget = cellWidget as MarkdownCell;
+
+      CellHandlers.listenToMetadataChanges(markdownCellWidget);
+      CellHandlers.listenToRenderChanges(markdownCellWidget);
+      CellHandlers.listenToNewCellRegistered(markdownCellWidget, cellRegistry);
+
+      // Rerender once to make sure the e2xgrader cell is rendered correctly
+      RenderUtils.forceRender(markdownCellWidget);
+    }
   });
-  e2xCellUtils.forceRender(cell);
 }
 
 /**
@@ -56,51 +77,35 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: PLUGIN_ID,
   description: 'A JupyterLab for displaying custom e2xgrader cells',
   autoStart: true,
-  requires: [INotebookTracker, ISettingRegistry],
-  activate: (
-    app: JupyterFrontEnd,
+  requires: [INotebookTracker, ISettingRegistry, ICellRegistry],
+  activate: async (
+    _app: JupyterFrontEnd,
     notebooks: INotebookTracker,
-    settings: ISettingRegistry
+    settings: ISettingRegistry,
+    cellRegistry: ICellRegistry
   ) => {
-    Settings.initialize(PLUGIN_ID, settings);
     console.log('JupyterLab extension e2xgrader_cells is activated!');
+
+    cellRegistry.registerCellType(
+      E2X_MULTIPLECHOICE_CELL_TYPE,
+      MultipleChoiceCell
+    );
+    cellRegistry.registerCellType(E2X_SINGLECHOICE_CELL_TYPE, SingleChoiceCell);
+    cellRegistry.registerCellType(E2X_DIAGRAM_CELL_TYPE, DiagramCell);
+
+    try {
+      const pluginSettings = await settings.load(PLUGIN_ID);
+      CellFactory.initialize(cellRegistry, pluginSettings);
+    } catch (error) {
+      console.error(
+        `Failed to load settings for plugin ID ${PLUGIN_ID}:`,
+        error
+      );
+    }
 
     notebooks.widgetAdded.connect((_, notebookPanel) => {
       const notebook = notebookPanel.content;
-
-      if (!notebook?.model) {
-        return;
-      }
-
-      notebook.model.cells.changed.connect((_, args) => {
-        // Skip if the cell is not being added
-        if (args.type !== 'add') {
-          return;
-        }
-
-        for (const cell of args.newValues) {
-          // Skip non markdown cells
-          if (!cell.type || cell.type !== 'markdown') {
-            continue;
-          }
-          // Find the widget by matching ids
-          const cellWidget = notebook.widgets.find(
-            widget => widget.model.id === cell.id
-          );
-          if (!cellWidget) {
-            console.error('Cell widget not found');
-            continue;
-          }
-
-          const markdownCellWidget = cellWidget as MarkdownCell;
-
-          listenToMetadataChanges(markdownCellWidget);
-          listenToRenderChanges(markdownCellWidget);
-
-          // Rerender e2xgrader cells
-          e2xCellUtils.forceRender(markdownCellWidget);
-        }
-      });
+      handleCellsChanged(notebook, cellRegistry);
     });
   }
 };

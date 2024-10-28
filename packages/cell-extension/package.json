@@ -57,9 +57,9 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
-        "@e2xgrader/cell-labels": "^0.1.0",
-        "@e2xgrader/cells": "^0.1.0",
-        "@e2xgrader/settings": "^0.1.0",
+        "@e2xgrader/cell-core": "^0.1.0",
+        "@e2xgrader/choice-cell": "^0.1.0",
+        "@e2xgrader/diagram-cell": "^0.1.0",
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/cells": "^4.2.5",
         "@jupyterlab/notebook": "^4.2.5",
