@@ -1,8 +1,10 @@
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 export class Settings {
-  private static instances: Map<string, ISettingRegistry.ISettings> = new Map();
-  private static initializationPromises: Map<string, Promise<void>> = new Map();
+  private static readonly instances: Map<string, ISettingRegistry.ISettings> =
+    new Map();
+  private static readonly initializationPromises: Map<string, Promise<void>> =
+    new Map();
 
   private constructor() {}
 
