@@ -1603,13 +1603,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@e2xgrader/cell-core@^0.1.0, @e2xgrader/cell-core@workspace:packages/cell-core":
+  version: 0.0.0-use.local
+  resolution: "@e2xgrader/cell-core@workspace:packages/cell-core"
+  dependencies:
+    "@jupyterlab/builder": ^4.0.0
+    "@jupyterlab/cells": ^4.2.5
+    "@jupyterlab/rendermime": ^4.2.5
+    "@jupyterlab/testutils": ^4.0.0
+    "@lumino/coreutils": ^2.2.0
+    "@lumino/signaling": ^2.1.3
+    "@types/jest": ^29.2.0
+    "@types/json-schema": ^7.0.11
+    "@types/react": ^18.0.26
+    "@types/react-addons-linked-state-mixin": ^0.14.22
+    "@typescript-eslint/eslint-plugin": ^6.1.0
+    "@typescript-eslint/parser": ^6.1.0
+    css-loader: ^6.7.1
+    eslint: ^8.36.0
+    eslint-config-prettier: ^8.8.0
+    eslint-plugin-prettier: ^5.0.0
+    jest: ^29.2.0
+    npm-run-all: ^4.1.5
+    prettier: ^3.0.0
+    rimraf: ^5.0.1
+    source-map-loader: ^1.0.2
+    style-loader: ^3.3.1
+    stylelint: ^15.10.1
+    stylelint-config-recommended: ^13.0.0
+    stylelint-config-standard: ^34.0.0
+    stylelint-csstree-validator: ^3.0.0
+    stylelint-prettier: ^4.0.0
+    typescript: ~5.0.2
+    yjs: ^13.5.0
+  languageName: unknown
+  linkType: soft
+
 "@e2xgrader/cell-extension@workspace:packages/cell-extension":
   version: 0.0.0-use.local
   resolution: "@e2xgrader/cell-extension@workspace:packages/cell-extension"
   dependencies:
-    "@e2xgrader/cell-labels": ^0.1.0
-    "@e2xgrader/cells": ^0.1.0
-    "@e2xgrader/settings": ^0.1.0
+    "@e2xgrader/cell-core": ^0.1.0
+    "@e2xgrader/choice-cell": ^0.1.0
+    "@e2xgrader/diagram-cell": ^0.1.0
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0
     "@jupyterlab/cells": ^4.2.5
@@ -1642,12 +1678,49 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@e2xgrader/cell-labels@^0.1.0, @e2xgrader/cell-labels@workspace:packages/cell-labels":
+"@e2xgrader/cell-registry-extension@workspace:packages/cell-registry-extension":
   version: 0.0.0-use.local
-  resolution: "@e2xgrader/cell-labels@workspace:packages/cell-labels"
+  resolution: "@e2xgrader/cell-registry-extension@workspace:packages/cell-registry-extension"
   dependencies:
+    "@e2xgrader/cell-core": ^0.1.0
+    "@jupyterlab/application": ^4.2.5
+    "@jupyterlab/builder": ^4.0.0
+    "@jupyterlab/testutils": ^4.0.0
+    "@lumino/signaling": ^2.1.3
+    "@types/jest": ^29.2.0
+    "@types/json-schema": ^7.0.11
+    "@types/react": ^18.0.26
+    "@types/react-addons-linked-state-mixin": ^0.14.22
+    "@typescript-eslint/eslint-plugin": ^6.1.0
+    "@typescript-eslint/parser": ^6.1.0
+    css-loader: ^6.7.1
+    eslint: ^8.36.0
+    eslint-config-prettier: ^8.8.0
+    eslint-plugin-prettier: ^5.0.0
+    jest: ^29.2.0
+    npm-run-all: ^4.1.5
+    prettier: ^3.0.0
+    rimraf: ^5.0.1
+    source-map-loader: ^1.0.2
+    style-loader: ^3.3.1
+    stylelint: ^15.10.1
+    stylelint-config-recommended: ^13.0.0
+    stylelint-config-standard: ^34.0.0
+    stylelint-csstree-validator: ^3.0.0
+    stylelint-prettier: ^4.0.0
+    typescript: ~5.0.2
+    yjs: ^13.5.0
+  languageName: unknown
+  linkType: soft
+
+"@e2xgrader/choice-cell@^0.1.0, @e2xgrader/choice-cell@workspace:packages/choice-cell":
+  version: 0.0.0-use.local
+  resolution: "@e2xgrader/choice-cell@workspace:packages/choice-cell"
+  dependencies:
+    "@e2xgrader/cell-core": ^0.1.0
     "@jupyterlab/builder": ^4.0.0
     "@jupyterlab/cells": ^4.2.5
+    "@jupyterlab/settingregistry": ^4.2.5
     "@jupyterlab/testutils": ^4.0.0
     "@types/jest": ^29.2.0
     "@types/json-schema": ^7.0.11
@@ -1675,11 +1748,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@e2xgrader/cells@^0.1.0, @e2xgrader/cells@workspace:packages/cells":
+"@e2xgrader/diagram-cell@^0.1.0, @e2xgrader/diagram-cell@workspace:packages/diagram-cell":
   version: 0.0.0-use.local
-  resolution: "@e2xgrader/cells@workspace:packages/cells"
+  resolution: "@e2xgrader/diagram-cell@workspace:packages/diagram-cell"
   dependencies:
+    "@e2xgrader/cell-core": ^0.1.0
     "@jupyterlab/builder": ^4.0.0
+    "@jupyterlab/cells": ^4.2.5
     "@jupyterlab/settingregistry": ^4.2.5
     "@jupyterlab/testutils": ^4.0.0
     "@types/jest": ^29.2.0
@@ -1712,7 +1787,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@e2xgrader/labextension@workspace:packages/lab-extension"
   dependencies:
-    "@e2xgrader/cells": ^0.1.0
+    "@e2xgrader/cell-core": ^0.1.0
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0
     "@jupyterlab/settingregistry": ^4.0.0
@@ -1774,7 +1849,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@e2xgrader/settings@^0.1.0, @e2xgrader/settings@workspace:packages/settings":
+"@e2xgrader/settings@workspace:packages/settings":
   version: 0.0.0-use.local
   resolution: "@e2xgrader/settings@workspace:packages/settings"
   dependencies:
