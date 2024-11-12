@@ -37,7 +37,9 @@ dev = [
     "pre-commit",
     "pytest-cov",
     "hatchling",
-    "tbump"
+    "tbump",
+    "build",
+    "twine"
 ]
 
 [project.scripts]
@@ -103,6 +105,14 @@ search = '"version": "{current_version}'
 [[tool.tbump.file]]
 src = "packages/*/package.json"
 search = '"@e2xgrader/[\w-]+": "{current_version}'
+
+[[tool.tbump.before_commit]]
+name = "Build"
+cmd = "python -m build"
+
+[[tool.tbump.before_commit]]
+name = "Check with twine"
+cmd = "twine check dist/*"
 
 [tool.ruff]
 line-length = 100
