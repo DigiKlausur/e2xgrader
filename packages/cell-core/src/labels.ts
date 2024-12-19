@@ -1,6 +1,8 @@
 import { Cell } from '@jupyterlab/cells';
 
 export namespace CellLabel {
+  export const CELL_LABEL_CLASS = 'e2xgrader-cell-label';
+  export const CELL_HEADER_CLASS = 'jp-Cell-header';
   /**
    * Adds a label to a cell.
    * @param cell - The cell to add the label to.
@@ -11,17 +13,38 @@ export namespace CellLabel {
       return;
     }
     const node = cell.node;
-    // Find the cell header
-    const header = node.querySelector('.jp-Cell-header') as HTMLElement;
-    // If it has does not have an element with class e2xgrader-cell-label, add it
-    if (!header.querySelector('.e2xgrader-cell-label')) {
-      const labelElement = document.createElement('div');
-      labelElement.classList.add('e2xgrader-cell-label');
-      labelElement.textContent = label;
-      header.appendChild(labelElement);
+
+    const addOrUpdateLabel = (header: HTMLElement) => {
+      if (!header.querySelector(`.${CELL_LABEL_CLASS}`)) {
+        const labelElement = document.createElement('div');
+        labelElement.classList.add(CELL_LABEL_CLASS);
+        labelElement.textContent = label;
+        header.appendChild(labelElement);
+      } else {
+        header.querySelector(`.${CELL_LABEL_CLASS}`)!.textContent = label;
+      }
+    };
+
+    const header = node.querySelector(`.${CELL_HEADER_CLASS}`) as HTMLElement;
+    if (header) {
+      addOrUpdateLabel(header);
     } else {
-      // Otherwise, update the text content
-      header.querySelector('.e2xgrader-cell-label')!.textContent = label;
+      const observer = new MutationObserver((_mutations, obs) => {
+        const header = node.querySelector(
+          `.${CELL_HEADER_CLASS}`
+        ) as HTMLElement;
+        if (header) {
+          addOrUpdateLabel(header);
+          obs.disconnect();
+        }
+      });
+
+      observer.observe(node, { childList: true, subtree: true });
+
+      // Set a timeout to stop observing after a certain period
+      setTimeout(() => {
+        observer.disconnect();
+      }, 5000); // 5 seconds timeout
     }
   }
 
@@ -35,8 +58,11 @@ export namespace CellLabel {
    */
   export function removeCellLabel(cell: Cell): void {
     const node = cell.node;
-    const header = node.querySelector('.jp-Cell-header') as HTMLElement;
-    const label = header.querySelector('.e2xgrader-cell-label');
+    const header = node.querySelector(`.${CELL_HEADER_CLASS}`) as HTMLElement;
+    if (!header) {
+      return;
+    }
+    const label = header.querySelector(`.${CELL_LABEL_CLASS}`);
     if (label) {
       header.removeChild(label);
     }
