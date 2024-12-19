@@ -1,9 +1,9 @@
 import { MarkdownCell } from '@jupyterlab/cells';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { E2xGraderUtils } from '@e2xgrader/cell-core';
 import { ChoiceCell } from './base';
 
 export const E2X_MULTIPLECHOICE_CELL_TYPE = 'multiplechoice';
+export const E2X_MULTIPLECHOICE_CELL_LABEL = 'Multiple Choice';
 
 export class MultipleChoiceCell extends ChoiceCell {
   choice_count_field: string;
@@ -18,15 +18,11 @@ export class MultipleChoiceCell extends ChoiceCell {
   }
 
   getChoiceCount(): number {
-    return E2xGraderUtils.getE2xGraderField(
-      this.cell,
-      this.choice_count_field,
-      '0'
-    );
+    return this.model.getE2xgraderMetadataKey(this.choice_count_field, 0);
   }
 
   setChoiceCount(count: number): void {
-    E2xGraderUtils.setE2xGraderField(this.cell, this.choice_count_field, count);
+    this.model.setE2xgraderMetadataKey(this.choice_count_field, count);
   }
 
   addChoice(choice: string): void {

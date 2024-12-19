@@ -1,8 +1,9 @@
-import { IE2xCell } from '@e2xgrader/cell-core';
+import { AttachmentModel, IE2xCell } from '@e2xgrader/cell-core';
 
 export type Base64ImageString = `data:${string};base64,${string}`;
 
 export interface IDiagramCell extends IE2xCell {
+  attachmentModel: AttachmentModel;
   updateDiagramAttachment: (attachment: Base64ImageString) => void;
 }
 

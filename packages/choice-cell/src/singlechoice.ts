@@ -1,9 +1,9 @@
 import { MarkdownCell } from '@jupyterlab/cells';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
-import { E2xGraderUtils } from '@e2xgrader/cell-core';
 import { ChoiceCell } from './base';
 
 export const E2X_SINGLECHOICE_CELL_TYPE = 'singlechoice';
+export const E2X_SINGLECHOICE_CELL_LABEL = 'Single Choice';
 
 export class SingleChoiceCell extends ChoiceCell {
   constructor(
@@ -15,7 +15,7 @@ export class SingleChoiceCell extends ChoiceCell {
   }
 
   getChoice(): string {
-    return E2xGraderUtils.getE2xGraderField(this.cell, this.choice_field, '');
+    return this.model.getE2xgraderMetadataKey(this.choice_field, '');
   }
 
   createChoiceElement(

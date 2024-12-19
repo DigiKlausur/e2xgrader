@@ -11,10 +11,11 @@ import { startDiagramEditor } from './diagram-editor';
 export const E2X_DIAGRAM_CLASS = 'e2x-diagram';
 
 export const E2X_DIAGRAM_CELL_TYPE = 'diagram';
+export const E2X_DIAGRAM_CELL_LABEL = 'Diagram';
 
 export class DiagramCell extends E2xCell implements IDiagramCell {
   diagram_file_name: string;
-  model: AttachmentModel;
+  attachmentModel: AttachmentModel;
 
   constructor(cell: any, settings: ISettingRegistry.ISettings) {
     super(cell, E2X_DIAGRAM_CELL_TYPE, settings, {
@@ -29,13 +30,13 @@ export class DiagramCell extends E2xCell implements IDiagramCell {
       }
     });
     this.diagram_file_name = 'diagram.png';
-    this.model = new AttachmentModel(this);
+    this.attachmentModel = new AttachmentModel(this);
     this.initialize();
   }
 
   initialize(): void {
-    this.model.load();
-    if (!this.model.hasAttachment(this.diagram_file_name)) {
+    this.attachmentModel.load();
+    if (!this.attachmentModel.hasAttachment(this.diagram_file_name)) {
       // Create a blank image attachment
       const canvas = document.createElement('canvas');
       canvas.width = 320;
@@ -45,20 +46,22 @@ export class DiagramCell extends E2xCell implements IDiagramCell {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         const blankImageBase64 = canvas.toDataURL('image/png');
-        this.model.setAttachment('diagram.png', blankImageBase64);
+        this.attachmentModel.setAttachment('diagram.png', blankImageBase64);
       }
       canvas.remove();
     }
   }
 
   updateDiagramAttachment(attachment: Base64ImageString): void {
-    this.model.setAttachment(this.diagram_file_name, attachment);
+    this.attachmentModel.setAttachment(this.diagram_file_name, attachment);
     RenderUtils.forceRender(this.cell);
     this.onCellRendered();
   }
 
   updateDiagram(diagramImage: HTMLImageElement): void {
-    const diagramAttachment = this.model.getAttachment(this.diagram_file_name);
+    const diagramAttachment = this.attachmentModel.getAttachment(
+      this.diagram_file_name
+    );
     diagramImage.src =
       'data:' + diagramAttachment.type + ';base64,' + diagramAttachment.data;
   }
