@@ -10,10 +10,16 @@ import { RenderUtils, ICellRegistry } from '@e2xgrader/cell-core';
 import {
   MultipleChoiceCell,
   E2X_MULTIPLECHOICE_CELL_TYPE,
+  E2X_MULTIPLECHOICE_CELL_LABEL,
   SingleChoiceCell,
-  E2X_SINGLECHOICE_CELL_TYPE
+  E2X_SINGLECHOICE_CELL_TYPE,
+  E2X_SINGLECHOICE_CELL_LABEL
 } from '@e2xgrader/choice-cell';
-import { DiagramCell, E2X_DIAGRAM_CELL_TYPE } from '@e2xgrader/diagram-cell';
+import {
+  DiagramCell,
+  E2X_DIAGRAM_CELL_TYPE,
+  E2X_DIAGRAM_CELL_LABEL
+} from '@e2xgrader/diagram-cell';
 
 import { CellFactory } from './factory';
 import { CellHandlers } from './cellHandlers';
@@ -88,10 +94,19 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     cellRegistry.registerCellType(
       E2X_MULTIPLECHOICE_CELL_TYPE,
+      E2X_MULTIPLECHOICE_CELL_LABEL,
       MultipleChoiceCell
     );
-    cellRegistry.registerCellType(E2X_SINGLECHOICE_CELL_TYPE, SingleChoiceCell);
-    cellRegistry.registerCellType(E2X_DIAGRAM_CELL_TYPE, DiagramCell);
+    cellRegistry.registerCellType(
+      E2X_SINGLECHOICE_CELL_TYPE,
+      E2X_SINGLECHOICE_CELL_LABEL,
+      SingleChoiceCell
+    );
+    cellRegistry.registerCellType(
+      E2X_DIAGRAM_CELL_TYPE,
+      E2X_DIAGRAM_CELL_LABEL,
+      DiagramCell
+    );
 
     try {
       const pluginSettings = await settings.load(PLUGIN_ID);
