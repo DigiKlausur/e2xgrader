@@ -26,6 +26,9 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.entrypoints.jupyterlab.locale]
+e2xgrader = "e2xgrader"
+
 [project.urls]
 Source = "https://github.com/Digiklausur/e2xgrader"
 Documentation = "https://e2xgrader.readthedocs.io/en/latest/"
@@ -54,14 +57,21 @@ allow-direct-references = true
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
+    "e2xgrader/static/labextensions/@e2xgrader/authoring-celltoolbar-extension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/authoring-celltoolbar-extension/package.json",
     "e2xgrader/static/labextensions/@e2xgrader/labextension/static/style.js",
     "e2xgrader/static/labextensions/@e2xgrader/labextension/package.json",
     "e2xgrader/static/labextensions/@e2xgrader/cell-extension/static/style.js",
     "e2xgrader/static/labextensions/@e2xgrader/cell-extension/package.json",
+    "e2xgrader/static/labextensions/@e2xgrader/help-extension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/help-extension/package.json",
     "e2xgrader/static/labextensions/@e2xgrader/cell-registry-extension/package.json",
 ]
 skip-if-exists = [
     "e2xgrader/static/labextension/@e2xgrader/labextension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/help-extension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/cell-extension/static/style.js",
+    "e2xgrader/static/labextensions/@e2xgrader/authoring-celltoolbar-extension/static/style.js",
 ]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
@@ -78,12 +88,12 @@ build_dir = "e2xgrader/static/labextensions"
 
 [tool.hatch.build.targets.sdist]
 artifacts = [
-    "e2xgrader/static/labextension"
+    "e2xgrader/static/labextensions"
 ]
 
 [tool.hatch.build.targets.wheel]
 artifacts = [
-    "e2xgrader/static/labextension"
+    "e2xgrader/static/labextensions"
 ]
 include = ["/e2xgrader"]
 
@@ -92,6 +102,8 @@ include = ["/e2xgrader"]
 "e2xgrader/static/labextensions/@e2xgrader/labextension" = "share/jupyter/labextensions/@e2xgrader/labextension"
 "e2xgrader/static/labextensions/@e2xgrader/cell-extension" = "share/jupyter/labextensions/@e2xgrader/cell-extension"
 "e2xgrader/static/labextensions/@e2xgrader/cell-registry-extension" = "share/jupyter/labextensions/@e2xgrader/cell-registry-extension"
+"e2xgrader/static/labextensions/@e2xgrader/authoring-celltoolbar-extension" = "share/jupyter/labextensions/@e2xgrader/authoring-celltoolbar-extension"
+"e2xgrader/static/labextensions/@e2xgrader/help-extension" = "share/jupyter/labextensions/@e2xgrader/help-extension"
 "install.json" = "share/jupyter/labextensions/@e2xgrader/labextension/install.json"
 
 [tool.jupyter-releaser.options]
