@@ -38,6 +38,14 @@ def _jupyter_labextension_paths():
             "src": "static/labextensions/@e2xgrader/cell-registry-extension",
             "dest": "@e2xgrader/cell-registry-extension",
         },
+        {
+            "src": "static/labextensions/@e2xgrader/authoring-celltoolbar-extension",
+            "dest": "@e2xgrader/authoring-celltoolbar-extension",
+        },
+        {
+            "src": "static/labextensions/@e2xgrader/help-extension",
+            "dest": "@e2xgrader/help-extension",
+        },
     ]
 
 
