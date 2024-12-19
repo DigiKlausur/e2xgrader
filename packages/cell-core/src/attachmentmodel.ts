@@ -1,4 +1,4 @@
-import { IE2xCell } from './model';
+import { IE2xCell } from './e2x_cell';
 
 export interface IObserver {
   notify(event: any): void;
