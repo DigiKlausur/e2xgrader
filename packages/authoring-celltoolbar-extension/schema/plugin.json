@@ -1,0 +1,22 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "@e2xgrader/authoring-celltoolbar-extension",
+  "description": "@e2xgrader/authoring-celltoolbar-extension settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "jupyter.lab.toolbars": {
+    "Cell": [
+      {
+        "name": "open-authoring-celltoolbar",
+        "command": "authoring-celltoolbar-extension:open"
+      }
+    ],
+    "Notebook": [
+      {
+        "name": "e2x-switcher",
+        "rank": 999
+      }
+    ]
+  }
+}

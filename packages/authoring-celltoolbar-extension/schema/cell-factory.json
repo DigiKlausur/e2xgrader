@@ -1,0 +1,14 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "E2xGrader Cell Factory",
+  "description": "Settings for the E2xGrader Cell Factory.",
+  "type": "object",
+  "properties": {
+    "cellToolbarVisible": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the cell toolbar is visible."
+    }
+  },
+  "additionalProperties": false
+}
