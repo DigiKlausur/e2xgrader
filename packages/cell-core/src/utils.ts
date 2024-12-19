@@ -1,5 +1,5 @@
-import { MarkdownCell } from '@jupyterlab/cells';
-import { E2X_METADATA_KEY, IE2xGraderMetadata } from './model';
+import { MarkdownCell, Cell } from '@jupyterlab/cells';
+import { E2xGraderMetadata } from './e2x_cell';
 
 export namespace E2xGraderUtils {
   /**
@@ -7,8 +7,20 @@ export namespace E2xGraderUtils {
    * @param cell - The Markdown cell to retrieve the metadata from.
    * @returns The e2xgrader metadata object.
    */
-  export function getE2xGraderMetadata(cell: MarkdownCell): IE2xGraderMetadata {
-    return cell.model?.getMetadata(E2X_METADATA_KEY) || {};
+  export function getE2xGraderMetadata(
+    cell: MarkdownCell
+  ): E2xGraderMetadata.IE2xGraderMetadata {
+    return (
+      cell.model?.getMetadata(E2xGraderMetadata.E2XGRADER_METADATA_KEY) || {}
+    );
+  }
+
+  /**
+   * Deletes the e2xgrader metadata from a cell.
+   * @param cell - The cell to delete the metadata from.
+   */
+  export function deleteE2xGraderMetadata(cell: Cell): void {
+    cell.model?.deleteMetadata(E2xGraderMetadata.E2XGRADER_METADATA_KEY);
   }
 
   /**
@@ -16,8 +28,11 @@ export namespace E2xGraderUtils {
    * @param cell - The Markdown cell to check.
    * @returns `true` if the cell is an e2xgrader cell, `false` otherwise.
    */
-  export function isE2xGraderCell(cell: MarkdownCell): boolean {
-    return getE2xGraderMetadata(cell).type !== undefined;
+  export function isE2xGraderCell(cell: Cell): boolean {
+    if (cell.model?.type !== 'markdown') {
+      return false;
+    }
+    return getE2xGraderMetadata(cell as MarkdownCell).type !== undefined;
   }
 
   /**
@@ -64,7 +79,7 @@ export namespace E2xGraderUtils {
   ): void {
     const metadata = getE2xGraderMetadata(cell);
     metadata[field] = value;
-    cell.model?.setMetadata(E2X_METADATA_KEY, metadata);
+    cell.model?.setMetadata(E2xGraderMetadata.E2XGRADER_METADATA_KEY, metadata);
   }
 
   /**
