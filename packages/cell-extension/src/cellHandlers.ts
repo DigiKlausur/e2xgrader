@@ -2,8 +2,8 @@ import { MarkdownCell } from '@jupyterlab/cells';
 import {
   E2xGraderUtils,
   RenderUtils,
-  ICellRegistry,
-  CellLabel
+  ICellRegistry
+  //CellLabel
 } from '@e2xgrader/cell-core';
 import { CellFactory } from './factory';
 
@@ -25,9 +25,9 @@ export namespace CellHandlers {
     const e2xCell = CellFactory.createCell(cell);
     if (e2xCell) {
       e2xCell.onCellRendered();
-      CellLabel.addCellLabel(cell, E2xGraderUtils.getE2xGraderCellType(cell));
+      //CellLabel.addCellLabel(cell, E2xGraderUtils.getE2xGraderCellType(cell));
     } else {
-      CellLabel.removeCellLabel(cell);
+      //CellLabel.removeCellLabel(cell);
     }
   }
 
