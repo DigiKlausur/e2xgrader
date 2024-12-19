@@ -1,0 +1,15 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "@e2xgrader/help-extension",
+  "description": "@e2xgrader/help-extension settings.",
+  "type": "object",
+  "properties": {
+    "menuLabel": {
+      "title": "Menu Title",
+      "description": "The title for the help menu",
+      "type": "string",
+      "default": "E2xGrader Help"
+    }
+  },
+  "additionalProperties": false
+}
