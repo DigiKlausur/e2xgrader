@@ -45,10 +45,6 @@ export namespace CellHandlers {
   export function listenToMetadataChanges(cell: MarkdownCell) {
     const model = cell.model;
     model.metadataChanged.connect((_: any, args: any) => {
-      console.log(
-        'Did the e2xgrader cell type change?',
-        E2xGraderUtils.hasE2xGraderCellTypeChanged(args)
-      );
       if (E2xGraderUtils.hasE2xGraderCellTypeChanged(args)) {
         RenderUtils.forceRender(cell);
       }
