@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "composite": true,
@@ -6,6 +7,14 @@
     "esModuleInterop": true,
     "incremental": true,
     "jsx": "react",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2019",
+      "ES2020.BigInt",
+      "ES2020.Intl",
+      "ES2020.String"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -13,14 +22,9 @@
     "noUnusedLocals": true,
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
-    "strict": true,
+    "sourceMap": true,
     "strictNullChecks": true,
-    "target": "ES2018"
-  },
-  "include": [
-    "package.json",
-    "lerna.json",
-    "packages/**/package.json",
-    "packages/**/src/**/*"
-  ]
+    "target": "ES2019",
+    "types": []
+  }
 }
