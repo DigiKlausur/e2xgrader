@@ -1,0 +1,11 @@
+.e2x-menubar {
+  background: var(--e2x-blue);
+}
+
+.e2x-menubar:hover {
+  background: var(--e2x-light-blue);
+}
+
+.e2x-menubar .lm-mod-active {
+  background: var(--e2x-light-blue);
+}
