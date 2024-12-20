@@ -27,10 +27,7 @@ export namespace AuthoringMenubar {
     export function createAuthoringToolbarFactory(
       commands: CommandRegistry
     ): (panel: NotebookPanel) => MenuBar {
-      console.log('Creating menu');
-
       const switcher = new Menu({ commands });
-
       const overflowOptions = {
         overflowMenuOptions: {
           isVisible: false
@@ -48,6 +45,7 @@ export namespace AuthoringMenubar {
 
       return (_panel: NotebookPanel) => {
         const menubar = new MenuBar(overflowOptions);
+        menubar.addClass('e2x-menubar');
         switcher.title.label = 'Insert Question';
         menubar.addMenu(switcher);
         return menubar;
