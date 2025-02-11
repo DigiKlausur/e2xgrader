@@ -204,10 +204,7 @@ class DiagramEditor {
 
   postMessage(msg) {
     if (this.frame != null) {
-      this.frame.contentWindow.postMessage(
-        JSON.stringify(msg),
-        this.origin
-      );
+      this.frame.contentWindow.postMessage(JSON.stringify(msg), this.origin);
     }
   }
 
@@ -288,13 +285,16 @@ class DiagramEditor {
       this.initializeEditor();
     } else if (msg.event == "autosave") {
       this.save(msg.xml, true, this.startElement);
+      Jupyter.notebook.set_dirty(true);
     } else if (msg.event == "export") {
       this.cell.model.setAttachment("diagram.png", msg.data);
       this.setElementData(this.startElement, msg.data);
       this.stopEditing();
       this.xml = null;
+      Jupyter.notebook.set_dirty(true);
     } else if (msg.event == "save") {
       this.save(msg.xml, false, this.startElement);
+      Jupyter.notebook.set_dirty(true);
       this.xml = msg.xml;
 
       if (msg.exit) {

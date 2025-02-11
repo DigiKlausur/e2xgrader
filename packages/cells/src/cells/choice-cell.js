@@ -56,6 +56,7 @@ export class SinglechoiceCell extends ChoiceCell {
           choices.indexOf(i.toString()) >= 0,
           function () {
             that.set_choice(this.value);
+            Jupyter.notebook.set_dirty(true);
           }
         );
         Jupyter.keyboard_manager.register_events(input);
@@ -117,6 +118,7 @@ export class MultiplechoiceCell extends ChoiceCell {
         } else {
           that.remove_choice(this.value);
         }
+        Jupyter.notebook.set_dirty(true);
       });
     if (selected) {
       input.attr("checked", "checked");
