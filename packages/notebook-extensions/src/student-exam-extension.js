@@ -16,6 +16,7 @@ function initialize() {
   disable_shortcuts();
   username.add_username();
   $("#notebook_name").off("click");
+  $("#rename_notebook").hide();
 }
 
 export function load_ipython_extension() {
