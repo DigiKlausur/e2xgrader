@@ -1,3 +1,4 @@
+import $ from "jquery";
 import Jupyter from "base/js/namespace";
 import events from "base/js/events";
 import { initialize_cell_extension } from "@e2xgrader/cell-extension";
@@ -14,6 +15,7 @@ function initialize() {
   new AssignmentViewToolbar().activate();
   disable_shortcuts();
   username.add_username();
+  $("#notebook_name").off("click");
 }
 
 export function load_ipython_extension() {
