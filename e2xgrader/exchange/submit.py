@@ -19,7 +19,7 @@ from textwrap import dedent
 
 from nbgrader.exchange.default import ExchangeSubmit
 from nbgrader.utils import check_mode, get_username
-from traitlets import Type
+from traitlets import List, Type
 
 from ..exporters import SubmissionExporter
 from ..utils.mode import E2xGraderMode, infer_e2xgrader_mode
@@ -42,6 +42,15 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             The class used for creating HTML files from exam notebooks.
             Must be a subclass of `nbconvert.exporters.HTMLExporter`.
             The exporter will receive the hashcode and timestamp as resources.
+            """
+        ),
+    ).tag(config=True)
+
+    exclude_hashcode_subfolders = List(
+        [".ipynb_checkpoints", ".history"],
+        help=dedent(
+            """
+            List of subfolders to exclude from the hash calculation.
             """
         ),
     ).tag(config=True)
@@ -148,7 +157,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             self.src_path,
             method="sha1",
             exclude_files=[self.timestamp_file, f"{username}_info.txt", "*.html"],
-            exclude_subfolders=[".ipynb_checkpoints"],
+            exclude_subfolders=self.exclude_hashcode_subfolders,
             output_file="SHA1SUM.txt",
         )
         hashcode = truncate_hashcode(
