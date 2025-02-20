@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/tree-extensions",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "",
   "scripts": {
     "build": "webpack --config webpack.config.js",
@@ -9,7 +9,7 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
-    "@e2xgrader/help-tab": "0.3.2"
+    "@e2xgrader/help-tab": "0.3.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
