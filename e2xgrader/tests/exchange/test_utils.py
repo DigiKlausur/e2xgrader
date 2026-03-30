@@ -13,7 +13,6 @@ from e2xgrader.exporters import SubmissionExporter
 
 
 class TestGenerateStudentInfoFile(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = TemporaryDirectory()
         self.directory = self.temp_dir.name
@@ -37,7 +36,6 @@ class TestGenerateStudentInfoFile(unittest.TestCase):
 
 
 class TestGenerateSubmissionHtml(unittest.TestCase):
-
     def setUp(self):
         self.temp_dir = TemporaryDirectory()
         self.directory = self.temp_dir.name

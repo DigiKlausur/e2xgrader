@@ -45,9 +45,7 @@ class GradebookNotebooksHandler(BaseHandler):
             template = os.path.join("task_view", "gradebook_notebooks.tpl")
         else:
             template = "gradebook_notebooks.tpl"
-        html = self.render(
-            template, assignment_id=assignment_id, base_url=self.base_url
-        )
+        html = self.render(template, assignment_id=assignment_id, base_url=self.base_url)
         self.write(html)
 
 
@@ -89,9 +87,7 @@ class GradebookNotebookSubmissionsHandler(BaseHandler):
 class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
     def _assignment_notebook_list_url(self, assignment_id, notebook_id, task_id):
         if len(task_id) < 1:
-            return "{}/formgrader/gradebook/{}/{}".format(
-                self.base_url, assignment_id, notebook_id
-            )
+            return "{}/formgrader/gradebook/{}/{}".format(self.base_url, assignment_id, notebook_id)
         return format_url(
             f"{self.base_url}/formgrader/gradebook/{assignment_id}/{notebook_id}/",
             dict(view="task", filter=task_id),
@@ -102,37 +98,25 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
         submission_ids = self._get_submission_ids(assignment_id, notebook_id)
         ix = submission_ids.index(submission.id)
         if ix == (len(submission_ids) - 1):
-            return self._assignment_notebook_list_url(
-                assignment_id, notebook_id, task_id
-            )
+            return self._assignment_notebook_list_url(assignment_id, notebook_id, task_id)
         else:
-            return format_url(
-                self._submission_url(submission_ids[ix + 1]), dict(task=task_id)
-            )
+            return format_url(self._submission_url(submission_ids[ix + 1]), dict(task=task_id))
 
     def _prev(self, assignment_id, notebook_id, submission, task_id):
         # find previous submission
         submission_ids = self._get_submission_ids(assignment_id, notebook_id)
         ix = submission_ids.index(submission.id)
         if ix == 0:
-            return self._assignment_notebook_list_url(
-                assignment_id, notebook_id, task_id
-            )
+            return self._assignment_notebook_list_url(assignment_id, notebook_id, task_id)
         else:
-            return format_url(
-                self._submission_url(submission_ids[ix - 1]), dict(task=task_id)
-            )
+            return format_url(self._submission_url(submission_ids[ix - 1]), dict(task=task_id))
 
     def _next_incorrect(self, assignment_id, notebook_id, submission, task_id):
         # find next incorrect submission
-        submission_ids = self._get_incorrect_submission_ids(
-            assignment_id, notebook_id, submission
-        )
+        submission_ids = self._get_incorrect_submission_ids(assignment_id, notebook_id, submission)
         ix_incorrect = submission_ids.index(submission.id)
         if ix_incorrect == (len(submission_ids) - 1):
-            return self._assignment_notebook_list_url(
-                assignment_id, notebook_id, task_id
-            )
+            return self._assignment_notebook_list_url(assignment_id, notebook_id, task_id)
         else:
             return format_url(
                 self._submission_url(submission_ids[ix_incorrect + 1]),
@@ -141,14 +125,10 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
 
     def _prev_incorrect(self, assignment_id, notebook_id, submission, task_id):
         # find previous incorrect submission
-        submission_ids = self._get_incorrect_submission_ids(
-            assignment_id, notebook_id, submission
-        )
+        submission_ids = self._get_incorrect_submission_ids(assignment_id, notebook_id, submission)
         ix_incorrect = submission_ids.index(submission.id)
         if ix_incorrect == 0:
-            return self._assignment_notebook_list_url(
-                assignment_id, notebook_id, task_id
-            )
+            return self._assignment_notebook_list_url(assignment_id, notebook_id, task_id)
         else:
             return format_url(
                 self._submission_url(submission_ids[ix_incorrect - 1]),
@@ -168,9 +148,7 @@ class SubmissionNavigationHandler(NbgraderSubmissionNavigationHandler):
             raise web.HTTPError(404, "Invalid submission: {}".format(submission_id))
 
         handler = getattr(self, "_{}".format(action))
-        self.redirect(
-            handler(assignment_id, notebook_id, submission, task_id), permanent=False
-        )
+        self.redirect(handler(assignment_id, notebook_id, submission, task_id), permanent=False)
 
 
 class SubmissionHandler(BaseHandler):

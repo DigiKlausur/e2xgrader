@@ -77,9 +77,7 @@ def hash_files_in_directory(
     if exclude_subfolders is None:
         exclude_subfolders = []
     else:
-        exclude_subfolders = [
-            os.path.normpath(subfolder) for subfolder in exclude_subfolders
-        ]
+        exclude_subfolders = [os.path.normpath(subfolder) for subfolder in exclude_subfolders]
 
     hashes = dict()
 
@@ -90,8 +88,8 @@ def hash_files_in_directory(
             if any([subfolder in root for subfolder in exclude_subfolders]):
                 continue
             filename = os.path.join(root, file)
-            hashes[os.path.relpath(filename, start=directory)] = (
-                compute_hashcode_of_file(filename, method)
+            hashes[os.path.relpath(filename, start=directory)] = compute_hashcode_of_file(
+                filename, method
             )
 
     return sorted(hashes.items())
@@ -122,12 +120,8 @@ def generate_directory_hash_file(
     else:
         exclude_files.append(output_file)
 
-    hashes = hash_files_in_directory(
-        directory, method, exclude_files, exclude_subfolders
-    )
-    formatted_hashes = "\n".join(
-        [f"{hashcode}  {filename}" for filename, hashcode in hashes]
-    )
+    hashes = hash_files_in_directory(directory, method, exclude_files, exclude_subfolders)
+    formatted_hashes = "\n".join([f"{hashcode}  {filename}" for filename, hashcode in hashes])
     with open(os.path.join(directory, output_file), "w") as f:
         f.write(formatted_hashes)
 
@@ -147,5 +141,5 @@ def truncate_hashcode(hashcode, number_of_chunks=3, chunk_size=4):
     """
     hash_string = ""
     for i in range(0, number_of_chunks * chunk_size, chunk_size):
-        hash_string += f"-{hashcode[i:i+chunk_size]}"
+        hash_string += f"-{hashcode[i : i + chunk_size]}"
     return hash_string[1:]

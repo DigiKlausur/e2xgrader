@@ -37,9 +37,7 @@ class PermuteTasks(NbGraderPreprocessor):
             cursor = task[-1] + 1
 
         # Add remaining cells at the bottom of the notebook
-        permuted_nb.cells.extend(
-            [nb.cells[idx] for idx in range(cursor, len(nb.cells))]
-        )
+        permuted_nb.cells.extend([nb.cells[idx] for idx in range(cursor, len(nb.cells))])
         # Save order
         permuted_nb.metadata["original_order"] = original_order
 

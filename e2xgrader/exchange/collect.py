@@ -43,9 +43,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
                 ]
             else:
                 submit_dirs = [
-                    username
-                    for username in os.listdir(self.inbound_path)
-                    if username == student_id
+                    username for username in os.listdir(self.inbound_path) if username == student_id
                 ]
             self.log.info(f"Submission dirs: {submit_dirs}")
 
@@ -55,9 +53,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             for user in submit_dirs:
                 submit_path = os.path.join(self.inbound_path, user)
                 self.log.info(f"Assignment id: {self.coursedir.assignment_id}")
-                pattern = os.path.join(
-                    submit_path, f"{user}+{self.coursedir.assignment_id}+*"
-                )
+                pattern = os.path.join(submit_path, f"{user}+{self.coursedir.assignment_id}+*")
                 user_records = [self._path_to_record(f) for f in glob.glob(pattern)]
                 self.log.info(f"{user} has {len(user_records)} submissions.")
                 for i, record in enumerate(user_records):
@@ -86,9 +82,7 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             self.fail("Course not found: {}".format(self.inbound_path))
         if not check_mode(self.inbound_path, read=True, execute=True):
             self.fail(
-                "You don't have read permissions for the directory: {}".format(
-                    self.inbound_path
-                )
+                "You don't have read permissions for the directory: {}".format(self.inbound_path)
             )
 
         records, usergroups = self.init_submissions()
@@ -100,13 +94,9 @@ class E2xExchangeCollect(E2xExchange, ExchangeCollect):
             except MissingEntry:
                 self.duedate = None
         if self.duedate is None or not self.before_duedate:
-            self.src_records = [
-                self._sort_by_timestamp(v)[0] for v in usergroups.values()
-            ]
+            self.src_records = [self._sort_by_timestamp(v)[0] for v in usergroups.values()]
         else:
-            self.log.info(
-                "Duedate is enabled. Collecting assignments submitted before duedate..."
-            )
+            self.log.info("Duedate is enabled. Collecting assignments submitted before duedate...")
             self.src_records = []
             for v in usergroups.values():
                 records = self._sort_by_timestamp(v)

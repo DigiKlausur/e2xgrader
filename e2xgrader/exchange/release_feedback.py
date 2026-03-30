@@ -45,11 +45,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
                     | S_IXGRP
                     | S_IWOTH
                     | S_IXOTH
-                    | (
-                        (S_IRGRP | S_IWGRP | S_ISGID)
-                        if self.coursedir.groupshared
-                        else 0
-                    )
+                    | ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0)
                 ),
             )
         else:
@@ -62,11 +58,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
                     | S_IXUSR
                     | S_IXGRP
                     | S_IXOTH
-                    | (
-                        (S_IRGRP | S_IWGRP | S_ISGID)
-                        if self.coursedir.groupshared
-                        else 0
-                    )
+                    | ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0)
                 ),
             )
 
@@ -117,9 +109,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
             )
 
             if self.personalized_feedback:
-                dest = os.path.join(
-                    self.dest_path, student_id, self.coursedir.assignment_id
-                )
+                dest = os.path.join(self.dest_path, student_id, self.coursedir.assignment_id)
                 # u+rwx, g+wx, o+wx
                 self.ensure_directory(
                     dest,
@@ -131,11 +121,7 @@ class E2xExchangeReleaseFeedback(E2xExchange, ExchangeReleaseFeedback):
                         | S_IXGRP
                         | S_IXOTH
                         | S_IROTH
-                        | (
-                            (S_IRGRP | S_IWGRP | S_ISGID)
-                            if self.coursedir.groupshared
-                            else 0
-                        )
+                        | ((S_IRGRP | S_IWGRP | S_ISGID) if self.coursedir.groupshared else 0)
                     ),
                 )
 

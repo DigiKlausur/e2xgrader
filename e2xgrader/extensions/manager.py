@@ -20,8 +20,6 @@ class E2xExtensionManager(BaseExtensionManager):
         for manager in self.managers:
             manager.activate_student(sys_prefix=sys_prefix, user=user)
 
-    def activate_student_exam(
-        self, sys_prefix: bool = True, user: bool = False
-    ) -> None:
+    def activate_student_exam(self, sys_prefix: bool = True, user: bool = False) -> None:
         for manager in self.managers:
             manager.activate_student_exam(sys_prefix=sys_prefix, user=user)

@@ -8,7 +8,6 @@ from e2xgrader.utils.mode import E2xGraderMode
 
 
 class TestActivateModeApp(unittest.TestCase):
-
     def setUp(self):
         self.app = ActivateModeApp()
         self.app.initialize([])

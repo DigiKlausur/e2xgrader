@@ -41,14 +41,10 @@ class SubmissionExporter(E2xExporter):
 
     @property
     def template_paths(self):
-        return super().template_paths + [
-            os.path.join(os.path.dirname(__file__), "templates")
-        ]
+        return super().template_paths + [os.path.join(os.path.dirname(__file__), "templates")]
 
     def from_notebook_node(self, nb, resources=None, **kw):
-        hashcode_template = self.environment.get_template(
-            self.hashcode_cell_template_name
-        )
+        hashcode_template = self.environment.get_template(self.hashcode_cell_template_name)
         hashcode_cell = new_markdown_cell(
             source=hashcode_template.render(
                 hashcode=resources["hashcode"].upper(),

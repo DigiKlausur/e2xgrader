@@ -17,7 +17,6 @@ from .utils import create_course_dir
 
 
 class DummyAuthenticator(Authenticator):
-
     def __init__(self, has_access=True):
         self._has_access = has_access
 
@@ -26,9 +25,7 @@ class DummyAuthenticator(Authenticator):
 
 
 class TestE2xExchangeSubmit(unittest.TestCase):
-
     def setUp(self):
-
         self.temp_dirs = dict(
             assignment_dir=TemporaryDirectory(),
             course_dir=TemporaryDirectory(),
@@ -153,9 +150,7 @@ class TestE2xExchangeSubmit(unittest.TestCase):
 
     def test_init_dest_without_course_id(self):
         submit = self.get_exchange_submit(
-            course_dir=create_course_dir(
-                root=self.temp_dirs["course_dir"].name, course_id=""
-            )
+            course_dir=create_course_dir(root=self.temp_dirs["course_dir"].name, course_id="")
         )
         with self.assertRaises(ExchangeError):
             submit.init_dest()
@@ -173,9 +168,7 @@ class TestE2xExchangeSubmit(unittest.TestCase):
 
     def test_init_release_returns_error_if_no_course_id(self):
         submit = self.get_exchange_submit(
-            course_dir=create_course_dir(
-                root=self.temp_dirs["course_dir"].name, course_id=""
-            )
+            course_dir=create_course_dir(root=self.temp_dirs["course_dir"].name, course_id="")
         )
         with self.assertRaises(ExchangeError):
             submit.init_release()
@@ -214,9 +207,7 @@ class TestE2xExchangeSubmit(unittest.TestCase):
 
     def test_set_assignment_filename_without_student_id(self):
         submit = self.get_exchange_submit(
-            course_dir=create_course_dir(
-                root=self.temp_dirs["course_dir"].name, student_id="*"
-            )
+            course_dir=create_course_dir(root=self.temp_dirs["course_dir"].name, student_id="*")
         )
 
         submit.set_assignment_filename()
@@ -273,9 +264,7 @@ class TestE2xExchangeSubmit(unittest.TestCase):
             )
         )
 
-        with patch(
-            "e2xgrader.exchange.submit.infer_e2xgrader_mode"
-        ) as mock_infer, patch.object(
+        with patch("e2xgrader.exchange.submit.infer_e2xgrader_mode") as mock_infer, patch.object(
             submit, "create_exam_files"
         ) as mock_create_exam_files:
             mock_infer.return_value = E2xGraderMode.STUDENT_EXAM.value
@@ -301,9 +290,7 @@ class TestE2xExchangeSubmit(unittest.TestCase):
             )
         )
 
-        with patch(
-            "e2xgrader.exchange.submit.infer_e2xgrader_mode"
-        ) as mock_infer, patch.object(
+        with patch("e2xgrader.exchange.submit.infer_e2xgrader_mode") as mock_infer, patch.object(
             submit, "create_exam_files"
         ) as mock_create_exam_files:
             mock_infer.return_value = E2xGraderMode.STUDENT.value
@@ -340,13 +327,9 @@ class TestE2xExchangeSubmit(unittest.TestCase):
 
                 assert os.path.isfile(os.path.join(assignment_path, "SHA1SUM.txt"))
                 assert os.path.isfile(os.path.join(assignment_path, "test.ipynb"))
-                assert os.path.isfile(
-                    os.path.join(assignment_path, "test_hashcode.html")
-                )
+                assert os.path.isfile(os.path.join(assignment_path, "test_hashcode.html"))
                 assert os.path.isfile(os.path.join(assignment_path, "test.txt"))
-                assert os.path.isfile(
-                    os.path.join(assignment_path, f"{get_username()}_info.txt")
-                )
+                assert os.path.isfile(os.path.join(assignment_path, f"{get_username()}_info.txt"))
 
                 # Make sure the files are in the hashcode file
                 with open(os.path.join(assignment_path, "SHA1SUM.txt"), "r") as f:

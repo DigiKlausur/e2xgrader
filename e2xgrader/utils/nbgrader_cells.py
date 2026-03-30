@@ -70,11 +70,7 @@ def get_task_info(nb):
             subtasks.append(subtask)
             subtask = []
     task = dict()
-    if (
-        len(subtasks) > 0
-        and len(subtasks[0]) > 0
-        and is_description(nb.cells[subtasks[0][0]])
-    ):
+    if len(subtasks) > 0 and len(subtasks[0]) > 0 and is_description(nb.cells[subtasks[0][0]]):
         task["header"] = subtasks[0].pop(0)
     task["subtasks"] = subtasks
     if len(subtask) > 0:

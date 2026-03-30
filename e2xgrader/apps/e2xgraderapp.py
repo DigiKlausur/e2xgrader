@@ -7,7 +7,6 @@ from .showmodeapp import ShowModeApp
 
 
 class E2xGraderApp(E2xGrader):
-
     subcommands = dict(
         activate=(
             ActivateModeApp,
@@ -38,9 +37,7 @@ class E2xGraderApp(E2xGrader):
     def start(self) -> None:
         super().start()
         if self.subapp is None:
-            print(
-                "No subcommand given (run with --help for options). List of subcommands:\n"
-            )
+            print("No subcommand given (run with --help for options). List of subcommands:\n")
             self.print_subcommands()
 
 

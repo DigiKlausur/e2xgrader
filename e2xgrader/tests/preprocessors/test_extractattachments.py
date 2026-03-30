@@ -26,9 +26,7 @@ class TestExtractAttachments(unittest.TestCase):
         nb.cells = PresetManager(self.coursedir).get_question_preset("Single Choice")
 
         processed_nb = deepcopy(nb)
-        processed_nb, _ = ExtractAttachments().preprocess(
-            nb=processed_nb, resources=self.resources
-        )
+        processed_nb, _ = ExtractAttachments().preprocess(nb=processed_nb, resources=self.resources)
 
         self.assertDictEqual(nb, processed_nb)
 
@@ -37,9 +35,7 @@ class TestExtractAttachments(unittest.TestCase):
         nb.cells = PresetManager(self.coursedir).get_question_preset("Diagram")
 
         processed_nb = deepcopy(nb)
-        processed_nb, _ = ExtractAttachments().preprocess(
-            nb=processed_nb, resources=self.resources
-        )
+        processed_nb, _ = ExtractAttachments().preprocess(nb=processed_nb, resources=self.resources)
 
         attachment_string = "![diagram](attachment:diagram.png)"
 

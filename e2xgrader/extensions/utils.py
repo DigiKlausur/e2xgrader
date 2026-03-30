@@ -38,13 +38,8 @@ def get_notebook_config_manager() -> Optional[ModuleType]:
 def discover_nbextensions(mode: str) -> List[Dict[str, str]]:
     extensions = list()
     for nbextension in _jupyter_nbextension_paths():
-        if (
-            f"{mode}_notebook" in nbextension["dest"]
-            or f"{mode}_tree" in nbextension["dest"]
-        ):
-            extensions.append(
-                dict(require=nbextension["require"], section=nbextension["section"])
-            )
+        if f"{mode}_notebook" in nbextension["dest"] or f"{mode}_tree" in nbextension["dest"]:
+            extensions.append(dict(require=nbextension["require"], section=nbextension["section"]))
     return extensions
 
 

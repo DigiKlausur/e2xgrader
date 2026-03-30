@@ -18,9 +18,7 @@ class E2xExporter(HTMLExporter):
     Custom E2x notebook exporter
     """
 
-    extra_cell_field = Unicode(
-        "extended_cell", help="The name of the extra cell metadata field."
-    )
+    extra_cell_field = Unicode("extended_cell", help="The name of the extra cell metadata field.")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

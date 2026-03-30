@@ -31,9 +31,7 @@ class TestCodeGrader(unittest.TestCase):
         cell = self.create_autograded_code_cell("mycell", 10)
 
         cell.outputs.append(
-            new_output(
-                output_type="error", ename="MyError", evalue="Something went wrong."
-            )
+            new_output(output_type="error", ename="MyError", evalue="Something went wrong.")
         )
         grader = CodeGrader()
 
@@ -53,9 +51,7 @@ class TestCodeGrader(unittest.TestCase):
     def test_correctly_formatted_execute_result(self):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
-        cell.outputs.append(
-            new_output(output_type="execute_result", data={"text/plain": "5.0"})
-        )
+        cell.outputs.append(new_output(output_type="execute_result", data={"text/plain": "5.0"}))
         points, max_points = grader.determine_grade(cell)
         assert points == 5
         assert max_points == 10
@@ -63,9 +59,7 @@ class TestCodeGrader(unittest.TestCase):
     def test_incorrectly_formatted_execute_result(self):
         grader = CodeGrader()
         cell = self.create_autograded_code_cell("mycell", 10)
-        cell.outputs.append(
-            new_output(output_type="execute_result", data={"text/plain": "five"})
-        )
+        cell.outputs.append(new_output(output_type="execute_result", data={"text/plain": "five"}))
         points, max_points = grader.determine_grade(cell)
         assert points == max_points
         assert max_points == 10

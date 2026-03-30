@@ -41,10 +41,6 @@ class Help(NbGrader, BaseApp):
         self.log.info("Loading the e2xgrader help app")
 
         self.update_tornado_settings(
-            dict(
-                e2xhelp_shared_dirs={
-                    str(idx): path for idx, path in enumerate(self.shared_paths)
-                }
-            )
+            dict(e2xhelp_shared_dirs={str(idx): path for idx, path in enumerate(self.shared_paths)})
         )
         self.add_handlers(self.get_static_handlers() + default_handlers)

@@ -27,9 +27,7 @@ class TestUnscramble(unittest.TestCase):
 
         self.nb.cells.extend(
             [
-                new_manually_graded_markdown_cell(
-                    source="Here we want to replace {{ myvar1   }}!"
-                ),
+                new_manually_graded_markdown_cell(source="Here we want to replace {{ myvar1   }}!"),
                 new_readonly_code_cell(source="# Here we want to replace {{myvar2 }}"),
                 new_manually_graded_code_cell(
                     source=(

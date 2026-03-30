@@ -16,15 +16,13 @@ class DiagramConfigHandler(E2xApiHandler):
 
 
 class DiagramEditor(NbGrader, BaseApp):
-    drawDomain = Unicode(
-        default_value=None, allow_none=True, help="The url to drawio"
-    ).tag(config=True)
-    drawOrigin = Unicode(
-        default_value=None, allow_none=True, help="The drawio origin"
-    ).tag(config=True)
-    libraries = List(default_value=[], help="A list of activated libraries").tag(
+    drawDomain = Unicode(default_value=None, allow_none=True, help="The url to drawio").tag(
         config=True
     )
+    drawOrigin = Unicode(default_value=None, allow_none=True, help="The drawio origin").tag(
+        config=True
+    )
+    libraries = List(default_value=[], help="A list of activated libraries").tag(config=True)
 
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)

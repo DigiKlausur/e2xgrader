@@ -6,7 +6,6 @@ from .baseapp import E2xGrader
 
 
 class ToggleModeApp(E2xGrader):
-
     sys_prefix = Bool(False, help="Install extensions to sys.prefix", config=True)
 
     user = Bool(False, help="Install extensions to the user space", config=True)

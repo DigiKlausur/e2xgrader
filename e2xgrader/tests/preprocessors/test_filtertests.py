@@ -19,17 +19,13 @@ class TestFilterTests(unittest.TestCase):
     def test_hide_tests(self):
         preprocessor = FilterTests()
         preprocessor.hide_cells = True
-        cell, _ = preprocessor.preprocess_cell(
-            new_autograder_test_cell(source=self.source), {}, 0
-        )
+        cell, _ = preprocessor.preprocess_cell(new_autograder_test_cell(source=self.source), {}, 0)
         assert cell.source == preprocessor.test_case_stub
 
     def test_show_test(self):
         preprocessor = FilterTests()
         preprocessor.hide_cells = False
-        cell, _ = preprocessor.preprocess_cell(
-            new_autograder_test_cell(source=self.source), {}, 0
-        )
+        cell, _ = preprocessor.preprocess_cell(new_autograder_test_cell(source=self.source), {}, 0)
         assert cell.source == self.source
 
     def test_custom_test_stub(self):
@@ -37,9 +33,7 @@ class TestFilterTests(unittest.TestCase):
         preprocessor.hide_cells = True
         custom_test_stub = "My custom message"
         preprocessor.test_case_stub = custom_test_stub
-        cell, _ = preprocessor.preprocess_cell(
-            new_autograder_test_cell(source=self.source), {}, 0
-        )
+        cell, _ = preprocessor.preprocess_cell(new_autograder_test_cell(source=self.source), {}, 0)
         assert cell.source == custom_test_stub
 
     def test_ignore_non_test_cells(self):
@@ -51,9 +45,7 @@ class TestFilterTests(unittest.TestCase):
         )
         assert cell.source == self.source
 
-        cell, _ = preprocessor.preprocess_cell(
-            new_autograded_code_cell(source=self.source), {}, 0
-        )
+        cell, _ = preprocessor.preprocess_cell(new_autograded_code_cell(source=self.source), {}, 0)
         assert cell.source == self.source
 
         cell, _ = preprocessor.preprocess_cell(
@@ -61,9 +53,7 @@ class TestFilterTests(unittest.TestCase):
         )
         assert cell.source == self.source
 
-        cell, _ = preprocessor.preprocess_cell(
-            new_readonly_code_cell(source=self.source), {}, 0
-        )
+        cell, _ = preprocessor.preprocess_cell(new_readonly_code_cell(source=self.source), {}, 0)
         assert cell.source == self.source
 
         cell, _ = preprocessor.preprocess_cell(

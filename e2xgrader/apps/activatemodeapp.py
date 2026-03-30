@@ -14,9 +14,7 @@ class ActivateModeApp(ToggleModeApp):
             E2xGraderMode.STUDENT.value,
             E2xGraderMode.STUDENT_EXAM.value,
         ]:
-            self.fail(
-                f"Mode {self.extra_args[0]} is not a valid mode that can be activated."
-            )
+            self.fail(f"Mode {self.extra_args[0]} is not a valid mode that can be activated.")
         self.mode = self.extra_args[0]
 
         self.activate_mode()
