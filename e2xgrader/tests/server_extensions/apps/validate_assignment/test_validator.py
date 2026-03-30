@@ -67,9 +67,7 @@ class TestValidator(unittest.TestCase):
     def test_validate_pass_attachment_cell(self):
         nb = new_notebook()
         nb.cells.append(
-            new_upload_cell(
-                points=10, attachments={"test.png": {"image/png": "byte64randomdata"}}
-            )
+            new_upload_cell(points=10, attachments={"test.png": {"image/png": "byte64randomdata"}})
         )
         filepath = self.save_notebook(nb)
 

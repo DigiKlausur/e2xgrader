@@ -76,8 +76,4 @@ class E2xExchange(Exchange):
         We do not need to make the exchange root writable by default.
         """
         if not check_directory(self.root, read=True, execute=True):
-            self.fail(
-                "Unreadable directory, please contact your instructor: {}".format(
-                    self.root
-                )
-            )
+            self.fail("Unreadable directory, please contact your instructor: {}".format(self.root))

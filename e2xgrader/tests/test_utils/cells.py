@@ -23,9 +23,7 @@ def nbgrader_metadata(**kwargs) -> Dict[str, Union[int, str, bool]]:
     return metadata
 
 
-def extra_cell_metadata(
-    type: str, options: Dict[str, Any] = None, **kwargs
-) -> Dict[str, Any]:
+def extra_cell_metadata(type: str, options: Dict[str, Any] = None, **kwargs) -> Dict[str, Any]:
     """Create an extra cell metadata dictionary
     Updates the metadata with any keyword arguments provided
 
@@ -46,9 +44,7 @@ def new_autograder_test_cell(
 ) -> NotebookNode:
     return new_code_cell(
         source=source,
-        metadata=dict(
-            nbgrader=nbgrader_metadata(grade=True, points=points, grade_id=grade_id)
-        ),
+        metadata=dict(nbgrader=nbgrader_metadata(grade=True, points=points, grade_id=grade_id)),
     )
 
 
@@ -57,9 +53,7 @@ def new_manually_graded_code_cell(
 ) -> NotebookNode:
     return new_code_cell(
         source=source,
-        metadata=dict(
-            nbgrader=nbgrader_metadata(grade=True, solution=True, grade_id=grade_id)
-        ),
+        metadata=dict(nbgrader=nbgrader_metadata(grade=True, solution=True, grade_id=grade_id)),
     )
 
 
@@ -69,9 +63,7 @@ def new_autograded_code_cell(
     return new_code_cell(
         source=source,
         metadata=dict(
-            nbgrader=nbgrader_metadata(
-                grade=False, solution=True, points=points, grade_id=grade_id
-            )
+            nbgrader=nbgrader_metadata(grade=False, solution=True, points=points, grade_id=grade_id)
         ),
     )
 
@@ -82,25 +74,19 @@ def new_manually_graded_markdown_cell(
     return new_markdown_cell(
         source=source,
         metadata=dict(
-            nbgrader=nbgrader_metadata(
-                grade=True, solution=True, points=points, grade_id=grade_id
-            )
+            nbgrader=nbgrader_metadata(grade=True, solution=True, points=points, grade_id=grade_id)
         ),
     )
 
 
-def new_readonly_code_cell(
-    source: str = "", grade_id: str = "code_example"
-) -> NotebookNode:
+def new_readonly_code_cell(source: str = "", grade_id: str = "code_example") -> NotebookNode:
     return new_code_cell(
         source=source,
         metadata=dict(nbgrader=nbgrader_metadata(locked=True, grade_id=grade_id)),
     )
 
 
-def new_readonly_markdown_cell(
-    source: str = "", grade_id: str = "description"
-) -> NotebookNode:
+def new_readonly_markdown_cell(source: str = "", grade_id: str = "description") -> NotebookNode:
     return new_markdown_cell(
         source=source,
         metadata=dict(nbgrader=nbgrader_metadata(locked=True, grade_id=grade_id)),
@@ -110,9 +96,7 @@ def new_readonly_markdown_cell(
 def new_singlechoice_cell(
     source: str = "", points: int = 0, grade_id: str = "singlechoice", **kwargs
 ) -> NotebookNode:
-    cell = new_manually_graded_markdown_cell(
-        source=source, grade_id=grade_id, points=points
-    )
+    cell = new_manually_graded_markdown_cell(source=source, grade_id=grade_id, points=points)
     cell.metadata["extended_cell"] = extra_cell_metadata(type="singlechoice", **kwargs)
     return cell
 
@@ -120,12 +104,8 @@ def new_singlechoice_cell(
 def new_multiplechoice_cell(
     source: str = "", points: int = 0, grade_id: str = "multiplechoice", **kwargs
 ) -> NotebookNode:
-    cell = new_manually_graded_markdown_cell(
-        source=source, grade_id=grade_id, points=points
-    )
-    cell.metadata["extended_cell"] = extra_cell_metadata(
-        type="multiplechoice", **kwargs
-    )
+    cell = new_manually_graded_markdown_cell(source=source, grade_id=grade_id, points=points)
+    cell.metadata["extended_cell"] = extra_cell_metadata(type="multiplechoice", **kwargs)
     return cell
 
 
@@ -143,9 +123,7 @@ def new_diagram_cell(
         source=source,
         attachments=attachments,
         metadata=dict(
-            nbgrader=nbgrader_metadata(
-                grade=True, solution=True, points=points, grade_id=grade_id
-            ),
+            nbgrader=nbgrader_metadata(grade=True, solution=True, points=points, grade_id=grade_id),
             extended_cell=extra_cell_metadata(type="diagram", **kwargs),
         ),
     )
@@ -162,9 +140,7 @@ def new_upload_cell(
         source=source,
         attachments=attachments if attachments is not None else dict(),
         metadata=dict(
-            nbgrader=nbgrader_metadata(
-                grade=True, solution=True, points=points, grade_id=grade_id
-            ),
+            nbgrader=nbgrader_metadata(grade=True, solution=True, points=points, grade_id=grade_id),
             extended_cell=extra_cell_metadata(type="attachments", **kwargs),
         ),
     )

@@ -33,7 +33,6 @@ from .utils import generate_student_info_file, generate_submission_html
 
 
 class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
-
     submission_exporter_class = Type(
         SubmissionExporter,
         klass="nbconvert.exporters.HTMLExporter",
@@ -58,9 +57,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
     def init_dest(self):
         if self.coursedir.course_id == "":
             self.fail("No course id specified. Re-run with --course flag.")
-        if not self.authenticator.has_access(
-            self.coursedir.student_id, self.coursedir.course_id
-        ):
+        if not self.authenticator.has_access(self.coursedir.student_id, self.coursedir.course_id):
             self.fail("You do not have access to this course.")
 
         self.inbound_path = self.get_inbound_path()
@@ -79,9 +76,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         self.timestamp_file = "timestamp.txt"
 
     def get_inbound_path(self):
-        inbound_path = os.path.join(
-            self.root, self.coursedir.course_id, self.inbound_directory
-        )
+        inbound_path = os.path.join(self.root, self.coursedir.course_id, self.inbound_directory)
 
         if self.personalized_inbound:
             inbound_path = os.path.join(inbound_path, get_username())
@@ -90,9 +85,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
 
     def create_personalized_inbound_directory(self):
         if not os.path.isdir(self.inbound_path):
-            self.log.info(
-                "Inbound directory doesn't exist, creating {}".format(self.inbound_path)
-            )
+            self.log.info("Inbound directory doesn't exist, creating {}".format(self.inbound_path))
             # 0777 with set GID so student instructors can read students' submissions
             self.ensure_directory(
                 self.inbound_path,
@@ -116,9 +109,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
     def ensure_write_permissions(self):
         if not check_mode(self.inbound_path, write=True, execute=True):
             self.fail(
-                "You don't have write permissions to the directory: {}".format(
-                    self.inbound_path
-                )
+                "You don't have write permissions to the directory: {}".format(self.inbound_path)
             )
 
     def get_cache_path(self):
@@ -147,9 +138,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             )
 
     def format_timestamp(self, format: str = "%H:%M:%S") -> str:
-        return datetime.strptime(self.timestamp, "%Y-%m-%d %H:%M:%S.%f %Z").strftime(
-            format
-        )
+        return datetime.strptime(self.timestamp, "%Y-%m-%d %H:%M:%S.%f %Z").strftime(format)
 
     def create_exam_files(self):
         username = get_username()
@@ -161,9 +150,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
             output_file="SHA1SUM.txt",
         )
         hashcode = truncate_hashcode(
-            compute_hashcode_of_file(
-                os.path.join(self.src_path, "SHA1SUM.txt"), method="sha1"
-            ),
+            compute_hashcode_of_file(os.path.join(self.src_path, "SHA1SUM.txt"), method="sha1"),
             number_of_chunks=3,
             chunk_size=4,
         )
@@ -182,8 +169,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
                 ipynb_file,
                 os.path.join(
                     self.src_path,
-                    os.path.splitext(os.path.basename(ipynb_file))[0]
-                    + "_hashcode.html",
+                    os.path.splitext(os.path.basename(ipynb_file))[0] + "_hashcode.html",
                 ),
                 hashcode,
                 self.format_timestamp(format="%Y-%m-%d %H:%M:%S"),
@@ -202,9 +188,7 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
 
         dest_path = os.path.join(self.inbound_path, self.assignment_filename)
         if self.add_random_string:
-            cache_path = os.path.join(
-                self.cache_path, self.assignment_filename.rsplit("+", 1)[0]
-            )
+            cache_path = os.path.join(self.cache_path, self.assignment_filename.rsplit("+", 1)[0])
         else:
             cache_path = os.path.join(self.cache_path, self.assignment_filename)
 
@@ -219,24 +203,14 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
         self.set_perms(
             dest_path,
             fileperms=(S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH),
-            dirperms=(
-                S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
-            ),
+            dirperms=(S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH),
         )
 
         # Make this 0777=ugo=rwx so the instructor can delete later.
         # Hidden from other users by the timestamp.
         os.chmod(
             dest_path,
-            S_IRUSR
-            | S_IWUSR
-            | S_IXUSR
-            | S_IRGRP
-            | S_IWGRP
-            | S_IXGRP
-            | S_IROTH
-            | S_IWOTH
-            | S_IXOTH,
+            S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH,
         )
 
         # also copy to the cache
@@ -269,17 +243,13 @@ class E2xExchangeSubmit(E2xExchange, ExchangeSubmit):
                 self.coursedir.assignment_id,
             )
         else:
-            self.release_path = os.path.join(
-                outbound_path, self.coursedir.assignment_id
-            )
+            self.release_path = os.path.join(outbound_path, self.coursedir.assignment_id)
 
         if not os.path.isdir(self.release_path):
             self.fail("Assignment not found: {}".format(self.release_path))
         if not check_mode(self.release_path, read=True, execute=True):
             self.fail(
-                "You don't have read permissions for the directory: {}".format(
-                    self.release_path
-                )
+                "You don't have read permissions for the directory: {}".format(self.release_path)
             )
 
     def start(self):

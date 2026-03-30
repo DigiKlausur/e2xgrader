@@ -8,7 +8,6 @@ from e2xgrader.apps.showmodeapp import ShowModeApp
 
 
 class TestShowModeApp(unittest.TestCase):
-
     def setUp(self):
         self.app = ShowModeApp()
         self.app.initialize([])

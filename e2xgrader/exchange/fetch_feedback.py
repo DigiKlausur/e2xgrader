@@ -30,19 +30,13 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
             student_id = get_username()
 
         if not os.path.isdir(self.src_path):
-            self._assignment_not_found(
-                self.src_path, os.path.join(self.outbound_path, "*")
-            )
+            self._assignment_not_found(self.src_path, os.path.join(self.outbound_path, "*"))
         if not check_mode(self.src_path, execute=True):
             self.fail(
-                "You don't have execute permissions for the directory: {}".format(
-                    self.src_path
-                )
+                "You don't have execute permissions for the directory: {}".format(self.src_path)
             )
 
-        assignment_id = (
-            self.coursedir.assignment_id if self.coursedir.assignment_id else "*"
-        )
+        assignment_id = self.coursedir.assignment_id if self.coursedir.assignment_id else "*"
         pattern = os.path.join(self.cache_path, "*+{}+*".format(assignment_id))
         self.log.debug("Looking for submissions with pattern: {}".format(pattern))
 
@@ -72,9 +66,7 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
                     )
                     self.log.debug("Feedback file: ", feedbackpath)
                     if os.path.exists(feedbackpath):
-                        self.feedback_files.append(
-                            (notebook_id, timestamp, feedbackpath)
-                        )
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
                         self.log.info(
                             "Found feedback for '{}/{}/{}' submitted at {}".format(
                                 self.coursedir.course_id,
@@ -106,13 +98,9 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
                     # Look for the feedback using new-style of feedback
                     self.log.debug("Unique key is: {}".format(unique_key))
                     nb_hash = notebook_hash(notebook, unique_key)
-                    feedbackpath = os.path.join(
-                        self.outbound_path, "{0}.html".format(nb_hash)
-                    )
+                    feedbackpath = os.path.join(self.outbound_path, "{0}.html".format(nb_hash))
                     if os.path.exists(feedbackpath):
-                        self.feedback_files.append(
-                            (notebook_id, timestamp, feedbackpath)
-                        )
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
                         self.log.info(
                             "Found feedback for '{}/{}/{}' submitted at {}".format(
                                 self.coursedir.course_id,
@@ -125,13 +113,9 @@ class E2xExchangeFetchFeedback(E2xExchange, ExchangeFetchFeedback):
 
                     # If it doesn't exist, try the legacy hashing
                     nb_hash = notebook_hash(notebook)
-                    feedbackpath = os.path.join(
-                        self.outbound_path, "{0}.html".format(nb_hash)
-                    )
+                    feedbackpath = os.path.join(self.outbound_path, "{0}.html".format(nb_hash))
                     if os.path.exists(feedbackpath):
-                        self.feedback_files.append(
-                            (notebook_id, timestamp, feedbackpath)
-                        )
+                        self.feedback_files.append((notebook_id, timestamp, feedbackpath))
                         self.log.warning(
                             "Found legacy feedback for '{}/{}/{}' submitted at {}".format(
                                 self.coursedir.course_id,

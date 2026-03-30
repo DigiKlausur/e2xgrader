@@ -63,9 +63,7 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
                 | ((S_ISGID | S_IWGRP) if self.coursedir.groupshared else 0),
             )
         else:
-            self.dest_path = os.path.join(
-                self.outbound_path, self.coursedir.assignment_id
-            )
+            self.dest_path = os.path.join(self.outbound_path, self.coursedir.assignment_id)
 
             # 0755
             # groupshared: +2040
@@ -142,9 +140,7 @@ class E2xExchangeReleaseAssignment(E2xExchange, ExchangeReleaseAssignment):
             self.do_copy(self.src_path, self.dest_path)
             self.set_released_assignment_perm(self.dest_path)
             self.log.info(
-                "Released as: {} {}".format(
-                    self.coursedir.course_id, self.coursedir.assignment_id
-                )
+                "Released as: {} {}".format(self.coursedir.course_id, self.coursedir.assignment_id)
             )
 
     def set_released_assignment_perm(self, path):

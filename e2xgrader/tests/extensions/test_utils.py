@@ -9,7 +9,6 @@ from e2xgrader.extensions.utils import (
 
 
 class TestIsInstalled(unittest.TestCase):
-
     def test_installed(self):
         self.assertTrue(is_installed("e2xgrader"), "e2xgrader should be installed")
 
@@ -21,14 +20,10 @@ class TestIsInstalled(unittest.TestCase):
 
 
 class TestGetNbextensionUtils(unittest.TestCase):
-
     def test_nbclassic_is_installed(self):
-
         with patch("e2xgrader.extensions.utils.is_installed") as mock_is_installed:
             mock_is_installed.side_effect = lambda package: package == "nbclassic"
-            with patch(
-                "e2xgrader.extensions.utils.import_module"
-            ) as mock_import_module:
+            with patch("e2xgrader.extensions.utils.import_module") as mock_import_module:
                 mock_import_module.return_value = MagicMock()
                 get_nbextension_utils()
                 mock_import_module.assert_called_once_with("nbclassic.nbextensions")
@@ -40,9 +35,7 @@ class TestGetNbextensionUtils(unittest.TestCase):
             mock_get_notebook_major_version.return_value = 6
             with patch("e2xgrader.extensions.utils.is_installed") as mock_is_installed:
                 mock_is_installed.side_effect = lambda package: package == "notebook"
-                with patch(
-                    "e2xgrader.extensions.utils.import_module"
-                ) as mock_import_module:
+                with patch("e2xgrader.extensions.utils.import_module") as mock_import_module:
                     mock_import_module.return_value = MagicMock()
                     get_nbextension_utils()
                     mock_import_module.assert_called_once_with("notebook.nbextensions")
@@ -54,7 +47,6 @@ class TestGetNbextensionUtils(unittest.TestCase):
 
 
 class TestGetNotebookConfigManager(unittest.TestCase):
-
     def test_get_notebook_config_manager_is_not_installed(self):
         with patch("e2xgrader.extensions.utils.is_installed") as mock_is_installed:
             mock_is_installed.return_value = False
@@ -64,15 +56,11 @@ class TestGetNotebookConfigManager(unittest.TestCase):
     def test_get_notebook_config_manager_from_jupyter_server(self):
         with patch("e2xgrader.extensions.utils.is_installed") as mock_is_installed:
             mock_is_installed.side_effect = lambda package: package == "jupyter_server"
-            with patch(
-                "e2xgrader.extensions.utils.import_module"
-            ) as mock_import_module:
+            with patch("e2xgrader.extensions.utils.import_module") as mock_import_module:
                 mock_import_module.return_value = MagicMock()
                 mock_import_module.return_value.BaseJSONConfigManager = "config_manager"
                 config_manager = get_notebook_config_manager()
-                mock_import_module.assert_called_once_with(
-                    "jupyter_server.config_manager"
-                )
+                mock_import_module.assert_called_once_with("jupyter_server.config_manager")
                 self.assertEqual(config_manager, "config_manager")
 
     def test_get_notebook_config_manager_from_notebook(self):
@@ -82,15 +70,9 @@ class TestGetNotebookConfigManager(unittest.TestCase):
             mock_get_notebook_major_version.return_value = 6
             with patch("e2xgrader.extensions.utils.is_installed") as mock_is_installed:
                 mock_is_installed.side_effect = lambda package: package == "notebook"
-                with patch(
-                    "e2xgrader.extensions.utils.import_module"
-                ) as mock_import_module:
+                with patch("e2xgrader.extensions.utils.import_module") as mock_import_module:
                     mock_import_module.return_value = MagicMock()
-                    mock_import_module.return_value.BaseJSONConfigManager = (
-                        "config_manager"
-                    )
+                    mock_import_module.return_value.BaseJSONConfigManager = "config_manager"
                     config_manager = get_notebook_config_manager()
-                    mock_import_module.assert_called_once_with(
-                        "notebook.services.config.manager"
-                    )
+                    mock_import_module.assert_called_once_with("notebook.services.config.manager")
                     self.assertEqual(config_manager, "config_manager")

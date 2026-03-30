@@ -24,8 +24,7 @@ def is_diagram(cell):
 def get_options(cell):
     if is_extra_cell(cell) and "options" in cell.metadata.extended_cell:
         return {
-            key: value["value"]
-            for key, value in cell.metadata.extended_cell["options"].items()
+            key: value["value"] for key, value in cell.metadata.extended_cell["options"].items()
         }
     return dict()
 

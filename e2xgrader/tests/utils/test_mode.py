@@ -10,7 +10,6 @@ from e2xgrader.utils.mode import (
 
 
 class TestInferE2xGraderMode(unittest.TestCase):
-
     @patch("e2xgrader.utils.mode.infer_nbextension_mode")
     @patch("e2xgrader.utils.mode.infer_serverextension_mode")
     def test_infer_e2xgrader_mode(
@@ -38,7 +37,6 @@ class TestInferE2xGraderMode(unittest.TestCase):
 
 
 class TestInferNbExtensionMode(unittest.TestCase):
-
     @patch("e2xgrader.utils.mode.get_nbextension_config")
     def test_infer_nbextension_mode(self, mock_get_nbextension_config):
         mock_get_nbextension_config.return_value = {
@@ -101,7 +99,6 @@ class TestInferNbExtensionMode(unittest.TestCase):
 
 
 class TestInferServerExtensionMode(unittest.TestCase):
-
     @patch("e2xgrader.utils.mode.get_serverextension_config")
     def test_infer_serverextension_mode(self, mock_get_serverextension_config):
         mock_get_serverextension_config.return_value = {

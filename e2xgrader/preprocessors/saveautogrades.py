@@ -69,9 +69,7 @@ class SaveAutoGrades(NbgraderSaveAutoGrades):
 
         # determine what the grade is
         if self.cell_type(cell) in self.graders:
-            auto_score, _ = self.graders[self.cell_type(cell)].determine_grade(
-                cell, self.log
-            )
+            auto_score, _ = self.graders[self.cell_type(cell)].determine_grade(cell, self.log)
             grade.auto_score = auto_score
         else:
             auto_score, _ = determine_grade(cell, self.log)

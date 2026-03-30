@@ -118,7 +118,7 @@ def infer_serverextension_mode() -> str:
         return E2xGraderMode.INACTIVE.value
     elif len(active) == 1:
         return active[0]
-    raise ValueError("More than one mode is active" f"The current config is {config}")
+    raise ValueError(f"More than one mode is activeThe current config is {config}")
 
 
 def infer_e2xgrader_mode() -> str:

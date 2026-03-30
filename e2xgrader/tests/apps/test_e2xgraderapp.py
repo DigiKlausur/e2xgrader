@@ -8,7 +8,6 @@ from e2xgrader.apps.e2xgraderapp import E2xGraderApp
 
 
 class TestE2xGraderApp(unittest.TestCase):
-
     def setUp(self):
         self.app = E2xGraderApp()
         self.app.initialize([])
@@ -23,9 +22,7 @@ class TestE2xGraderApp(unittest.TestCase):
         # When the app starts with a subcommand we need to make sure the subcommand is called
         self.app.initialize(["activate"])
         self.assertIsInstance(self.app.subapp, ActivateModeApp)
-        with patch(
-            "e2xgrader.apps.activatemodeapp.ActivateModeApp.start"
-        ) as mock_start:
+        with patch("e2xgrader.apps.activatemodeapp.ActivateModeApp.start") as mock_start:
             try:
                 self.app.start()
             except NoStart:

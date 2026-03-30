@@ -36,22 +36,16 @@ class ServerExtensionManager(BaseExtensionManager):
         kwargs = dict(sys_prefix=sys_prefix, user=user)
         self.deactivate(**kwargs)
         for import_name in [E2XGRADER_TEACHER, NBGRADER_COURSE_LIST]:
-            toggle_server_extension_python(
-                import_name=import_name, enabled=True, **kwargs
-            )
+            toggle_server_extension_python(import_name=import_name, enabled=True, **kwargs)
 
     def activate_student(self, sys_prefix: bool = True, user: bool = False) -> None:
         kwargs = dict(sys_prefix=sys_prefix, user=user)
         self.deactivate(**kwargs)
         for import_name in [E2XGRADER_STUDENT, NBGRADER_COURSE_LIST]:
-            toggle_server_extension_python(
-                import_name=import_name, enabled=True, **kwargs
-            )
+            toggle_server_extension_python(import_name=import_name, enabled=True, **kwargs)
 
     def activate_student_exam(self, sys_prefix=True, user=False):
         kwargs = dict(sys_prefix=sys_prefix, user=user)
         self.deactivate(**kwargs)
         for import_name in [E2XGRADER_STUDENT_EXAM, NBGRADER_COURSE_LIST]:
-            toggle_server_extension_python(
-                import_name=import_name, enabled=True, **kwargs
-            )
+            toggle_server_extension_python(import_name=import_name, enabled=True, **kwargs)

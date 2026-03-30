@@ -7,7 +7,6 @@ from ..utils.mode import E2xGraderMode, infer_e2xgrader_mode
 
 
 class E2xGrader(JupyterApp):
-
     mode = Enum(
         values=[mode.value for mode in E2xGraderMode],
         default_value=E2xGraderMode.INACTIVE.value,

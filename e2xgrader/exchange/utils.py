@@ -4,9 +4,7 @@ import nbformat
 from nbconvert.exporters import HTMLExporter
 
 
-def generate_student_info_file(
-    filename: str, username: str, hashcode: str, timestamp: str
-) -> None:
+def generate_student_info_file(filename: str, username: str, hashcode: str, timestamp: str) -> None:
     """
     Generate a student info file with the given username, hashcode, and timestamp.
 

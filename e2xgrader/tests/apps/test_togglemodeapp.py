@@ -6,7 +6,6 @@ from e2xgrader.utils.mode import E2xGraderMode
 
 
 class TestToggleModeApp(unittest.TestCase):
-
     def setUp(self):
         self.app = ToggleModeApp()
         self.app.initialize([])
@@ -18,10 +17,7 @@ class TestToggleModeApp(unittest.TestCase):
             self.app.start()
 
     def test_activate_mode(self):
-        with patch(
-            "e2xgrader.apps.togglemodeapp.E2xExtensionManager"
-        ) as mock_extension_manager:
-
+        with patch("e2xgrader.apps.togglemodeapp.E2xExtensionManager") as mock_extension_manager:
             self.app.mode = E2xGraderMode.TEACHER.value
             self.app.activate_mode()
             mock_extension_manager.return_value.activate_teacher.assert_called_once_with(
@@ -46,9 +42,7 @@ class TestToggleModeApp(unittest.TestCase):
                 "e2xgrader.apps.togglemodeapp.infer_e2xgrader_mode"
             ) as mock_infer_e2xgrader_mode:
                 mock_infer_e2xgrader_mode.side_effect = ValueError("error")
-                with patch(
-                    "e2xgrader.apps.togglemodeapp.ToggleModeApp.log"
-                ) as mock_log:
+                with patch("e2xgrader.apps.togglemodeapp.ToggleModeApp.log") as mock_log:
                     self.app.initialize([])
                     self.app.activate_mode()
                     mock_log.error.assert_called_once_with("error")

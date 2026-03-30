@@ -19,9 +19,7 @@ class TestFilterCellsById(unittest.TestCase):
             new_readonly_markdown_cell(source="", grade_id="Task1_Task2_Description")
         )
         self.nb.cells.append(new_manually_graded_code_cell(source="", grade_id="Task1"))
-        self.nb.cells.append(
-            new_readonly_markdown_cell(source="", grade_id="Task2_Description")
-        )
+        self.nb.cells.append(new_readonly_markdown_cell(source="", grade_id="Task2_Description"))
         self.nb.cells.append(new_autograded_code_cell(source="", grade_id="Task2"))
         self.nb.cells.append(new_autograder_test_cell(source="", grade_id="test_Task2"))
         self.nb.cells.append(new_readonly_markdown_cell(source="", grade_id="Task3"))

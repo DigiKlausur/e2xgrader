@@ -61,8 +61,7 @@ class GradeExporter(LoggingConfigurable):
             return self.assignments
         else:
             return [
-                assignment["name"]
-                for assignment in self.api.get_assignments(include_score=False)
+                assignment["name"] for assignment in self.api.get_assignments(include_score=False)
             ]
 
     def get_grades(self) -> pd.DataFrame:
@@ -83,13 +82,11 @@ class GradeExporter(LoggingConfigurable):
                         for key, value in grades.items():
                             data[key].update(value)
                     elif self.notebooks:
-                        data[(assignment_id, notebook_id)][submission["student"]] = (
-                            submission["score"]
-                        )
-                    else:
-                        data[assignment_id][submission["student"]] += submission[
+                        data[(assignment_id, notebook_id)][submission["student"]] = submission[
                             "score"
                         ]
+                    else:
+                        data[assignment_id][submission["student"]] += submission["score"]
         grades = pd.DataFrame.from_dict(data, orient="index").T
         if self.normalize:
             grades = grades.div(grades.loc["max_score"]).drop("max_score")
@@ -108,9 +105,7 @@ class GradeExporter(LoggingConfigurable):
                     name=notebook["name"], assignment=assignment_id
                 ).grade_cells:
                     grade_id = self.normalize_grade_id(grade)
-                    data[(assignment_id, notebook["name"], grade_id)][
-                        "max_score"
-                    ] = grade.max_score
+                    data[(assignment_id, notebook["name"], grade_id)]["max_score"] = grade.max_score
         elif self.notebooks:
             data[(assignment_id, notebook["name"])]["max_score"] = notebook["max_score"]
         else:
@@ -127,9 +122,9 @@ class GradeExporter(LoggingConfigurable):
             nb = gb.find_submission_notebook_by_id(submission["id"])
             for grade in nb.grades:
                 grade_id = self.normalize_grade_id(grade)
-                data[(assignment_id, submission["name"], grade_id)][
-                    submission["student"]
-                ] = grade.score
+                data[(assignment_id, submission["name"], grade_id)][submission["student"]] = (
+                    grade.score
+                )
         return data
 
     def normalize_grade_id(self, grade: Grade) -> str:

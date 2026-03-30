@@ -62,11 +62,7 @@ class GenerateFeedbackHandler(E2xApiHandler):
     def post(self, assignment_id, student_id):
         hide_cells = json.loads(self.get_argument("hide_cells", "false"))
         self.write(
-            json.dumps(
-                self.api.generate_feedback(
-                    assignment_id, student_id, hide_cells=hide_cells
-                )
-            )
+            json.dumps(self.api.generate_feedback(assignment_id, student_id, hide_cells=hide_cells))
         )
 
 
@@ -75,9 +71,7 @@ class GenerateAllFeedbackHandler(E2xApiHandler):
     @check_xsrf
     def post(self, assignment_id):
         hide_cells = json.loads(self.get_argument("hide_cells", "false"))
-        self.write(
-            json.dumps(self.api.generate_feedback(assignment_id, hide_cells=hide_cells))
-        )
+        self.write(json.dumps(self.api.generate_feedback(assignment_id, hide_cells=hide_cells)))
 
 
 class GraderHandler(E2xApiHandler):

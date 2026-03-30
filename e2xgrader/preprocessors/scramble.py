@@ -12,9 +12,7 @@ class Scramble(NbGraderPreprocessor):
     def __init__(self, **kw):
         self.__seed = random.randint(0, 10000000)
         self.__random = random.Random(self.__seed)
-        self.__p_define = re.compile(
-            r"^#define +(?P<fun>\w+)\((?P<args>[^(]*)\) +(?P<body>.*)"
-        )
+        self.__p_define = re.compile(r"^#define +(?P<fun>\w+)\((?P<args>[^(]*)\) +(?P<body>.*)")
         self.__p_set = re.compile(r"^#set +(?P<name>\w+) += +(?P<options>.*)")
         self.__p_random = re.compile(r"^#random +(?P<vars>.*) +in +(?P<sets>.*)")
         self.__p_replace = re.compile(r"#replace +(?P<name>\w+) +(?P<replace_with>.*)")
@@ -68,10 +66,8 @@ class Scramble(NbGraderPreprocessor):
         processed = text
         for match in p_macro.finditer(text):
             args = [arg.strip() for arg in match.group("args").split(",")]
-            assert len(macro[1]) == len(
-                args
-            ), "Wrong number of arguments for macro {} with args {}".format(
-                macro[0], args
+            assert len(macro[1]) == len(args), (
+                "Wrong number of arguments for macro {} with args {}".format(macro[0], args)
             )
             replacement = macro[2]
             for i in range(len(args)):

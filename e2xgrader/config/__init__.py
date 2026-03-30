@@ -87,16 +87,8 @@ def configure_exchange(config):
     config.ExchangeFactory.exchange = "e2xgrader.exchange.E2xExchange"
     config.ExchangeFactory.submit = "e2xgrader.exchange.E2xExchangeSubmit"
     config.ExchangeFactory.collect = "e2xgrader.exchange.E2xExchangeCollect"
-    config.ExchangeFactory.fetch_assignment = (
-        "e2xgrader.exchange.E2xExchangeFetchAssignment"
-    )
-    config.ExchangeFactory.release_assignment = (
-        "e2xgrader.exchange.E2xExchangeReleaseAssignment"
-    )
+    config.ExchangeFactory.fetch_assignment = "e2xgrader.exchange.E2xExchangeFetchAssignment"
+    config.ExchangeFactory.release_assignment = "e2xgrader.exchange.E2xExchangeReleaseAssignment"
     config.ExchangeFactory.list = "e2xgrader.exchange.E2xExchangeList"
-    config.ExchangeFactory.fetch_feedback = (
-        "e2xgrader.exchange.E2xExchangeFetchFeedback"
-    )
-    config.ExchangeFactory.release_feedback = (
-        "e2xgrader.exchange.E2xExchangeReleaseFeedback"
-    )
+    config.ExchangeFactory.fetch_feedback = "e2xgrader.exchange.E2xExchangeFetchFeedback"
+    config.ExchangeFactory.release_feedback = "e2xgrader.exchange.E2xExchangeReleaseFeedback"

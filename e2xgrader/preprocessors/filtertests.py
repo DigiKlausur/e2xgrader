@@ -8,9 +8,9 @@ from traitlets import Bool, Unicode
 
 
 class FilterTests(NbGraderPreprocessor):
-    hide_cells = Bool(
-        False, help="Hide test cells in the feedback generated for students."
-    ).tag(config=True)
+    hide_cells = Bool(False, help="Hide test cells in the feedback generated for students.").tag(
+        config=True
+    )
 
     test_case_stub = Unicode(
         "# This test case is hidden #",

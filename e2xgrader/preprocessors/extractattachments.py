@@ -13,9 +13,9 @@ class ExtractAttachments(NbGraderPreprocessor):
 
     output_filename_template = Unicode("attach_{cell_index}_{name}").tag(config=True)
 
-    extract_output_types = Set(
-        {"image/png", "image/jpeg", "image/svg+xml", "application/pdf"}
-    ).tag(config=True)
+    extract_output_types = Set({"image/png", "image/jpeg", "image/svg+xml", "application/pdf"}).tag(
+        config=True
+    )
 
     def preprocess(self, nb, resources):
         # Get files directory if it has been specified
