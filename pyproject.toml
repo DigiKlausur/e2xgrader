@@ -117,5 +117,6 @@ cmd = "twine check dist/*"
 [tool.ruff]
 line-length = 100
 exclude = ["nbgrader_config.py"]
-ignore-init-module-imports = true
+
+[tool.ruff.lint]
 select = ["F", "E", "I"]
