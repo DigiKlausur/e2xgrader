@@ -2,7 +2,7 @@
 
 [![PyPi](https://img.shields.io/pypi/v/e2xgrader)](https://pypi.org/project/e2xgrader)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DigiKlausur_e2xgrader&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=DigiKlausur_e2xgrader)
+[![Python package](https://github.com/DigiKlausur/e2xgrader/actions/workflows/python-package.yml/badge.svg)](https://github.com/DigiKlausur/e2xgrader/actions/workflows/python-package.yml)
 [![Docs](https://img.shields.io/readthedocs/e2xgrader)](https://e2xgrader.readthedocs.io)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
