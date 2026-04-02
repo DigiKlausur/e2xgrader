@@ -152,7 +152,6 @@ let CommentUI = BaseNbgraderUI.extend({
     );
 
     this.render();
-    autosize(this.$comment);
   },
 
   render: function () {
