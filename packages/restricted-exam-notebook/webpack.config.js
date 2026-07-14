@@ -16,6 +16,23 @@ module.exports = {
     /^notebook\/js*/,
   ],
   optimization: {
-    minimize: false,
+    minimize: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, "src"),
+        loader: "babel-loader",
+        options: {
+          presets: ["@babel/preset-env"],
+          plugins: ["transform-class-properties"],
+        },
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
   },
 };
