@@ -119,3 +119,32 @@
 #advanced:hover .dropdown {
   display: block;
 }
+
+#copy_notebook {
+  display: none;
+}
+
+li:has(> #download_menu) {
+    display: none;
+}
+
+
+li:has(> #widget-submenu) {
+    display: none;
+}
+
+#print_preview {
+  display: none;
+}
+
+#open_notebook {
+  display: none;
+}
+
+#new_notebook {
+  display: none;
+}
+
+#file_menu > .divider {
+  display: none;
+}
