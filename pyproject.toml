@@ -21,7 +21,7 @@ classifiers=[
 ]
 dependencies = [
     "e2xcore>=0.0.5",
-    "e2xauthoring>=0.3.0,<0.4",
+    "e2xauthoring @ git+https://github.com/Digiklausur/e2xauthoring.git@v0.4.0-dev0",
     "pandas"
 ]
 dynamic = ["version"]
@@ -47,6 +47,9 @@ e2xgrader = "e2xgrader.apps.e2xgraderapp:main"
 
 [tool.hatch.version]
 path = "e2xgrader/__version__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder"]
