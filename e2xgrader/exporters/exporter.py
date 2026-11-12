@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from jinja2.filters import pass_context
 from nbconvert.exporters import HTMLExporter
 from nbgrader.server_extensions.formgrader import handlers as nbgrader_handlers
-from traitlets import Unicode
+from traitlets import Unicode, default
 
 from ..utils import extra_cells as utils
 from .filters import Highlight2HTMLwithLineNumbers
@@ -22,46 +22,18 @@ class E2xExporter(HTMLExporter):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.extra_template_basedirs = [
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "apps",
-                    "e2xgraderapi",
-                    "templates",
-                )
-            ),
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "apps",
-                    "formgrader",
-                    "templates",
-                )
-            ),
-            nbgrader_handlers.template_path,
-        ]
         # The notebook seems to sometimes set exclude_input to true
         self.exclude_input = False
 
-    @property
-    def template_paths(self):
-        return super()._template_paths() + [
-            os.path.abspath(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..",
-                    "server_extensions",
-                    "grader",
-                    "apps",
-                    "formgrader",
-                    "templates",
-                )
-            )
+    @default("extra_template_basedirs")
+    def _default_extra_template_basedirs(self):
+        # A default (not an assignment in __init__) so the dirs are already
+        # known when nbconvert resolves the template during super().__init__
+        apps_dir = os.path.join(os.path.dirname(__file__), "..", "server_extensions", "apps")
+        return [
+            os.path.abspath(os.path.join(apps_dir, "e2xgraderapi", "templates")),
+            os.path.abspath(os.path.join(apps_dir, "formgrader", "templates")),
+            nbgrader_handlers.template_path,
         ]
 
     @pass_context

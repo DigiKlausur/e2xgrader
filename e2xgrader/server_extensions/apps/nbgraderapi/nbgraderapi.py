@@ -3,16 +3,20 @@ import os
 from e2xcore import BaseApp
 from nbgrader.apps.baseapp import NbGrader
 from nbgrader.server_extensions.formgrader.apihandlers import default_handlers
+from traitlets import Bool
 
 
 class NbGraderApi(NbGrader, BaseApp):
+    # nbgrader >= 0.9: the formgrader pages read `formgrader.debug` (AttributeError without it).
+    debug = Bool(
+        False,
+        help="Show the loaded configuration in 'Formgrader -> Manage Assignments'.",
+    ).tag(config=True)
+
     def __init__(self, **kwargs):
         NbGrader.__init__(self, **kwargs)
         BaseApp.__init__(self, **kwargs)
-        if self.parent.name == "jupyter-notebook":
-            self.root_dir = self.parent.notebook_dir
-        else:
-            self.root_dir = self.parent.root_dir
+        self.root_dir = self.parent.root_dir
 
     @property
     def url_prefix(self):
@@ -23,9 +27,7 @@ class NbGraderApi(NbGrader, BaseApp):
         self.log.info("Loading the nbgrader api app")
         self.initialize([])
 
-        course_dir = self.coursedir.root
-        notebook_dir = self.parent.notebook_dir
-        relpath = os.path.relpath(course_dir, notebook_dir)
+        relpath = self.url_prefix
         if relpath.startswith("../"):
             nbgrader_bad_setup = True
             self.log.error(
@@ -33,7 +35,7 @@ class NbGraderApi(NbGrader, BaseApp):
                 "server root. This means that nbgrader will not work correctly. "
                 "If you want to use nbgrader, please ensure the course directory "
                 "root is in a subdirectory of the notebook root: %s",
-                notebook_dir,
+                self.root_dir,
             )
         else:
             nbgrader_bad_setup = False
@@ -49,6 +51,9 @@ class NbGraderApi(NbGrader, BaseApp):
             nbgrader_gradebook=None,
             nbgrader_db_url=self.coursedir.db_url,
             nbgrader_bad_setup=nbgrader_bad_setup,
+            # nbgrader >= 0.9: the formgrader handler resets its config to this on each
+            # request (KeyError without it).
+            initial_config=self.config,
         )
 
         self.update_tornado_settings(tornado_settings)

@@ -4,6 +4,7 @@ import { initialize_cell_extension } from "@e2xgrader/cell-extension";
 import { CreateAssignmentToolbar } from "@e2xgrader/create-assignment-celltoolbar";
 import { TaskMenubar, TemplateMenubar } from "@e2xgrader/authoring-menubar";
 import { shortcuts, utils } from "@e2xgrader/utils";
+import { add_validate_button } from "@e2xgrader/validate-assignment";
 
 export function remove_empty_cells() {
   let to_remove = [];
@@ -39,6 +40,7 @@ function is_templatebook() {
 
 function initialize() {
   initialize_cell_extension();
+  add_validate_button();
 
   const celltoolbar = new CreateAssignmentToolbar();
   celltoolbar.register();

@@ -2,7 +2,7 @@ import os
 from textwrap import dedent
 
 from nbformat.v4 import new_markdown_cell
-from traitlets import Unicode
+from traitlets import Unicode, default
 
 from .exporter import E2xExporter
 
@@ -39,9 +39,10 @@ class SubmissionExporter(E2xExporter):
         super().__init__(**kwargs)
         self.template_name = "form"
 
-    @property
-    def template_paths(self):
-        return super().template_paths + [os.path.join(os.path.dirname(__file__), "templates")]
+    @default("extra_template_paths")
+    def _default_extra_template_paths(self):
+        # Directory of hashcode_cell.html; nbconvert appends it to template_paths
+        return [os.path.join(os.path.dirname(__file__), "templates")]
 
     def from_notebook_node(self, nb, resources=None, **kw):
         hashcode_template = self.environment.get_template(self.hashcode_cell_template_name)

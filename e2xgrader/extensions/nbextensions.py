@@ -8,7 +8,8 @@ class NbExtensionManager(BaseExtensionManager):
         self.utils = get_nbextension_utils()
         if self.utils is None:
             self.log.warn("Neither notebook<7 or nbclassic found. Won't install nbextensions.")
-        self.modules = ["e2xgrader", "nbgrader"]
+        # nbgrader >= 0.9 ships no classic nbextensions; e2xgrader brings its own ports
+        self.modules = ["e2xgrader"]
 
     def enable_nbextensions(self, mode: str, sys_prefix: bool = True, user: bool = False) -> None:
         for nbextension in discover_nbextensions(mode):
@@ -35,34 +36,15 @@ class NbExtensionManager(BaseExtensionManager):
             return
         self.activate_common(sys_prefix=sys_prefix, user=user)
         self.enable_nbextensions(mode="teacher", sys_prefix=sys_prefix, user=user)
-        self.utils.enable_nbextension_python("nbgrader", sys_prefix=sys_prefix, user=user)
-        self.utils.disable_nbextension(
-            require="create_assignment/main",
-            section="notebook",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
 
     def activate_student(self, sys_prefix: bool = True, user: bool = False) -> None:
         if self.utils is None:
             return
         self.activate_common(sys_prefix=sys_prefix, user=user)
         self.enable_nbextensions(mode="student", sys_prefix=sys_prefix, user=user)
-        self.utils.enable_nbextension(
-            require="assignment_list/main",
-            section="tree",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
 
     def activate_student_exam(self, sys_prefix: bool = True, user: bool = False) -> None:
         if self.utils is None:
             return
         self.activate_common(sys_prefix=sys_prefix, user=user)
         self.enable_nbextensions(mode="student_exam", sys_prefix=sys_prefix, user=user)
-        self.utils.enable_nbextension(
-            require="assignment_list/main",
-            section="tree",
-            sys_prefix=sys_prefix,
-            user=user,
-        )
