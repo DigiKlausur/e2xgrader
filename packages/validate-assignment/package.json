@@ -1,0 +1,15 @@
+{
+  "name": "@e2xgrader/validate-assignment",
+  "version": "0.3.6",
+  "main": "lib/index.js",
+  "description": "adds a Validate button to the notebook toolbar (ported from the nbgrader validate_assignment nbextension)",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "author": "Tim Metzler",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
