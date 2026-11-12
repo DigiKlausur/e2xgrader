@@ -9,6 +9,7 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
+    "@e2xgrader/assignment-list": "0.3.6",
     "@e2xgrader/help-tab": "0.3.6"
   },
   "devDependencies": {
