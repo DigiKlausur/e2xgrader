@@ -2,16 +2,10 @@ import os
 import unittest
 
 from jupyter_core.paths import jupyter_config_path
-from jupyter_server.extension.config import ExtensionConfigManager
 
 from e2xgrader.extensions import E2xExtensionManager
 from e2xgrader.extensions.utils import get_notebook_config_manager
-
-
-def read_server_extensions():
-    """Enabled state of all server extensions, merged over all Jupyter config dirs."""
-    manager = ExtensionConfigManager(read_config_path=jupyter_config_path())
-    return manager.get_jpserver_extensions()
+from e2xgrader.utils.mode import get_serverextension_config
 
 
 class TestE2XExtensionManager(unittest.TestCase):
@@ -26,7 +20,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         ]
 
         self.manager = E2xExtensionManager()
-        # Deactivate all extensions with all flags (sys_prefix, user)
+        # Deactivate all extensions (default flags: sys_prefix only)
         self.manager.deactivate()
 
     def tearDown(self):
@@ -77,7 +71,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         return nbextensions
 
     def test_deactivated_serverextensions(self):
-        extensions = read_server_extensions()
+        extensions = get_serverextension_config()
         for serverextension in self.serverextensions:
             assert not extensions[serverextension]
 
@@ -85,7 +79,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         teacher_serverextensions = self.get_serverextensions("teacher")
         self.manager.activate_teacher()
 
-        extensions = read_server_extensions()
+        extensions = get_serverextension_config()
         for serverextension, status in teacher_serverextensions.items():
             assert extensions[serverextension] == status
 
@@ -109,7 +103,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         student_serverextensions = self.get_serverextensions("student")
         self.manager.activate_student()
 
-        extensions = read_server_extensions()
+        extensions = get_serverextension_config()
         for serverextension, status in student_serverextensions.items():
             assert extensions[serverextension] == status
 
@@ -134,7 +128,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         student_serverextensions = self.get_serverextensions("student_exam")
         self.manager.activate_student_exam()
 
-        extensions = read_server_extensions()
+        extensions = get_serverextension_config()
         for serverextension, status in student_serverextensions.items():
             assert extensions[serverextension] == status
 
