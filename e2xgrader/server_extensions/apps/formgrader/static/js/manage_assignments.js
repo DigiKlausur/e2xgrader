@@ -131,7 +131,11 @@ let AssignmentUI = Backbone.View.extend({
         .attr("target", "_blank")
         .attr(
           "href",
-          base_url + "/tree/" + url_prefix + "/" + this.model.get("source_path")
+          base_url +
+            "/nbclassic/tree/" +
+            url_prefix +
+            "/" +
+            this.model.get("source_path")
         )
         .text(name)
     );
@@ -190,7 +194,10 @@ let AssignmentUI = Backbone.View.extend({
       this.$preview.append(
         $("<a/>")
           .attr("target", "_blank")
-          .attr("href", base_url + "/tree/" + url_prefix + "/" + release_path)
+          .attr(
+            "href",
+            base_url + "/nbclassic/tree/" + url_prefix + "/" + release_path
+          )
           .append(
             $("<span/>")
               .addClass("glyphicon glyphicon-search")
