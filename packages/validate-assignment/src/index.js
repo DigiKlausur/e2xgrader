@@ -67,12 +67,19 @@ function create_result_body(data) {
   return body;
 }
 
-function show_results(data) {
+/**
+ * Show the response of /assignments/validate in a dialog.
+ *
+ * @returns {boolean} true if the notebook passed validation
+ */
+export function show_validation_results(data) {
+  const body = create_result_body(data);
   dialog.modal({
     title: "Validation Results",
-    body: create_result_body(data),
+    body: body,
     buttons: { OK: { class: "btn-primary" } },
   });
+  return body.hasClass("validation-success");
 }
 
 function validate_notebook(button) {
@@ -85,7 +92,7 @@ function validate_notebook(button) {
         type: "POST",
         dataType: "json",
         data: { path: Jupyter.notebook.notebook_path },
-        success: show_results,
+        success: show_validation_results,
         error: utils.log_ajax_error,
         complete: () => button.text("Validate").removeAttr("disabled"),
       }
