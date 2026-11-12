@@ -53,13 +53,11 @@ class TestE2XExtensionManager(unittest.TestCase):
         nbextensions = {
             "tree": {
                 "teacher_tree/main": ["teacher"],
-                "assignment_list/main": ["teacher", "student", "student_exam"],
                 "student_exam_tree/main": ["student_exam"],
                 "student_tree/main": ["student"],
             },
             "notebook": {
                 "teacher_notebook/main": ["teacher"],
-                "validate_assignment/main": ["teacher"],
                 "student_notebook/main": ["student"],
                 "student_exam_notebook/main": ["student_exam"],
             },
