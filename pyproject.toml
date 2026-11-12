@@ -20,8 +20,9 @@ classifiers=[
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "e2xcore>=0.0.5",
+    "e2xcore>=0.0.5,<0.1",
     "e2xauthoring>=0.3.0,<0.4",
+    "nbgrader>=0.8,<0.9",
     "pandas"
 ]
 dynamic = ["version"]
