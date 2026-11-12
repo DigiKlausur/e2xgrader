@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/assignment-list",
-  "version": "0.3.6",
+  "version": "0.4.0-rc0",
   "main": "lib/index.js",
   "description": "adds an Assignments tab to the notebook list (ported from the nbgrader assignment_list nbextension)",
   "scripts": {
@@ -9,8 +9,8 @@
   "author": "Tim Metzler",
   "license": "ISC",
   "dependencies": {
-    "@e2xgrader/utils": "0.3.6",
-    "@e2xgrader/validate-assignment": "0.3.6"
+    "@e2xgrader/utils": "0.4.0-rc0",
+    "@e2xgrader/validate-assignment": "0.4.0-rc0"
   },
   "devDependencies": {
     "css-loader": "^6.6.0",

@@ -1,6 +1,6 @@
 {
   "name": "@e2xgrader/validate-assignment",
-  "version": "0.3.6",
+  "version": "0.4.0-rc0",
   "main": "lib/index.js",
   "description": "adds a Validate button to the notebook toolbar (ported from the nbgrader validate_assignment nbextension)",
   "scripts": {
