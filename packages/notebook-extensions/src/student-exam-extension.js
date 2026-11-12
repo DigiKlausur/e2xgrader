@@ -7,9 +7,11 @@ import { patch_assignment_notebook } from "@e2xgrader/restricted-assignment-note
 import { disable_shortcuts } from "@e2xgrader/restricted-exam-notebook";
 import { ExamMenubar } from "@e2xgrader/exam-menubar";
 import { username } from "@e2xgrader/utils";
+import { add_validate_button } from "@e2xgrader/validate-assignment";
 
 function initialize() {
   initialize_cell_extension();
+  add_validate_button();
   patch_assignment_notebook();
   new ExamMenubar().activate();
   new AssignmentViewToolbar().activate();
