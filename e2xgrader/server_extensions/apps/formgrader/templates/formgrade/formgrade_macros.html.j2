@@ -2,22 +2,12 @@
 <meta charset="utf-8" />
 <title>{{ resources.notebook_id }}</title>
 
-{# nbgrader < 0.9: bower "components/"; nbgrader >= 0.9: npm "node_modules/" (paths as in its own formgrade_macros) #}
-{% if resources.nbgrader_legacy_static %}
-<script src="{{ resources.base_url }}/formgrader/static/components/jquery/jquery.min.js"></script>
-<script src="{{ resources.base_url }}/formgrader/static/components/jquery-color/jquery.color.js"></script>
-<script src="{{ resources.base_url }}/formgrader/static/components/underscore/underscore-min.js"></script>
-<script src="{{ resources.base_url }}/formgrader/static/components/backbone/backbone-min.js"></script>
-<script src="{{ resources.base_url }}/formgrader/static/components/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ resources.base_url }}/formgrader/static/components/autosize/dist/autosize.min.js"></script>
-{% else %}
 <script src="{{ resources.base_url }}/formgrader/static/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="{{ resources.base_url }}/formgrader/static/node_modules/jquery-color/dist/jquery.color.min.js"></script>
 <script src="{{ resources.base_url }}/formgrader/static/node_modules/underscore/underscore-min.js"></script>
 <script src="{{ resources.base_url }}/formgrader/static/node_modules/backbone/backbone-min.js"></script>
 <script src="{{ resources.base_url }}/formgrader/static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{{ resources.base_url }}/formgrader/static/node_modules/autosize/dist/autosize.min.js"></script>
-{% endif %}
 
 <script type="text/javascript">
 var submission_id = "{{ resources.submission_id }}";
@@ -46,11 +36,7 @@ function toggle_name(on) {
 }
 </script>
 
-{% if resources.nbgrader_legacy_static %}
-<link rel="stylesheet" href="{{ resources.base_url }}/formgrader/static/components/bootstrap/css/bootstrap.min.css" />
-{% else %}
 <link rel="stylesheet" href="{{ resources.base_url }}/formgrader/static/node_modules/bootstrap/dist/css/bootstrap.min.css" />
-{% endif %}
 {% endmacro %}
 
 {% macro nav(resources) %}
