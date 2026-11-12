@@ -2,9 +2,16 @@ import os
 import unittest
 
 from jupyter_core.paths import jupyter_config_path
+from jupyter_server.extension.config import ExtensionConfigManager
 
 from e2xgrader.extensions import E2xExtensionManager
 from e2xgrader.extensions.utils import get_notebook_config_manager
+
+
+def read_server_extensions():
+    """Enabled state of all server extensions, merged over all Jupyter config dirs."""
+    manager = ExtensionConfigManager(read_config_path=jupyter_config_path())
+    return manager.get_jpserver_extensions()
 
 
 class TestE2XExtensionManager(unittest.TestCase):
@@ -70,11 +77,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         return nbextensions
 
     def test_deactivated_serverextensions(self):
-        config_dict = {}
-        for config_dir in jupyter_config_path():
-            cm = get_notebook_config_manager()(config_dir=config_dir)
-            config_dict.update(cm.get("jupyter_notebook_config"))
-        extensions = config_dict["NotebookApp"]["nbserver_extensions"]
+        extensions = read_server_extensions()
         for serverextension in self.serverextensions:
             assert not extensions[serverextension]
 
@@ -82,11 +85,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         teacher_serverextensions = self.get_serverextensions("teacher")
         self.manager.activate_teacher()
 
-        config_dict = {}
-        for config_dir in jupyter_config_path():
-            cm = get_notebook_config_manager()(config_dir=config_dir)
-            config_dict.update(cm.get("jupyter_notebook_config"))
-        extensions = config_dict["NotebookApp"]["nbserver_extensions"]
+        extensions = read_server_extensions()
         for serverextension, status in teacher_serverextensions.items():
             assert extensions[serverextension] == status
 
@@ -110,11 +109,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         student_serverextensions = self.get_serverextensions("student")
         self.manager.activate_student()
 
-        config_dict = {}
-        for config_dir in jupyter_config_path():
-            cm = get_notebook_config_manager()(config_dir=config_dir)
-            config_dict.update(cm.get("jupyter_notebook_config"))
-        extensions = config_dict["NotebookApp"]["nbserver_extensions"]
+        extensions = read_server_extensions()
         for serverextension, status in student_serverextensions.items():
             assert extensions[serverextension] == status
 
@@ -139,11 +134,7 @@ class TestE2XExtensionManager(unittest.TestCase):
         student_serverextensions = self.get_serverextensions("student_exam")
         self.manager.activate_student_exam()
 
-        config_dict = {}
-        for config_dir in jupyter_config_path():
-            cm = get_notebook_config_manager()(config_dir=config_dir)
-            config_dict.update(cm.get("jupyter_notebook_config"))
-        extensions = config_dict["NotebookApp"]["nbserver_extensions"]
+        extensions = read_server_extensions()
         for serverextension, status in student_serverextensions.items():
             assert extensions[serverextension] == status
 
