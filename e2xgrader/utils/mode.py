@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Dict
 
 from jupyter_core.paths import jupyter_config_path
+from jupyter_server.extension.config import ExtensionConfigManager
 
 from .. import _jupyter_server_extension_paths
 from ..extensions.utils import discover_nbextensions, get_notebook_config_manager
@@ -45,18 +46,16 @@ def get_nbextension_config() -> Dict[str, Dict[str, bool]]:
 
 def get_serverextension_config() -> Dict[str, bool]:
     """
-    Retrieves the server extension configuration from the Jupyter notebook configuration files.
+    Retrieves the server extension configuration from the Jupyter server configuration files
+    (ServerApp.jpserver_extensions, including the jupyter_server_config.d directories).
 
     Returns:
         A dictionary containing the server extension configuration, where the keys are the
         extension names and the values are boolean values indicating whether the extension
         is enabled or not.
     """
-    config = dict()
-    for path in jupyter_config_path():
-        contextmanager = get_notebook_config_manager()(config_dir=path)
-        config.update(contextmanager.get("jupyter_notebook_config"))
-    return config.get("NotebookApp", dict()).get("nbserver_extensions", dict())
+    manager = ExtensionConfigManager(read_config_path=jupyter_config_path())
+    return manager.get_jpserver_extensions()
 
 
 def infer_nbextension_mode() -> str:
