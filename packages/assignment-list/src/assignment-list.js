@@ -3,6 +3,7 @@
 import $ from "jquery";
 import utils from "base/js/utils";
 import dialog from "base/js/dialog";
+import { urls } from "@e2xgrader/utils";
 import { show_validation_results } from "@e2xgrader/validate-assignment";
 
 // Notebook >= 4.3.1 uses xsrf; its ajax sends the token in the header
@@ -87,11 +88,7 @@ function make_submission_row(submission, base_url) {
     .addClass("item_name col-sm-6")
     .append($("<span/>").text(submission.timestamp));
   if (submission.has_local_feedback && !submission.feedback_updated) {
-    const url = utils.url_path_join(
-      base_url,
-      "tree",
-      submission.local_feedback_path
-    );
+    const url = urls.tree_url(base_url, submission.local_feedback_path);
     name.append(
       $("<a/>")
         .attr("href", url)
@@ -134,11 +131,7 @@ function make_validate_button(path, base_url) {
 }
 
 function make_notebook_row(notebook, base_url) {
-  const url = utils.url_path_join(
-    base_url,
-    "tree",
-    utils.url_join_encode(notebook.path)
-  );
+  const url = urls.notebook_url(base_url, notebook.path);
   const link = $("<a/>")
     .attr("href", url)
     .attr("target", "_blank")

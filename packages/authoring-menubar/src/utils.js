@@ -1,5 +1,5 @@
 import Jupyter from "base/js/namespace";
-import { utils } from "@e2xgrader/utils";
+import { urls, utils } from "@e2xgrader/utils";
 
 function get_valid_name(name) {
   let alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -68,11 +68,11 @@ export function set_template_ids(cells, template_name) {
 }
 
 export function get_file_options() {
-  let path = Jupyter.utils.url_path_join(
-    Jupyter.notebook.base_url,
-    "tree",
-    Jupyter.notebook.notebook_path.replace(Jupyter.notebook.notebook_name, "")
+  const directory = Jupyter.notebook.notebook_path.replace(
+    Jupyter.notebook.notebook_name,
+    ""
   );
+  let path = urls.tree_url(Jupyter.notebook.base_url, directory);
   return [
     {
       label: "Images",
